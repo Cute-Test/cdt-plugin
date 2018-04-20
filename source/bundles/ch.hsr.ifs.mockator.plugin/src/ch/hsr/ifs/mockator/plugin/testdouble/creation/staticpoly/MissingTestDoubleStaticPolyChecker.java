@@ -10,9 +10,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateId;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTypeId;
 
-import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
-import ch.hsr.ifs.iltis.cpp.ast.visitor.SimpleVisitor;
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.cpp.core.ast.checker.CheckerResult;
+import ch.hsr.ifs.iltis.cpp.core.ast.visitor.SimpleVisitor;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.testdouble.support.TestFunctionChecker;

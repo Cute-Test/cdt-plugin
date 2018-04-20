@@ -8,7 +8,7 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertEqualFinderVisitor;

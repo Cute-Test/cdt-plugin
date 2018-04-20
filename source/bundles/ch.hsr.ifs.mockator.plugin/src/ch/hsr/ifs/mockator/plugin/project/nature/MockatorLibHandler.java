@@ -13,8 +13,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;
 import ch.hsr.ifs.mockator.plugin.project.cdt.SourceFolderHandler;

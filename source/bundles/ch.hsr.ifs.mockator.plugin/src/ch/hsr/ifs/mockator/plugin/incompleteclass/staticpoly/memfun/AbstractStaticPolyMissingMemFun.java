@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.staticpoly.memfun;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
 
 import java.util.Collection;
 
@@ -13,7 +13,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.AbstractTestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;

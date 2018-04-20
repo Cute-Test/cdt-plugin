@@ -15,7 +15,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPTemplateTypeParameter;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPUnknownMethod;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeOfDependentExpression;
 
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;
 

@@ -1,8 +1,8 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.ui;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.checkedCast;
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
-import static ch.hsr.ifs.iltis.core.functional.Functional.as;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.checkedCast;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.core.functional.Functional.as;
 
 import java.util.Collection;
 
@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring;

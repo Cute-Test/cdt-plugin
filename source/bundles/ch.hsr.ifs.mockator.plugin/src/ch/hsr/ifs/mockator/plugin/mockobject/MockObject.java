@@ -1,7 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.mockobject;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.MOCK_ID;
 
 import java.util.Arrays;
@@ -21,7 +21,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;

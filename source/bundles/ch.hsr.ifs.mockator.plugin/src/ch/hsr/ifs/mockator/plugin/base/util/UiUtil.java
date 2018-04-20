@@ -14,7 +14,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
 
 @SuppressWarnings("restriction")

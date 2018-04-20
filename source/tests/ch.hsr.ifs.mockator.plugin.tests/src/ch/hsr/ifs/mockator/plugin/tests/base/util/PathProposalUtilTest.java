@@ -13,7 +13,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.hsr.ifs.iltis.core.resources.IOUtil;
+import ch.hsr.ifs.iltis.core.core.resources.IOUtil;
 
 import ch.hsr.ifs.mockator.plugin.base.util.PathProposalUtil;
 

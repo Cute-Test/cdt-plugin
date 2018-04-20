@@ -9,10 +9,10 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTemplateDeclaration;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
-import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
-import ch.hsr.ifs.iltis.cpp.ast.visitor.SimpleVisitor;
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.checker.CheckerResult;
+import ch.hsr.ifs.iltis.cpp.core.ast.visitor.SimpleVisitor;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.checker.AbstractMissingMemFunChecker;

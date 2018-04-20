@@ -16,8 +16,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTVisibilityLabel;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 
 
 public class PublicMemFunFinder {

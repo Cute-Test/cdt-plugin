@@ -17,9 +17,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
-import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringContext;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;

@@ -5,9 +5,9 @@ import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 
-import ch.hsr.ifs.iltis.cpp.ast.checker.CheckerResult;
-import ch.hsr.ifs.iltis.cpp.ast.checker.SimpleChecker;
-import ch.hsr.ifs.iltis.cpp.ast.visitor.SimpleVisitor;
+import ch.hsr.ifs.iltis.cpp.core.ast.checker.CheckerResult;
+import ch.hsr.ifs.iltis.cpp.core.ast.checker.SimpleChecker;
+import ch.hsr.ifs.iltis.cpp.core.ast.visitor.SimpleVisitor;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;

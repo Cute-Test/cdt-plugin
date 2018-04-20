@@ -13,8 +13,8 @@ import org.eclipse.cdt.core.index.IIndexName;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.wrappers.IndexToASTNameHelper;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.IndexToASTNameHelper;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitLoader;
 

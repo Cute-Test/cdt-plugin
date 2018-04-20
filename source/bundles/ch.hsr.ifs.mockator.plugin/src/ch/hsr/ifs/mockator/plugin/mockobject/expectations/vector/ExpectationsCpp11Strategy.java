@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.expectations.vector;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.CALLS;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.core.resources.StringUtil;
+import ch.hsr.ifs.iltis.core.core.resources.StringUtil;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;

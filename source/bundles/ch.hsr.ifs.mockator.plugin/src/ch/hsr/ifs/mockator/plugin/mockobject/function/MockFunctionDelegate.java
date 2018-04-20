@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.function;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.head;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -10,7 +10,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
-import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
+import ch.hsr.ifs.iltis.cpp.core.resources.CProjectUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;

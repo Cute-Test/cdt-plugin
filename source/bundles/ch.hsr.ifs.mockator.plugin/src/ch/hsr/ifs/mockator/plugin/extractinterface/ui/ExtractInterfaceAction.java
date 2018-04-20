@@ -8,7 +8,7 @@ import org.eclipse.cdt.core.model.IWorkingCopy;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.window.IShellProvider;
 
-import ch.hsr.ifs.iltis.cpp.wrappers.RefactoringAction;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.RefactoringAction;
 
 
 class ExtractInterfaceAction extends RefactoringAction {

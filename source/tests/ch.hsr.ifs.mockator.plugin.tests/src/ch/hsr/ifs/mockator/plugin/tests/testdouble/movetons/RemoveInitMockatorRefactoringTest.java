@@ -9,9 +9,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.internal.ui.refactoring.NodeContainer;
 import org.eclipse.ltk.core.refactoring.RefactoringContext;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
-import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringContext;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorRefactoring;
 import ch.hsr.ifs.mockator.plugin.testdouble.movetons.RemoveInitMockatorRefactoring;

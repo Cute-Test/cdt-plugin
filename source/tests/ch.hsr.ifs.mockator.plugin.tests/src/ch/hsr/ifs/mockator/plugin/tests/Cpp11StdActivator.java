@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.tests;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.array;
 
 import org.eclipse.cdt.managedbuilder.core.BuildException;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;

@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions.params;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
 
 import java.util.Collection;
 
@@ -65,8 +65,8 @@ import org.eclipse.cdt.core.dom.ast.gnu.c.ICASTKnRFunctionDeclarator;
 import org.eclipse.cdt.core.parser.Keywords;
 import org.eclipse.cdt.core.parser.util.CharArrayUtils;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 
 // Taken and adapted from org.eclipse.cdt.internal.core.model.ASTStringUtil;

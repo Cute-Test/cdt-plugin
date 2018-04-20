@@ -8,7 +8,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.cpp.util.constants.CommonCPPConstants;
+import ch.hsr.ifs.iltis.cpp.core.util.constants.CommonCPPConstants;
 
 
 public class StdString {

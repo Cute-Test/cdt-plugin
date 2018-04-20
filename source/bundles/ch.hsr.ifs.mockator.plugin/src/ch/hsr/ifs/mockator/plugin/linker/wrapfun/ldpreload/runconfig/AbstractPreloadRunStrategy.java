@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload.runconfig;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.orderPreservingSet;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.orderPreservingSet;
 
 import java.util.Map;
 import java.util.Set;

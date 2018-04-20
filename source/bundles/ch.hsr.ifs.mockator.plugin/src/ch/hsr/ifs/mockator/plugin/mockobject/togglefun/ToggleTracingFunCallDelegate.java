@@ -1,12 +1,12 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.togglefun;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
 
 import java.util.Optional;
 
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.linkedmode.MockObjectLinkedEditModeFactory;
 import ch.hsr.ifs.mockator.plugin.project.nature.MockatorLibHandler;

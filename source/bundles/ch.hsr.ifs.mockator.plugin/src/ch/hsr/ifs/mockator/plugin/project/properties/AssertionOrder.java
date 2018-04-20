@@ -6,7 +6,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.QualifiedName;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;

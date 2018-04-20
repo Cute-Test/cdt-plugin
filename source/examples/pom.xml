@@ -9,6 +9,6 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modules>
-        <module>ch.hsr.ifs.mockator.plugin.examples</module>
+        <module>ch.hsr.ifs.mockator.plugin.example</module>
     </modules>
 </project>

@@ -1,13 +1,13 @@
 package ch.hsr.ifs.mockator.plugin.project.properties;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.head;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.Functional;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.functional.Functional;
 
 
 class DefaultPropertyHandler {

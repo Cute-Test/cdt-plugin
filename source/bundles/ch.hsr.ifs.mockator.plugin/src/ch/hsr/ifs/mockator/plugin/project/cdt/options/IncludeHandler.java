@@ -10,8 +10,8 @@ import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.functions.Function2;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.functional.functions.Function2;
 
 
 abstract class IncludeHandler extends AbstractOptionsHandler {

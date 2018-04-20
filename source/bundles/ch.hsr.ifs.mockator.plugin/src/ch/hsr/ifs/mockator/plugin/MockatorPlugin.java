@@ -5,7 +5,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
 
 public class MockatorPlugin extends AbstractUIPlugin {

@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.testdouble.movetons;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.array;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.CUTE_NS;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.CUTE_SUITE;
 
@@ -21,8 +21,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.refsupport.utils.NodeContainer;

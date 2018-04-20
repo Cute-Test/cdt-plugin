@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemberFunction;

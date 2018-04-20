@@ -3,7 +3,7 @@ package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload.refactoring;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 
 class LdPreloadFunBodyFactory {

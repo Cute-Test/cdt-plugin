@@ -12,7 +12,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.incompleteclass.StaticPolyMissingMemFun;

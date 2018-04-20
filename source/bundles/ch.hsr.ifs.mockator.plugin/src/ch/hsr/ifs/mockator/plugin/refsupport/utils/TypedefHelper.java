@@ -30,7 +30,7 @@ import org.eclipse.core.filesystem.URIUtil;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.content.IContentType;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 
 
 // Taken and adapted from ds8

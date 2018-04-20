@@ -10,6 +10,6 @@
     </parent>
     <modules>
         <module>ch.hsr.ifs.mockator.feature</module>
-        <module>ch.hsr.ifs.mockator.example.feature</module>
+        <module>ch.hsr.ifs.mockator.examples.feature</module>
     </modules>
 </project>

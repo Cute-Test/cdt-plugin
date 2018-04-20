@@ -24,8 +24,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayModifier;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
-import ch.hsr.ifs.iltis.cpp.util.constants.CommonCPPConstants;
+import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.util.constants.CommonCPPConstants;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.types.DeclSpecGenerator;
 

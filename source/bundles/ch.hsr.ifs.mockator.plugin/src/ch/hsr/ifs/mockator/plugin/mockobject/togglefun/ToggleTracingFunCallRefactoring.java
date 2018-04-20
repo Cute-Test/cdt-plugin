@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.togglefun;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -19,8 +19,8 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
-import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.mockobject.MockObject;

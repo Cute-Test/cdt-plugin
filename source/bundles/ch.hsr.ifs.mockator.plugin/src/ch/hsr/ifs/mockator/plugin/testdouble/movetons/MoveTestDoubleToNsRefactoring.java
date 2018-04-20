@@ -13,8 +13,8 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
-import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
+import ch.hsr.ifs.iltis.core.core.functional.OptionalUtil;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.base.i18n.I18N;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;

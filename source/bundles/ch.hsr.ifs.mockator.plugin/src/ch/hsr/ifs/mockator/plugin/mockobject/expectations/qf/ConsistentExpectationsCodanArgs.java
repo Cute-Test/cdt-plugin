@@ -1,7 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.expectations.qf;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.array;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IMarker;
 
-import ch.hsr.ifs.iltis.core.resources.StringUtil;
+import ch.hsr.ifs.iltis.core.core.resources.StringUtil;
 
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.CodanArguments;

@@ -3,7 +3,7 @@ package ch.hsr.ifs.mockator.plugin.refsupport.qf;
 import org.eclipse.cdt.codan.internal.core.model.CodanProblemMarker;
 import org.eclipse.core.resources.IMarker;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
 
 @SuppressWarnings("restriction")

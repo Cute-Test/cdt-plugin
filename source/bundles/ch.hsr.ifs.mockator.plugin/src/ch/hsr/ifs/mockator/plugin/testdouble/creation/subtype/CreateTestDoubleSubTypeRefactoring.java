@@ -16,8 +16,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.iltis.core.resources.StringUtil;
-import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
+import ch.hsr.ifs.iltis.core.core.resources.StringUtil;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.includes.AstIncludeNode;
 import ch.hsr.ifs.mockator.plugin.testdouble.creation.AbstractCreateTestDoubleRefactoring;

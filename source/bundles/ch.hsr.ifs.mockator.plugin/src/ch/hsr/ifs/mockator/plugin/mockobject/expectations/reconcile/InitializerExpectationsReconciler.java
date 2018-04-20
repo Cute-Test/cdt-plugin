@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.expectations.reconcile;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.array;
 
 import java.util.Collection;
 
@@ -12,9 +12,9 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.resources.StringUtil;
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.resources.StringUtil;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder.ExistingMemFunCallRegistration;

@@ -16,9 +16,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
-import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
-import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
+import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringContext;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterNameFunDecorator;
 import ch.hsr.ifs.mockator.plugin.refsupport.tu.TranslationUnitCreator;

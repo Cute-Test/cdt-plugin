@@ -9,8 +9,8 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.resources.WorkspaceUtil;
 
 import ch.hsr.ifs.mockator.plugin.project.cdt.options.IncludePathHandler;
 

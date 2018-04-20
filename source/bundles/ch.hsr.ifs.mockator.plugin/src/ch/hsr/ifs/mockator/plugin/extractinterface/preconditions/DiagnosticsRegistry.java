@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.extractinterface.preconditions;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.orderPreservingSet;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.orderPreservingSet;
 
 import java.util.Set;
 import java.util.function.Consumer;

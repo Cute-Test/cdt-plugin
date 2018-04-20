@@ -5,8 +5,8 @@ Bundle-SymbolicName: ch.hsr.ifs.mockator.plugin;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: ch.hsr.ifs.mockator.plugin.MockatorPlugin
 Bundle-Vendor: %BundleProvider
-Require-Bundle: ch.hsr.ifs.iltis.core,
- ch.hsr.ifs.iltis.cpp,
+Require-Bundle: ch.hsr.ifs.iltis.core.core,
+ ch.hsr.ifs.iltis.cpp.core,
  org.eclipse.ui;bundle-version="3.105.0",
  org.eclipse.core.runtime;bundle-version="3.9.0",
  org.eclipse.ltk.core.refactoring;bundle-version="3.6.100",
@@ -28,4 +28,4 @@ Require-Bundle: ch.hsr.ifs.iltis.core,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: ch.hsr.ifs.mockator.plugin
-Export-Package: ch.hsr.ifs.mockator.plugin.project.nature;x-friends:="ch.hsr.ifs.mockator.plugin.examples"
+Export-Package: ch.hsr.ifs.mockator.plugin.project.nature;x-friends:="ch.hsr.ifs.mockator.plugin.example"

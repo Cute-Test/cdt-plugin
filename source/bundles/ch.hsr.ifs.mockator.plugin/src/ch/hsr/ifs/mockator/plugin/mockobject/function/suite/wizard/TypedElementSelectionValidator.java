@@ -13,7 +13,7 @@ import java.util.Collection;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
 
 // Copied and adapted from CUTE

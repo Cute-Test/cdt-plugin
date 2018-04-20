@@ -8,7 +8,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.internal.core.dom.rewrite.ASTLiteralNode;
 
-import ch.hsr.ifs.iltis.cpp.util.constants.CommonCPPConstants;
+import ch.hsr.ifs.iltis.cpp.core.util.constants.CommonCPPConstants;
 
 
 @SuppressWarnings("restriction")

@@ -16,8 +16,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
-import ch.hsr.ifs.iltis.core.data.AbstractPair;
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.data.AbstractPair;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
 
 public class CppIncludeResolver {

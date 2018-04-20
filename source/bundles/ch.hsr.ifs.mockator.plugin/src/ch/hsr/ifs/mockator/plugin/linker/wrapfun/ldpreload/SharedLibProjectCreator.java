@@ -21,8 +21,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.resources.WorkspaceUtil;
 
 import ch.hsr.ifs.mockator.plugin.project.cdt.CdtHelper;
 import ch.hsr.ifs.mockator.plugin.project.cdt.toolchains.ToolChain;

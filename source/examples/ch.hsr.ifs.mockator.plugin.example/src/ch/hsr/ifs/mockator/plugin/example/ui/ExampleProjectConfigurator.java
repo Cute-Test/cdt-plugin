@@ -1,11 +1,11 @@
-package ch.hsr.ifs.mockator.plugin.examples.ui;
+package ch.hsr.ifs.mockator.plugin.example.ui;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.BasicMonitor;
 
-import ch.hsr.ifs.iltis.core.ui.examples.IExampleProjectConfigurator;
+import ch.hsr.ifs.iltis.core.core.ui.examples.IExampleProjectConfigurator;
 
 import ch.hsr.ifs.cute.ui.project.CuteNature;
 import ch.hsr.ifs.mockator.plugin.project.nature.MockatorNature;

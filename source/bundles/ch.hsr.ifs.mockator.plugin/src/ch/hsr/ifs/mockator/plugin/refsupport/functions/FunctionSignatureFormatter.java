@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.functions;
 
-import static ch.hsr.ifs.iltis.cpp.util.constants.CommonCPPConstants.CONST_KEYWORD;
+import static ch.hsr.ifs.iltis.cpp.core.util.constants.CommonCPPConstants.CONST_KEYWORD;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.COMMA;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.SPACE;
 

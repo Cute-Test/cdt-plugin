@@ -2,7 +2,7 @@ package ch.hsr.ifs.mockator.plugin.tests.mockobject.consexp;
 
 import org.junit.Ignore;
 
-import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
+import ch.hsr.ifs.iltis.cpp.core.ast.checker.helper.IProblemId;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.mockobject.expectations.qf.ConsistentExpectationsQuickFix;

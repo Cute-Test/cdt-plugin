@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.registrations.finder;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.head;
 
 import java.util.ArrayList;
 import java.util.Collection;

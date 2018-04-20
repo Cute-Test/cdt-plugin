@@ -2,7 +2,7 @@ package ch.hsr.ifs.mockator.plugin.extractinterface;
 
 import java.util.Map;
 
-import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContribution;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringContribution;
 
 
 public class ExtractInterfaceContribution extends CRefactoringContribution {

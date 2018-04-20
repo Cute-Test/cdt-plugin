@@ -10,7 +10,7 @@ import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
 
-import ch.hsr.ifs.iltis.cpp.wrappers.RefactoringRunner;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.RefactoringRunner;
 
 import ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring;
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;

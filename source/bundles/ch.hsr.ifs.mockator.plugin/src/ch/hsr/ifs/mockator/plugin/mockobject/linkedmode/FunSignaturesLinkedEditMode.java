@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 
 import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup.Proposal;
 
-import ch.hsr.ifs.iltis.core.resources.StringUtil;
+import ch.hsr.ifs.iltis.core.core.resources.StringUtil;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.mockator.plugin.project.properties.AssertionOrder;

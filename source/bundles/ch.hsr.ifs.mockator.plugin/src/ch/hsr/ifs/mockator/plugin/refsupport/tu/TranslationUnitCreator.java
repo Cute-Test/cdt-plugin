@@ -9,10 +9,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.resources.FileUtil;
-import ch.hsr.ifs.iltis.cpp.resources.CProjectUtil;
-import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.cpp.core.resources.CProjectUtil;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringContext;
 
 
 @SuppressWarnings("restriction")

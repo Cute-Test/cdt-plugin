@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.tests.testdouble.creation.staticpoly;
 
-import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
+import ch.hsr.ifs.iltis.cpp.core.ast.checker.helper.IProblemId;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;

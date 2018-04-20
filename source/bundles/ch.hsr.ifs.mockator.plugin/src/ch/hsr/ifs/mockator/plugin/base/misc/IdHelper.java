@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.base.misc;
 
-import ch.hsr.ifs.iltis.cpp.ast.checker.helper.IProblemId;
+import ch.hsr.ifs.iltis.cpp.core.ast.checker.helper.IProblemId;
 
 
 public class IdHelper {

@@ -17,10 +17,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import ch.hsr.ifs.iltis.core.functional.OptionalUtil;
-import ch.hsr.ifs.iltis.core.functional.functions.Builder;
-import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
-import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
+import ch.hsr.ifs.iltis.core.core.functional.OptionalUtil;
+import ch.hsr.ifs.iltis.core.core.functional.functions.Builder;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringContext;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;
 
 
 public final class ExtractInterfaceContext {

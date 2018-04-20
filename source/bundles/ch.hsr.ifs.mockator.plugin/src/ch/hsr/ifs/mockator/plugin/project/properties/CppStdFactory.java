@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.project.properties;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
 
 public class CppStdFactory<T> {

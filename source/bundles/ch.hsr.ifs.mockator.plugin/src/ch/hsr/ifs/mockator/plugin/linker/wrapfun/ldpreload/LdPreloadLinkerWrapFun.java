@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.linker.wrapfun.ldpreload;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.orderPreservingSet;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.orderPreservingSet;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
+import ch.hsr.ifs.iltis.core.core.resources.WorkspaceUtil;
 
 import ch.hsr.ifs.mockator.plugin.MockatorConstants;
 import ch.hsr.ifs.mockator.plugin.MockatorPlugin;

@@ -35,6 +35,11 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<failIfNoTests>false</failIfNoTests>
+					<includes>
+						<include>
+							<!-- Avoids execution of any tests in default execution -->
+						</include>
+					</includes>
 				</configuration>
 				<executions>
 					<execution>

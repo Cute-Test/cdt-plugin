@@ -16,10 +16,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.core.resources.IFile;
 
-import ch.hsr.ifs.iltis.core.resources.FileUtil;
-import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
-import ch.hsr.ifs.iltis.cpp.wrappers.ModificationCollector;
+import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.core.resources.WorkspaceUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.mockator.plugin.refsupport.functions.params.ParameterSignatureHandler;
 

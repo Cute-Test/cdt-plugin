@@ -1,7 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.incompleteclass.subtype;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -24,8 +24,8 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;

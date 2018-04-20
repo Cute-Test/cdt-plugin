@@ -5,8 +5,8 @@ import java.util.Map;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoring;
-import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringDescriptor;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoring;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringDescriptor;
 
 import ch.hsr.ifs.mockator.plugin.extractinterface.context.ExtractInterfaceContext;
 

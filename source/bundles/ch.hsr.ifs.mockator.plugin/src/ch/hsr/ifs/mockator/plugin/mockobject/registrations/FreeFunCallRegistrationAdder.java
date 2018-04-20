@@ -1,13 +1,13 @@
 package ch.hsr.ifs.mockator.plugin.mockobject.registrations;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.array;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.CALL;
 import static ch.hsr.ifs.mockator.plugin.MockatorConstants.MOCKATOR_NS;
 
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 
-import ch.hsr.ifs.iltis.cpp.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 

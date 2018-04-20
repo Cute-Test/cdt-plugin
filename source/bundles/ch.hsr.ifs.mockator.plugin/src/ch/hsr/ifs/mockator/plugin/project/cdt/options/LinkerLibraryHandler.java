@@ -1,6 +1,6 @@
 package ch.hsr.ifs.mockator.plugin.project.cdt.options;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.orderPreservingSet;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.orderPreservingSet;
 
 import java.util.Set;
 
@@ -9,8 +9,8 @@ import org.eclipse.cdt.managedbuilder.core.IOption;
 import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.core.resources.IProject;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.functional.functions.Function2;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.functional.functions.Function2;
 
 
 public class LinkerLibraryHandler extends AbstractOptionsHandler {

@@ -13,8 +13,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
-import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoringContext;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringContext;
 
 import ch.hsr.ifs.mockator.plugin.project.properties.FunctionsToAnalyze;
 import ch.hsr.ifs.mockator.plugin.refsupport.lookup.NodeLookup;

@@ -1,7 +1,7 @@
 package ch.hsr.ifs.mockator.plugin.refsupport.qf;
 
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
-import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.last;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.array;
+import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.last;
 
 import java.util.Optional;
 
@@ -30,10 +30,10 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ui.ide.IDE;
 
-import ch.hsr.ifs.iltis.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
-import ch.hsr.ifs.iltis.cpp.wrappers.CPPVisitor;
-import ch.hsr.ifs.iltis.cpp.wrappers.CRefactoring;
+import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.core.resources.WorkspaceUtil;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
+import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoring;
 
 import ch.hsr.ifs.mockator.plugin.base.util.UiUtil;
 

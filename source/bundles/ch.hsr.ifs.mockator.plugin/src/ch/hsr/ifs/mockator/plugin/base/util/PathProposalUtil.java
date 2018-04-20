@@ -2,7 +2,7 @@ package ch.hsr.ifs.mockator.plugin.base.util;
 
 import org.eclipse.core.runtime.IPath;
 
-import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
 
 
 public class PathProposalUtil {
