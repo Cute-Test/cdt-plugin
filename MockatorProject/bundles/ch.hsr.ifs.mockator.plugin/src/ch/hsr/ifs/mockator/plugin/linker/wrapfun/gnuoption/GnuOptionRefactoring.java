@@ -64,7 +64,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
       newFunName = new ItaniumMangledNameGenerator((ICPPFunction) binding).createMangledName();
    }
 
-   private void createWrapperFunction(final IASTName funName, ASTRewrite rewriter, final IProgressMonitor pm) {
+   private void createWrapperFunction(final IASTName funName, final ASTRewrite rewriter, final IProgressMonitor pm) {
       findFunDeclaration(funName, pm).ifPresent((funDecl) -> {
          final IASTDeclSpecifier declSpecifier = ASTUtil.getDeclSpec(funDecl);
          final IASTSimpleDeclaration realFunDecl = createRealFunDecl(declSpecifier, funDecl);
@@ -123,7 +123,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
       newFunDecl.setVolatile(false);
    }
 
-   private void insertWrapperFunsInCLinkage(ASTRewrite rewriter, final ICPPASTLinkageSpecification cLinkageSpec, final IASTName funName) {
+   private void insertWrapperFunsInCLinkage(final ASTRewrite rewriter, final ICPPASTLinkageSpecification cLinkageSpec, final IASTName funName) {
       final IASTNode insertionPoint = getInsertionPoint(funName);
       rewriter.insertBefore(insertionPoint.getParent(), insertionPoint, createIfDefWrapFun(), null);
       rewriter.insertBefore(insertionPoint.getParent(), insertionPoint, cLinkageSpec, null);

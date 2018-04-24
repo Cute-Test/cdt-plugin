@@ -24,10 +24,10 @@ public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> 
    @Override
    public void accept(final ExtractInterfaceContext context) {
 
-      Optional<IASTName> nameOfSelectedSpecifier = getNameOfSelectedSpecifier(context.getSelectedName());
+      final Optional<IASTName> nameOfSelectedSpecifier = getNameOfSelectedSpecifier(context.getSelectedName());
 
-      OptionalUtil<ICPPASTCompositeTypeSpecifier> classDefinition = OptionalUtil.of(nameOfSelectedSpecifier).flatFlatMap(nameToLookup -> OptionalUtil
-            .of(lookupInAst(nameToLookup)).orElse(lookupInIndex(context, nameToLookup)));
+      final OptionalUtil<ICPPASTCompositeTypeSpecifier> classDefinition = OptionalUtil.of(nameOfSelectedSpecifier).flatFlatMap(
+            nameToLookup -> OptionalUtil.of(lookupInAst(nameToLookup)).orElse(lookupInIndex(context, nameToLookup)));
 
       classDefinition.ifNotPresent(() -> warnUserAboutMissingClass(context.getStatus())).ifPresent(clsDef -> nameOfSelectedSpecifier.ifPresent(
             nameToLookup -> rememberClassInformation(context, clsDef, getSutClass(nameToLookup))));

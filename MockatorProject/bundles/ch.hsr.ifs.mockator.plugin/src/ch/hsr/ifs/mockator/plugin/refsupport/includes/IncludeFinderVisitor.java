@@ -22,7 +22,7 @@ class IncludeFinderVisitor {
       if (includeName.isEmpty()) { return true; }
 
       final IASTPreprocessorStatement[] prepStmts = tu.getAllPreprocessorStatements();
-      return !(Arrays.asList(prepStmts).stream().filter(new IncludeStatementFinder(includeName)).collect(Collectors.toList())).isEmpty();
+      return !Arrays.asList(prepStmts).stream().filter(new IncludeStatementFinder(includeName)).collect(Collectors.toList()).isEmpty();
    }
 
    private static class IncludeStatementFinder implements Predicate<IASTPreprocessorStatement> {

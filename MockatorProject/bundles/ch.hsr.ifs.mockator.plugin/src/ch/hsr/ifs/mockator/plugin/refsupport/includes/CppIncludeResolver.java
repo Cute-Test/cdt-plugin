@@ -119,7 +119,7 @@ public class CppIncludeResolver {
 
    private class IncludeInfo extends AbstractPair<String, Boolean> {
 
-      public IncludeInfo(String first, Boolean second) {
+      public IncludeInfo(final String first, final Boolean second) {
          super(first, second);
       }
 

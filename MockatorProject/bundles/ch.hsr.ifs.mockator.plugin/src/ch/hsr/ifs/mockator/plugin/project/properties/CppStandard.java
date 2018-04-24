@@ -29,7 +29,7 @@ import ch.hsr.ifs.mockator.plugin.project.cdt.toolchains.ToolChain;
 public enum CppStandard implements PropertyTypeWithDefault {
 
    //TODO(Tobias Stauber) Once the Elevenator (soon to be Versionator) was moved to ILTIS, Mockator should use it to handle versions...
-   
+
    Cpp03Std("C++03", I18N.Cpp03Desc) {
 
    @Override

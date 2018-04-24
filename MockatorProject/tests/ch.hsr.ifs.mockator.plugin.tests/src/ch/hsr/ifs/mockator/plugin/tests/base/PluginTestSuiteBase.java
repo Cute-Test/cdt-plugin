@@ -11,10 +11,10 @@ import ch.hsr.ifs.mockator.plugin.tests.base.util.ExceptionUtilTest;
 @RunWith(Suite.class)
 //@formatter:off
 @SuiteClasses({
-   
+
    /*Base*/
    DefaultCtorClassRegistryTest.class,
    ExceptionUtilTest.class,
-   
+
 })
 public class PluginTestSuiteBase {}

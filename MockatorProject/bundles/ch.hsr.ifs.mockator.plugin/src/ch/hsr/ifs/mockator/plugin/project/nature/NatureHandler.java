@@ -24,7 +24,7 @@ public class NatureHandler {
       if (hasNature(natureId)) return;
 
       final IProjectDescription desc = getProjectDescription();
-      String[] newNatures = ArrayUtil.append(desc.getNatureIds(), natureId);
+      final String[] newNatures = ArrayUtil.append(desc.getNatureIds(), natureId);
       validateNewNatures(newNatures);
       desc.setNatureIds(newNatures);
       project.setDescription(desc, pm);

@@ -21,7 +21,7 @@ import ch.hsr.ifs.mockator.plugin.tests.testdouble.movetons.RemoveInitMockatorRe
 @RunWith(Suite.class)
 //@formatter:off
 @SuiteClasses({
-   
+
    /*Testdouble*/
    IntoCtorByPointerCreateTestDoubleQfTest.class,
    IntoMemberFunctionByReferenceCreateTestDoubleQfTest.class,

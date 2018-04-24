@@ -78,7 +78,7 @@ public class ExpectationsFinder {
 
    public class ExpectionsInfo extends AbstractPair<Collection<MemFunCallExpectation>, IASTName> {
 
-      public ExpectionsInfo(Collection<MemFunCallExpectation> expectations, IASTName vectorName) {
+      public ExpectionsInfo(final Collection<MemFunCallExpectation> expectations, final IASTName vectorName) {
          super(expectations, vectorName);
       }
 

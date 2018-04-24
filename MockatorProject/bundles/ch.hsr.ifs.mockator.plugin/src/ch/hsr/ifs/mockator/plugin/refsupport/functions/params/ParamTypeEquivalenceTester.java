@@ -51,7 +51,7 @@ public class ParamTypeEquivalenceTester {
 
          IType callerType = triple.first();
          IType receiverType = triple.second();
-         Integer argNo = triple.third();
+         final Integer argNo = triple.third();
 
          if (filter != null && filter.apply(argNo, receiverType)) {
             continue;

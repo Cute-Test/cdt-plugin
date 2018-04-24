@@ -189,7 +189,7 @@ abstract class MockObjectLinkedModeSupport implements LinkedModeInfoCreater {
 
    class ExpectationVectorInfo extends AbstractPair<Integer, String> {
 
-      public ExpectationVectorInfo(Integer first, String second) {
+      public ExpectationVectorInfo(final Integer first, final String second) {
          super(first, second);
       }
 

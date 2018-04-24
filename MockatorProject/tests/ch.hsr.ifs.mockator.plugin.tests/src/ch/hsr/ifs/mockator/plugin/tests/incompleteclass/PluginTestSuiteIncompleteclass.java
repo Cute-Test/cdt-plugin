@@ -99,7 +99,7 @@ import ch.hsr.ifs.mockator.plugin.tests.incompleteclass.subtype.WithMultipleInhe
 @RunWith(Suite.class)
 //@formatter:off
 @SuiteClasses({
- 
+
    /*IncompleteClass*/
    NonLocalCompleteClassTest.class,
    NonLocalClassWithMissingMemFunsTest.class,

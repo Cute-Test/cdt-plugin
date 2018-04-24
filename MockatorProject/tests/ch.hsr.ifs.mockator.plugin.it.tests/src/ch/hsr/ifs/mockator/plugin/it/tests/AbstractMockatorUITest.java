@@ -41,7 +41,7 @@ public abstract class AbstractMockatorUITest {
    public static void beforeClass() throws Exception {
       bot = new SWTWorkbenchBot();
    }
-   
+
    @AfterClass
    public static void sleep() {
       bot.sleep(2000);

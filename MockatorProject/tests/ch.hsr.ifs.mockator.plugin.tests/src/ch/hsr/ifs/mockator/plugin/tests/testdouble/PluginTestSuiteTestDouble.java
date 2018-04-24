@@ -26,7 +26,7 @@ import ch.hsr.ifs.mockator.plugin.tests.testdouble.creation.subtype.PassedToFree
 @RunWith(Suite.class)
 //@formatter:off
 @SuiteClasses({
-   
+
    /*Testdouble*/
    CtorPtrDependencyShouldBeMarkedTest.class,
    PassedToFreeFunctionTest.class,

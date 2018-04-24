@@ -8,7 +8,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 //@formatter:off
 @SuiteClasses({
-  
+
    /*Preprocessor*/
    TraceFunctionCheckerTest.class,
 

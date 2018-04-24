@@ -10,9 +10,9 @@ import ch.hsr.ifs.mockator.plugin.tests.base.util.PathProposalUtilTest;
 @RunWith(Suite.class)
 //@formatter:off
 @SuiteClasses({
-   
+
    /*Base*/
    PathProposalUtilTest.class,
-   
+
 })
 public class PluginUITestSuiteBase {}

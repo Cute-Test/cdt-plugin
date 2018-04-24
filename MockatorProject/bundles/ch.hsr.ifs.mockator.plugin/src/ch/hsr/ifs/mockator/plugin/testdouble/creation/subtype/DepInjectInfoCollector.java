@@ -14,7 +14,7 @@ interface DepInjectInfoCollector {
 
    class DependencyInfo extends AbstractPair<IASTName, IType> {
 
-      public DependencyInfo(IASTName name, IType type) {
+      public DependencyInfo(final IASTName name, final IType type) {
          super(name, type);
       }
 

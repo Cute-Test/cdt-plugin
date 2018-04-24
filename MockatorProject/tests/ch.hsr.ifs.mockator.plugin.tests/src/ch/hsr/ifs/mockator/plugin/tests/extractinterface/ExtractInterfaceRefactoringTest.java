@@ -103,7 +103,7 @@ public class ExtractInterfaceRefactoringTest extends AbstractRefactoringTest {
    private IASTTranslationUnit getTuOfChosenClass(final CRefactoringContext context) {
       try {
          IFile chosenClassFile;
-         List<ICProject> referencedProjects = currentProjectHolder.getReferencedProjects();
+         final List<ICProject> referencedProjects = currentProjectHolder.getReferencedProjects();
          if (referencedProjects.isEmpty()) {
             chosenClassFile = currentProjectHolder.getFile(tuOfChosenClass);
          } else {

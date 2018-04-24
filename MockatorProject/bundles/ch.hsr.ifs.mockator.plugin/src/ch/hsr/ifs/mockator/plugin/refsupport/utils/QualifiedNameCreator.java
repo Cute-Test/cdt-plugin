@@ -26,7 +26,7 @@ public class QualifiedNameCreator {
       final ICPPASTQualifiedName qName = nodeFactory.newQualifiedName(null);
 
       for (int i = nodes.size() - 1; i >= 0; i--) {
-         IASTNode node = nodes.get(i);
+         final IASTNode node = nodes.get(i);
          if (node instanceof IASTCompositeTypeSpecifier) {
             qName.addName(((IASTCompositeTypeSpecifier) node).getName());
          } else if (node instanceof ICPPASTNamespaceDefinition) {

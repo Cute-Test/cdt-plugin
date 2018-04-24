@@ -124,7 +124,7 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
 
    private static class ExpectedAndRegistration extends AbstractPair<IASTIdExpression, IASTIdExpression> {
 
-      public ExpectedAndRegistration(IASTIdExpression expected, IASTIdExpression registration) {
+      public ExpectedAndRegistration(final IASTIdExpression expected, final IASTIdExpression registration) {
          super(expected, registration);
       }
 
