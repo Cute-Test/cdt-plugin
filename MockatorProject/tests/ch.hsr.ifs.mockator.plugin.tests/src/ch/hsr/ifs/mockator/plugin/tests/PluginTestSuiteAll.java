@@ -15,7 +15,6 @@ import ch.hsr.ifs.mockator.plugin.tests.testdouble.PluginTestSuiteTestDouble;
 @SuiteClasses({
    //@formatter:off
    PluginTestSuiteBase.class,
-//   TODO(Tobias Stauber) reenable after testing
    PluginTestSuiteIncompleteclass.class,
    PluginTestSuiteTestDouble.class,
    PluginTestSuiteProject.class,

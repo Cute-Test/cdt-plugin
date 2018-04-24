@@ -1,43 +1,27 @@
-target "Mockator Development-Version for Eclipse Oxygen" with source
-requirements
-
-location "http://www.cute-test.com/updatesite/development" {
-	ch.hsr.ifs.cute.feature.feature.group lazy
-	ch.hsr.ifs.cute.ui lazy
-}
-
-location "https://www.cevelop.com/cdt-testing/development" {
-	ch.hsr.ifs.cdttesting.feature.feature.group lazy
-}
+target "Mockator Development" with source requirements
 
 location "http://download.eclipse.org/releases/oxygen" {
-	org.eclipse.equinox.common lazy
-	org.eclipse.emf.sdk.feature.group lazy
-	org.apache.log4j lazy
-}
+	//	org.eclipse.emf.sdk.feature.group lazy
+ 	//	org.eclipse.equinox.common lazy
 
-location "http://download.eclipse.org/tools/cdt/releases/9.4/" {
-	org.eclipse.cdt.sdk.feature.group lazy
-}
+	//	org.eclipse.cdt.sdk.feature.group lazy
 
-location "http://download.eclipse.org/technology/swtbot/releases/latest/" {
+	//	org.eclipse.platform.sdk [4.7.0,5.0.0)
+ 	org.eclipse.sdk.ide [4.7.0,5.0.0)
+	//	org.eclipse.ui.ide.application lazy
+ 	//	org.eclipse.equinox.launcher lazy
+
 	org.eclipse.swtbot.eclipse.feature.group lazy
-	org.eclipse.swtbot.feature.group lazy
-	org.eclipse.swtbot.ide.feature.group lazy
-	org.eclipse.swtbot.forms.feature.group lazy
 }
 
-location "http://download.eclipse.org/eclipse/updates/4.7" {
-	org.eclipse.platform.sdk [4.7.0,4.8.0)
-	org.eclipse.sdk.ide [4.7.0,4.8.0)
+location "http://cute-test.com/updatesite/development" {
+	ch.hsr.ifs.cute.feature.feature.group lazy
 }
 
-location "http://www.cevelop.com/iltis/core" {
+location "http://www.cevelop.com/iltis" {
+	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group lazy
 	ch.hsr.ifs.iltis.core.feature.feature.group lazy
-}
-
-location "http://www.cevelop.com/iltis/cpp" {
 	ch.hsr.ifs.iltis.cpp.feature.feature.group lazy
+	ch.hsr.ifs.iltis.core.feature.source.feature.group lazy
+	ch.hsr.ifs.iltis.cpp.feature.source.feature.group lazy
 }
-
-

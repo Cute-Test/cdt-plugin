@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringContext;
 
-import ch.hsr.ifs.cdttesting.cdttest.CDTTestingRefactoringTest;
+import ch.hsr.ifs.iltis.testing.highlevel.cdttest.CDTTestingRefactoringTest;
 import ch.hsr.ifs.mockator.plugin.project.nature.NatureHandler;
 import ch.hsr.ifs.mockator.plugin.project.properties.MarkMissingMemFuns;
 
