@@ -62,6 +62,7 @@
       <import plugin="ch.hsr.ifs.cute.core"/>
       <import plugin="org.eclipse.cdt.managedbuilder.ui" version="8.2.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.e4.core.di"/>
+      <import plugin="com.cevelop.elevenator"/>
    </requires>
 
    <plugin
@@ -86,13 +87,6 @@
          unpack="false"/>
 
    <plugin
-         id="ch.hsr.ifs.cute.cuteExtensions"
-         download-size="0"
-         install-size="0"
-         version="5.4.0.qualifier"
-         fragment="true"/>
-
-   <plugin
          id="ch.hsr.ifs.cute.help"
          download-size="0"
          install-size="0"
@@ -106,10 +100,10 @@
          unpack="false"/>
 
    <plugin
-         id="com.cevelop.elevenator"
+         id="ch.hsr.ifs.cute.framework.extension"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="5.4.0.qualifier"
+         fragment="true"/>
 
 </feature>
