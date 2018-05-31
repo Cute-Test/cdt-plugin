@@ -41,8 +41,8 @@ public class CuteConsoleEventParser extends ConsoleEventParser {
    private static Pattern SUITEBEGINNINGLINE = Pattern.compile(LINE_QUALIFIER + BEGINNING + " (.*) (\\d+)$");
    private static Pattern SUITEENDINGLINE    = Pattern.compile(LINE_QUALIFIER + ENDING + " (.*)$");
    private static Pattern TESTSTARTLINE      = Pattern.compile(LINE_QUALIFIER + STARTTEST + " (.*)$");
-   private static Pattern TESTFAILURELINE    = Pattern.compile(LINE_QUALIFIER + FAILURE + " (.*) (.*):(\\d+) (.*)$");
-   private static Pattern TESTSUCESSLINE     = Pattern.compile(LINE_QUALIFIER + SUCCESS + " (.*) (.*)$");
+   private static Pattern TESTFAILURELINE = Pattern.compile(LINE_QUALIFIER + FAILURE + " (.*?) (.*?):(\\d+) (.*)$");
+   private static Pattern TESTSUCESSLINE = Pattern.compile(LINE_QUALIFIER + SUCCESS + " (.*?) (.*)$");
    private static Pattern TESTERRORLINE      = Pattern.compile(LINE_QUALIFIER + ERROR + " (.*?) (.*)$");
 
    @Override

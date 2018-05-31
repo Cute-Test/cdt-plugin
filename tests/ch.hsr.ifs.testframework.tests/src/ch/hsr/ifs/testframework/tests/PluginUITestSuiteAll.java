@@ -8,6 +8,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.tests;
 
+import ch.hsr.ifs.testframework.tests.consoleparser.ConsoleParserTestSuite;
 import ch.hsr.ifs.testframework.tests.hyperlink.HyperlinkSuite;
 import ch.hsr.ifs.testframework.tests.modelbuilder.ModelBuilderSuite;
 import ch.hsr.ifs.testframework.tests.patternlistener.PatternListenerSuite;
@@ -23,6 +24,7 @@ public class PluginUITestSuiteAll extends TestSuite {
 
    public PluginUITestSuiteAll() {
       super("Testframework All Core Tests");
+      addTest(ConsoleParserTestSuite.suite());
       addTest(PatternListenerSuite.suite());
       addTest(ModelBuilderSuite.suite());
       addTest(HyperlinkSuite.suite());
