@@ -24,7 +24,7 @@ cache:
   image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build:latest
   stage: build
   script:
-    - 'xvfb-run ./build verify'
+    - 'xvfb-run ./toos/build verify'
 
 build unstable:
   <<: *BUILD_COMMON
