@@ -56,7 +56,7 @@ build signed:
     P2_SOURCE: releng/ch.hsr.ifs.cute.update/target/repository
   script:
     - cd CUTEProject
-    - ./tools/ci/deploy
+    - ../tools/ci/deploy
 
 deploy development:
   <<: *DEPLOY_COMMON
