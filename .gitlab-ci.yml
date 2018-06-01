@@ -51,9 +51,6 @@ build signed:
   image: gitlab.dev.ifs.hsr.ch:45023/ifs/docker-alpine-ssh:latest
   cache: {}
   stage: deploy
-  variables:
-    P2_ROOT: /var/lib/redmine/cute/public/updatesite/
-    P2_SOURCE: releng/ch.hsr.ifs.cute.update/target/repository
   script:
     - cd CUTEProject
     - ../tools/ci/deploy
@@ -63,6 +60,8 @@ deploy development:
   dependencies:
     - build signed
   variables:
+    P2_ROOT: /var/lib/redmine/cute/public/updatesite/
+    P2_SOURCE: releng/ch.hsr.ifs.cute.update/target/repository
     P2_DESTINATION: oxygen-unstable/cute
   only:
     - develop
@@ -72,6 +71,8 @@ deploy release:
   dependencies:
     - build signed
   variables:
+    P2_ROOT: /var/lib/redmine/cute/public/updatesite/
+    P2_SOURCE: releng/ch.hsr.ifs.cute.update/target/repository
     P2_DESTINATION: oxygen/cute
   only:
     - master
