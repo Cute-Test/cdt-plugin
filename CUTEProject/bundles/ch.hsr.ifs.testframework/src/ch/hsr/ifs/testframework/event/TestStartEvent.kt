@@ -11,4 +11,6 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.event;
 
-public class SessionStartEvent implements TestEvent {}
+import org.eclipse.jface.text.IRegion;
+
+data class TestStartEvent(val reg: IRegion, val testName: String) : TestEvent

@@ -11,4 +11,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.event;
 
-public class NonEvent implements TestEvent {}
+import org.eclipse.jface.text.IRegion;
+
+
+data class TestErrorEvent(val reg: IRegion, val testName: String, val msg: String) : TestEvent

@@ -11,4 +11,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.event;
 
-public interface TestEvent {}
+import org.eclipse.jface.text.IRegion;
+
+
+data class SuiteEndEvent(val reg: IRegion, val suitename: String) : TestEvent

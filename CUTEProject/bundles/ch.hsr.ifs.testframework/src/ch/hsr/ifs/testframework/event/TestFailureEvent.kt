@@ -14,19 +14,4 @@ package ch.hsr.ifs.testframework.event;
 import org.eclipse.jface.text.IRegion;
 
 
-public class TestFailureEvent implements TestEvent {
-
-   public IRegion reg;
-   public String  testName;
-   public String  fileName;
-   public String  lineNo;
-   public String  reason;
-
-   public TestFailureEvent(IRegion reg, String testName, String fileName, String lineNo, String reason) {
-      this.fileName = fileName;
-      this.lineNo = lineNo;
-      this.reason = reason;
-      this.reg = reg;
-      this.testName = testName;
-   }
-}
+data class TestFailureEvent(val reg: IRegion, val testName: String, val fileName: String, val lineNo: String, val reason: String) : TestEvent

@@ -14,15 +14,4 @@ package ch.hsr.ifs.testframework.event;
 import org.eclipse.jface.text.IRegion;
 
 
-public class TestErrorEvent implements TestEvent {
-
-   public IRegion reg;
-   public String  testName;
-   public String  msg;
-
-   public TestErrorEvent(IRegion reg, String testName, String msg) {
-      this.msg = msg;
-      this.reg = reg;
-      this.testName = testName;
-   }
-}
+data class TestSuccessEvent(val reg: IRegion, val testName: String, val msg: String) : TestEvent

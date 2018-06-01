@@ -46,12 +46,12 @@ public class ConsoleParserFailureTest extends TestCase {
       assertThat(firstEvent, is(instanceOf(TestFailureEvent.class)));
 
       TestFailureEvent failureEvent = (TestFailureEvent) firstEvent;
-      assertThat(failureEvent.testName, is(equalTo("poly::testComposite")));
-      assertThat(failureEvent.fileName, is(equalTo("../src/Test.cpp")));
-      assertThat(failureEvent.lineNo, is(equalTo("80")));
-      assertThat(failureEvent.reason, is(equalTo("testComposite: \"{ circle:42rectangle:4,circle:4 }\" == out.str() expected:  { circle:42rectangle:4,circle:4 }  but was:  { circle:42rectangle:4,2circle:4 }  ")));
+      assertThat(failureEvent.getTestName(), is(equalTo("poly::testComposite")));
+      assertThat(failureEvent.getFileName(), is(equalTo("../src/Test.cpp")));
+      assertThat(failureEvent.getLineNo(), is(equalTo("80")));
+      assertThat(failureEvent.getReason(), is(equalTo("testComposite: \"{ circle:42rectangle:4,circle:4 }\" == out.str() expected:  { circle:42rectangle:4,circle:4 }  but was:  { circle:42rectangle:4,2circle:4 }  ")));
 
-      assertThat(failureEvent.reg, is(dummyRegion));
+      assertThat(failureEvent.getReg(), is(dummyRegion));
    }
 
 }
