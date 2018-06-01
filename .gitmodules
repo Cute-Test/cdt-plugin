@@ -1,0 +1,3 @@
+[submodule "tools"]
+	path = tools
+	url = ssh://git@gitlab.dev.ifs.hsr.ch:45022/SLOTH/tools.git

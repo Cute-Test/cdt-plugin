@@ -1,32 +1,76 @@
+#=============================================================================#
+# General configuration                                                       #
+#=============================================================================#
+
+stages:
+  - build
+  - test
+  - deploy
+
 variables:
-  LC_ALL: "C.UTF-8"
-  LANG: "en_US.UTF-8"
-  LANGUAGE: "en_US.UTF-8"
-  MAVEN_OPTS: "-Dmaven.repo.local=./.m2/repository"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
-image: fmorgner/cevelop-plugin-build:latest
+cache:
+  paths:
+    - .m2/repository
+  policy: pull-push
+  key: "maven-$CI_PROJECT_ID"
 
-build:
+#=============================================================================#
+# Build jobs                                                                  #
+#=============================================================================#
+
+.buildCommon: &BUILD_COMMON
+  image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build:latest
   stage: build
-  cache:
-    key: "CuteMavenCache"
-    paths:
-      - ./.m2/repository
   script:
-    - mvn compile
-  artifacts:
-    paths:
-      - ./**/target/*
+    - 'xvfb-run ./build verify'
 
-test:
-  stage: test
-  cache:
-    key: "CuteMavenCache"
-    paths:
-      - ./.m2/repository
-    policy: pull
-  script:
-    - 'xvfb-run --server-args="-screen 0 1024x768x24" mvn test verify -Djarsigner.skip=true'
+build unstable:
+  <<: *BUILD_COMMON
+  except:
+    - master
+    - develop
+
+build signed:
+  <<: *BUILD_COMMON
+  image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-release:latest
   artifacts:
     paths:
-      - ./ch.hsr.ifs.cute.updatesite/target/site/*
+    - './*/*/*/target/repository/**'
+  only:
+    - develop
+    - master
+
+#=============================================================================#
+# Deployment jobs                                                             #
+#=============================================================================#
+
+.deployCommon: &DEPLOY_COMMON
+  image: gitlab.dev.ifs.hsr.ch:45023/ifs/docker-alpine-ssh:latest
+  cache: {}
+  stage: deploy
+  variables:
+    P2_ROOT: /var/lib/redmine/cute/public/updatesite/
+    P2_SOURCE: releng/ch.hsr.ifs.cute.update/target/repository
+  script:
+    - cd CUTEProject
+    - ./tools/ci/deploy
+
+deploy development:
+  <<: *DEPLOY_COMMON
+  dependencies:
+    - build signed
+  variables:
+    P2_DESTINATION: oxygen-unstable/cute
+  only:
+    - develop
+
+deploy release:
+  <<: *DEPLOY_COMMON
+  dependencies:
+    - build signed
+  variables:
+    P2_DESTINATION: oxygen/cute
+  only:
+    - master
