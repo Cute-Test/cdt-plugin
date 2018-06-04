@@ -19,10 +19,16 @@ import org.eclipse.core.runtime.CoreException;
  */
 public interface ILaunchObserver {
 
-   public void notifyBeforeLaunch(IProject project) throws CoreException;
+   // FIXME(fmorgner): Remove throws annotation after kotlin port is complete
+   @Throws(CoreException::class)
+   fun notifyBeforeLaunch(project: IProject)
 
-   public void notifyAfterLaunch(IProject project) throws CoreException;
+   // FIXME(fmorgner): Remove throws annotation after kotlin port is complete
+   @Throws(CoreException::class)
+   fun notifyAfterLaunch(project: IProject)
 
-   public void notifyTermination(IProject project) throws CoreException;
+   // FIXME(fmorgner): Remove throws annotation after kotlin port is complete
+   @Throws(CoreException::class)
+   fun notifyTermination(project: IProject)
 
 }
