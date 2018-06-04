@@ -8,9 +8,6 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.preference;
 
-import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.jface.preference.IPreferenceStore;
-
 import ch.hsr.ifs.testframework.TestFrameworkPlugin;
 
 
@@ -18,12 +15,4 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin;
  * @author Emanuel Graf
  *
  */
-public class PreferenceInitializer extends AbstractPreferenceInitializer {
-
-   @Override
-   public void initializeDefaultPreferences() {
-      IPreferenceStore store = TestFrameworkPlugin.getDefault().getPreferenceStore();
-      store.setDefault(PreferenceConstants.SHOW_WHITESPACES, false);
-   }
-
-}
+public val SHOW_WHITESPACES = TestFrameworkPlugin.PLUGIN_ID + "SHOW_WHITESPACES";

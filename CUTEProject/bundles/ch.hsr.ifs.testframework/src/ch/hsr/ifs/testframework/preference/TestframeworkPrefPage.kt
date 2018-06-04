@@ -23,28 +23,23 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin;
  * @author Emanuel Graf
  *
  */
-public class TestframeworkPrefPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class TestframeworkPrefPage : FieldEditorPreferencePage(GRID), IWorkbenchPreferencePage {
 
-   private final Messages msg = TestFrameworkPlugin.getMessages();
+   private val msg = TestFrameworkPlugin.getMessages();
 
-   public TestframeworkPrefPage() {
-      super(GRID);
+   init {
       setPreferenceStore(TestFrameworkPlugin.getDefault().getPreferenceStore());
       setDescription(msg.getString("CutePrefPage.CuteRefPage"));
    }
 
-   @Override
-   protected void createFieldEditors() {
-      addField(new BooleanFieldEditor(PreferenceConstants.SHOW_WHITESPACES, msg.getString("CutePrefPage.ShowWhiteSpaces"), getFieldEditorParent()));
+   protected override fun createFieldEditors() {
+      addField(BooleanFieldEditor(SHOW_WHITESPACES, msg.getString("CutePrefPage.ShowWhiteSpaces"), getFieldEditorParent()));
 
    }
 
-   @Override
-   public void init(IWorkbench workbench) {}
+   override fun init(workbench: IWorkbench) {}
 
-   @Override
-   public Image getImage() {
-      return TestFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO).createImage();
-   }
+   override fun getImage() =
+      TestFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO).createImage();
 
 }

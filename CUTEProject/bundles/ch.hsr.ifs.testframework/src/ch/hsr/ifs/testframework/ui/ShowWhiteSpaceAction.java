@@ -12,7 +12,7 @@ import org.eclipse.jface.action.Action;
 
 import ch.hsr.ifs.testframework.Messages;
 import ch.hsr.ifs.testframework.TestFrameworkPlugin;
-import ch.hsr.ifs.testframework.preference.PreferenceConstants;
+import ch.hsr.ifs.testframework.preference.PreferenceConstantsKt;
 
 
 /**
@@ -29,13 +29,13 @@ public class ShowWhiteSpaceAction extends Action {
       viewer = compareViewer;
       setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/show_whitespace_chars.gif"));
       setToolTipText(msg.getString("ShowWhiteSpaceAction.ShowWhitespaceChar"));
-      setChecked(TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES));
+      setChecked(TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstantsKt.getSHOW_WHITESPACES()));
    }
 
    @Override
    public void run() {
-      boolean show = !TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES);
-      TestFrameworkPlugin.getDefault().getPreferenceStore().setValue(PreferenceConstants.SHOW_WHITESPACES, show);
+      boolean show = !TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstantsKt.getSHOW_WHITESPACES());
+      TestFrameworkPlugin.getDefault().getPreferenceStore().setValue(PreferenceConstantsKt.getSHOW_WHITESPACES(), show);
       viewer.showWhitespaces(show);
    }
 }

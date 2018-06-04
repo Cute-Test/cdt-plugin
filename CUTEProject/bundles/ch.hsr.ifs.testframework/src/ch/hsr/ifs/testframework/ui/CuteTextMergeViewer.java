@@ -22,7 +22,7 @@ import org.eclipse.jface.text.WhitespaceCharacterPainter;
 import org.eclipse.swt.widgets.Composite;
 
 import ch.hsr.ifs.testframework.TestFrameworkPlugin;
-import ch.hsr.ifs.testframework.preference.PreferenceConstants;
+import ch.hsr.ifs.testframework.preference.PreferenceConstantsKt;
 
 
 /**
@@ -47,7 +47,7 @@ public class CuteTextMergeViewer extends TextMergeViewer {
    protected void configureTextViewer(TextViewer textViewer) {
       super.configureTextViewer(textViewer);
       WhitespaceCharacterPainter whitespaceCharPainter = null;
-      if (TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_WHITESPACES)) {
+      if (TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(PreferenceConstantsKt.getSHOW_WHITESPACES())) {
          whitespaceCharPainter = new WhitespaceCharacterPainter(textViewer);
          textViewer.addPainter(whitespaceCharPainter);
       }
