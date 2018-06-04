@@ -12,8 +12,10 @@ package ch.hsr.ifs.testframework.model;
  * @author Emanuel Graf
  *
  */
-public interface ITestCompositeListener {
+data class NotifyEvent(val type: EventType, val element: TestElement) {
 
-   public void newTestElement(ITestComposite source, TestElement newElement);
+   enum class EventType {
+      testFinished, suiteFinished
+   }
 
 }

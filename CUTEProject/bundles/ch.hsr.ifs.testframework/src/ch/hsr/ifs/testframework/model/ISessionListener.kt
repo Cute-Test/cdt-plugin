@@ -6,10 +6,16 @@
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.testframework.model;
+package ch.hsr.ifs.testframework.model
 
-public enum TestStatus {
+/**
+ * @author Emanuel Graf
+ *
+ */
+interface ISessionListener {
 
-   running, success, failure, error
+   public fun sessionStarted(session: TestSession)
+
+   public fun sessionFinished(session: TestSession)
 
 }

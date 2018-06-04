@@ -8,35 +8,32 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.model;
 
-import java.util.List;
-
-
 /**
  * @author Emanuel Graf
  *
  */
-public interface ITestComposite {
+interface ITestComposite {
 
-   public abstract int getError();
+   fun getError(): Int;
 
-   public abstract int getFailure();
+   fun getFailure(): Int;
 
-   public abstract int getSuccess();
+   fun getSuccess(): Int;
 
-   public abstract int getTotalTests();
+   fun getTotalTests(): Int;
 
-   public abstract int getRun();
+   fun getRun(): Int;
 
-   public abstract List<? extends TestElement> getElements();
+   fun getElements(): List<TestElement> 
 
-   public void addTestElement(TestElement element);
+   fun addTestElement(element: TestElement);
 
-   public boolean hasErrorOrFailure();
+   fun hasErrorOrFailure(): Boolean;
 
-   public void addListener(ITestCompositeListener listener);
+   fun addListener(listener: ITestCompositeListener);
 
-   public void removeListener(ITestCompositeListener listener);
+   fun removeListener(listener: ITestCompositeListener);
 
-   public String getRerunName();
+   fun getRerunName(): String;
 
 }

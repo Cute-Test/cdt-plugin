@@ -8,32 +8,6 @@
  ******************************************************************************/
 package ch.hsr.ifs.testframework.model;
 
-/**
- * @author Emanuel Graf
- *
- */
-public class NotifyEvent {
-
-   public enum EventType {
-      testFinished, suiteFinished
-   }
-
-   private final EventType type;
-
-   private final TestElement element;
-
-   public NotifyEvent(EventType type, TestElement element) {
-      super();
-      this.type = type;
-      this.element = element;
-   }
-
-   public EventType getType() {
-      return type;
-   }
-
-   public TestElement getElement() {
-      return element;
-   }
-
+enum class TestStatus {
+   running, success, failure, error
 }

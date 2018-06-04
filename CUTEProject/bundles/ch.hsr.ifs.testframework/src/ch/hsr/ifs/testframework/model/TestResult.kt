@@ -12,8 +12,9 @@ package ch.hsr.ifs.testframework.model;
  * @author Emanuel Graf
  *
  */
-public interface ITestElementListener {
+open class TestResult(protected var message: String = "") {
 
-   public void modelCanged(TestElement source, NotifyEvent event);
+   open val msg: String
+      get() { return message }
 
 }

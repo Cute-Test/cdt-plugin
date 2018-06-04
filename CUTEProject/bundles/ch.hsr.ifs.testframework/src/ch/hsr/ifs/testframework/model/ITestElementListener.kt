@@ -6,27 +6,14 @@
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.testframework.model;
+package ch.hsr.ifs.testframework.model
 
 /**
  * @author Emanuel Graf
  *
  */
-public class TestResult {
+public interface ITestElementListener {
 
-   protected String msg;
-
-   protected TestResult() {
-      msg = "";
-   }
-
-   public TestResult(String msg) {
-      super();
-      this.msg = msg;
-   }
-
-   public String getMsg() {
-      return msg;
-   }
+   fun modelCanged(source: TestElement, event: NotifyEvent)
 
 }

@@ -6,16 +6,14 @@
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.testframework.model;
+package ch.hsr.ifs.testframework.model
 
 /**
  * @author Emanuel Graf
  *
  */
-public interface ISessionListener {
+public interface ITestCompositeListener {
 
-   public void sessionStarted(TestSession session);
-
-   public void sessionFinished(TestSession session);
+   fun newTestElement(source: ITestComposite, newElement: TestElement)
 
 }

@@ -1,5 +1,8 @@
 package ch.hsr.ifs.cute.core.launch;
 
+import static ch.hsr.ifs.testframework.launch.CustomisedLaunchConfigTabKt.CUSTOM_SRC_PATH;
+import static ch.hsr.ifs.testframework.launch.CustomisedLaunchConfigTabKt.USE_CUSTOM_SRC_PATH;
+
 import java.util.Set;
 
 import org.eclipse.cdt.core.model.ICProject;
@@ -28,7 +31,6 @@ import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
 import ch.hsr.ifs.testframework.event.ConsoleEventParser;
 import ch.hsr.ifs.testframework.event.TestEventHandler;
 import ch.hsr.ifs.testframework.launch.ConsolePatternListener;
-import ch.hsr.ifs.testframework.launch.CustomisedLaunchConfigTab;
 import ch.hsr.ifs.testframework.model.ModellBuilder;
 import ch.hsr.ifs.testframework.ui.ConsoleLinkHandler;
 import ch.hsr.ifs.testframework.ui.ShowResultView;
@@ -76,9 +78,9 @@ public class CuteDebugLauncherDelegate extends AbstractCLaunchDelegate2 {
 
    public IPath sourcelookupPath(ILaunchConfiguration config, IPath exePath) {
       try {
-         if (config != null && config.getAttribute(CustomisedLaunchConfigTab.USE_CUSTOM_SRC_PATH, false)) {
+         if (config != null && config.getAttribute(USE_CUSTOM_SRC_PATH, false)) {
             String rootpath = org.eclipse.core.runtime.Platform.getLocation().toOSString();
-            String customSrcPath = config.getAttribute(CustomisedLaunchConfigTab.CUSTOM_SRC_PATH, "");
+            String customSrcPath = config.getAttribute(CUSTOM_SRC_PATH, "");
             String fileSeparator = System.getProperty("file.separator");
             return new org.eclipse.core.runtime.Path(rootpath + customSrcPath + fileSeparator);
          } else {
