@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
+import ch.hsr.ifs.cute.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
 import ch.hsr.ifs.cute.ui.ProjectTools;
@@ -81,7 +82,7 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
    @Override
    protected boolean isCustomPageComplete() {
       if (isLibrarySelectionActive && getCheckedProjects().size() < 1) { return false; }
-      return cuteVersionComp != null ? cuteVersionComp.isComplete() : !CuteUIPlugin.getInstalledCuteHeaders().isEmpty();
+      return cuteVersionComp != null ? cuteVersionComp.isComplete() : !ICuteHeaders.loadedHeaders().isEmpty();
    }
 
    @Override
@@ -240,7 +241,7 @@ public class NewCuteProjectWizardPage extends MBSCustomPage implements ICheckSta
       if (cuteVersionComp != null) {
          return cuteVersionComp.getVersionString();
       } else {
-         return CuteUIPlugin.getInstalledCuteHeaders().first().getVersionString();
+         return ICuteHeaders.loadedHeaders().stream().map(ICuteHeaders::getVersionString).findFirst().orElse(null);
       }
    }
 

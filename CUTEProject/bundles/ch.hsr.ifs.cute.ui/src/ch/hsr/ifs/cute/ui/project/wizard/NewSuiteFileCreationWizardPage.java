@@ -61,7 +61,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
-import ch.hsr.ifs.cute.core.headers.CuteHeaders;
+import ch.hsr.ifs.cute.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 
 
@@ -136,11 +136,11 @@ public class NewSuiteFileCreationWizardPage extends WizardPage {
 
                if (folderPath.segmentCount() == 1) {
                   IProject project = root.getProject(folderPath.toPortableString());
-                  CuteHeaders headers = CuteUIPlugin.getCuteVersion(project);
+                  ICuteHeaders headers = ICuteHeaders.getForProject(project); 
                   headers.copySuiteFiles(project, monitor, suitename, true);
                } else {
                   IProject project = root.getProject(folderPath.segments()[0]);
-                  CuteHeaders headers = CuteUIPlugin.getCuteVersion(project);
+                  ICuteHeaders headers = ICuteHeaders.getForProject(project); 
                   IFolder folder = root.getFolder(folderPath);
                   headers.copySuiteFiles(folder, monitor, suitename, false);
                }

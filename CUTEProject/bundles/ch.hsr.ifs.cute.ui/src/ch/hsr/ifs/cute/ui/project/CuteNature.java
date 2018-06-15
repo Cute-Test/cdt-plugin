@@ -1,71 +1,74 @@
-/*******************************************************************************
- * Copyright (c) 2007-2011, IFS Institute for Software, HSR Rapperswil,
- * Switzerland, http://ifs.hsr.ch
- *
- * Permission to use, copy, and/or distribute this software for any
- * purpose without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
- ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import org.eclipse.cdt.managedbuilder.core.IOption;
+import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 
+import ch.hsr.ifs.iltis.core.core.arrays.ArrayUtil;
+
+import ch.hsr.ifs.iltis.cpp.versionator.definition.CPPVersion;
+
+import ch.hsr.ifs.cute.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
+import ch.hsr.ifs.cute.ui.GetOptionsStrategy;
+import ch.hsr.ifs.cute.ui.IIncludeStrategyProvider;
+import ch.hsr.ifs.cute.ui.IncludePathStrategy;
+import ch.hsr.ifs.cute.ui.ProjectTools;
 
 
 /**
- * @author Emanuel Graf
+ * @author Emanuel Graf, Tobias Stauber
  *
  */
-public class CuteNature implements IProjectNature {
+public class CuteNature implements IProjectNature, IIncludeStrategyProvider {
 
-   public static final String CUTE_NATURE_ID = CuteUIPlugin.PLUGIN_ID + ".cutenature";
+   public static final String NATURE_ID = CuteUIPlugin.PLUGIN_ID + ".cutenature";
 
    private IProject project;
 
    public static void addCuteNature(IProject project, IProgressMonitor mon) throws CoreException {
-      addNature(project, CUTE_NATURE_ID, mon);
+      addNature(project, NATURE_ID, mon);
    }
 
    public static void removeCuteNature(IProject project, IProgressMonitor mon) throws CoreException {
-      removeNature(project, CUTE_NATURE_ID, mon);
+      removeNature(project, NATURE_ID, mon);
    }
 
    public static void addNature(IProject project, String natureId, IProgressMonitor monitor) throws CoreException {
       IProjectDescription description = project.getDescription();
       String[] prevNatures = description.getNatureIds();
-      for (String prevNature : prevNatures) {
-         if (natureId.equals(prevNature)) return;
+      if (ArrayUtil.contains(prevNatures, natureId) == -1) {
+         description.setNatureIds(ArrayUtil.append(prevNatures, natureId));
+         project.setDescription(description, monitor);
       }
-      String[] newNatures = new String[prevNatures.length + 1];
-      System.arraycopy(prevNatures, 0, newNatures, 1, prevNatures.length);
-      newNatures[0] = natureId;
-      description.setNatureIds(newNatures);
-      project.setDescription(description, monitor);
    }
 
    public static void removeNature(IProject project, String natureId, IProgressMonitor monitor) throws CoreException {
       IProjectDescription description = project.getDescription();
-      String[] prevNatures = description.getNatureIds();
-      List<String> newNatures = new ArrayList<>(Arrays.asList(prevNatures));
-      newNatures.remove(natureId);
-      description.setNatureIds(newNatures.toArray(new String[newNatures.size()]));
+      description.setNatureIds(ArrayUtil.removeAndTrim(description.getNatureIds(), natureId));
       project.setDescription(description, monitor);
    }
 
    @Override
-   public void configure() throws CoreException {}
+   public void configure() throws CoreException {
+      if (ManagedBuildManager.getBuildInfo(project) != null) {
+         ICuteHeaders defaultHeaders = ICuteHeaders.getDefaultHeaders(CPPVersion.getForProject(getProject()));
+         createCuteProjectFolders(project, defaultHeaders);
+      }
+   }
 
    @Override
-   public void deconfigure() throws CoreException {}
+   public void deconfigure() throws CoreException {
+      removeCuteProjectFolders(project);
+   }
 
    @Override
    public IProject getProject() {
@@ -77,4 +80,29 @@ public class CuteNature implements IProjectNature {
       this.project = project;
    }
 
+   private void createCuteProjectFolders(IProject project, ICuteHeaders headers) throws CoreException {
+      IFolder cuteFolder = ProjectTools.createFolder(project, "cute", true);
+      headers.copyHeaderFiles(cuteFolder, new NullProgressMonitor());
+      ProjectTools.setIncludePaths(replaceProjectLocation(cuteFolder), project, this);
+   }
+
+   private void removeCuteProjectFolders(IProject project) throws CoreException {
+      IFolder cuteFolder = project.getFolder("cute");
+      ProjectTools.removeIncludePaths(replaceProjectLocation(cuteFolder), project, this);
+      ICuteHeaders.removeHeaderFiles(cuteFolder, new NullProgressMonitor());
+   }
+
+   private IPath replaceProjectLocation(IFolder cuteFolder) {
+      return new Path("/${ProjName}").append(cuteFolder.getProjectRelativePath());
+   }
+
+   @Override
+   public GetOptionsStrategy getStrategy(int optionType) {
+      switch (optionType) {
+      case IOption.INCLUDE_PATH:
+         return new IncludePathStrategy();
+      default:
+         throw new IllegalArgumentException("Illegal Argument: " + optionType);
+      }
+   }
 }

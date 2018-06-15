@@ -11,19 +11,18 @@ package ch.hsr.ifs.cute.headers.tests.tests;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import ch.hsr.ifs.cute.headers.versions.CuteHeaders_2_0;
+import ch.hsr.ifs.cute.headers.versions.CuteHeaders2;
 
 
 public class CopyHeaders2_0Test extends CopyHeadersBaseTest {
-
+   
    public CopyHeaders2_0Test(String m) {
       super(m);
    }
-
+ 
    public final void testCopySuiteFiles() throws CoreException {
-      CuteHeaders_2_0 h = new CuteHeaders_2_0();
       String suitename = "TestSuite";
-      h.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename, true);
+      CuteHeaders2._0_1.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename, true);
       assertSuiteFilesExist(suitename);
    }
 }

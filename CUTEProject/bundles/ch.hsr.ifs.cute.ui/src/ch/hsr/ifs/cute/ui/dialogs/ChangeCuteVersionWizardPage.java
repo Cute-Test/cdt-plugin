@@ -16,6 +16,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import ch.hsr.ifs.cute.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteVersionComposite;
 
@@ -30,11 +31,11 @@ public class ChangeCuteVersionWizardPage extends WizardPage {
    private Composite             composite;
    private CuteVersionComposite  cuteVersionComp;
    private final ImageDescriptor imageDesc;
-   private final String          currentCuteHeadersVersionName;
+   private final ICuteHeaders    currentCuteHeaders;
 
-   protected ChangeCuteVersionWizardPage(String currentCuteHeadersVersionName) {
+   protected ChangeCuteVersionWizardPage(ICuteHeaders currentCuteHeaders) {
       super("changeCuteVersionPage");
-      this.currentCuteHeadersVersionName = currentCuteHeadersVersionName;
+      this.currentCuteHeaders = currentCuteHeaders;
       imageDesc = CuteUIPlugin.getImageDescriptor("cute_logo.png");
    }
 
@@ -44,9 +45,9 @@ public class ChangeCuteVersionWizardPage extends WizardPage {
       composite.setLayout(new GridLayout());
       composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-      setTitle(Messages.getString("ChangeCuteVersionWizardPage.changeCuteVersion"));
+      setTitle("Change CUTE Version");
 
-      cuteVersionComp = new CuteVersionComposite(composite, currentCuteHeadersVersionName);
+      cuteVersionComp = new CuteVersionComposite(composite, currentCuteHeaders);
       setControl(composite);
    }
 

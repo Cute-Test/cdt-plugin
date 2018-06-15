@@ -29,6 +29,5 @@ Export-Package: ch.hsr.ifs.cute.core,
  ch.hsr.ifs.cute.core.event,
  ch.hsr.ifs.cute.core.headers,
  ch.hsr.ifs.cute.core.launch,
- ch.hsr.ifs.cute.core.template.processes,
- ch.hsr.ifs.cute.core.utils
+ ch.hsr.ifs.cute.core.template.processes
 Automatic-Module-Name: ch.hsr.ifs.cute.core

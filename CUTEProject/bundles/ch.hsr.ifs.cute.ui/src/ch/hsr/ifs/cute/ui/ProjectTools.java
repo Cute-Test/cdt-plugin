@@ -10,6 +10,7 @@ package ch.hsr.ifs.cute.ui;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.CSourceEntry;
@@ -37,11 +38,13 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 
+import ch.hsr.ifs.iltis.core.core.arrays.ArrayUtil;
+
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 
 
 /**
- * @author Emanuel Graf IFS
+ * @author Emanuel Graf IFS & Tobias Stauber IFS
  * @since 4.0
  *
  */
@@ -93,31 +96,37 @@ public class ProjectTools {
       return set.toArray(new ICSourceEntry[set.size()]);
    }
 
-   public static void setOptionInConfig(String value, IConfiguration config, IOption[] options, IHoldsOptions optionHolder, int optionType,
-         IIncludeStrategyProvider inStratProv) throws BuildException {
+   public static void changeOptionInConfig(IConfiguration config, IOption[] options, IHoldsOptions optionHolder, int optionType,
+         IIncludeStrategyProvider inStratProv, Function<String[], String[]> changeOperation) throws BuildException {
       for (IOption option : options) {
          if (option.getValueType() == optionType) {
-            String[] includePaths = inStratProv.getStrategy(optionType).getValues(option);
-            String[] newPaths = new String[includePaths.length + 1];
-            System.arraycopy(includePaths, 0, newPaths, 0, includePaths.length);
-            newPaths[includePaths.length] = value;
-            ManagedBuildManager.setOption(config, optionHolder, option, newPaths);
+            ManagedBuildManager.setOption(config, optionHolder, option, changeOperation.apply(inStratProv.getStrategy(optionType).getValues(option)));
          }
       }
    }
 
-   public static void setOptionInAllConfigs(IProject project, String value, int optionType, IIncludeStrategyProvider inclStratProv)
-         throws CoreException {
+   public static void setOptionInConfig(String value, IConfiguration config, IOption[] options, IHoldsOptions optionHolder, int optionType,
+         IIncludeStrategyProvider inStratProv) throws BuildException {
+      changeOptionInConfig(config, options, optionHolder, optionType, inStratProv, values -> ArrayUtil.append(values, value));
+   }
+
+   public static void removeOptionInConfig(String value, IConfiguration config, IOption[] options, IHoldsOptions optionHolder, int optionType,
+         IIncludeStrategyProvider inStratProv) throws BuildException {
+      changeOptionInConfig(config, options, optionHolder, optionType, inStratProv, values -> ArrayUtil.removeAndTrim(values, value));
+   }
+
+   public static void changeOptionInAllConfigs(IProject project, int optionType, IIncludeStrategyProvider inclStratProv,
+         Function<String[], String[]> changeOperation) throws CoreException {
       IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
       IConfiguration[] configs = info.getManagedProject().getConfigurations();
       try {
          for (IConfiguration conf : configs) {
             IToolChain toolChain = conf.getToolChain();
-            setOptionInConfig(value, conf, toolChain.getOptions(), toolChain, optionType, inclStratProv);
+            changeOptionInConfig(conf, toolChain.getOptions(), toolChain, optionType, inclStratProv, changeOperation);
 
             ITool[] tools = conf.getTools();
             for (ITool tool : tools) {
-               setOptionInConfig(value, conf, tool.getOptions(), tool, optionType, inclStratProv);
+               changeOptionInConfig(conf, tool.getOptions(), tool, optionType, inclStratProv, changeOperation);
             }
          }
       } catch (BuildException be) {
@@ -125,9 +134,24 @@ public class ProjectTools {
       }
    }
 
+   public static void setOptionInAllConfigs(IProject project, String value, int optionType, IIncludeStrategyProvider inclStratProv)
+         throws CoreException {
+      changeOptionInAllConfigs(project, optionType, inclStratProv, values -> ArrayUtil.append(values, value));
+   }
+
+   public static void removeOptionInAllConfigs(IProject project, String value, int optionType, IIncludeStrategyProvider inclStratProv)
+         throws CoreException {
+      changeOptionInAllConfigs(project, optionType, inclStratProv, values -> ArrayUtil.removeAndTrim(values, value));
+   }
+
    public static void setIncludePaths(IPath cuteFolder, IProject project, IIncludeStrategyProvider inclStratProv) throws CoreException {
       String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\"";
       setOptionInAllConfigs(project, path, IOption.INCLUDE_PATH, inclStratProv);
+   }
+
+   public static void removeIncludePaths(IPath cuteFolder, IProject project, IIncludeStrategyProvider inclStratProv) throws CoreException {
+      String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\"";
+      removeOptionInAllConfigs(project, path, IOption.INCLUDE_PATH, inclStratProv);
    }
 
    public static boolean isLibraryProject(IProject project) {
