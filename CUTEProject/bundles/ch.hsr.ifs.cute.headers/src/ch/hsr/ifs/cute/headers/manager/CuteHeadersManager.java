@@ -109,7 +109,7 @@ public class CuteHeadersManager {
    }
 
    public static List<URL> getHeaderFiles(Bundle bundle, String versionNumber) {
-      return CuteHeadersManager.getFileList(bundle, "headers", "*.*", versionNumber);
+      return CuteHeadersManager.getFileList(bundle, "headers/CUTE/cute", "*.*", versionNumber);
    }
 
    public static String getCpp11Appendix(IProject project) {

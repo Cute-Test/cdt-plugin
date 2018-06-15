@@ -8,8 +8,6 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.headers.tests;
 
-import ch.hsr.ifs.cute.headers.tests.tests.CopyHeaders2_0Test;
-import ch.hsr.ifs.cute.headers.tests.tests.CopyHeaders2_1Test;
 import ch.hsr.ifs.cute.headers.tests.tests.CopyHeaders2_2Test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -24,8 +22,6 @@ public class PluginUITestSuiteAll extends TestSuite {
    public PluginUITestSuiteAll() {
       super("All Header Tests");
       addTestSuite(CopyHeaders2_2Test.class);
-      addTestSuite(CopyHeaders2_1Test.class);
-      addTestSuite(CopyHeaders2_0Test.class);
    }
 
    public static Test suite() {
