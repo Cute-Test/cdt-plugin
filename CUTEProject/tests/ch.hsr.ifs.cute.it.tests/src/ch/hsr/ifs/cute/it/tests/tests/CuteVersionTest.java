@@ -55,31 +55,6 @@ public class CuteVersionTest extends AutomatedUITest {
 
    @Test
    @TestProjectType("CUTE Project")
-   public void newProjectV201() throws Exception {
-      ICuteHeaders expectedVersion = CuteHeaders2._0_1;
-      assertEquals("2.0.1", expectedVersion.getVersionNumber());
-
-      ICProject project = createProject(() -> setCuteVersion(expectedVersion));
-      ICuteHeaders cuteVersion = ICuteHeaders.getForProject(project.getProject());
-      assertTrue(cuteVersion == expectedVersion);
-      assertCuteVersion(project, expectedVersion);
-   }
-
-   @Test
-   @TestProjectType("CUTE Project")
-   public void newProjectV211() throws Exception {
-
-      ICuteHeaders expectedVersion = CuteHeaders2._1_1;
-      assertEquals("2.1.1", expectedVersion.getVersionNumber());
-
-      ICProject project = createProject(() -> setCuteVersion(expectedVersion));
-      ICuteHeaders cuteVersion = ICuteHeaders.getForProject(project.getProject());
-      assertTrue(cuteVersion == expectedVersion);
-      assertCuteVersion(project, expectedVersion);
-   }
-
-   @Test
-   @TestProjectType("CUTE Project")
    public void newProjectV221() throws Exception {
       ICuteHeaders expectedVersion = CuteHeaders2._2_1;
       assertEquals("2.2.1", expectedVersion.getVersionNumber());

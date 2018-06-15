@@ -13,12 +13,6 @@ import ch.hsr.ifs.cute.headers.ICuteHeaders;
  */
 public enum CuteHeaders2 implements ICuteHeaders {
 
-   @CuteVersionNumber(major = 2, minor = 0, patch = 1)
-   _0_1(),
-
-   @CuteVersionNumber(major = 2, minor = 1, patch = 1)
-   _1_1(),
-
    @CuteVersionNumber(major = 2, minor = 2, patch = 1)
    _2_1();
 
@@ -40,7 +34,7 @@ public enum CuteHeaders2 implements ICuteHeaders {
 
    @Override
    public boolean compatibleWith(CPPVersion cppVersion) {
-      return cppVersion.ordinal() > CPPVersion.CPP_98.ordinal();
+      return cppVersion.ordinal() >= CPPVersion.CPP_03.ordinal();
    }
 
 }
