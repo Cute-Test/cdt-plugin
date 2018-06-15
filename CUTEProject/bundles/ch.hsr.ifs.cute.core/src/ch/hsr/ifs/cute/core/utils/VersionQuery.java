@@ -11,7 +11,8 @@ package ch.hsr.ifs.cute.core.utils;
 
 import org.eclipse.core.resources.IProject;
 
-import com.cevelop.elevenator.definition.CPPVersion;
+import ch.hsr.ifs.iltis.cpp.versionator.definition.CPPVersion;
+
 
 
 /**

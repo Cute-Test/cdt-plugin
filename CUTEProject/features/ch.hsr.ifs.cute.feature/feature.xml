@@ -62,7 +62,7 @@
       <import plugin="ch.hsr.ifs.cute.core"/>
       <import plugin="org.eclipse.cdt.managedbuilder.ui" version="8.2.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.e4.core.di"/>
-      <import plugin="com.cevelop.elevenator"/>
+      <import plugin="ch.hsr.ifs.iltis.cpp.versionator"/>
    </requires>
 
    <plugin

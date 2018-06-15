@@ -7,7 +7,7 @@ Bundle-Activator: ch.hsr.ifs.cute.headers.tests.CuteHeaderTestPlugin
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;bundle-version="3.6.0",
  org.junit;bundle-version="4.8.1",
- com.cevelop.elevenator,
+ ch.hsr.ifs.iltis.cpp.versionator,
  ch.hsr.ifs.cute.ui,
  ch.hsr.ifs.cute.headers,
  ch.hsr.ifs.cute.core

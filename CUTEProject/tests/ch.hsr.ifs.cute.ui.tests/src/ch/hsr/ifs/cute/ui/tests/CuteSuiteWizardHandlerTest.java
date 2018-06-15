@@ -25,8 +25,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.cevelop.elevenator.Activator;
-import com.cevelop.elevenator.definition.CPPVersion;
+import ch.hsr.ifs.iltis.cpp.versionator.Activator;
+import ch.hsr.ifs.iltis.cpp.versionator.definition.CPPVersion;
 
 import ch.hsr.ifs.cute.core.headers.CuteHeaders;
 import ch.hsr.ifs.cute.headers.versions.CuteHeaders_1_7;
