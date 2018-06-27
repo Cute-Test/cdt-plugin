@@ -4,7 +4,7 @@
    <extension
          point="ch.hsr.ifs.iltis.testing.highlevel.testingPlugin">
       <testResouresLocation
-            sourceLocation="/resources/ch.hsr.ifs.cute.ui/">
+            sourceLocation="resources/ch.hsr.ifs.cute.ui.tests/">
       </testResouresLocation>
    </extension>
 </plugin>
