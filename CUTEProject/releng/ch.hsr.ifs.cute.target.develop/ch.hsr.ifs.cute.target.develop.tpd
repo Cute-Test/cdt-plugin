@@ -1,19 +1,19 @@
-target "Cevelop based on Eclipse Oxygen and CDT 9.4.0" with source requirements
+target "Cute Develop" with source requirements
 
-//TODO change to ITLIS Testing Highlevel
-location "https://www.cevelop.com/cdt-testing/9.4.0" {
-	ch.hsr.ifs.cdttesting.feature.feature.group [9.4.0,9.5.0)
-}
+//location "https://www.cevelop.com/cdt-testing/9.4.0" {
+//	ch.hsr.ifs.cdttesting.feature.feature.group [9.4.0,9.5.0)
+//}
 
-location "http://download.eclipse.org/releases/oxygen" {
-	org.eclipse.swtbot.eclipse.feature.group [2.6.0,2.7.0)
+location "http://download.eclipse.org/releases/photon" {
+	org.eclipse.swtbot.eclipse.feature.group [2.7.0,2.8.0)
 	org.eclipse.cdt.sdk.feature.group lazy
 	org.apache.log4j lazy
-	org.eclipse.platform.sdk [4.7.0,4.8.0)
-	org.eclipse.sdk.ide [4.7.0,4.8.0)
+	org.eclipse.platform.sdk [4.8.0,4.9.0)
+	org.eclipse.sdk.ide [4.8.0,4.9.0)
 }
 
 location "https://www.cevelop.com/iltis-unstable/" {
 	ch.hsr.ifs.iltis.core.core.feature.feature.group lazy
 	ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group lazy
+	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group lazy
 }
