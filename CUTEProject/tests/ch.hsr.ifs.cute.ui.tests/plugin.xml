@@ -2,9 +2,8 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="ch.hsr.ifs.cdttesting.testingPlugin">
+         point="ch.hsr.ifs.iltis.testing.highlevel.testingPlugin">
       <testResouresLocation
-            activatorClass="ch.hsr.ifs.cute.ui.tests.UiTestPlugin"
             sourceLocation="/resources/ch.hsr.ifs.cute.ui/">
       </testResouresLocation>
    </extension>
