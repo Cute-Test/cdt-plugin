@@ -1,6 +1,6 @@
-//!testUnregisteredTestFunctionWithUsingDeclaration
+//!Test Unregistered Test Function With Using Declaration
 //@.config
-markerLineNr=4
+markerLines=4
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -13,9 +13,9 @@ markerLineNr=4
  using cute::suite;
  suite s;
  }
-//!testUnregisteredTestFunctionWithUsingNamespace
+//!Test Unregistered Test Function With Using Namespace
 //@.config
-markerLineNr=4
+markerLines=4
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -28,9 +28,9 @@ markerLineNr=4
  using namespace cute;
  suite s;
  }
-//!testUnregisteredTestFunction
+//!Test Unregistered Test Function
 //@.config
-markerLineNr=4
+markerLines=4
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -42,9 +42,9 @@ markerLineNr=4
  void runSuite() {
  cute::suite s;
  }
-//!testUnregisteredTestFunctionExternalFile
+//!Test Unregistered Test Function External File
 //@.config
-markerLineNr=4
+markerLines=4
 //@test.h
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -57,9 +57,7 @@ markerLineNr=4
  void runSuite() {
  cute::suite s;
  }
-//!testRegisteredTestFunction
-//@.config
-noMarker=true
+//!Test Registered Test Function
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -73,9 +71,7 @@ noMarker=true
  cute::suite s;
  s.push_back(CUTE(thisIsATest));
  }
-//!testRegisteredTestFunctionWithUsingDeclaration
-//@.config
-noMarker=true
+//!Test Registered Test Function With Using Declaration
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -92,9 +88,7 @@ noMarker=true
  suite s;
  s.push_back(CUTE(thisIsATest));
  }
-//!testRegisteredTestFunctionWithUsingNamespace
-//@.config
-noMarker=true
+//!Test Registered Test Function With Using Namespace
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -109,9 +103,7 @@ noMarker=true
  suite s;
  s.push_back(CUTE(thisIsATest));
  }
-//!testNonLocalSuite
-//@.config
-noMarker=true
+//!Test Non Local Suite
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -125,9 +117,9 @@ noMarker=true
  void runSuite() {
  s.push_back(CUTE(thisIsATest));
  }
-//!testRegisteredTestFunction2
+//!Test Registered Test Function 2
 //@.config
-markerLineNr=9
+markerLines=9
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -145,9 +137,9 @@ markerLineNr=9
  cute::suite s;
  s.push_back(CUTE(thisIsATest));
  }
-//!testUnregisteredFunctor
+//!Test Unregistered Functor
 //@.config
-markerLineNr=5
+markerLines=5
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -161,9 +153,9 @@ markerLineNr=5
  void runSuite() {
  cute::suite s;
  }
-//!testUnregisteredFunctorAssertInMemberFunction
+//!Test Unregistered Functor Assert In Member Function
 //@.config
-markerLineNr=5
+markerLines=5
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -181,9 +173,7 @@ markerLineNr=5
  void runSuite() {
  cute::suite s;
  }
-//!testRegisteredFunctor
-//@.config
-noMarker=true
+//!Test Registered Functor
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -198,9 +188,7 @@ noMarker=true
  cute::suite s;
  s.push_back(testFunctor());
  }
- //!testRegisteredFunctorAssertInMemberFunction
-//@.config
-noMarker=true
+//!Test Registered Functor Assert In Member Function
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -218,9 +206,7 @@ noMarker=true
  cute::suite s;
  s.push_back(testFunctor());
  }
- //!testRegisteredFunctorAssertInMemberFunctionAndOperator
-//@.config
-noMarker=true
+//!Test Registered Functor Assert In Member Function And Operator
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -239,9 +225,7 @@ noMarker=true
  cute::suite s;
  s.push_back(testFunctor());
  }
-//!testRegisteredMemberFunctionInline
-//@.config
-noMarker=true
+//!Test Registered Member Function Inline
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -265,9 +249,7 @@ noMarker=true
  cute::suite s;
  s.push_back(CUTE_SMEMFUN(testStruct, testIt));
  }
-//!testRegisteredMemberFunctionTypeHierarchy
-//@.config
-noMarker=true
+//!Test Registered Member Function Type Hierarchy
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -320,9 +302,9 @@ noMarker=true
      cute::ide_listener lis;
      cute::makeRunner(lis)(s, "The Suite");
  }
-//!testUnregisteredMemberFunctionInline
+//!Test Unregistered Member Function Inline
 //@.config
-markerLineNr=9
+markerLines=9
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -341,8 +323,6 @@ markerLineNr=9
  cute::suite s;
  }
 //!Member Function Registered with push_back
-//@.config
-noMarker=true
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -369,8 +349,6 @@ noMarker=true
  s.push_back(CUTE_SMEMFUN(testStruct, testIt));
  }
 //!Member Function Registered with Operator +=
-//@.config
-noMarker=true
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -396,9 +374,9 @@ noMarker=true
  cute::suite s;
  s += CUTE_SMEMFUN(testStruct, testIt);
  }
-//!testUnregisteredMemberFunction
+//!Test Unregistered Member Function
 //@.config
-markerLineNr=12
+markerLines=12
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -418,9 +396,7 @@ markerLineNr=12
  void runSuite() {
  cute::suite s;
  }
- //!Test Functor Defined in Other Translation Unit
-//@.config
-noMarker=true
+//!Test Functor Defined in Other Translation Unit
 //@main.cpp
  #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
  #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -466,9 +442,7 @@ void myclassTest::operator()() {
 	ASSERT(false);
 }
 
-//!TestRegisteredByCallingCuteTestDirectlyWithNoNameAndImplicitFunctionToPointerToFunctionDecay
-//@.config
-noMarker=true
+//!Test Registered By Calling Cute Test Directly With No Name And Implicit Function To Pointer To Function Decay
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -485,9 +459,7 @@ void runSuite() {
 	s.push_back(cute::test(thisIsATest));
 }
 
-//!TestRegisteredByCallingCuteTestDirectlyWithNoNameAndExplicitnFunctionToPointerToFunctionConversion
-//@.config
-noMarker=true
+//!Test Registered By Calling Cute Test Directly With No Name And Explicit Function To Pointer To Function Conversion
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -504,9 +476,7 @@ void runSuite() {
 	s.push_back(cute::test(&thisIsATest));
 }
 
-//!TestRegisteredByCallingCuteTestDirectlyWithNameAndImplicitFunctionToPointerToFunctionDecay
-//@.config
-noMarker=true
+//!Test Registered By Calling Cute Test Directly With Name And Implicit Function To Pointer To Function Decay
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -523,9 +493,7 @@ void runSuite() {
 	s.push_back(cute::test(thisIsATest, "some test"));
 }
 
-//!TestRegisteredByCallingCuteTestDirectlyWithNameAndExplicitnFunctionToPointerToFunctionConversion
-//@.config
-noMarker=true
+//!Test Registered By Calling Cute Test Directly With Name And Explicit Function To Pointer To Function Conversion
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
