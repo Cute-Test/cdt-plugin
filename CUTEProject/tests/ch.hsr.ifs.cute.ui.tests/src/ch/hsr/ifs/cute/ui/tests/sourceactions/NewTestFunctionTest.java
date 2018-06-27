@@ -28,12 +28,13 @@ public class NewTestFunctionTest extends CDTTestingUITest {
          invokeKeyEvent('\t');
          insertUserTyping(insertText2, getPrimaryIFileFromCurrentProject());
       }
+      saveAllEditors();
       assertAllSourceFilesEqual(EnumSet.of(ComparisonArg.PRINT_WHOLE_ASTS_ON_FAIL));
-      closeOpenEditors();
    }
 
    @Override
    protected void configureTest(Properties properties) {
+      super.configureTest(properties);
       insertText = properties.getProperty("insertText");
       sendTab = Boolean.parseBoolean(properties.getProperty("sendTab", "false"));
       insertText2 = properties.getProperty("insertText2");
