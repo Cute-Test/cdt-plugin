@@ -36,6 +36,12 @@ build unstable:
     - develop
   script:
     - 'xvfb-run ./tools/build clean verify --verbose'
+    - eval $(ssh-agent -s)
+    - echo "$P2_PRIVATE_KEY" | ssh-add -
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo "$P2_HOST_KEY" > ~/.ssh/known_hosts'
+    - 'ssh hudson@cute-test.com "cd /var/www/${P2_DESTINATION}"'
+    - 'scp -r /builds/*/0/cevelop/cute/CUTEProject/tests/*/target/work/data/.metadata/.log hudson@cute-test.com:/var/www/${P2_DESTINATION}/logs'
 
 build signed:
   <<: *BUILD_COMMON

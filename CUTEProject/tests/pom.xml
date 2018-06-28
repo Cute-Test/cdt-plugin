@@ -95,8 +95,7 @@
 						<configuration>
 							<useUIHarness>true</useUIHarness>
 							<useUIThread>false</useUIThread>
-							<appArgLine>-Dorg.eclipse.swtbot.keyboard.layout=EN_US
-								-Dorg.eclipse.swtbot.playback.delay=60</appArgLine>
+							<appArgLine>-Dorg.eclipse.swtbot.keyboard.layout=EN_US -Dorg.eclipse.swtbot.playback.delay=60</appArgLine>
 							<includes>
 								<include>**/SWTBotTestSuiteAll.java</include>
 							</includes>
