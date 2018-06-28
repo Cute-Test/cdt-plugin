@@ -63,18 +63,18 @@
 					</dependencies>
 				</configuration>
 				<executions>
-					<execution>
-						<id>default-test</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>test</goal>
-						</goals>
-						<configuration>
-							<includes>
-								<include>**/PluginTestSuiteAll.java</include>
-							</includes>
-						</configuration>
-					</execution>
+<!-- 					<execution> -->
+<!-- 						<id>default-test</id> -->
+<!-- 						<phase>verify</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>test</goal> -->
+<!-- 						</goals> -->
+<!-- 						<configuration> -->
+<!-- 							<includes> -->
+<!-- 								<include>**/PluginTestSuiteAll.java</include> -->
+<!-- 							</includes> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
 
 					<execution>
 						<id>plugin-ui-verify</id>
@@ -90,22 +90,22 @@
 						</configuration>
 					</execution>
 
-<!-- 					<execution> -->
-<!-- 						<id>plugin-swtbot-verify</id> -->
-<!-- 						<phase>verify</phase> -->
-<!-- 						<goals> -->
-<!-- 							<goal>test</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							<useUIHarness>true</useUIHarness> -->
-<!-- 							<useUIThread>false</useUIThread> -->
-<!-- 							<appArgLine>-Dorg.eclipse.swtbot.keyboard.layout=EN_US -->
-<!-- 								-Dorg.eclipse.swtbot.playback.delay=60</appArgLine> -->
-<!-- 							<includes> -->
-<!-- 								<include>**/SWTBotTestSuiteAll.java</include> -->
-<!-- 							</includes> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
+					<execution>
+						<id>plugin-swtbot-verify</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<useUIHarness>true</useUIHarness>
+							<useUIThread>false</useUIThread>
+							<appArgLine>-Dorg.eclipse.swtbot.keyboard.layout=EN_US
+								-Dorg.eclipse.swtbot.playback.delay=60</appArgLine>
+							<includes>
+								<include>**/SWTBotTestSuiteAll.java</include>
+							</includes>
+						</configuration>
+					</execution>
 				</executions>
 
 			</plugin>
