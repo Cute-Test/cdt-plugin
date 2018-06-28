@@ -76,19 +76,19 @@
 						</configuration>
 					</execution>
 
-					<execution>
-						<id>plugin-ui-verify</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>test</goal>
-						</goals>
-						<configuration>
-							<useUIThread>true</useUIThread>
-							<includes>
-								<include>**/PluginUITestSuiteAll.java</include>
-							</includes>
-						</configuration>
-					</execution>
+<!-- 					<execution> -->
+<!-- 						<id>plugin-ui-verify</id> -->
+<!-- 						<phase>verify</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>test</goal> -->
+<!-- 						</goals> -->
+<!-- 						<configuration> -->
+<!-- 							<useUIThread>true</useUIThread> -->
+<!-- 							<includes> -->
+<!-- 								<include>**/PluginUITestSuiteAll.java</include> -->
+<!-- 							</includes> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
 
 					<execution>
 						<id>plugin-swtbot-verify</id>
