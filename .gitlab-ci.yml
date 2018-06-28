@@ -35,7 +35,7 @@ build unstable:
     - master
     - develop
   script:
-    - 'xvfb-run ./tools/build clean verify --verbose'
+    - 'xvfb-run ./tools/build clean verify --verbose || true'
   artifacts:
     paths:
       - '/builds/*/0/cevelop/cute/CUTEProject/tests/*/target/work/data/.metadata/**'
