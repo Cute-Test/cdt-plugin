@@ -1,4 +1,4 @@
-//!TestBugFixes
+//!Test Bug Fixes
 //@main.cpp
 #include "cute.h"
 #include "ide_listener.h"
@@ -11,4 +11,4 @@ void runSuite(){
 
 int main(){
     runSuite();
-} 
+}

@@ -8,6 +8,10 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.tests.sourceactions;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -20,15 +24,15 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IEditorPart;
 import org.junit.Test;
 
-import ch.hsr.ifs.cdttesting.cdttest.CDTTestingTest;
 import ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate;
+import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.base.CDTTestingUITest;
 
 
-public class TestBugFixes extends CDTTestingTest {
+public class TestBugFixes extends CDTTestingUITest {
 
    @Test
    public void testNewTestFunctionhighlight() throws Exception {
-      final IEditorPart editor = EditorTestHelper.openInEditor(getActiveIFile(), true);
+      final IEditorPart editor = EditorTestHelper.openInEditor(getPrimaryIFileFromCurrentProject(), true);
       assertTrue(editor instanceof ICEditor);
 
       final ISelectionProvider selectionProvider = ((ICEditor) editor).getSelectionProvider();
@@ -46,7 +50,7 @@ public class TestBugFixes extends CDTTestingTest {
 
       callLeave(linked2ndCopy);
 
-      final String results = getCurrentSource();
+      final String results = currentProjectHolder.getDocument(getPrimaryIFileFromCurrentProject()).get();
 
       final TextSelection selection = (TextSelection) selectionProvider.getSelection();
       final String actual = results.substring(selection.getOffset(), selection.getOffset() + selection.getLength());
@@ -68,4 +72,5 @@ public class TestBugFixes extends CDTTestingTest {
       }
       assertFalse(flag);
    }
+
 }

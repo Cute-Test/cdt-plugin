@@ -1,4 +1,4 @@
-//!testAddFunctorToSuite
+//!Test Add Functor To Suite
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 struct testStruct{
@@ -24,7 +24,7 @@ cute::suite make_suite_Suite3(){
 	s.push_back(testStruct());
 	return s;
 }
-//!testAddFunctorWithConstructorToSuite
+//!Test Add Functor With Constructor To Suite
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 struct testStruct{
@@ -52,7 +52,7 @@ cute::suite make_suite_Suite3(){
 	s.push_back(testStruct());
 	return s;
 }
-//!testAddFunctorWithNonDefaultConstructorToSuite
+//!Test Add Functor With Non Default Constructor To Suite
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 struct testStruct{
@@ -80,7 +80,7 @@ cute::suite make_suite_Suite3(){
 	s.push_back(testStruct(pArAmEtRs_ReQuIrEd));
 	return s;
 }
-//!testAddFunctionToSuite
+//!Test Add Function To Suite
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 void theTestFunction(){
@@ -102,7 +102,7 @@ cute::suite make_suite_Suite3(){
 	s.push_back(CUTE(theTestFunction));
 	return s;
 }
-//!testAddFunctionToSuiteInDirtyEditorChangeBeforeInsertion
+//!Test Add Function To Suite In Dirty Editor Change Before Insertion
 //@.config
 insertText=//I add a comment at the beginning\n
 insertPosition=0
@@ -128,7 +128,7 @@ cute::suite make_suite_Suite3(){
 	s.push_back(CUTE(theTestFunction));
 	return s;
 }
-//!testAddFunctionToSuiteInDirtyEditorChangeBetweenInsertionAndSelection
+//!Test Add Function To Suite In Dirty Editor Change Between Insertion And Selection
 //@.config
 insertText=//I add another comment in between\n
 insertPosition=142
@@ -164,7 +164,7 @@ cute::suite make_suite_Suite3(){
 	s.push_back(CUTE(theTestFunction));
 	return s;
 }
-//!testAddFunctionToSuiteInDirtyEditorChangeAfterInsertion
+//!Test Add Function To Suite In Dirty Editor Change After Insertion
 //@.config
 insertText=\n//I add a comment at the end
 insertPosition=204
@@ -190,7 +190,7 @@ cute::suite make_suite_Suite3(){
 	return s;
 }
 //I add a comment at the end
-//!testAddMemberFunctionInSameFileToSuite
+//!Test Add Member Function In Same File To Suite
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 struct AllTests{
@@ -212,7 +212,7 @@ cute::suite make_suite_Suite3(){
 	s.push_back(CUTE_SMEMFUN(AllTests, testit));
 	return s;
 }
-//!testAddMemberFunctionToSuite
+//!Test Add Member Function To Suite
 //@suite.cpp
 #include "suite.h"
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
@@ -246,7 +246,7 @@ class Suite3{
 public:
 	void test();
 };
-//!testAddQualifiedMemberFunctionToSuite
+//!Test Add Qualified Member Function To Suite
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 
@@ -284,7 +284,7 @@ void runSuite() {
 	cute::ide_listener lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
-//!testRegisterFunctionWithNewSuite
+//!Test Register Function With New Suite
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 
@@ -306,7 +306,7 @@ cute::suite make_suite(){
 	s.push_back(CUTE(testSuccess));
 	return s;
 }
-//!testRegisterFunctorWithNewSuite
+//!Test Register Functor With New Suite
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 
@@ -332,7 +332,7 @@ cute::suite make_suite(){
 	s.push_back(S());
 	return s;
 }
-//!testRegisterMemberFunctionWithNewSuite
+//!Test Register Member Function With New Suite
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 
@@ -358,7 +358,7 @@ cute::suite make_suite(){
 	s.push_back(CUTE_SMEMFUN(S, testIt));
 	return s;
 }
-//!testSelectionAtBeginOfTestFunction
+//!Test Selection At Begin Of Test Function
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 struct S {
@@ -386,7 +386,7 @@ void runAllTests(int argc, char const *argv[]){
   cute::ide_listener<> lis;
   cute::makeRunner(lis,argc,argv)(s, "AllTests");
 }
-//!testRegisterMemberFunctionWithConstrArg
+//!Test Register Member Function With Const Arg
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)
@@ -423,7 +423,7 @@ void runAllTests(int argc, char const *argv[]){
     cute::ide_listener<> lis;
     cute::makeRunner(lis,argc,argv)(s, "AllTests");
 }
-//!testNoNewlineAtEndOfFile
+//!Test No Newline At End Of File
 //@main.cpp
 #define ASSERTM(msg,cond) if (!(cond)) throw cute::test_failure((msg),__FILE__,__LINE__)
 #define ASSERT(cond) ASSERTM(#cond,cond)

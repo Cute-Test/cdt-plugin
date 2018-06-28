@@ -1,4 +1,4 @@
-//!testNewTestFunction
+//!Test New Test Function
 //@main.cpp
 void runSuite(){
 	cute::suite s;
@@ -12,7 +12,7 @@ void runSuite(){
 	cute::suite s;
 	s.push_back(CUTE(newTestFunction));
 }
-//!testNewTestFunctionChangeBody
+//!Test New Test Function ChangeBody
 //@.config
 insertText=myTestName
 sendTab=true
@@ -30,7 +30,7 @@ void runSuite(){
 	cute::suite s;
 	s.push_back(CUTE(myTestName));
 }
-//!testNewTestFunctionMissingSuite
+//!Test New Test Function Missing Suite
 //@.config
 insertText=myTestName2
 //@main.cpp
@@ -44,7 +44,7 @@ cute::suite make_suite(){
 	s.push_back(CUTE(myTestName2));
 	return s;
 }
-//!testNewTestFunctionEndOfFile
+//!Test New Test Function End Of File
 //@.config
 insertText=myTestName
 sendTab=true
@@ -62,5 +62,3 @@ void runSuite(){
 void myTestName(){
 	ASSERT(true);
 }
-
-
