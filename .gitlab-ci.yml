@@ -36,6 +36,7 @@ build unstable:
     - develop
   script:
     - 'xvfb-run ./tools/build clean verify --verbose'
+  after_script:
     - eval $(ssh-agent -s)
     - echo "$P2_PRIVATE_KEY" | ssh-add -
     - mkdir -p ~/.ssh
