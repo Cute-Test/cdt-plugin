@@ -54,8 +54,6 @@
 					<argLine>${osx-jvm-flags}</argLine>
 					<useUIHarness>true</useUIHarness>
 					<failIfNoTests>false</failIfNoTests>
-					<product>org.eclipse.epp.package.cpp.product</product>
-					<application>org.eclipse.ui.ide.workbench</application>
 					<dependencies>
 						<dependency>
 							<type>p2-installable-unit</type>
@@ -92,22 +90,22 @@
 						</configuration>
 					</execution>
 
-					<execution>
-						<id>plugin-swtbot-verify</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>test</goal>
-						</goals>
-						<configuration>
-							<useUIHarness>true</useUIHarness>
-							<useUIThread>false</useUIThread>
-							<appArgLine>-Dorg.eclipse.swtbot.keyboard.layout=EN_US
-								-Dorg.eclipse.swtbot.playback.delay=60</appArgLine>
-							<includes>
-								<include>**/SWTBotTestSuiteAll.java</include>
-							</includes>
-						</configuration>
-					</execution>
+<!-- 					<execution> -->
+<!-- 						<id>plugin-swtbot-verify</id> -->
+<!-- 						<phase>verify</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>test</goal> -->
+<!-- 						</goals> -->
+<!-- 						<configuration> -->
+<!-- 							<useUIHarness>true</useUIHarness> -->
+<!-- 							<useUIThread>false</useUIThread> -->
+<!-- 							<appArgLine>-Dorg.eclipse.swtbot.keyboard.layout=EN_US -->
+<!-- 								-Dorg.eclipse.swtbot.playback.delay=60</appArgLine> -->
+<!-- 							<includes> -->
+<!-- 								<include>**/SWTBotTestSuiteAll.java</include> -->
+<!-- 							</includes> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
 				</executions>
 
 			</plugin>
