@@ -18,7 +18,7 @@ public class ExampleProjectConfigurator implements IExampleProjectConfigurator {
       try {
          if (project.exists() && project.isOpen()) {
             if (!project.hasNature(MockatorNature.NATURE_ID)) MockatorNature.addMockatorNature(project, BasicMonitor.subProgress(monitor, 1));
-            if (!project.hasNature(CuteNature.NATURE_ID)) CuteNature.addCuteNature(project, BasicMonitor.subProgress(monitor, 1));
+            if (!project.hasNature(CuteNature.CUTE_NATURE_ID)) CuteNature.addCuteNature(project, BasicMonitor.subProgress(monitor, 1));
          }
       } catch (CoreException e) {
          e.printStackTrace();
