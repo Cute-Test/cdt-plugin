@@ -3,7 +3,6 @@ package ch.hsr.ifs.mockator.plugin.tests.fakeobject.staticpoly;
 import org.junit.Ignore;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.checker.helper.IProblemId;
-
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.fakeobject.FakeObjectQuickFix;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;

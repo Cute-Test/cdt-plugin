@@ -14,10 +14,9 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.junit.Test;
 
-import ch.hsr.ifs.iltis.testing.highlevel.cdttest.CDTTestingQuickfixTest;
-import ch.hsr.ifs.iltis.testing.highlevel.cdttest.comparison.ASTComparison.ComparisonArg;
-import ch.hsr.ifs.iltis.testing.highlevel.helpers.UIThreadSyncRunnable;
-
+import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.CDTTestingQuickfixTest;
+import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.comparison.ASTComparison.ComparisonArg;
+import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.helpers.UIThreadSyncRunnable;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
 

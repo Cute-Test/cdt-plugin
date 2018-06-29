@@ -10,7 +10,7 @@ location "http://cute-test.com/updatesite/development" {
 }
 
 location "http://www.cevelop.com/iltis-unstable" {
-	ch.hsr.ifs.iltis.testing.highlevel.feature.source.feature.group lazy
+	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group lazy
 	ch.hsr.ifs.iltis.core.core.feature.source.feature.group lazy
 	ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group lazy
 }
