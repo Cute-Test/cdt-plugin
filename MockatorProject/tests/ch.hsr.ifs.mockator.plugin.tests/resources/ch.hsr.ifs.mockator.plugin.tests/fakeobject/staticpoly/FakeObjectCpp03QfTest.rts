@@ -1,4 +1,4 @@
-//!FakeObjectCpp03QfTest
+//!Fake Object Cpp 03 Qf Test
 //@main.cpp
 namespace a {
    struct A {
