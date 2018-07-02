@@ -13,7 +13,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTInitializerList;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 
-import ch.hsr.ifs.iltis.cpp.core.ast.checker.CheckerResult;
+import ch.hsr.ifs.iltis.cpp.core.ast.checker.VisitorReport;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
@@ -27,7 +27,7 @@ import ch.hsr.ifs.mockator.plugin.testdouble.support.TestFunctionChecker;
 public class MissingTestDoubleSubTypeChecker extends TestFunctionChecker {
 
    @Override
-   protected void processTestFunction(final CheckerResult<ProblemId> result) {
+   protected void processTestFunction(final VisitorReport<ProblemId> result) {
       final IASTFunctionDefinition function = (IASTFunctionDefinition) result.getNode();
       final InjectionInfoCollectorFactory factory = new InjectionInfoCollectorFactory(getIndex(), getCProject());
       function.accept(new ASTVisitor() {
@@ -70,7 +70,7 @@ public class MissingTestDoubleSubTypeChecker extends TestFunctionChecker {
 
    private void markMissingInjectedTestDouble(final IASTName name, final DependencyInfo optResult) {
       final CreateTestDoubleSubTypeCodanArgs codanArgs = getCodanArgs(name, optResult);
-      addNodeForReporting(new CheckerResult<>(ProblemId.MISSING_TEST_DOUBLE_SUBTYPE, name), codanArgs.toArray());
+      addNodeForReporting(new VisitorReport<>(ProblemId.MISSING_TEST_DOUBLE_SUBTYPE, name), codanArgs.toArray());
    }
 
    private CreateTestDoubleSubTypeCodanArgs getCodanArgs(final IASTName name, final DependencyInfo targetNameAndType) {
