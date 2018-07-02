@@ -12,8 +12,7 @@ import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.iltis.core.core.data.AbstractPair;
 import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.cpp.core.ast.checker.CheckerResult;
-
+import ch.hsr.ifs.iltis.cpp.core.ast.checker.VisitorReport;
 import ch.hsr.ifs.mockator.plugin.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertEqualFinderVisitor;
 import ch.hsr.ifs.mockator.plugin.mockobject.asserteq.AssertKind.ExpectedActualPair;
@@ -30,7 +29,7 @@ import ch.hsr.ifs.mockator.plugin.testdouble.support.TestFunctionChecker;
 public class InconsistentExpectationsChecker extends TestFunctionChecker {
 
    @Override
-   protected void processTestFunction(final CheckerResult<ProblemId> result) {
+   protected void processTestFunction(final VisitorReport<ProblemId> result) {
       final IASTFunctionDefinition testFun = (IASTFunctionDefinition) result.getNode();
       for (final ExpectedActualPair expectedActual : getAssertedCalls(testFun)) {
          getExpectationsAndRegistrations(expectedActual).ifPresent((expReg) -> {
@@ -99,7 +98,7 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
    }
 
    private void mark(final IASTName toMark, final Collection<MemFunSignature> toRemove, final Collection<MemFunSignature> toAdd) {
-      addNodeForReporting(new CheckerResult<>(getProblemId(), toMark), getCodanArgs(toRemove, toAdd));
+      addNodeForReporting(new VisitorReport<>(getProblemId(), toMark), getCodanArgs(toRemove, toAdd));
    }
 
    private static Object[] getCodanArgs(final Collection<MemFunSignature> toRemove, final Collection<MemFunSignature> toAdd) {
@@ -137,4 +136,5 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
       }
 
    }
+
 }
