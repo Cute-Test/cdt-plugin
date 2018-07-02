@@ -5,7 +5,7 @@ location "http://download.eclipse.org/releases/photon" {
 	org.eclipse.swtbot.eclipse.feature.group lazy
 }
 
-location "http://cute-test.com/updatesite/development" {
+location "http://www.cute-test.com/updatesite" {
 	ch.hsr.ifs.cute.feature.feature.group lazy
 }
 
