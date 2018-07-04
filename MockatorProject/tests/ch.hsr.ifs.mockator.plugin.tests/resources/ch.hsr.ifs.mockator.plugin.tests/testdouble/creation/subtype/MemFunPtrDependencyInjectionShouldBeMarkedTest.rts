@@ -1,4 +1,4 @@
-//!MemFunPtrDependencyInjectionShouldBeMarked
+//!Mem Fun Ptr Dependency Injection Should Be Marked
 //@main.cpp
 struct IDependency {
   virtual ~IDependency();

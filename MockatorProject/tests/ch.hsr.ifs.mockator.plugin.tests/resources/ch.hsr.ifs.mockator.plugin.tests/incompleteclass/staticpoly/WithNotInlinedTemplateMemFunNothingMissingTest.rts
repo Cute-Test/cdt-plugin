@@ -1,4 +1,4 @@
-//!WithNotInlinedTemplateMemFunNothingMissingTest
+//!With Not Inlined Template Mem Fun Nothing Missing Test
 //@main.cpp
 template <typename T>
 struct SUT {

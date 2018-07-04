@@ -1,4 +1,4 @@
-//!CtorPtrDependencyShouldBeMarkedTest
+//!Ctor Ptr Dependency Should Be Marked Test
 //@main.cpp
 struct IDependency {
   virtual ~IDependency();

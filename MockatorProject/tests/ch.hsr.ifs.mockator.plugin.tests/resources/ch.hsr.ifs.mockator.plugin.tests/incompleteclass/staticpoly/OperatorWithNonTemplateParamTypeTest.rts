@@ -1,4 +1,4 @@
-//!OperatorWithNonTemplateParamTypeTest
+//!Operator With Non Template Param Type Test
 //@main.cpp
 struct A {
   A& operator++() {

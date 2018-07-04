@@ -1,4 +1,4 @@
-//!ArgumentToExistingClassShouldBeIgnored
+//!Argument To Existing Class Should Be Ignored
 //@main.cpp
 struct IDependency {
   virtual ~IDependency();

@@ -1,4 +1,4 @@
-//!PointerParameterExistingTest
+//!Pointer Parameter Existing Test
 //@main.cpp
 namespace {
   struct A {

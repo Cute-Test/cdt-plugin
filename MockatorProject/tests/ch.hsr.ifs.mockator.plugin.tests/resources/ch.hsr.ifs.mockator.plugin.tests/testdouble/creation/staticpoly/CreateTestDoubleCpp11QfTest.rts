@@ -1,4 +1,4 @@
-//!CreateTestDoubleCpp11QfTest
+//!Create Test Double Cpp 11 Qf Test
 //@main.cpp
 template<typename T>
 struct SUT {};

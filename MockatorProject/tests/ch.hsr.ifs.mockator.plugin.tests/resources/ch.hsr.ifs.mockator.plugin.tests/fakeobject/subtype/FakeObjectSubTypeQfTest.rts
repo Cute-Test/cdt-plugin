@@ -1,4 +1,4 @@
-//!FakeObjectSubTypeQfTest
+//!Fake Object Sub Type Qf Test
 //@main.cpp
 struct Base {
    virtual ~Base() {}

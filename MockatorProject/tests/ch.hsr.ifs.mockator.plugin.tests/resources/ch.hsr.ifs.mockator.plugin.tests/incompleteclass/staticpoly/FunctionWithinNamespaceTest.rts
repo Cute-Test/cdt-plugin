@@ -1,4 +1,4 @@
-//!FunctionWithinNamespaceTest
+//!Function Within Namespace Test
 //@main.cpp
 namespace A {
   template <typename T>

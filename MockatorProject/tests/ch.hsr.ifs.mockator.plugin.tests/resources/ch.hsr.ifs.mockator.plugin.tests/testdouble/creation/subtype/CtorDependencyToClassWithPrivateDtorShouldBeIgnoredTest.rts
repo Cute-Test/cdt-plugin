@@ -1,4 +1,4 @@
-//!CtorDependencyToClassWithPrivateDtorShouldBeIgnoredTest
+//!Ctor Dependency To Class With Private Dtor Should Be Ignored Test
 //@main.cpp
 class IDependency {
   virtual ~IDependency();

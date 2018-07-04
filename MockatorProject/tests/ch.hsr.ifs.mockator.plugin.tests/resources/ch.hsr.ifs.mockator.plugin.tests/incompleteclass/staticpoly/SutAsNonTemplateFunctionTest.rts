@@ -1,4 +1,4 @@
-//!SutAsNonTemplateFunctionTest
+//!SUT As Non Template Function Test
 //@main.cpp
 void sut(Fake const& t) {
   t.foo();

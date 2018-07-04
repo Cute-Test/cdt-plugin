@@ -1,4 +1,4 @@
-//!CtorRefDependencyToBaseClassShouldBeMarkedTest
+//!Ctor Ref Dependency To Base Class Should Be Marked Test
 //@main.cpp
 struct IDependency {
   virtual ~IDependency();

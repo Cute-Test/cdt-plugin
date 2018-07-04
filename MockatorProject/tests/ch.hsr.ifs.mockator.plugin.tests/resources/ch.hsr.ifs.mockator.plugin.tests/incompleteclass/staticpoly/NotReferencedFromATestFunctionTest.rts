@@ -1,4 +1,4 @@
-//!NotReferencedFromATestFunction
+//!Not Referenced From A Test Function
 //@main.cpp
 template <typename T>
 struct SUT{

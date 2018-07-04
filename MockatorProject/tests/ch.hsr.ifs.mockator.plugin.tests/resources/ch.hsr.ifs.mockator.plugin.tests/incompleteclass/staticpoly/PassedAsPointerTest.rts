@@ -1,4 +1,4 @@
-//!PassedAsPointerTest
+//!Passed As Pointer Test
 //@main.cpp
 template <typename T>
 void sut(T const* t) {

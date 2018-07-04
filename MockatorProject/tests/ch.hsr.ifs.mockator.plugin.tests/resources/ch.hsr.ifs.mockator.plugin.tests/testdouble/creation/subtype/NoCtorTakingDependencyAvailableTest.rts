@@ -1,4 +1,4 @@
-//!NoCtorTakingDependencyAvailableTest
+//!No Ctor Taking Dependency Available Test
 //@main.cpp
 struct IDependency {
   virtual ~IDependency();

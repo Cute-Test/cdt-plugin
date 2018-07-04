@@ -1,4 +1,4 @@
-//!OnlyWhenUsedWithStaticCall3Test
+//!Only When Used With Static Call 3 Test
 //@main.cpp
 template <typename T>
 struct SUT{

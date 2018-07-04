@@ -1,4 +1,4 @@
-//!InstantiationOfAbstractClassTest
+//!Instantiation Of Abstract Class Test
 //@main.cpp
 struct IDependency {
    virtual void foo() = 0;

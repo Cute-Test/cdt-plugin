@@ -1,4 +1,4 @@
-//!NonLocalCompleteClassTest
+//!Non Local Complete Class Test
 //@main.cpp
 struct IDependency {
   virtual ~IDependency();

@@ -1,4 +1,4 @@
-//!ClassTemplateMemberFunctionsTest
+//!Class Template Member Functions Test
 //@main.cpp
 class A {
 };

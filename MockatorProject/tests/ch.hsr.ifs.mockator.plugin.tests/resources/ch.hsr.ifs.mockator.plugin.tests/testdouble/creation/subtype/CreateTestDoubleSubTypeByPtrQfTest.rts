@@ -1,4 +1,4 @@
-//!CreateTestDoubleSubTypeByPtrQfTest
+//!Create Test Double Sub Type By Ptr Qf Test
 //@.config
 cppStandard=C++11
 primaryFile=A.cpp

@@ -1,4 +1,4 @@
-//!PassingThisOfSutTest
+//!Passing This Of SUT Test
 //@main.cpp
 namespace A {
   template <typename T>

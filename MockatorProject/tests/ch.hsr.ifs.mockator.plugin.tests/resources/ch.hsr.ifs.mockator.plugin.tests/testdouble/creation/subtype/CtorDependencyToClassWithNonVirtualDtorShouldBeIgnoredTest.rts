@@ -1,4 +1,4 @@
-//!CtorDependencyToClassWithNonVirtualDtorShouldBeIgnored
+//!Ctor Dependency To Class With Non Virtual Dtor Should Be Ignored
 //@main.cpp
 struct IDependency {
   ~IDependency();

@@ -1,4 +1,4 @@
-//!MultipleFakeObjectsTest
+//!Multiple Fake Objects Test
 //@main.cpp
 template <typename S, typename T>
 struct Bar{

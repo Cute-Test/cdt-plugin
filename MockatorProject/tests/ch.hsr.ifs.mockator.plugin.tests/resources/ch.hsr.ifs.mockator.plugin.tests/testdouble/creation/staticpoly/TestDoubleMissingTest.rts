@@ -1,4 +1,4 @@
-//!TestDoubleMissingTest
+//!Test Double Missing Test
 //@main.cpp
 template <typename T>
 struct SUT{

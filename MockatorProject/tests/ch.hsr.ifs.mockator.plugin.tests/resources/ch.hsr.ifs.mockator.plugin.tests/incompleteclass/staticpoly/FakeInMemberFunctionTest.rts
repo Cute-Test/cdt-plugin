@@ -1,4 +1,4 @@
-//!FakeInMemberFunctionTest
+//!Fake In Member Function Test
 //@main.cpp
 template <typename T>
 struct SUT{

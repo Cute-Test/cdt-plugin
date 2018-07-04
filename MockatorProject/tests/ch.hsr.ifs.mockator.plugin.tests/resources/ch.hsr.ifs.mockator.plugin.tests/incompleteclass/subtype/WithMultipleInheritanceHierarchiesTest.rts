@@ -1,4 +1,4 @@
-//!WithMultipleInheritanceHierarchiesTest
+//!With Multiple Inheritance Hierarchies Test
 //@main.cpp
 struct Base {
   virtual ~Base();

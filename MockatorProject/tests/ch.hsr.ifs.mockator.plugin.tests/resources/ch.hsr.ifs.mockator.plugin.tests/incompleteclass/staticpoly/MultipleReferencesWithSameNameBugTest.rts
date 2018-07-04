@@ -1,4 +1,4 @@
-//!MultipleReferencesWithSameNameBugTest
+//!Multiple References With Same Name Bug Test
 //@main.cpp
 template <typename T>
 struct SUT{

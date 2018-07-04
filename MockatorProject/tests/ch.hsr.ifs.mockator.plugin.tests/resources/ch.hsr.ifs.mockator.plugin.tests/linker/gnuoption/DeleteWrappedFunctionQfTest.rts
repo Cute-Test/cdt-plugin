@@ -1,4 +1,4 @@
-//!DeleteWrappedFunctionQfTest
+//!Delete Wrapped Function Qf Test
 /* This test might fail randomly, just run it again...*/ 
 //@main.cpp
 #ifdef WRAP__Z3foov
