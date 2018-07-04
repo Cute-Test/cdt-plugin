@@ -5,6 +5,10 @@ location "http://download.eclipse.org/releases/photon" {
 	org.eclipse.swtbot.eclipse.feature.group lazy
 }
 
+location "http://download.eclipse.org/tools/cdt/releases/9.5" {
+	org.eclipse.cdt.managedbuilder.gnu.ui lazy
+}
+
 location "http://www.cute-test.com/updatesite" {
 	ch.hsr.ifs.cute.feature.feature.group lazy
 }
