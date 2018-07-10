@@ -23,9 +23,9 @@ void testSUT() {
    sut.bar(mock);                                                                                                                                                        
 }                                                                                                                                                                      
 //=
-#include "mockator.h"
-
 #include <cassert>
+
+#include "mockator.h"
 
 struct Base {
    virtual ~Base() {}
@@ -42,7 +42,7 @@ struct SUT {
 
 void testSUT() {
     INIT_MOCKATOR();
-    static std::vector<calls> allCalls{1};
+    static std::vector<calls> allCalls{ 1 };
     struct Mock : IDependency
     {
         const size_t mock_id; 
@@ -52,15 +52,15 @@ void testSUT() {
         }
         void base()
         {
-            allCalls[mock_id].push_back(call{"base()"});
+            allCalls[mock_id].push_back(call{ "base()" });
         }
         void foo()
         {
-            allCalls[mock_id].push_back(call{"foo()"});
+            allCalls[mock_id].push_back(call{ "foo()" });
         }
     } mock;
     SUT sut;
     sut.bar(mock);
-    calls expectedMock = {{"base()"}, {"foo()"}};
+    calls expectedMock = { { "base()" }, { "foo()" } };
     assert(expectedMock == allCalls[1]);
 }

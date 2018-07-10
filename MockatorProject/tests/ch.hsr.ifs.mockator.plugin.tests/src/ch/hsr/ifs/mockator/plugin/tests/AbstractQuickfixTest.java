@@ -44,8 +44,7 @@ public abstract class AbstractQuickfixTest extends CDTTestingQuickfixTest {
       assertQfResolutionDescription(quickfix);
 
       //FIXME Fix include-insertion system and then remove IGNORE_INCLUDE_ORDER
-      assertAllSourceFilesEqual(EnumSet.of(ComparisonArg.COMPARE_INCLUDE_DIRECTIVES, ComparisonArg.PRINT_CONTEXT_ON_FAIL,
-            ComparisonArg.PRINT_WHOLE_ASTS_ON_FAIL, ComparisonArg.IGNORE_INCLUDE_ORDER));
+      assertAllSourceFilesEqual(EnumSet.of(ComparisonArg.USE_SOURCE_COMPARISON));
    }
 
    protected void assertProblemMarkerMessages(final String[] expectedMarkerMessages) throws CoreException {

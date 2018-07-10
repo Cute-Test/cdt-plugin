@@ -50,6 +50,6 @@ void testSUT() {
      };
      SUT<Mock> sut;
      sut.bar();
-     calls expectedMock = { { "Mock()" }, { "foo() const" }, {"operator ++(int)" } };
+     calls expectedMock = { { "Mock()" }, { "foo() const" }, { "operator ++(int)" } };
      assert(expectedMock == allCalls[1]);
 }

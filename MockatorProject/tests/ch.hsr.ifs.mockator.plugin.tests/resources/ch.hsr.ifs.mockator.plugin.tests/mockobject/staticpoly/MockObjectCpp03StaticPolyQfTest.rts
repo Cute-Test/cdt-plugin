@@ -44,7 +44,7 @@ namespace suite {
          {
              const size_t mock_id;
              Mock()
-             :mock_id( reserveNextCallId(allCalls) )
+             :mock_id(reserveNextCallId(allCalls))
              {
                  allCalls[mock_id].push_back(call("Mock()"));
              }
