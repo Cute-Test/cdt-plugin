@@ -13,7 +13,3 @@ location "https://www.cevelop.com/iltis-unstable/" {
 	ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group lazy
 	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group lazy
 }
-
-location "https://www.cevelop.com/iltis-unstable" {
-	ch.hsr.ifs.iltis.core.feature.feature.group lazy
-}
