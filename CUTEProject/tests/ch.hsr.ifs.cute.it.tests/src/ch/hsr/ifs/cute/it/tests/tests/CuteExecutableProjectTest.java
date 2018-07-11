@@ -22,7 +22,7 @@ public class CuteExecutableProjectTest extends AutomatedUITest {
    @TestProjectType("CUTE Project")
    public void newProject() throws Exception {
       ICProject project = createProject();
-      assertNotNull("Project does not have CUTE nature", getProjectNature(project, CuteNature.CUTE_NATURE_ID));
+      assertNotNull("Project does not have CUTE nature", getProjectNature(project, CuteNature.NATURE_ID));
    }
 
    private void setSuiteName() {
@@ -34,7 +34,7 @@ public class CuteExecutableProjectTest extends AutomatedUITest {
    @TestProjectType("CUTE Suite Project")
    public void newSuiteProject() throws Exception {
       ICProject project = createProject(this::setSuiteName);
-      assertNotNull("Project does not have CUTE nature", getProjectNature(project, CuteNature.CUTE_NATURE_ID));
+      assertNotNull("Project does not have CUTE nature", getProjectNature(project, CuteNature.NATURE_ID));
    }
 
    private void copyBoostHeaders() {
@@ -46,7 +46,7 @@ public class CuteExecutableProjectTest extends AutomatedUITest {
    @TestProjectType("CUTE Project")
    public void newProjectWithBoost() throws Exception {
       ICProject project = createProject(this::copyBoostHeaders);
-      assertNotNull("Project does not have CUTE nature", getProjectNature(project, CuteNature.CUTE_NATURE_ID));
+      assertNotNull("Project does not have CUTE nature", getProjectNature(project, CuteNature.NATURE_ID));
       getFolder(project, "boost");
    }
 
@@ -59,7 +59,7 @@ public class CuteExecutableProjectTest extends AutomatedUITest {
    @TestProjectType("CUTE Project")
    public void newProjectWithGCov() throws Exception {
       ICProject project = createProject(this::enableGCov);
-      assertNotNull("Project does not have CUTE nature", getProjectNature(project, CuteNature.CUTE_NATURE_ID));
+      assertNotNull("Project does not have CUTE nature", getProjectNature(project, CuteNature.NATURE_ID));
       assertNotNull("Project does not have GCov nature", getProjectNature(project, GcovNature.NATURE_ID));
    }
 }

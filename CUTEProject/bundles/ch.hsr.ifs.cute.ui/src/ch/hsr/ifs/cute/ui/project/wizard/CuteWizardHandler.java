@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -47,7 +46,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
-import ch.hsr.ifs.cute.core.headers.CuteHeaders;
+import ch.hsr.ifs.cute.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.GetOptionsStrategy;
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
@@ -121,7 +120,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
 
    protected void createCuteProject(IProject project, IProgressMonitor pm) throws CoreException {
       CuteNature.addCuteNature(project, new NullProgressMonitor());
-      project.setPersistentProperty(CuteUIPlugin.CUTE_VERSION_PROPERTY_NAME, getCuteVersion().getVersionString());
+      ICuteHeaders.setForProject(project, getCuteVersion());
       createCuteProjectFolders(project);
       callAdditionalHandlers(project, pm);
       ManagedBuildManager.saveBuildInfo(project, true);
@@ -142,22 +141,15 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
    }
 
    private void createCuteProjectFolders(IProject project) throws CoreException {
-      CuteHeaders cuteVersion = getCuteVersion();
+      ICuteHeaders cuteVersion = getCuteVersion();
       IFolder srcFolder = ProjectTools.createFolder(project, "src", false);
       copyExampleTestFiles(srcFolder, cuteVersion);
-      IFolder cuteFolder = ProjectTools.createFolder(project, "cute", false);
-      cuteVersion.copyHeaderFiles(cuteFolder, new NullProgressMonitor());
-      ProjectTools.setIncludePaths(replaceProjectLocation(cuteFolder), project, this);
       IFile srcFile = project.getFile("src/Test.cpp");
       IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), srcFile, true);
    }
 
-   protected void copyExampleTestFiles(IFolder srcFolder, CuteHeaders cuteVersion) throws CoreException {
-      cuteVersion.copyTestFiles(srcFolder, new NullProgressMonitor());
-   }
-
-   private IPath replaceProjectLocation(IFolder cuteFolder) {
-      return new Path("/${ProjName}").append(cuteFolder.getProjectRelativePath());
+   protected void copyExampleTestFiles(IFolder srcFolder, ICuteHeaders cuteVersion) throws CoreException {
+      cuteVersion.copyExampleTestFiles(srcFolder, new NullProgressMonitor());
    }
 
    private void createLibSettings(IProject project) throws CoreException {
@@ -283,7 +275,7 @@ public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrat
       }
    }
 
-   private CuteHeaders getCuteVersion() {
-      return CuteUIPlugin.getCuteVersion(cuteWizardPage.getCuteVersionString());
+   private ICuteHeaders getCuteVersion() {
+      return ICuteHeaders.loadHeadersForVersionNumber(cuteWizardPage.getCuteVersionString());
    }
 }

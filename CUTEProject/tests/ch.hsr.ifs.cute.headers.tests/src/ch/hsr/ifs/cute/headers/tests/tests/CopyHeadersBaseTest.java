@@ -19,8 +19,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 
-import com.cevelop.elevenator.Activator;
-import com.cevelop.elevenator.definition.CPPVersion;
+import ch.hsr.ifs.iltis.cpp.versionator.Activator;
+import ch.hsr.ifs.iltis.cpp.versionator.definition.CPPVersion;
 
 import junit.framework.TestCase;
 

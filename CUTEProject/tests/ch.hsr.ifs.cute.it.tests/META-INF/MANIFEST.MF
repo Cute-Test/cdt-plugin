@@ -5,7 +5,8 @@ Bundle-SymbolicName: ch.hsr.ifs.cute.swtbottest;singleton:=true
 Bundle-Version: 5.4.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.it.tests.SWTBotTestPlugin
 Bundle-Vendor: IFS Institute for Software
-Require-Bundle: org.eclipse.ui,
+Require-Bundle: ch.hsr.ifs.iltis.cpp.versionator,
+ org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.junit,
@@ -18,7 +19,8 @@ Require-Bundle: org.eclipse.ui,
  ch.hsr.ifs.cute.ui,
  ch.hsr.ifs.cute.gcov,
  ch.hsr.ifs.cute.headers,
- ch.hsr.ifs.cute.core
+ ch.hsr.ifs.cute.core,
+ ch.hsr.ifs.iltis.core.core
 Eclipse-RegisterBuddy: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

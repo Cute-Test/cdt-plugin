@@ -25,11 +25,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.cevelop.elevenator.Activator;
-import com.cevelop.elevenator.definition.CPPVersion;
+import ch.hsr.ifs.iltis.cpp.versionator.Activator;
+import ch.hsr.ifs.iltis.cpp.versionator.definition.CPPVersion;
 
-import ch.hsr.ifs.cute.core.headers.CuteHeaders;
-import ch.hsr.ifs.cute.headers.versions.CuteHeaders_1_7;
+import ch.hsr.ifs.cute.headers.ICuteHeaders;
+import ch.hsr.ifs.cute.headers.versions.CuteHeaders2;
 import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
 
 
@@ -60,12 +60,12 @@ public class CuteSuiteWizardHandlerTest {
 
    @Test
    public void testAddTestFiles() throws CoreException {
-      CuteHeaders_1_7 h = new CuteHeaders_1_7();
+      CuteHeaders2 h = CuteHeaders2._2_1;
       addTestFiles(h);
       assertCuteHeaderFilesExist();
    }
 
-   private void addTestFiles(CuteHeaders cuteHeader) throws CoreException {
+   private void addTestFiles(ICuteHeaders cuteHeader) throws CoreException {
       cswh.copyExampleTestFiles(srcFolder, cuteHeader);
 
       IFile file = srcFolder.getFile("Test.cpp");

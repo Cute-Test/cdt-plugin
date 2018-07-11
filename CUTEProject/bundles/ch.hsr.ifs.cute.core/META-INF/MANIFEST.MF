@@ -20,7 +20,7 @@ Require-Bundle: org.eclipse.cdt.dsf.gdb.ui,
  org.eclipse.jface.text;bundle-version="3.4.0",
  org.eclipse.cdt.ui;bundle-version="5.3.0",
  org.eclipse.cdt.managedbuilder.core;bundle-version="7.0.0",
- com.cevelop.elevenator,
+ ch.hsr.ifs.iltis.cpp.versionator,
  ch.hsr.ifs.testframework
 Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy
@@ -29,6 +29,5 @@ Export-Package: ch.hsr.ifs.cute.core,
  ch.hsr.ifs.cute.core.event,
  ch.hsr.ifs.cute.core.headers,
  ch.hsr.ifs.cute.core.launch,
- ch.hsr.ifs.cute.core.template.processes,
- ch.hsr.ifs.cute.core.utils
+ ch.hsr.ifs.cute.core.template.processes
 Automatic-Module-Name: ch.hsr.ifs.cute.core

@@ -54,7 +54,7 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
-import ch.hsr.ifs.cute.core.utils.VersionQuery;
+import ch.hsr.ifs.cute.headers.utils.VersionQuery;
 
 
 /**

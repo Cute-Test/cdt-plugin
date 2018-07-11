@@ -8,6 +8,8 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.headers;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -34,6 +36,22 @@ public class CuteHeadersPlugin extends AbstractUIPlugin {
 
    public static CuteHeadersPlugin getDefault() {
       return plugin;
+   }
+
+   public static void log(IStatus status) {
+      getDefault().getLog().log(status);
+   }
+
+   public static void log(String msg) {
+      log(new Status(IStatus.ERROR, PLUGIN_ID, msg));
+   }
+
+   public static void log(String msg, Throwable e) {
+      log(new Status(IStatus.ERROR, PLUGIN_ID, 1, msg, e));
+   }
+
+   public static void log(Throwable e) {
+      log("Internal Error", e);
    }
 
 }

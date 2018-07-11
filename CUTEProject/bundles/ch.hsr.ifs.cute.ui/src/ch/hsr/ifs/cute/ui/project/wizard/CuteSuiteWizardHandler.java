@@ -16,7 +16,7 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 
-import ch.hsr.ifs.cute.core.headers.CuteHeaders;
+import ch.hsr.ifs.cute.headers.ICuteHeaders;
 
 
 public class CuteSuiteWizardHandler extends CuteWizardHandler {
@@ -49,7 +49,7 @@ public class CuteSuiteWizardHandler extends CuteWizardHandler {
    }
 
    @Override
-   public void copyExampleTestFiles(IFolder srcFolder, CuteHeaders cuteVersion) throws CoreException {
+   public void copyExampleTestFiles(IFolder srcFolder, ICuteHeaders cuteVersion) throws CoreException {
       suitename = suitewizPage.getSuiteName();
       cuteVersion.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename, true);
    }

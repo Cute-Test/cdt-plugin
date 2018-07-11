@@ -27,13 +27,19 @@ cache:
   image: gitlab.dev.ifs.hsr.ch:45023/cevelop/docker-tycho-build:latest
   stage: build
   script:
-    - 'xvfb-run ./tools/build verify'
+    - 'env SWT_GTK3=0 xvfb-run ./tools/build clean verify'
 
 build unstable:
   <<: *BUILD_COMMON
   except:
     - master
     - develop
+  script:
+    - 'env SWT_GTK3=0 xvfb-run ./tools/build clean verify --verbose'
+  artifacts:
+    when: on_failure
+    paths:
+      - '/builds/*/0/cevelop/cute/CUTEProject/tests/*/target/work/data/.metadata/**'
 
 build signed:
   <<: *BUILD_COMMON

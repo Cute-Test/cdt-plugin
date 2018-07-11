@@ -45,7 +45,6 @@ public class NewCuteProjectCategoryWizard extends AbstractCWizard {
 
    protected CuteWizardHandler getHandler(IWizard wizard) {
       return new CuteWizardHandler(parent, wizard);
-
    }
 
 }

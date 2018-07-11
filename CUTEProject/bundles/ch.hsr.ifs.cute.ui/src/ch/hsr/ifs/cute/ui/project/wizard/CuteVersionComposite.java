@@ -8,7 +8,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
-import java.util.SortedSet;
+import java.util.Iterator;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -17,8 +17,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import ch.hsr.ifs.cute.core.headers.CuteHeaders;
-import ch.hsr.ifs.cute.ui.CuteUIPlugin;
+import ch.hsr.ifs.cute.headers.ICuteHeaders;
 
 
 /**
@@ -30,9 +29,9 @@ public class CuteVersionComposite extends Composite {
 
    private Combo combo;
 
-   public CuteVersionComposite(Composite parent, String currentCuteHeadersVersionName) {
+   public CuteVersionComposite(Composite parent, ICuteHeaders currentCuteHeaders) {
       super(parent, SWT.NULL);
-      createCuteVersionCompsite(parent, currentCuteHeadersVersionName);
+      createCuteVersionCompsite(currentCuteHeaders);
    }
 
    public CuteVersionComposite(Composite parent) {
@@ -52,7 +51,7 @@ public class CuteVersionComposite extends Composite {
       return !combo.getText().isEmpty();
    }
 
-   private void createCuteVersionCompsite(Composite parent, String currentCuteHeadersVersionName) {
+   private void createCuteVersionCompsite(ICuteHeaders currentCuteHeaders) {
       GridLayout layout = new GridLayout(2, false);
       layout.marginWidth = 0;
       layout.marginHeight = 0;
@@ -62,23 +61,20 @@ public class CuteVersionComposite extends Composite {
       Label label = new Label(this, SWT.HORIZONTAL);
       label.setText(Messages.getString("CuteVersionComposite.CuteVersion"));
 
-      int indexToSelect = 0;
-      int i = 0;
       combo = new Combo(this, SWT.READ_ONLY | SWT.DROP_DOWN);
-      SortedSet<CuteHeaders> set = CuteUIPlugin.getInstalledCuteHeaders();
-      if (!set.isEmpty()) {
-         for (CuteHeaders cuteHeaders : set) {
-            String versionString = cuteHeaders.getVersionString();
-            combo.add(versionString);
-            if (versionString.equals(currentCuteHeadersVersionName)) {
-               indexToSelect = i;
-            }
-            i++;
-         }
-         combo.setText(combo.getItem(0));
+
+      int i = 0;
+      // TODO(tstauber - Apr 16, 2018) This should only show compatible headers
+      Iterator<ICuteHeaders> iter = ICuteHeaders.loadedHeaders().iterator();
+      while (iter.hasNext()) {
+         ICuteHeaders headers = iter.next();
+         combo.add(headers.getVersionString());
+         if (headers == currentCuteHeaders) combo.select(i);
+         if (!iter.hasNext()) combo.select(i);
+         i++;
       }
+
       GridData data = new GridData(GridData.FILL_HORIZONTAL);
-      combo.select(indexToSelect);
       combo.setLayoutData(data);
    }
 
