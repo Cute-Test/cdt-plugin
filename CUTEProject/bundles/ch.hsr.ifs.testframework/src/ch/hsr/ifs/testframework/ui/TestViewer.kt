@@ -55,7 +55,7 @@ import kotlin.properties.Delegates
 public class TestViewer(parent: Composite, style: Int, private val viewPart: TestRunnerViewPart) : Composite(parent, style), ITestElementListener, ISessionListener, ITestCompositeListener {
 
 	companion object {
-		private val msg = TestFrameworkPlugin.getMessages()
+		private val msg = TestFrameworkPlugin.messages!!
 	}
 
 	private inner class UpdateTestElement(name: String, private val element: TestElement, private val reveal: Boolean) : UIJob(name) {
@@ -133,9 +133,9 @@ public class TestViewer(parent: Composite, style: Int, private val viewPart: Tes
 	}
 
 	init {
-		TestFrameworkPlugin.getModel().addListener(this)
+		TestFrameworkPlugin.getModel()?.addListener(this)
 		initialize()
-		addDisposeListener { _ -> TestFrameworkPlugin.getModel().removeListener(this) }
+		addDisposeListener { _ -> TestFrameworkPlugin.getModel()?.removeListener(this) }
 	}
 
 	fun reset(session: TestSession) {
@@ -193,8 +193,8 @@ public class TestViewer(parent: Composite, style: Int, private val viewPart: Tes
 	}
 
 	override fun modelCanged(source: TestElement, event: NotifyEvent) = when (event.type) {
-		EventType.suiteFinished -> UpdateTestElement(msg.getString("TestViewer.ShowNewTest"), event.element, false)
-		EventType.testFinished -> UpdateTestElement(msg.getString("TestViewer.UpdateTest"), event.element, true)
+		EventType.suiteFinished -> UpdateTestElement(msg.getString("TestViewer.ShowNewTest") ?: "Show New Test", event.element, false)
+		EventType.testFinished -> UpdateTestElement(msg.getString("TestViewer.UpdateTest") ?: "Update Test", event.element, true)
 	}.schedule()
 
 	override fun sessionStarted(session: TestSession) {
@@ -271,7 +271,7 @@ public class TestViewer(parent: Composite, style: Int, private val viewPart: Tes
 
 	private fun getSession(): TestSession {
 		if (!this::session.isInitialized) {
-			session = TestFrameworkPlugin.getModel().getSession()
+			session = TestFrameworkPlugin.getModel()!!.getSession()
 		}
 		return session
 	}
@@ -378,7 +378,7 @@ public class TestViewer(parent: Composite, style: Int, private val viewPart: Tes
 			newElement.addListener(this)
 		}
 		elemets += newElement
-		ShowNewTest(msg.getString("TestViewer.ShowNewTest"), newElement.getParent(), newElement).schedule()
+		ShowNewTest(msg.getString("TestViewer.ShowNewTest") ?: "Show New Test", newElement.getParent(), newElement).schedule()
 	}
 
 	fun getTreeViewer() = treeViewer

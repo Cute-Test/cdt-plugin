@@ -129,7 +129,7 @@ class CuteTestDClickListener(private var session: TestSession?) : IDoubleClickLi
    private fun isQualifiedName(testCaseName: String) = testCaseName.contains(REGEX)
 
    private fun openEditor(file: IFile, lineNumberOrOffset: Int, isOffset: Boolean) =
-      getActivePage()?.apply{
+      TestFrameworkPlugin.activePage?.apply{
          try {
             val editor = openEditor(FileEditorInput(file), getEditorId(file), false)
             if(lineNumberOrOffset > 0 && editor is ITextEditor) {
@@ -146,10 +146,8 @@ class CuteTestDClickListener(private var session: TestSession?) : IDoubleClickLi
          }
       }
 
-   private fun getActivePage() = TestFrameworkPlugin.getActiveWorkbenchWindow()?.getActivePage()
-
    private fun getEditorId(file: IFile) =
-         with(TestFrameworkPlugin.getDefault().getWorkbench(), {
+         with(TestFrameworkPlugin.default!!.workbench, {
             getEditorRegistry()
                .getDefaultEditor(file.getName(), getFileContentType(file))
                ?.getId()

@@ -55,12 +55,12 @@ class CuteProgressBar(parent: Composite) : Canvas(parent, SWT.NONE), ITestElemen
    private val fStoppedColor: Color
    private var fError = false
    private var fStopped = false
-   private val msg = TestFrameworkPlugin.getMessages()
+   private val msg = TestFrameworkPlugin.messages!!
 
    private lateinit var session: TestSession
 
    init {
-      TestFrameworkPlugin.getModel().addListener(this)
+      TestFrameworkPlugin.getModel()?.addListener(this)
       addControlListener(object : ControlAdapter() {
          override fun controlResized(e: ControlEvent) {
             fColorBarWidth = scale(fCurrentTickCount)
@@ -76,7 +76,7 @@ class CuteProgressBar(parent: Composite) : Canvas(parent, SWT.NONE), ITestElemen
          fFailureColor.dispose()
          fOKColor.dispose()
          fStoppedColor.dispose()
-         TestFrameworkPlugin.getModel().removeListener(this)
+         TestFrameworkPlugin.getModel()?.removeListener(this)
       }
    }
 

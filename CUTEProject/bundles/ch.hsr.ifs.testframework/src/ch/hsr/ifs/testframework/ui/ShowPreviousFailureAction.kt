@@ -19,7 +19,7 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin
 class ShowPreviousFailureAction(private val trViewPart: TestRunnerViewPart?) : Action(msg!!.getString("ShowPreviousFailureAction.ShowPrevFailedTest")) {
 
    companion object {
-      private val msg = TestFrameworkPlugin.getMessages()
+      private val msg = TestFrameworkPlugin.messages
    }
 
    init {

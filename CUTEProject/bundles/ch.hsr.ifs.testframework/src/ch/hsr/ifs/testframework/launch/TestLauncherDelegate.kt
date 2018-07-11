@@ -166,7 +166,7 @@ abstract class TestLauncherDelegate : AbstractCLaunchDelegate() {
             return exePath.removeLastSegments(1)
          }
       } catch (e: CoreException) {
-         TestFrameworkPlugin.getDefault().getLog().log(e.getStatus())
+         TestFrameworkPlugin.log(e.getStatus())
       }
       return exePath
    }

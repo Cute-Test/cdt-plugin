@@ -54,7 +54,7 @@ abstract class ConsoleEventParser {
       try {
          extractTestEventsFor(reg, line)
       } catch (e: CoreException) {
-         TestFrameworkPlugin.getDefault().getLog().log(e.getStatus())
+         TestFrameworkPlugin.log(e.getStatus())
          throwLineParsingException(reg, line, e)
       } catch (e: Exception) {
          throwLineParsingException(reg, line, e)

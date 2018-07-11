@@ -23,6 +23,6 @@ class FallbackImageProvider : ImageProvider() {
    )
 
    override fun getImage(key: Int): ImageDescriptor? {
-      return TestFrameworkPlugin.getImageDescriptor(pathMap[key])
+      return TestFrameworkPlugin.getImageDescriptor(pathMap[key] ?: "")
    }
 }

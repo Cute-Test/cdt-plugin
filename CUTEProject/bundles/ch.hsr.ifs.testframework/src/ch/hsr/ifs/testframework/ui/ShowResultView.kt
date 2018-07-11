@@ -20,7 +20,7 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin
 class ShowResultView : UIJob(msg!!.getString("ShowResultView.ShowResultView")) {
 
    companion object {
-      private val msg = TestFrameworkPlugin.getMessages()
+      private val msg = TestFrameworkPlugin.messages
    }
 
    override fun runInUIThread(monitor: IProgressMonitor?) =
@@ -38,7 +38,7 @@ class ShowResultView : UIJob(msg!!.getString("ShowResultView.ShowResultView")) {
             }
          } 
          
-         return TestFrameworkPlugin.getActivePage()?.showView(TestRunnerViewPart.ID) as? TestRunnerViewPart
+         return TestFrameworkPlugin.activePage?.showView(TestRunnerViewPart.ID) as? TestRunnerViewPart
       } catch (pie: PartInitException) {
          TestFrameworkPlugin.log(pie)
          return null
@@ -46,7 +46,7 @@ class ShowResultView : UIJob(msg!!.getString("ShowResultView.ShowResultView")) {
    }
 
    private fun findTestRunnerViewPartInActivePage(): TestRunnerViewPart? {
-      return TestFrameworkPlugin.getActivePage()?.findView(TestRunnerViewPart.ID) as? TestRunnerViewPart
+      return TestFrameworkPlugin.activePage?.findView(TestRunnerViewPart.ID) as? TestRunnerViewPart
    }
 
 }

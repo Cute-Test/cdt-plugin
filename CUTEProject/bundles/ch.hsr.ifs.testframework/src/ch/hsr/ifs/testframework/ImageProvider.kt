@@ -6,19 +6,18 @@
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.testframework;
+package ch.hsr.ifs.testframework
 
-import org.eclipse.jface.resource.ImageDescriptor;
-
+import org.eclipse.jface.resource.ImageDescriptor
 
 /**
  * @author egraf
  *
  */
-public abstract class ImageProvider {
+abstract class ImageProvider {
+	abstract fun getImage(key: Int): ImageDescriptor?
 
-   public static final int APP_LOGO = 0;
-
-   abstract public ImageDescriptor getImage(int key);
-
+	companion object {
+		val APP_LOGO = 0
+	}
 }

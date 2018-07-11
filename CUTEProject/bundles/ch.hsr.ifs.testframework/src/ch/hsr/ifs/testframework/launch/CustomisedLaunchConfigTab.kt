@@ -159,7 +159,7 @@ class CustomisedLaunchConfigTab : CLaunchConfigurationTab() {
             setSharedEnabled(false)
          }
       } catch (ce: CoreException) {
-         TestFrameworkPlugin.getDefault().getLog().log(ce.getStatus())
+         TestFrameworkPlugin.log(ce.getStatus())
       }
    }
 

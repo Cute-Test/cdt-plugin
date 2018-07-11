@@ -20,18 +20,18 @@ import ch.hsr.ifs.testframework.preference.SHOW_WHITESPACES
 class ShowWhiteSpaceAction(private val viewer: CuteTextMergeViewer) : Action(msg!!.getString("ShowWhiteSpaceAction.ShowWhitespaceChar"), AS_CHECK_BOX) {
 
    companion object {
-      private val msg = TestFrameworkPlugin.getMessages()
+      private val msg = TestFrameworkPlugin.messages
    }
 
    init {
       setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/show_whitespace_chars.gif"))
       setToolTipText(msg!!.getString("ShowWhiteSpaceAction.ShowWhitespaceChar"))
-      setChecked(TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(SHOW_WHITESPACES))
+      setChecked(TestFrameworkPlugin.default!!.getPreferenceStore().getBoolean(SHOW_WHITESPACES))
    }
 
    override fun run() {
-      val show = !TestFrameworkPlugin.getDefault().getPreferenceStore().getBoolean(SHOW_WHITESPACES)
-      TestFrameworkPlugin.getDefault().getPreferenceStore().setValue(SHOW_WHITESPACES, show)
+      val show = !TestFrameworkPlugin.default!!.getPreferenceStore().getBoolean(SHOW_WHITESPACES)
+      TestFrameworkPlugin.default!!.getPreferenceStore().setValue(SHOW_WHITESPACES, show)
       viewer.showWhitespaces(show)
    }
 

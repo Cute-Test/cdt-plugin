@@ -25,10 +25,10 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin;
  */
 public class TestframeworkPrefPage : FieldEditorPreferencePage(GRID), IWorkbenchPreferencePage {
 
-   private val msg = TestFrameworkPlugin.getMessages();
+   private val msg = TestFrameworkPlugin.messages!!;
 
    init {
-      setPreferenceStore(TestFrameworkPlugin.getDefault().getPreferenceStore());
+      setPreferenceStore(TestFrameworkPlugin.default!!.getPreferenceStore());
       setDescription(msg.getString("CutePrefPage.CuteRefPage"));
    }
 
@@ -40,6 +40,6 @@ public class TestframeworkPrefPage : FieldEditorPreferencePage(GRID), IWorkbench
    override fun init(workbench: IWorkbench) {}
 
    override fun getImage() =
-      TestFrameworkPlugin.getImageProvider().getImage(ImageProvider.APP_LOGO).createImage();
+      TestFrameworkPlugin.imageProvider.getImage(ImageProvider.APP_LOGO)?.createImage();
 
 }

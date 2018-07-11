@@ -1,4 +1,7 @@
 eclipse.preferences.version=1
+encoding//src/ch/hsr/ifs/testframework/ImageProvider.kt=UTF-8
+encoding//src/ch/hsr/ifs/testframework/Messages.kt=UTF-8
+encoding//src/ch/hsr/ifs/testframework/TestFrameworkPlugin.kt=UTF-8
 encoding//src/ch/hsr/ifs/testframework/ui/CuteTestLabelProvider.kt=UTF-8
 encoding//src/ch/hsr/ifs/testframework/ui/CuteTestSelecetionListener.kt=UTF-8
 encoding//src/ch/hsr/ifs/testframework/ui/CuteTestTreeContentProvieder.kt=UTF-8

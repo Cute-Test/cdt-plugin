@@ -18,13 +18,14 @@ import org.eclipse.ui.console.TextConsole;
 
 import ch.hsr.ifs.testframework.TestFrameworkPlugin;
 import ch.hsr.ifs.testframework.event.TestEventHandler;
+import kotlin.jvm.JvmOverloads
 
 
 /**
  * @author Emanuel Graf (IFS)
  *
  */
-class ConsoleLinkHandler(val rtPath: IPath, val console: TextConsole, val linkFactory: ILinkFactory = ConsoleLinkFactory()) : TestEventHandler() {
+class ConsoleLinkHandler @JvmOverloads constructor (val rtPath: IPath, val console: TextConsole, val linkFactory: ILinkFactory = ConsoleLinkFactory()) : TestEventHandler() {
 
    override fun handleBeginning(reg: IRegion, suitename: String, suitesize: String) = Unit
 

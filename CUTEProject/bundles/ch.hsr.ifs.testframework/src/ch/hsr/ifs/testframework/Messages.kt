@@ -6,13 +6,11 @@
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.testframework;
+package ch.hsr.ifs.testframework
 
 /**
  * @since 3.0
  */
-public interface Messages {
-
-   public String getString(String key);
-
+interface Messages {
+	fun getString(key: String?): String?
 }

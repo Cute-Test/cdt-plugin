@@ -65,7 +65,7 @@ public class ModelBuilderTest extends ConsoleTest {
    @Override
    protected void runTest() throws Throwable {
       emulateTestRun();
-      TestSession session = TestFrameworkPlugin.getModel().getSession();
+      TestSession session = TestFrameworkPlugin.Companion.getModel().getSession();
       assertEquals(getExpected(), getSessionString(session));
    }
 

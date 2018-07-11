@@ -19,7 +19,7 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin
 class ShowNextFailureAction(private val trViewPart: TestRunnerViewPart) : Action(msg!!.getString("ShowNextFailureAction.ShowNextFailedTest")) {
 
    companion object {
-      private val msg = TestFrameworkPlugin.getMessages()
+      private val msg = TestFrameworkPlugin.messages
    }
 
    init {

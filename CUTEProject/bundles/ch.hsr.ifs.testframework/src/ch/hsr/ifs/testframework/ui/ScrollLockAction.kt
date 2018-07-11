@@ -16,15 +16,15 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin
  * @author Emanuel Graf
  *
  */
-class ScrollLockAction(private val view: TestRunnerViewPart) : Action(msg!!.getString("ScrollLockAction.ScrollLock")) {
+class ScrollLockAction(private val view: TestRunnerViewPart) : Action(msg.getString("ScrollLockAction.ScrollLock")) {
 
    companion object {
-      private val msg = TestFrameworkPlugin.getMessages()
+      private val msg = TestFrameworkPlugin.messages!!
    }
 
 
    init {
-      setToolTipText(msg!!.getString("ScrollLockAction.ScrollLock"))
+      setToolTipText(msg.getString("ScrollLockAction.ScrollLock"))
       setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/lock.gif"))
       setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/lock.gif"))
       setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/lock.gif"))

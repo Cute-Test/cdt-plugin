@@ -37,9 +37,9 @@ import ch.hsr.ifs.testframework.model.TestSession
  */
 class CounterPanel(parent: Composite, style: Int) : Composite(parent, style), ITestElementListener, ISessionListener, ITestCompositeListener {
 
-   val msg = TestFrameworkPlugin.getMessages()
+   val msg = TestFrameworkPlugin.messages!!
 
-   inner class UpdateCounterPanelJob(name: String): UIJob(name) {
+   inner class UpdateCounterPanelJob(name: String?): UIJob(name) {
 
       override fun runInUIThread(monitor: IProgressMonitor): IStatus {
          updateNumbers()
@@ -63,7 +63,7 @@ class CounterPanel(parent: Composite, style: Int) : Composite(parent, style), IT
    private var total = 0
 
    init {
-      TestFrameworkPlugin.getModel().addListener(this)
+      TestFrameworkPlugin.getModel()?.addListener(this)
       initialize()
    }
 
@@ -120,7 +120,7 @@ class CounterPanel(parent: Composite, style: Int) : Composite(parent, style), IT
 
       addDisposeListener({
          disposeIcons()
-         TestFrameworkPlugin.getModel().removeListener(this)
+         TestFrameworkPlugin.getModel()?.removeListener(this)
       })
 
       this.setLayout(gridLayout)
