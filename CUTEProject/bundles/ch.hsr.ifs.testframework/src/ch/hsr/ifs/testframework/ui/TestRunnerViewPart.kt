@@ -46,7 +46,6 @@ public class TestRunnerViewPart : ViewPart(), ISessionListener {
 
 	private lateinit var top: Composite
 	private lateinit var TopPanel: Composite
-	protected var autoScroll = true
 	protected lateinit var counterPanel: CounterPanel
 	private lateinit var cuteProgressBar: CuteProgressBar
 	private lateinit var testViewer: TestViewer
@@ -69,6 +68,8 @@ public class TestRunnerViewPart : ViewPart(), ISessionListener {
 			setEnabled(false)
 		}
 	}
+
+	var isAutoScroll = true
 
 	override fun createPartControl(parent: Composite) {
 		this.parent = parent
@@ -109,7 +110,7 @@ public class TestRunnerViewPart : ViewPart(), ISessionListener {
 		val toolBar = actionBars.getToolBarManager()
 
 		scrollLockAction = ScrollLockAction(this)
-		scrollLockAction.setChecked(!autoScroll)
+		scrollLockAction.setChecked(!isAutoScroll)
 
 		failureOnlyAction = FailuresOnlyFilterAction()
 		failureOnlyAction.setChecked(false)
@@ -195,12 +196,6 @@ public class TestRunnerViewPart : ViewPart(), ISessionListener {
 
 
 	override fun setFocus() = Unit
-
-	var isAutoScroll
-		get() = autoScroll
-		set(value) {
-			autoScroll = value
-		}
 
 	private inner class SessionFinishedUIJob(name: String) : UIJob(name) {
 
