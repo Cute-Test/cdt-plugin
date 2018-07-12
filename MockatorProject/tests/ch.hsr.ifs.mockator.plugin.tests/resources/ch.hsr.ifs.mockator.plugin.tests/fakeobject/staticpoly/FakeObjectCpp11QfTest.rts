@@ -1,4 +1,4 @@
-//!FakeObjectCpp11QfTest
+//!Fake Object Cpp 11 Qf Test
 //@main.cpp
 #include "stl_fake.h"
 template<typename T>

@@ -1,4 +1,4 @@
-//!NotProvidedMemberFunctionTest
+//!Not Provided Member Function Test
 //@main.cpp
 template <typename T>
 struct SUT{

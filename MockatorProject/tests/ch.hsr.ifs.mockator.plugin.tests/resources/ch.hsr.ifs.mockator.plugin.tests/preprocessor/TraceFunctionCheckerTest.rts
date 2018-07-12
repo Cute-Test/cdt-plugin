@@ -1,4 +1,4 @@
-//!TraceFunctionCheckerTest
+//!Trace Function Checker Test
 //@main.cpp
 #undef srand
 void mockator_srand(unsigned int i, const char *fileName, int lineNumber) {

@@ -1,4 +1,4 @@
-//!SUTProject
+//!SUT Project
 //@.config
 newFileCreation=true
 newFiles=FooInterface.h

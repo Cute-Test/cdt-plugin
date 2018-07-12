@@ -1,4 +1,4 @@
-//!WithTypedefForSutTest
+//!With Typedef For SUT Test
 //@main.cpp
 template <typename T>
 struct SUT{

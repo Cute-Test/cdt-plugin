@@ -1,4 +1,4 @@
-//!LocalSutNotUsedTest
+//!Local SUT Not Used Test
 //@main.cpp
 template <typename T>
 void sut(T const& t) {

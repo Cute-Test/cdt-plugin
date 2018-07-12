@@ -1,4 +1,4 @@
-//!TestDoubleAlreadyProvidedTest
+//!Test Double Already Provided Test
 //@main.cpp
 namespace A {
   namespace B {

@@ -1,4 +1,4 @@
-//!BugWithSutInNamespaceTest
+//!Bug With Sut In Namespace Test
 //@main.cpp
 namespace A {
   namespace B {

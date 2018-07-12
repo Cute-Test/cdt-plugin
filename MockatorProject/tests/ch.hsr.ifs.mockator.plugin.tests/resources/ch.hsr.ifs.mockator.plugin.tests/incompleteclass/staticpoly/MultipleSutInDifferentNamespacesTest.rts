@@ -1,4 +1,4 @@
-//!MultipleSutinDifferentNamespacesTest
+//!Multiple SUT in Different Namespaces Test
 //@main.cpp
 namespace A {
   template <typename T>

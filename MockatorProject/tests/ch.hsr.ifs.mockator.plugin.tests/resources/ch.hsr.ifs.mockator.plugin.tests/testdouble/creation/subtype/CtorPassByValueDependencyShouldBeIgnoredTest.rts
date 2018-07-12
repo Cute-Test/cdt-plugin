@@ -1,4 +1,4 @@
-//!CtorPassByValueDependencyShouldBeIgnored
+//!Ctor Pass By Value Dependency Should Be Ignored
 //@.config
 cppStandard=C++11
 

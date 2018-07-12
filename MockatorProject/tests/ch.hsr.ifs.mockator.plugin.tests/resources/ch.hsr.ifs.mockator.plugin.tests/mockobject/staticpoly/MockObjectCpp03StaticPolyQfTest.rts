@@ -1,4 +1,4 @@
-//!MockObjectCpp03StaticPolyQfTest
+//!Mock Object Cpp 03 Static Poly Qf Test
 //@.config
 primaryFile=main.cpp
 //@main.cpp
@@ -44,7 +44,7 @@ namespace suite {
          {
              const size_t mock_id;
              Mock()
-             :mock_id( reserveNextCallId(allCalls) )
+             :mock_id(reserveNextCallId(allCalls))
              {
                  allCalls[mock_id].push_back(call("Mock()"));
              }

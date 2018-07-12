@@ -1,4 +1,4 @@
-//!AllMemFunsProvidedInLocalClassTest
+//!All Mem Funs Provided In Local Class Test
 //@main.cpp
 struct IDependency {
   virtual ~IDependency();

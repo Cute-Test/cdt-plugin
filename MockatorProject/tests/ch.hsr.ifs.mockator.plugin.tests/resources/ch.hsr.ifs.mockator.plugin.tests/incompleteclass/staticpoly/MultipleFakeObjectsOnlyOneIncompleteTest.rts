@@ -1,4 +1,4 @@
-//!MultipleFakeObjectsOnlyOneIncompleteTest
+//!Multiple Fake Objects Only One Incomplete Test
 //@main.cpp
 template <typename S, typename T, typename U>
 struct Bar{

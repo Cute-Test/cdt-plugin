@@ -29,5 +29,6 @@ void test() {
     SUT sut;
     struct Foo : IDependency
     {
-    } foo;sut.inject(3.1415, foo);
+    } foo;
+	sut.inject(3.1415, foo);
 }

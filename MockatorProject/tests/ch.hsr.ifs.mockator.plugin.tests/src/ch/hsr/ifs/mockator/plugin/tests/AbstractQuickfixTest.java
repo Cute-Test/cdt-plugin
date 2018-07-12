@@ -14,10 +14,9 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.junit.Test;
 
-import ch.hsr.ifs.iltis.testing.highlevel.cdttest.CDTTestingQuickfixTest;
-import ch.hsr.ifs.iltis.testing.highlevel.cdttest.comparison.ASTComparison.ComparisonArg;
-import ch.hsr.ifs.iltis.testing.highlevel.helpers.UIThreadSyncRunnable;
-
+import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.CDTTestingQuickfixTest;
+import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.comparison.ASTComparison.ComparisonArg;
+import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.helpers.UIThreadSyncRunnable;
 import ch.hsr.ifs.mockator.plugin.project.properties.CppStandard;
 import ch.hsr.ifs.mockator.plugin.refsupport.qf.MockatorQuickFix;
 
@@ -45,8 +44,7 @@ public abstract class AbstractQuickfixTest extends CDTTestingQuickfixTest {
       assertQfResolutionDescription(quickfix);
 
       //FIXME Fix include-insertion system and then remove IGNORE_INCLUDE_ORDER
-      assertAllSourceFilesEqual(EnumSet.of(ComparisonArg.COMPARE_INCLUDE_DIRECTIVES, ComparisonArg.PRINT_CONTEXT_ON_FAIL,
-            ComparisonArg.PRINT_WHOLE_ASTS_ON_FAIL, ComparisonArg.IGNORE_INCLUDE_ORDER));
+      assertAllSourceFilesEqual(EnumSet.of(ComparisonArg.USE_SOURCE_COMPARISON));
    }
 
    protected void assertProblemMarkerMessages(final String[] expectedMarkerMessages) throws CoreException {

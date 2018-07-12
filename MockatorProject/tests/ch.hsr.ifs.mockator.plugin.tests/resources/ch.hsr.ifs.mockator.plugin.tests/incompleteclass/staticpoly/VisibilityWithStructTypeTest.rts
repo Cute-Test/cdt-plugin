@@ -1,4 +1,4 @@
-//!VisibilityWithStructTypeTest
+//!Visibility With Struct Type Test
 //@main.cpp
 template <typename T>
 struct SUT{

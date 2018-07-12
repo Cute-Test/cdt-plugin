@@ -1,4 +1,4 @@
-//!CtorDependencyToClassWithBaseVirtualDtorShouldBeMarkedTest
+//!Ctor Dependency To Class With Base Virtual Dtor Should Be Marked Test
 //@.config
 cppStandard=C++11
 

@@ -1,4 +1,4 @@
-//!NonLocalNotInNamespaceFakeClassTest
+//!Non Local Not In Namespace Fake Class Test
 //@main.cpp
 template <typename T>
 struct SUT{

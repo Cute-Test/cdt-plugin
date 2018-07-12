@@ -1,4 +1,4 @@
-//!MissingMemFunWhenCalledFromTestFunctorTest
+//!Missing Mem Fun When Called From Test Functor Test
 //@main.cpp
 template <typename T>
 struct SUT{

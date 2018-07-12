@@ -1,4 +1,4 @@
-//!OnlyDestructorTest
+//!Only Destructor Test
 //@main.cpp
 struct IDependency {
   virtual ~IDependency();

@@ -1,4 +1,4 @@
-//!NotReferencedSutFunctionShouldbeIgnoredTest
+//!Not Referenced SUT Function Should be Ignored Test
 //@main.cpp
 template <typename T>
 struct SUT{

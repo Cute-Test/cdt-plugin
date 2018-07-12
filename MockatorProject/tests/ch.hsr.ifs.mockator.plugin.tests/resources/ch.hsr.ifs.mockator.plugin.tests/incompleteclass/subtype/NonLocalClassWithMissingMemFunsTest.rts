@@ -1,4 +1,4 @@
-//!NonLocalClassWithMissingMemFunsTest
+//!Non Local Class With Missing Mem Funs Test
 //@main.cpp
 struct IDependency {
   virtual ~IDependency();

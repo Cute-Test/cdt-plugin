@@ -12,6 +12,6 @@
 	<modules>
 		<module>ch.hsr.ifs.mockator.update</module>
 		<module>ch.hsr.ifs.mockator.target</module>
-		<module>ch.hsr.ifs.mockator.target.dev</module>
+		<module>ch.hsr.ifs.mockator.target.develop</module>
 	</modules>
 </project>

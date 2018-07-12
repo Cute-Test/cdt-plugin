@@ -1,4 +1,4 @@
-//!PassedToFreeFunctionTest
+//!Passed To Free Function Test
 //@main.cpp
 struct IDependency {
   virtual ~IDependency();

@@ -10,6 +10,5 @@
     </parent>
     <modules>
         <module>ch.hsr.ifs.mockator.plugin</module>
-        <module>ch.hsr.ifs.mockator.help</module>
     </modules>
 </project>

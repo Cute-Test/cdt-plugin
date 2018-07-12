@@ -1,4 +1,4 @@
-//!MultipleDependenciesMissingTest
+//!Multiple Dependencies Missing Test
 //@main.cpp
 struct IDependency1 {
   virtual ~IDependency1();

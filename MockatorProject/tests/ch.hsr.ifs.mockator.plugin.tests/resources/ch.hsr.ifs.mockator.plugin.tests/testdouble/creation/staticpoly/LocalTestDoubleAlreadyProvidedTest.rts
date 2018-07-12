@@ -1,4 +1,4 @@
-//!LocalTestDoubleAlreadyProvidedTest
+//!Local Test Double Already Provided Test
 //@main.cpp
 template <typename T>
 struct SUT{

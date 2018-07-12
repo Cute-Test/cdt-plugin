@@ -1,4 +1,4 @@
-//!ParametersNotConsideredConst
+//!Parameters Not Considered Const
 //@main.cpp
 template <typename T>
 struct SUT{

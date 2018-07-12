@@ -1,4 +1,4 @@
-//!FunctionCallWithPointerSyntaxTest
+//!Function Call With Pointer Syntax Test
 //@main.cpp
 template <typename T>
 struct SUT{

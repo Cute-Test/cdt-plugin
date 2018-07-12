@@ -1,4 +1,4 @@
-//!QualifiedNamesInFunCalls2Test
+//!Qualified Names In Fun Calls 2 Test
 //@main.cpp
 namespace a {
   struct A {

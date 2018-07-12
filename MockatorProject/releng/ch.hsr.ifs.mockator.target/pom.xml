@@ -9,7 +9,7 @@
 	</parent>
 
 	<groupId>ch.hsr.ifs.mockator</groupId>
-	<artifactId>ch.hsr.ifs.mockator.target</artifactId>
+	<artifactId>ch.hsr.ifs.mockator.target.master</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>eclipse-target-definition</packaging>
 

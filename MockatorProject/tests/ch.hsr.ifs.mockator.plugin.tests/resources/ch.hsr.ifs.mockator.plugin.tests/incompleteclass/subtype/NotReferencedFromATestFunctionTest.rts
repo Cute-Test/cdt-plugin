@@ -1,4 +1,4 @@
-//!NotReferencedFromATestFunctionTest
+//!Not Referenced From A Test Function Test
 //@main.cpp
 struct IDependency {
   virtual ~IDependency();
