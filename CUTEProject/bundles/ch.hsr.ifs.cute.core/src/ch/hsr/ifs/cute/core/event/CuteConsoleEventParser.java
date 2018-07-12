@@ -15,8 +15,10 @@ package ch.hsr.ifs.cute.core.event;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IRegion;
+
+import static ch.hsr.ifs.testframework.event.ConsoleEventParserKt.escapeForRegex;
+import static ch.hsr.ifs.testframework.event.ConsoleEventParserKt.regExUnion;
 
 import ch.hsr.ifs.testframework.event.ConsoleEventParser;
 import ch.hsr.ifs.testframework.event.SuiteBeginEvent;
@@ -57,7 +59,7 @@ public class CuteConsoleEventParser extends ConsoleEventParser {
    }
 
    @Override
-   protected void extractTestEventsFor(IRegion reg, String line) throws CoreException {
+   protected void extractTestEventsFor(IRegion reg, String line) {
       if (testStarting(line)) testStart(reg, line);
       else if (testSucceeded(line)) testSuccess(reg, line);
       else if (testFailed(line)) testFailure(reg, line);
@@ -70,7 +72,7 @@ public class CuteConsoleEventParser extends ConsoleEventParser {
       return line.startsWith(STARTTEST, LINEPREFIXLENGTH);
    }
 
-   private void testStart(IRegion reg, String line) throws CoreException {
+   private void testStart(IRegion reg, String line) {
       Matcher m = matcherFor(TESTSTARTLINE, line);
       testEvents.add(new TestStartEvent(reg, m.group(1)));
    }
@@ -79,7 +81,7 @@ public class CuteConsoleEventParser extends ConsoleEventParser {
       return line.startsWith(SUCCESS, LINEPREFIXLENGTH);
    }
 
-   private void testSuccess(IRegion reg, String line) throws CoreException {
+   private void testSuccess(IRegion reg, String line) {
       Matcher m = matcherFor(TESTSUCESSLINE, line);
       testEvents.add(new TestSuccessEvent(reg, m.group(1), m.group(2)));
    }
@@ -88,7 +90,7 @@ public class CuteConsoleEventParser extends ConsoleEventParser {
       return line.startsWith(FAILURE, LINEPREFIXLENGTH);
    }
 
-   private void testFailure(IRegion reg, String line) throws CoreException {
+   private void testFailure(IRegion reg, String line) {
       Matcher m = matcherFor(TESTFAILURELINE, line);
       testEvents.add(new TestFailureEvent(reg, m.group(1), m.group(2), m.group(3), m.group(4)));
    }
@@ -97,7 +99,7 @@ public class CuteConsoleEventParser extends ConsoleEventParser {
       return line.startsWith(BEGINNING, LINEPREFIXLENGTH);
    }
 
-   private void suiteStarted(IRegion reg, String line) throws CoreException {
+   private void suiteStarted(IRegion reg, String line) {
       Matcher m = matcherFor(SUITEBEGINNINGLINE, line);
       testEvents.add(new SuiteBeginEvent(reg, m.group(1), m.group(2)));
    }
@@ -106,7 +108,7 @@ public class CuteConsoleEventParser extends ConsoleEventParser {
       return line.startsWith(ENDING, LINEPREFIXLENGTH);
    }
 
-   private void suiteEnded(IRegion reg, String line) throws CoreException {
+   private void suiteEnded(IRegion reg, String line) {
       Matcher m = matcherFor(SUITEENDINGLINE, line);
       testEvents.add(new SuiteEndEvent(reg, m.group(1)));
    }
@@ -115,7 +117,7 @@ public class CuteConsoleEventParser extends ConsoleEventParser {
       return line.startsWith(ERROR, LINEPREFIXLENGTH);
    }
 
-   private void testError(IRegion reg, String line) throws CoreException {
+   private void testError(IRegion reg, String line) {
       Matcher m = matcherFor(TESTERRORLINE, line);
       testEvents.add(new TestErrorEvent(reg, m.group(1), m.group(2)));
    }

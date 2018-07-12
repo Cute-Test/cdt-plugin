@@ -27,12 +27,12 @@ public class CuteImageProvider extends ImageProvider {
    protected Map<Integer, String> pathMap = new TreeMap<>();
 
    public CuteImageProvider() {
-      pathMap.put(APP_LOGO, "obj16/cute_app.png");
+      pathMap.put(ImageProvider.Companion.getAPP_LOGO(), "obj16/cute_app.png");
    }
 
    @Override
    public ImageDescriptor getImage(int key) {
-      return TestFrameworkPlugin.getImageDescriptor(getPath(key));
+      return TestFrameworkPlugin.Companion.getImageDescriptor(getPath(key));
    }
 
    protected String getPath(int key) {
