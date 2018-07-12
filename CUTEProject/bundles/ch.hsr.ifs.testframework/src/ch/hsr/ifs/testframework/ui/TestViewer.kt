@@ -123,7 +123,7 @@ public class TestViewer(parent: Composite, style: Int, private val viewPart: Tes
 	private lateinit var cuteTestDClickListener: CuteTestDClickListener
 	private lateinit var rerunAction: RerunSelectedAction
 
-	private lateinit var session: TestSession
+	private var session: TestSession? = null
 
 	private val failuresOnlyFilter = FailuresOnlyFilter()
 	private val elemets = mutableListOf<TestElement>()
@@ -138,7 +138,7 @@ public class TestViewer(parent: Composite, style: Int, private val viewPart: Tes
 		addDisposeListener { _ -> TestFrameworkPlugin.getModel()?.removeListener(this) }
 	}
 
-	fun reset(session: TestSession) {
+	fun reset(session: TestSession?) {
 		testResultViewer.setText("")
 		treeViewer.setInput(session)
 	}
@@ -224,7 +224,7 @@ public class TestViewer(parent: Composite, style: Int, private val viewPart: Tes
 	}
 
 	fun selectNextFailure() {
-		if (session.hasErrorOrFailure()) {
+		if (session?.hasErrorOrFailure() ?: false) {
 			val element = getSelectedElement()
 			when (element) {
 				is TestCase -> treeViewer.setSelection(StructuredSelection(findNextFailure(element)), true)
@@ -254,7 +254,7 @@ public class TestViewer(parent: Composite, style: Int, private val viewPart: Tes
 	}
 
 	private fun findFirstFailure(): TestElement? {
-		session.getElements().forEach {
+		session?.getElements()?.forEach {
 			@Suppress("NON_EXHAUSTIVE_WHEN")
 			when (it.getStatus()) {
 				TestStatus.failure, TestStatus.error -> {
@@ -270,10 +270,10 @@ public class TestViewer(parent: Composite, style: Int, private val viewPart: Tes
 	}
 
 	private fun getSession(): TestSession {
-		if (!this::session.isInitialized) {
+		if (session == null) {
 			session = TestFrameworkPlugin.getModel()!!.getSession()
 		}
-		return session
+		return session!!
 	}
 
 	private fun findNextChildFailure(composite: ITestComposite, revese: Boolean): TestElement? {
