@@ -46,7 +46,7 @@ public class CuteNature implements IProjectNature, IIncludeStrategyProvider {
       IProjectDescription description = project.getDescription();
       String[] prevNatures = description.getNatureIds();
       if (ArrayUtil.contains(prevNatures, natureId) == -1) {
-         description.setNatureIds(ArrayUtil.append(prevNatures, natureId));
+         description.setNatureIds(ArrayUtil.prepend(prevNatures, natureId));
          project.setDescription(description, monitor);
       }
    }
