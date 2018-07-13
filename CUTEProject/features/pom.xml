@@ -13,5 +13,7 @@
 		<module>ch.hsr.ifs.cute.feature</module>
 		<module>ch.hsr.ifs.cute.boost.feature</module>
 		<module>ch.hsr.ifs.cute.gcov.feature</module>
+		<module>ch.hsr.ifs.cute.mockator.examples.feature</module>
+		<module>ch.hsr.ifs.cute.mockator.feature</module>
 	</modules>
 </project>
