@@ -1,0 +1,90 @@
+//!Mock Object Cpp 03 Sub Type Qf Test
+//@.config
+primaryFile=main.cpp
+//@main.cpp
+struct Base {
+   virtual ~Base() {}
+   virtual void base() = 0;
+};
+struct IDependency : Base {
+   virtual ~IDependency() {}
+   IDependency(char c, double d);
+   IDependency(int i);
+   virtual void foo() = 0;
+};
+struct SUT {
+   void bar(IDependency &d) {
+     d.foo();
+   }
+};
+
+namespace suite {
+   namespace testSUT_Ns {
+     namespace mock_Ns {
+       struct /*$*/Mock/*$$*/ : IDependency {
+       };
+     }
+   }
+}
+
+void testSUT() {
+   using namespace suite::testSUT_Ns::mock_Ns;
+   Mock mock;
+   SUT sut;
+   sut.bar(mock);
+}
+//=
+#include "mockator.h"
+#include <cassert>
+struct Base {
+   virtual ~Base() {}
+   virtual void base() = 0;
+};
+struct IDependency : Base {
+   virtual ~IDependency() {}
+   IDependency(char c, double d);
+   IDependency(int i);
+   virtual void foo() = 0;
+};
+struct SUT {
+   void bar(IDependency &d) {
+     d.foo();
+   }
+};
+
+namespace suite {
+   namespace testSUT_Ns {
+     namespace mock_Ns {
+         INIT_MOCKATOR();
+         std::vector<calls> allCalls(1);
+         struct Mock : IDependency
+         {
+             const size_t mock_id;
+             Mock()
+             :IDependency(int()), mock_id( reserveNextCallId(allCalls) )
+             {
+             }
+
+             void base()
+             {
+                 allCalls[mock_id].push_back(call("base()"));
+             }
+
+             void foo()
+             {
+                 allCalls[mock_id].push_back(call("foo()"));
+             }
+       };
+     }
+   }
+}
+
+void testSUT() {
+   using namespace suite::testSUT_Ns::mock_Ns;
+   Mock mock;
+   SUT sut;
+   sut.bar(mock);
+    calls expectedMock;
+    expectedMock += call("base()"), call("foo()");
+    assert(expectedMock == suite::testSUT_Ns::mock_Ns::allCalls[1]);
+}

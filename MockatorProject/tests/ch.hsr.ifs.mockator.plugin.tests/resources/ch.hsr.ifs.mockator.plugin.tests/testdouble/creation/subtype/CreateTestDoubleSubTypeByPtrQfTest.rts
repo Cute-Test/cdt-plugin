@@ -1,0 +1,41 @@
+//!Create Test Double Sub Type By Ptr Qf Test
+//@.config
+cppStandard=C++11
+primaryFile=A.cpp
+
+//@A.cpp
+struct IDependency {
+   virtual ~IDependency();
+};
+
+struct SUT{
+   SUT(int i) {}
+   SUT(SUT& s) {}
+   SUT(IDependency* d) : d(d) {}
+private:
+   IDependency* d;
+};
+
+void testSUT() {
+   SUT* sut = new SUT(dependency);
+}
+
+//=
+struct IDependency {
+   virtual ~IDependency();
+};
+
+struct SUT{
+   SUT(int i) {}
+   SUT(SUT& s) {}
+   SUT(IDependency* d) : d(d) {}
+private:
+   IDependency* d;
+};
+
+void testSUT() {
+    struct Dependency : IDependency
+    {
+    } dependency;
+    SUT* sut = new SUT(&dependency);
+}

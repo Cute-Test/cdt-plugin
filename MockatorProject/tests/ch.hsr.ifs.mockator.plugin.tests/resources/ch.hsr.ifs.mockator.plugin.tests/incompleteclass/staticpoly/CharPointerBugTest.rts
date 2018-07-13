@@ -1,0 +1,19 @@
+//!Char Array Bug Test
+//@main.cpp
+template <typename T>
+struct SUT{
+  void bar() {
+    char toCopy[4];
+    T t;
+    t.foo(toCopy);
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    void foo(char toCopy[]) const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

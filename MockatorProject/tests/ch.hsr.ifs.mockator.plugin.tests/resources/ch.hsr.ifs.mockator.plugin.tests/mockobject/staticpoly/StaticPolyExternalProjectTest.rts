@@ -1,0 +1,81 @@
+//!Basic mock object static poly support with SUT in referencing project 
+//@.config
+cppStandard=C++11
+primaryFile=A.cpp
+
+//@A.cpp
+#include "SUTFromOtherProject.h"
+
+void testSUT() {
+  struct /*$*/Mock/*$$*/ {
+  };
+  SUT<Mock> sut;
+  sut.bar();
+}
+//=
+#include "SUTFromOtherProject.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct Mock
+    {
+        const size_t mock_id;
+        Mock()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock()"});
+        }
+
+        void gugus(const int & i) const
+        {
+            allCalls[mock_id].push_back(call{"gugus(const int&) const", i});
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock()"}, {"gugus(const int&) const"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+
+//!Use of template function as SUT in referencing project 
+//@.config
+cppStandard=C++11
+primaryFile=A.cpp
+
+//@A.cpp
+#include "SUTFromOtherProject.h"
+
+void testSUT() {
+  struct /*$*/Mock/*$$*/ {
+  };
+  Mock mock;
+  sut(mock);
+}
+//=
+#include "SUTFromOtherProject.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct Mock
+    {
+        const size_t mock_id;
+        Mock()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock()"});
+        }
+
+        void foo(const double & d) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const double&) const", d});
+        }
+    };
+    Mock mock;
+    sut(mock);
+    calls expectedMock = {{"Mock()"}, {"foo(const double&) const"}};
+    ASSERT_EQUAL(expectedMock, allCalls[1]);
+}

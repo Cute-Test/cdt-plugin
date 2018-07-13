@@ -1,0 +1,24 @@
+//!Member Function Chaining Bug Test
+//@main.cpp
+template <typename T>
+struct SUT {
+  void bar1() {
+    bar2();
+  }
+      
+  void bar2() {
+    bar3();
+    bar2(); //ignore self calls
+  }
+
+  void bar3() {
+    T::foo();
+  }
+};
+
+void testSUT(){
+  struct Fake {
+  };
+  SUT<Fake> sut;
+  sut.bar1();
+}

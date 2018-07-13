@@ -1,0 +1,22 @@
+//!Operator With Non Template Param Type Test
+//@main.cpp
+struct A {
+  A& operator++() {
+      return *this;
+  }
+};
+template <typename T>
+struct SUT{
+  void bar() {
+    T t;
+    A a;
+    ++a;
+  }
+};
+
+void testSUT(){
+  struct Fake{
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

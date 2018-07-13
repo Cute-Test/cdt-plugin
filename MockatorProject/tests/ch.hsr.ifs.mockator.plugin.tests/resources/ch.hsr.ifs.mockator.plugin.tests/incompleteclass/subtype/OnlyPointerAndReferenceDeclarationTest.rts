@@ -1,0 +1,11 @@
+//!Only Pointer And Reference Declaration Test
+//@main.cpp
+struct IDependency {
+   virtual void foo() = 0;
+};
+void testSUT() {
+   struct Foo : IDependency {
+   };
+   Foo* foo1;
+   Foo& foo2;
+}

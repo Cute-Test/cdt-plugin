@@ -1,0 +1,20 @@
+//!Passing This Of SUT Test
+//@main.cpp
+namespace A {
+  template <typename T>
+  struct SUT {
+      void bar() {
+        T::foo(this);
+      }
+    };
+}
+
+void testSUT(){
+  struct Fake {
+      static void foo(A::SUT<Fake> const* s)
+      {
+      }
+    };
+  A::SUT<Fake> sut;
+  sut.bar();
+}

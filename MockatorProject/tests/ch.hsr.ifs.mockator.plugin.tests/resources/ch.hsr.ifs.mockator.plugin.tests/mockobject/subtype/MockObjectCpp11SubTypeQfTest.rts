@@ -1,0 +1,66 @@
+//!Mock Object Cpp 11 Sub Type Qf Test
+//@.config
+primaryFile=main.cpp
+//@main.cpp
+#include <cassert>                                                                                                                                                      
+struct Base {                                                                                                                                                           
+    virtual ~Base() {}                                                                                                                                                    
+    virtual void base() = 0;                                                                                                                                               
+};                                                                                                                                                                      
+struct IDependency : Base {                                                                                                                                             
+    virtual void foo() = 0;                                                                                                                                                
+};                                                                                                                                                                      
+struct SUT {                                                                                                                                                            
+   void bar(IDependency &d) {                                                                                                                                            
+        d.foo();                                                                                                                                                            
+   }                                                                                                                                                                     
+};                                                                                                                                                                      
+                                                                                                                                                                         
+void testSUT() {                                                                                                                                                        
+   struct Mock : IDependency {                                                                                                                                           
+   } mock;                                                                                                                                                               
+   SUT sut;                                                                                                                                                              
+   sut.bar(mock);                                                                                                                                                        
+}                                                                                                                                                                      
+//=
+#include <cassert>
+
+#include "mockator.h"
+
+struct Base {
+   virtual ~Base() {}
+   virtual void base() = 0;
+};
+struct IDependency : Base {
+   virtual void foo() = 0;
+};
+struct SUT {
+   void bar(IDependency &d) {
+     d.foo();
+   }
+};
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{ 1 };
+    struct Mock : IDependency
+    {
+        const size_t mock_id; 
+        Mock()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+        }
+        void base()
+        {
+            allCalls[mock_id].push_back(call{ "base()" });
+        }
+        void foo()
+        {
+            allCalls[mock_id].push_back(call{ "foo()" });
+        }
+    } mock;
+    SUT sut;
+    sut.bar(mock);
+    calls expectedMock = { { "base()" }, { "foo()" } };
+    assert(expectedMock == allCalls[1]);
+}

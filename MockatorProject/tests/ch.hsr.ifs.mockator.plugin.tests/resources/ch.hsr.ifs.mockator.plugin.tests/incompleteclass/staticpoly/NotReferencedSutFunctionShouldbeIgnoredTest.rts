@@ -1,0 +1,22 @@
+//!Not Referenced SUT Function Should be Ignored Test
+//@main.cpp
+template <typename T>
+struct SUT{
+  void subbar() {
+    T fake;
+    fake.bar();
+  }
+  void bar() {
+    T fake;
+    fake.foo();
+  }
+};
+
+int calc(int i){
+  struct Fake{
+    void foo() const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

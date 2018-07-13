@@ -1,0 +1,18 @@
+//!Local SUT Not Used Test
+//@main.cpp
+template <typename T>
+void sut(T const& t) {
+  t.foo();
+}
+
+struct Fake {
+  void foo() const {
+  }
+};
+    
+void testSUT(){
+    struct Fake {
+  };
+  ::Fake fake;
+  sut(fake);
+}

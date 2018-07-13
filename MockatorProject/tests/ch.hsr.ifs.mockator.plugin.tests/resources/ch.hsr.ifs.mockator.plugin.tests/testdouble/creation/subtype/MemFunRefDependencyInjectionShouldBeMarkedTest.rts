@@ -1,0 +1,16 @@
+//!Mem Fun Ref Dependency Injection Should Be Marked
+//@main.cpp
+struct IDependency {
+  virtual ~IDependency();
+};
+
+struct SUT {
+  void injectDependency(int i, IDependency& d) {}
+private:
+  IDependency& d;
+};
+
+void testSUT() {
+  SUT sut;
+  sut.injectDependency(42, foo);
+}

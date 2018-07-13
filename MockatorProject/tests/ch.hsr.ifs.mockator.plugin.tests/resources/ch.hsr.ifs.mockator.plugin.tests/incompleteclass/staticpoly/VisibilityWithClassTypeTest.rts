@@ -1,0 +1,18 @@
+//!Visibility With Class Type Test
+//@main.cpp
+template <typename T>
+struct SUT{
+  void bar() {
+    T fake;
+    fake.foo();
+  }
+};
+
+void testSUT(){
+  class Fake{
+    void foo() {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

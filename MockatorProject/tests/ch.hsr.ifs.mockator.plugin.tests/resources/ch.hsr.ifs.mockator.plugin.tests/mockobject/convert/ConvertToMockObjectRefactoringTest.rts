@@ -1,0 +1,512 @@
+//!Fatal error when choosing a mock object
+//@.config
+fatalError=true
+cppStandard=C++11
+primaryFile=A.cpp
+
+//@A.cpp
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct /*$*/Mock/*$$*/
+    {
+        const size_t mock_id;
+        Mock(const std::string & s)
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Mock(const std::string&)", s});
+        }
+    };
+    SUT<Mock> sut;
+    sut.bar();
+    calls expected = {{"Mock(const std::string&)"}};
+    ASSERT_EQUAL(expected, allCalls[1]);
+}
+
+//!Static Poly With C++03
+//@.config
+cppStandard=C++03
+primaryFile=A.cpp
+
+//@SUT.h
+namespace a {
+  struct B {
+    void doit() {
+    }
+  };
+}
+
+template <typename T>
+struct SUT {
+  int bar() {
+    Fake f("mockator");
+    a::B b;
+    fake.foo(b);
+    return fake.foo(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+namespace testSUT {
+  namespace fake_Ns {
+    struct /*$*/Fake/*$$*/ {
+      Fake(std::string const& s) {
+        int i = 42;
+      }    
+
+      void foo(a::B const& b) const {
+        b.doit();
+      }
+
+      int foo(int const& i) const {
+        return int();
+      }
+    };
+  }
+}
+
+void testSUT() {
+  using namespace testSUT::fake_Ns;
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSUT {
+  namespace fake_Ns {
+      INIT_MOCKATOR();
+      std::vector<calls> allCalls(1);
+      struct Fake
+      {
+          const size_t mock_id;
+          Fake(const std::string & s)
+          :mock_id( reserveNextCallId(allCalls) )
+          {
+              int i = 42;
+              allCalls[mock_id].push_back(call("Fake(const std::string&)", s));
+          }
+
+          void foo(a::B const& b) const
+          {
+              allCalls[mock_id].push_back(call("foo(const a::B&) const", b));
+              b.doit();
+          }
+
+          int foo(int const& i) const
+          {
+              allCalls[mock_id].push_back(call("foo(const int&) const", i));
+              return int();
+          }
+    };
+  }
+}
+
+void testSUT() {
+  using namespace testSUT::fake_Ns;
+  SUT<Fake> sut;
+  sut.bar();
+  calls expectedFake;
+  expectedFake += call("Fake(const std::string&)"), call("foo(const a::B&) const"), call("foo(const int&) const");
+  ASSERT_EQUAL(expectedFake, testSUT::fake_Ns::allCalls[1]);
+}
+
+//!Static Poly with provided Ctor for C++11
+//@.config
+cppStandard=C++11
+primaryFile=A.cpp
+
+//@SUT.h
+namespace a {
+  struct B {
+    void doit() {
+    }
+  };
+}
+
+template <typename T>
+struct SUT {
+  int bar() {
+    Fake f("mockator");
+    a::B b;
+    fake.foo(b);
+    return fake.foo(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+    Fake(std::string const& s) {
+      int i = 42;
+    }    
+
+    void foo(a::B const& b) const {
+      b.doit();
+    }
+
+    int foo(int const& i) const {
+      return int();
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct Fake
+    {
+        const size_t mock_id;
+        Fake(const std::string & s)
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            int i = 42;            
+            allCalls[mock_id].push_back(call{"Fake(const std::string&)", s});
+        }
+
+        void foo(a::B const& b) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const a::B&) const", b});
+            b.doit();
+        }
+
+        int foo(int const& i) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const int&) const", i});
+            return int();
+        }
+
+    };
+    SUT<Fake> sut;
+    sut.bar();
+    calls expectedFake = {{"Fake(const std::string&)"}, {"foo(const a::B&) const"}, {"foo(const int&) const"}};
+    ASSERT_EQUAL(expectedFake, allCalls[1]);
+}
+
+//!Static Poly with namespace for C++11
+//@.config
+cppStandard=C++11
+primaryFile=A.cpp
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  int bar() {
+    T fake;
+    return fake.foo(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+namespace testSUT_Ns
+{
+    namespace Fake_Ns
+    {
+        struct /*$*/Fake/*$$*/
+        {
+            int foo(const int & i) const
+            {
+                return int{};
+            }
+        };
+    }
+}
+
+void testSUT() {
+    using namespace testSUT_Ns::Fake_Ns;
+    SUT<Fake> sut;
+    sut.bar();
+}
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+namespace testSUT_Ns
+{
+    namespace Fake_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> allCalls{1};
+        struct Fake
+        {
+            const size_t mock_id;
+            Fake()
+            :mock_id{ reserveNextCallId(allCalls) }
+            {
+                allCalls[mock_id].push_back(call{"Fake()"});
+            }
+
+            int foo(const int & i) const
+            {
+                allCalls[mock_id].push_back(call{"foo(const int&) const", i});
+                return int{};
+            }
+        };
+    }
+}
+
+void testSUT() {
+    using namespace testSUT_Ns::Fake_Ns;
+    SUT<Fake> sut;
+    sut.bar();
+    calls expectedFake = {{"Fake()"}, {"foo(const int&) const"}};
+    ASSERT_EQUAL(expectedFake, testSUT_Ns::Fake_Ns::allCalls[1]);
+}
+
+//!Static poly and fake without Ctor
+//@.config
+cppStandard=C++11
+primaryFile=A.cpp
+
+//@SUT.h
+template <typename T>
+struct SUT {
+  T fake;
+  int bar() {
+    fake.foo('a');
+    return fake.foo(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  int j = 42;
+  struct /*$*/Fake/*$$*/ {
+    void foo(char const& c) const {
+    }
+
+    int foo(int const& i) const {
+      return int{};
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    int j = 42;
+    static std::vector<calls> allCalls{1};
+    struct Fake
+    {
+        const size_t mock_id;
+        Fake()
+        :mock_id{ reserveNextCallId(allCalls) }
+        {
+            allCalls[mock_id].push_back(call{"Fake()"});
+        }
+
+        void foo(char const& c) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const char&) const", c});
+        }
+
+        int foo(int const& i) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const int&) const", i});
+            return int{};
+        }
+
+    };
+    SUT<Fake> sut;
+    sut.bar();
+    calls expectedFake = {{"Fake()"}, {"foo(const char&) const"}, {"foo(const int&) const"}};
+    ASSERT_EQUAL(expectedFake, allCalls[1]);
+}
+
+//!With subclass for C++03
+//@.config
+cppStandard=C++03
+primaryFile=A.cpp
+
+//@IDependency.h
+struct IDependency {
+  virtual ~IDependency();
+  virtual int foo(int const& i) const = 0;
+};
+
+//@A.cpp
+#include "IDependency.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/: IDependency {
+    int foo(int const& i) const {
+      return int();
+    }
+  } fake;
+}
+//=
+#include "IDependency.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls(1);
+    struct Fake : IDependency
+    {
+        const size_t mock_id;
+        Fake()
+        :mock_id( reserveNextCallId(allCalls) )
+        {
+        }
+        int foo(int const& i) const
+        {
+            allCalls[mock_id].push_back(call("foo(const int&) const", i));
+            return int();
+        }
+    } fake;
+    calls expectedFake;
+    expectedFake += call("foo(const int&) const");
+    ASSERT_EQUAL(expectedFake, allCalls[1]);
+}
+
+//!With subclass for C++11
+//@.config
+cppStandard=C++11
+primaryFile=A.cpp
+
+//@IDependency.h
+struct IDependency {
+  virtual ~IDependency();
+  IDependency(char c);
+  virtual int foo(int const& i) const = 0;
+};
+
+//@A.cpp
+#include "IDependency.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/: IDependency {
+    Fake() : IDependency(char{}) {
+    }
+    int foo(int const& i) const {
+      return int{};
+    }
+  } fake;
+}
+//=
+#include "IDependency.h"
+#include "mockator.h"
+
+void testSUT() {
+    INIT_MOCKATOR();
+    static std::vector<calls> allCalls{1};
+    struct Fake : IDependency
+    {
+        const size_t mock_id;
+        Fake()
+        :IDependency(char{}), mock_id{ reserveNextCallId(allCalls) }
+        {
+        }
+        int foo(int const& i) const
+        {
+            allCalls[mock_id].push_back(call{"foo(const int&) const", i});
+            return int{};
+        }
+    } fake;
+    calls expectedFake = {{"foo(const int&) const"}};
+    ASSERT_EQUAL(expectedFake, allCalls[1]);
+}
+
+//!With multiple referencing test functions for C++03
+//@.config
+cppStandard=C++03
+primaryFile=A.cpp
+
+//@A.cpp
+namespace testSUT {
+  namespace fake_Ns {
+      struct /*$*/Fake/*$$*/
+      {
+          int foo(const double& d) const
+          {
+            return int();
+          }
+
+          int bar(const int& i) const
+          {
+            return int();
+          }
+    };
+  }
+}
+
+void testSUT1() {
+  using namespace testSUT::fake_Ns;
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+void testSUT2() {
+  using namespace testSUT::fake_Ns;
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "mockator.h"
+
+namespace testSUT {
+  namespace fake_Ns {
+      INIT_MOCKATOR();
+      std::vector<calls> allCalls(1);
+      struct Fake
+      {
+          const size_t mock_id;
+          Fake()
+          :mock_id( reserveNextCallId(allCalls) )
+          {
+              allCalls[mock_id].push_back(call("Fake()"));
+          }
+
+          int foo(const double& d) const
+          {
+              allCalls[mock_id].push_back(call("foo(const double&) const", d));
+              return int();
+          }
+
+          int bar(const int& i) const
+          {
+              allCalls[mock_id].push_back(call("bar(const int&) const", i));
+              return int();
+          }
+    };
+  }
+}
+
+void testSUT1() {
+  using namespace testSUT::fake_Ns;
+  SUT<Fake> sut;
+  sut.bar();
+  calls expectedFake;
+  expectedFake += call("Fake()"), call("foo(const double&) const"), call("bar(const int&) const");
+  ASSERT_EQUAL(expectedFake, testSUT::fake_Ns::allCalls[1]);
+}
+
+void testSUT2() {
+  using namespace testSUT::fake_Ns;
+  SUT<Fake> sut;
+  sut.bar();
+  calls expectedFake;
+  expectedFake += call("Fake()"), call("foo(const double&) const"), call("bar(const int&) const");
+  ASSERT_EQUAL(expectedFake, testSUT::fake_Ns::allCalls[1]);
+}

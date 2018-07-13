@@ -1,0 +1,11 @@
+//!Not Referenced From A Test Function Test
+//@main.cpp
+struct IDependency {
+  virtual ~IDependency();
+  virtual void foo() = 0;
+};
+
+int calc(int i){
+  struct  : IDependency {
+  } fake;
+}

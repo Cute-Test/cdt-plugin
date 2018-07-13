@@ -1,0 +1,38 @@
+//!Fake Object Cpp 11 Qf Test
+//@main.cpp
+#include "stl_fake.h"
+template<typename T>
+struct SUT {
+   void bar() {
+     T fake;
+     std::map<int, int> m;
+     fake.foo(m);
+   }
+};
+
+void testSUT() {
+   struct /*$*/Fake/*$$*/ {
+   };
+   SUT<Fake> sut;
+   sut.bar();
+}
+//=
+#include "stl_fake.h"
+template<typename T>
+struct SUT {
+   void bar() {
+     T fake;
+     std::map<int, int> m;
+     fake.foo(m);
+   }
+};
+
+void testSUT() {
+   struct Fake {
+       void foo(const std::map<int,int> & m) const
+       {
+       }
+   };
+   SUT<Fake> sut;
+   sut.bar();
+}

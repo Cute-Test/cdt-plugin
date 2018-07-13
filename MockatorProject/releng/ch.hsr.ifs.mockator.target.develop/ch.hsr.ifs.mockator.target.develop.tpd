@@ -1,0 +1,20 @@
+target "Mockator Development" with source requirements
+
+location "http://download.eclipse.org/releases/photon" {
+ 	org.eclipse.sdk.ide [4.8.0,5.0.0)
+	org.eclipse.swtbot.eclipse.feature.group lazy
+}
+
+location "http://download.eclipse.org/tools/cdt/releases/9.5" {
+	org.eclipse.cdt.managedbuilder.gnu.ui lazy
+}
+
+location "http://www.cute-test.com/updatesite" {
+	ch.hsr.ifs.cute.feature.feature.group lazy
+}
+
+location "http://www.cevelop.com/iltis-unstable" {
+	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group lazy
+	ch.hsr.ifs.iltis.core.core.feature.source.feature.group lazy
+	ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group lazy
+}

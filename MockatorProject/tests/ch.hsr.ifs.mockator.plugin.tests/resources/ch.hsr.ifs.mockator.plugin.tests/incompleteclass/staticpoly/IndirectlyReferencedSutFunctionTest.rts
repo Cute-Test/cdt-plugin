@@ -1,0 +1,22 @@
+//!Indirectly Referenced SUT Function Test
+//@main.cpp
+template <typename T>
+struct SUT {
+    void bar() {
+    bar2();
+  }
+  void bar2();
+};
+
+template <typename T>
+void SUT<T>::bar2() {
+    T t;
+    t.foo();
+}
+
+void testSUT(){
+  struct Fake {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

@@ -1,0 +1,18 @@
+//!Create Test Double Cpp 11 Qf Test
+//@main.cpp
+template<typename T>
+struct SUT {};
+
+void test() {
+  SUT<Fake> sut;
+}
+//=
+template<typename T>
+struct SUT {};
+
+void test() {
+    struct Fake
+    {
+    };
+  SUT<Fake> sut;
+}

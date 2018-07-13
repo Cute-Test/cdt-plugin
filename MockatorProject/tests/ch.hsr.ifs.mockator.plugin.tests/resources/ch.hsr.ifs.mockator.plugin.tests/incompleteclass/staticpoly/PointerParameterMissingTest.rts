@@ -1,0 +1,19 @@
+//!Pointer Parameter Missing Test
+//@main.cpp
+struct A{
+};
+
+template <typename T>
+struct SUT{
+  void bar() {
+    A *a = new A;
+    T::foo(a);
+  }
+};
+
+void testSUT(){
+  struct Fake{
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

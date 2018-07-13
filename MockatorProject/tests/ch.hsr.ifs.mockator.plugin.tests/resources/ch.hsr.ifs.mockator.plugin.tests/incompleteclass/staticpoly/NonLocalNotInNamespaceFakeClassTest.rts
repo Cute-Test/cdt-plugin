@@ -1,0 +1,16 @@
+//!Non Local Not In Namespace Fake Class Test
+//@main.cpp
+template <typename T>
+struct SUT{
+  void bar() {
+    T fake;
+    fake.foo();
+  }
+};
+
+struct Fake{
+};
+void test() {
+  SUT<Fake> sut;
+  sut.bar();
+}
