@@ -1,0 +1,10 @@
+//!Only Destructor Test
+//@main.cpp
+struct IDependency {
+  virtual ~IDependency();
+};
+
+void testSUT(){
+  struct  : IDependency {
+  } fake;
+}

@@ -1,0 +1,19 @@
+//!Pointer Bug 1 Test
+//@main.cpp
+template <typename T>
+struct SUT{
+  T fake;
+  void bar() {
+    char c = 'c';
+    fake.foo(c);
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    void foo(char const * c) const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

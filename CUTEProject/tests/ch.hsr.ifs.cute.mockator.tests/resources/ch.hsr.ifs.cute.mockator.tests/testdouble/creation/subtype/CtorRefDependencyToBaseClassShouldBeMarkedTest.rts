@@ -1,0 +1,15 @@
+//!Ctor Ref Dependency To Base Class Should Be Marked Test
+//@main.cpp
+struct IDependency {
+  virtual ~IDependency();
+};
+
+struct SUT{
+  SUT(int i, IDependency& d) : d(d) {}
+private:
+  IDependency& d;
+};
+
+void testSUT() {
+  SUT sut(42, dependency);
+}

@@ -1,0 +1,36 @@
+//!Into ctor by pointer
+//@IDependency.h
+namespace Ns {
+struct IDependency {
+    virtual ~IDependency() {};
+};
+}
+
+//@SUT.h
+#include "IDependency.h"
+
+struct SUT {
+    SUT(int i) : d(0) {}
+    SUT(SUT& s): d(0) {}
+    SUT(Ns::IDependency const* d) : d(d) {}
+private:
+    Ns::IDependency const* d;
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void test() {
+    SUT sut(foo);
+}
+
+//=
+#include "SUT.h"
+#include "IDependency.h"
+
+void test() {
+    struct Foo : Ns::IDependency
+    {
+    } foo;
+    SUT sut(&foo);
+}

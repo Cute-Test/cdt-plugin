@@ -1,0 +1,34 @@
+//!Into member function by reference
+//@IDependency.h
+struct IDependency {
+    virtual ~IDependency();
+};
+
+//@SUT.h
+#include "IDependency.h"
+
+struct SUT {
+    void doIt(int i, float f) {}
+    void inject(double d, int i) {}
+    void inject(double d, IDependency& dep) {}
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void test() {
+    SUT sut;
+    sut.inject(3.1415, foo);
+}
+
+//=
+#include "SUT.h"
+#include "IDependency.h"
+
+void test() {
+    SUT sut;
+    struct Foo : IDependency
+    {
+    } foo;
+	sut.inject(3.1415, foo);
+}

@@ -1,0 +1,13 @@
+//!With Argument Deduction Test
+//@main.cpp
+template <typename T>
+void sut(T const& t) {
+  t.foo();
+}
+    
+void testSUT(){
+    struct Fake {
+  };
+  Fake fake;
+  sut(fake);
+}

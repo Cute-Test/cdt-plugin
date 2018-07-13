@@ -1,0 +1,12 @@
+//!SUT Function Not Called Test
+//@main.cpp
+template <typename T>
+void sut(T const& t) {
+  t.foo();
+}
+    
+void testSUT(){
+    struct Fake {
+  };
+  Fake fake;
+}

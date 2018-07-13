@@ -1,0 +1,2998 @@
+//!Array handling
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+namespace {
+  struct A {
+  };
+}
+
+template <typename S, typename T>
+struct SUT {
+  T fake;
+  void bar() {
+    int arr[] = { 16, 2, 77, 40, 12071 };
+    fake.foo(arr);
+    A aaas[3];
+    fake.foo2(aaas);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+struct A {
+};
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<A, Fake> *sut = new SUT<A, Fake>;
+  sut->bar();
+}
+//=
+#include "SUT.h"
+
+struct A {
+};
+
+void testSUT(){
+  struct Fake {
+      void foo(const int arr[]) const
+      {
+      }
+      void foo2(const A aaas[]) const
+      {
+      }
+  };
+  SUT<A, Fake> *sut = new SUT<A, Fake>;
+  sut->bar();
+}
+
+//!Creation of function signatures for built-in types
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+void sut(T const& fake) {
+  fake.foo(42);
+  fake.foo(3.14159265);    
+  fake.foo("test");
+  fake.foo('a');
+  fake.foo(true);
+  fake.foo(42, 3.14159265, "test", 'a', false, true);
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  Fake fake;
+  sut(fake);
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo(const int & i) const
+      {
+      }
+      void foo(const double & d) const
+      {
+      }
+      void foo(const std::string & s) const
+      {
+      }
+      void foo(const char & c) const
+      {
+      }
+      void foo(const bool & b) const
+      {
+      }
+      void foo(const int & i, const double & d, const std::string & s, const char & c, const bool & b, const bool & e) const
+      {
+      }
+  };
+  Fake fake;
+  sut(fake);
+}
+
+//!Call in ctor bug
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  SUT() {
+    T::foo();
+  }
+
+  SUT(const int& i) {
+    T::foo(i);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  SUT<Fake> sut(3);
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      static void foo()
+      {
+      }
+
+      static void foo(const int & i)
+      {
+      }
+  };
+  SUT<Fake> sut;
+  SUT<Fake> sut(3);
+}
+
+//!Call on function parameter
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar1(T const& t) {
+    t.foo1();
+  }
+  
+  void bar2(T const* t) {
+    t->foo2();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  Fake fake1;
+  sut.bar1(fake1);
+  Fake* fake2 = new Fake;
+  sut.bar2(fake2);
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo1() const
+      {
+      }
+
+      void foo2() const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  Fake fake1;
+  sut.bar1(fake1);
+  Fake* fake2 = new Fake;
+  sut.bar2(fake2);
+}
+
+//!Const vs. Non-Const Member Functions
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    const T t = T();
+    t.foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+    void foo()
+    {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+    void foo() const
+    {
+    }
+
+    void foo()
+    {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Creation of ctor
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T fake(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      Fake(const int & i)
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Creation of function in class
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T fake;
+    fake.foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  class /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  class Fake {
+  public:
+      void foo() const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Creation of function in struct
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T fake;
+    fake.foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo() const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Creation of no duplicates
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  T fake;
+  void bar() {
+    fake.foo(true);
+    fake.foo(false);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo(const bool & b) const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Ctor with class type parameter bug
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+struct A {
+};
+
+template <typename T>
+struct SUT {
+  void bar() {
+    A a;
+    T fake(a);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      Fake(const A & a)
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Create default ctor when necessary
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  T fake1;
+  void bar() {
+    T fake2(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+    Fake(const int& i) {
+    }
+
+    Fake() {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Default template argument
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+struct B {};
+template <typename T = B>
+struct SUT {
+  T fake;
+  void bar() {
+    fake.foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo() const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Everything in one cpp file
+//@.config
+primaryFile=A.cpp
+//@A.cpp
+template <typename T>
+struct SUT {
+  T t;
+  void bar() {
+    t.foo();
+  }
+};
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+template <typename T>
+struct SUT {
+  T t;
+  void bar() {
+    t.foo();
+  }
+};
+
+void testSUT(){
+  struct Fake {
+      void foo() const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Result of function call as argument type
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+bool isPrime(int i) {
+  return false;
+}
+
+template <typename T>
+struct SUT {
+  void bar() {
+    T::foo(isPrime(4));
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      static void foo(const bool & isPrime)
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Ignore default template parameters
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+#include "stl_fake.h"
+
+struct Node {
+  int value;
+};
+
+struct NodeValueLessThan {
+  bool operator() (Node const& n1, Node const& n2) const {
+    return n1.value < n2.value;
+  }
+};
+
+template <typename T>
+struct SUT {
+  void bar() {
+    T t;
+    std::map<std::string, int> m;
+    m["theAnswer"] = 42;
+    t.foo1(m);
+    std::vector<std::string> v;
+    t.foo2(v);
+    std::map<Node, int, NodeValueLessThan> nodes;
+    t.foo3(nodes);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+  };
+  
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT() {
+  struct Fake {
+      void foo1(const std::map<std::string,int> & m) const
+      {
+      }
+      void foo2(const std::vector<std::string> & v) const
+      {
+      }
+      void foo3(const std::map<Node,int,NodeValueLessThan> & nodes) const
+      {
+      }
+  };
+  
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Member function chaining bug
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar1() {
+    bar2();
+  }
+
+  void bar2() {
+    bar3();
+  }
+
+  void bar3() {
+    T t;
+    t.foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar1();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo() const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar1();
+}
+
+//!Calling multiple member functions on SUT
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T, typename U>
+struct SUT {
+  void bar1() {
+    T t;
+    t.foo1(3);
+  }
+  
+  void bar2() {
+    U u;
+    u.foo2('f');
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake, Fake> sut;
+  sut.bar1();
+  sut.bar2();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo1(const int & i) const
+      {
+      }
+      void foo2(const char & c) const
+      {
+      }
+  };
+  SUT<Fake, Fake> sut;
+  sut.bar1();
+  sut.bar2();
+}
+
+//!Multiple SUTs with same name but in different namespaces
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+namespace A {
+  template <typename T>
+  struct SUT {
+    void bar() {
+      T::foo(3);
+    }
+  };
+}
+
+namespace B {
+  template <typename T>
+  struct SUT {
+    void bar() {
+      T::foo();
+    }
+  };
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  B::SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      static void foo()
+      {
+      }
+  };
+  B::SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Multiple SUTs with one fake
+//@.config
+primaryFile=A.cpp
+//@SUT1.h
+template <typename T>
+struct SUT1 {
+  void bar() {
+    internal();
+  }
+  void internal();
+};
+
+template <typename T>
+void SUT1<T>::internal() {
+  T::foo(3);
+}
+
+//@SUT2.h
+template <typename T>
+struct SUT2 {
+  void bar() {
+    T::foo();
+  }
+};
+
+//@A.cpp
+#include "SUT1.h"
+#include "SUT2.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT1<Fake> sut1;
+  sut1.bar();
+  SUT2<Fake> sut2;
+  sut2.bar();
+}
+//=
+#include "SUT1.h"
+#include "SUT2.h"
+
+void testSUT(){
+  struct Fake {
+      static void foo(const int & i)
+      {
+      }
+
+      static void foo()
+      {
+      }
+  };
+  SUT1<Fake> sut1;
+  sut1.bar();
+  SUT2<Fake> sut2;
+  sut2.bar();
+}
+
+//!Not inline defined SUT member function with default ctor
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar();
+};
+
+template <typename T>
+void SUT<T>::bar()
+{
+  T t1;
+  T t2(42);
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      Fake()
+      {
+      }
+      Fake(const int& i)
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Not inline defined SUT member function
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar();
+  T t;
+};
+
+template <typename T>
+void SUT<T>::bar() {
+  T::foo1();
+  t.foo2();
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      static void foo1()
+      {
+      }
+
+      void foo2() const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Not inline defined SUT member function with fake object parameter
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar(T const& t);
+};
+
+template <typename T>
+void SUT<T>::bar(T const& t) {
+  t.foo(3);
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  Fake f;
+  sut.bar(f);
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo(const int & i) const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  Fake f;
+  sut.bar(f);
+}
+
+//!Overloaded member functions
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+#include "stl_fake.h"
+
+template <typename T>
+struct SUT {
+  T t;
+  void bar() {
+    int lifeTheUniverseAndEverything = 42;
+    t.foo(lifeTheUniverseAndEverything);
+    std::string s = "mockator";
+    t.foo(s);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo(const int & lifeTheUniverseAndEverything) const
+      {
+      }
+      void foo(const std::string & s) const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Correct parameter naming rules
+//@.config
+primaryFile=A.cpp
+//@ParameterNaming.h
+class Abesra {
+};
+
+template <typename T>
+struct SUT {
+  void bar() {
+    T t;
+    int e, delta;
+	t.foo(2.72, 3.1415, e, delta, delta) ;
+  }
+};
+
+//@A.cpp
+#include "ParameterNaming.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "ParameterNaming.h"
+
+void testSUT(){
+  struct Fake {
+      void foo(const double & d, const double & e, const int & e1, const int & delta, const int & delta1) const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Class template parameter handling
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+struct A {
+};
+
+namespace D {
+  template <typename T>
+  struct C {
+  };
+}
+
+template <typename T>
+struct SUT {
+  void bar() {
+    D::C<A> c;
+    T::foo(c);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      static void foo(const D::C<A> & c)
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Pointer handling
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+struct A {
+};
+
+template <typename T>
+struct SUT {
+  T fake;
+  double *bar() {
+    T *t = T::init();
+    int *i = fake.foo();
+    A *a = fake.foo2();
+    fake.foo3(i, a);
+    fake.foo4(&i);
+    fake.foo5(*a);
+    return fake.foo6();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+      void foo3(int* i, A* a) const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      static Fake *init()
+      {
+          return 0;
+      }
+      int *foo() const
+      {
+          return 0;
+      }
+      A *foo2() const
+      {
+          return 0;
+      }
+      void foo4(const int **& i) const
+      {
+      }
+      void foo5(const A & a) const
+      {
+      }
+      double *foo6() const
+      {
+          return 0;
+      }
+      void foo3(int* i, A* a) const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!With already provided private member function in class
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T fake;
+    fake.foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  class /*$*/Fake/*$$*/ {
+    void foo() {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  class Fake {
+    void foo() {
+    }
+
+  public:
+    void foo() const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!With already provided private member function in struct
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T fake;
+    fake.foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  private:
+    void foo() {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+    void foo() const {
+    }
+  private:
+    void foo() {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Bug with public visibility in class
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T fake(3);
+    fake.foo1();
+    fake.foo2();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  class /*$*/Fake/*$$*/ {
+      void foo0() const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  class Fake {
+      void foo0() const
+      {
+      }
+
+  public:
+      Fake(const int & i)
+      {
+      }
+
+      void foo1() const
+      {
+      }
+
+      void foo2() const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Return type deduction
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  T fake;
+  bool bar1() {
+    if(fake.isValid()) {
+    }
+    int i = fake.foo();
+    long j = 0;
+    long k = j + fake.foo2();
+    long l = fake.foo3() * k;
+    long m = (l / fake.foo4());
+    long n = (fake.foo5() - m);
+    long o = -fake.foo6();
+    long p = -(-fake.foo7());
+    
+    return fake.foo8();
+  }
+
+  T bar2() {
+    return T(3);
+  }
+  
+  double bar3() {
+    return 1.0 + fake.foo9();
+  }
+  
+  bool bar4() {
+    bool b = !fake.foo10();
+    return b && fake.foo11();
+  }
+
+  bool bar5() {
+    return fake.foo12();
+  }
+
+  bool bar6() {
+    return !fake.foo13();
+  }
+
+  int bar7() {
+    return fake.foo14() % 2;
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar1();
+  sut.bar2();
+  sut.bar3();
+  sut.bar4();
+  sut.bar5();
+  sut.bar6();
+  sut.bar7();  
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      Fake(const int & i)
+      {
+      }
+  
+      Fake()
+      {
+      }
+
+      bool isValid() const
+      {
+          return bool();
+      }
+
+      int foo() const
+      {
+          return int();
+      }
+
+      long foo2() const
+      {
+          return long ();
+      }
+
+      long foo3() const
+      {
+          return long ();
+      }
+
+      long foo4() const
+      {
+          return long ();
+      }
+
+      long foo5() const
+      {
+          return long ();
+      }
+
+      long foo6() const
+      {
+          return long ();
+      }
+
+      long foo7() const
+      {
+          return long ();
+      }
+
+      bool foo8() const
+      {
+          return bool();
+      }
+
+      double foo9() const
+      {
+          return double();
+      }
+
+      bool foo10() const
+      {
+          return bool();
+      }
+
+      bool foo11() const
+      {
+          return bool();
+      }
+
+      bool foo12() const
+      {
+          return bool();
+      }
+
+      bool foo13() const
+      {
+          return bool();
+      }
+
+      int foo14() const
+      {
+          return int();
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar1();
+  sut.bar2();
+  sut.bar3();
+  sut.bar4();
+  sut.bar5();
+  sut.bar6();
+  sut.bar7();  
+}
+
+//!Creation of missing static member function
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T::foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      static void foo()
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!With SUT in namespace
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+namespace N {
+  template <typename T>
+  struct SUT {
+    void bar() {
+      T t;
+      t.foo();
+    }
+  };
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  N::SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo() const
+      {
+      }
+  };
+  N::SUT<Fake> sut;
+  sut.bar();
+}
+
+//!SUT in namespace passed as argument
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+namespace NS {
+  struct A {
+  };
+}
+
+template <typename T>
+struct SUT {
+  void bar() {
+    NS::A a;
+    T::foo(a);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      static void foo(const NS::A & a)
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Template class as function parameter
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename A>
+struct B {
+};
+
+template <typename T>
+struct SUT {
+  T fake;
+  void bar() {
+    B<int> b;
+    fake.foo(b);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT() {
+  struct Fake {
+      void foo(const B<int> & b) const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!SUT with template member function
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+class A {
+};
+
+struct SUT {
+  template <typename T>
+  void bar1(T const& t) {
+    t.foo1();
+  }
+  
+  template <typename U>
+  void bar2(U const& u) {
+    u.foo2();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT sut;
+  Fake fake;
+  sut.bar1(fake);
+  A a;
+  sut.bar2(a);
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo1() const
+      {
+      }
+  };
+  SUT sut;
+  Fake fake;
+  sut.bar1(fake);
+  A a;
+  sut.bar2(a);
+}
+
+//!Temporary fake instance
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar1() {
+    bar2(T(3));
+  }
+  
+  void bar2(T const& t) {
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar1();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      Fake(const int & i)
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar1();
+}
+
+//!Twice the same fake template argument
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T1, typename T2>
+struct SUT {
+  void bar() {
+    T1::bar();
+    T2::foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake, Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      static void bar()
+      {
+      }
+
+      static void foo()
+      {
+      }
+  };
+  SUT<Fake, Fake> sut;
+  sut.bar();
+}
+
+//!Typedef with template parameter
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  typedef T Fake_type;
+  void bar() {
+    Fake_type fake;
+    fake.foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo() const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Typedef for function arguments and return values
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  typedef unsigned int Positive;
+  typedef char Character;
+  typedef bool Boolean;
+  T t;
+  
+  Character bar1() {
+    Positive i = 3;
+    return t.foo(i);
+  }
+  
+  Boolean bar2() {
+    return !t.foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar1();
+  sut.bar2();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      char foo(const unsigned int & i) const
+      {
+          return char();
+      }
+
+      bool foo() const
+      {
+          return bool();
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar1();
+  sut.bar2();
+}
+
+//!Use of shortest typedef where possible
+//@.config
+primaryFile=A.cpp
+//@A.h
+namespace B {
+  class AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA {
+  };
+  typedef AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA gaga;
+  typedef AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA gagagaga;
+}
+
+//@SUT.h
+#include "stl_fake.h"
+#include "A.h"
+
+typedef basic_ostringstream<char> ostringstream_longer_typedef;
+
+template <typename T>
+struct SUT {
+  void bar() {
+    T t;
+    std::string s = "test";
+    t.foo(s);
+    std::ostringstream oss;
+    t.foo(oss);
+    B::AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA a;
+    t.foo(a);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+  };
+  
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT() {
+  struct Fake {
+      void foo(const std::string & s) const
+      {
+      }
+      void foo(const std::ostringstream & oss) const
+      {
+      }
+      void foo(const B::gaga & a) const
+      {
+      }
+  };
+  
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Support for user defined types
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+class A {
+};
+
+namespace N {
+  class B {
+  }
+}
+
+template <typename T>
+struct SUT {
+  T fake;
+  void bar() {
+    A a;
+	fake.foo(a);
+	A a2 = fake.foo2();
+	N::B b = fake.foo3();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo(const A & a) const
+      {
+      }
+
+      A foo2() const
+      {
+          return A();
+      }
+
+      N::B foo3() const
+      {
+          return N::B();
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!With multiple parameters
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  T fake;
+  void bar() {
+    fake.foo(42, 3.14159265, "test", 'a', false, true);
+    fake.foo(42, 3.14159265, "test", 'a');
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+    void foo(int const& i, float const& f, std::string const& s, char const& c, bool const& b) const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      void foo(const int & i, const double & d, const std::string & s, const char & c, const bool & b, const bool & e) const
+      {
+      }
+      void foo(const int & i, const double & d, const std::string & s, const char & c) const
+      {
+      }
+      void foo(int const& i, float const& f, std::string const& s, char const& c, bool const& b) const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Wrong return type bug 1
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+struct Dice {
+	int roll() const
+	{
+		return rand() % 6 + 1;
+	}
+};
+
+template<typename DIE> struct GameT
+{
+    bool play() const
+    {
+        return dice.roll() == 4;
+    }
+
+    DIE dice;
+};
+typedef GameT<Dice> Game;
+
+
+//@A.cpp
+#include "SUT.h"
+
+void testLoosingGame() {
+    struct /*$*/LoosingGame/*$$*/
+    {
+    };
+	GameT<LoosingGame> game;
+	ASSERTM("Loosing Game", not game.play());
+}
+//=
+#include "SUT.h"
+
+void testLoosingGame() {
+    struct LoosingGame
+    {
+        int roll() const
+        {
+            return int();
+        }
+    };
+	GameT<LoosingGame> game;
+	ASSERTM("Loosing Game", not game.play());
+}
+
+//!Wrong return type bug 2
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+struct Dice {
+	int roll() const
+	{
+		return rand() % 6 + 1;
+	}
+};
+
+template<typename DIE> struct GameT
+{
+    void play() const
+    {
+        if(dice.roll() == 4) {
+        }
+    }
+
+    DIE dice;
+};
+typedef GameT<Dice> Game;
+
+//@A.cpp
+#include "SUT.h"
+
+void testLoosingGame() {
+    struct /*$*/LoosingGame/*$$*/
+    {
+    };
+	GameT<LoosingGame> game;
+	ASSERTM("Loosing Game", not game.play());
+}
+//=
+#include "SUT.h"
+
+void testLoosingGame() {
+    struct LoosingGame
+    {
+        int roll() const
+        {
+            return int();
+        }
+    };
+	GameT<LoosingGame> game;
+	ASSERTM("Loosing Game", not game.play());
+}
+
+//!With empty template id list in template function
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+void sut(T const& t) {
+  t.foo();
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+  };
+  Fake fake;
+  sut<>(fake);
+}
+//=
+#include "SUT.h"
+
+void testSUT() {
+  struct Fake {
+      void foo() const
+      {
+      }
+  };
+  Fake fake;
+  sut<>(fake);
+}
+
+//!With function call in expression for template function
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+int sut(T const& t) {
+  return t.foo();
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+  };
+  Fake f;
+  int i = sut(f);
+}
+
+//=
+#include "SUT.h"
+
+void testSUT() {
+  struct Fake {
+      int foo() const
+      {
+          return int();
+      }
+  };
+  Fake f;
+  int i = sut(f);
+}
+
+//!With static function call bug for template function
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+void sut() {
+  T::foo();
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+  };
+  sut<Fake>();
+}
+//=
+#include "SUT.h"
+
+void testSUT() {
+  struct Fake {
+      static void foo()
+      {
+      }
+  };
+  sut<Fake>();
+}
+
+//!With template function in namespace
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+namespace A {
+  template <typename T>
+  void sut(T const& t) {
+    t.foo();
+  }
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+  };
+  Fake f;
+  A::sut(f);
+}
+//=
+#include "SUT.h"
+
+void testSUT() {
+  struct Fake {
+      void foo() const
+      {
+      }
+  };
+  Fake f;
+  A::sut(f);
+}
+
+//!With explicit instantiation of template function
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+void sut(T const& t) {
+  t.foo();
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+  };
+  Fake fake;
+  sut<Fake>(fake);
+}
+//=
+#include "SUT.h"
+
+void testSUT() {
+  struct Fake {
+      void foo() const
+      {
+      }
+  };
+  Fake fake;
+  sut<Fake>(fake);
+}
+
+//!With overloaded template functions
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+void sut(T const& t) {
+  t.foo1();
+}
+
+template <typename T>
+void sut(T const& t1, T const& t2) {
+  t1.foo2();
+}
+
+void sut(int i) {
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+  };
+  Fake f;
+  sut(f, f);
+}
+//=
+#include "SUT.h"
+
+void testSUT() {
+  struct Fake {
+      void foo2() const
+      {
+      }
+  };
+  Fake f;
+  sut(f, f);
+}
+
+//!Bug with creating default ctor even already provided in subtype poly
+//@.config
+primaryFile=A.cpp
+//@IDependency.h
+struct Base {
+	virtual ~Base() {
+	}
+	virtual void base() = 0;
+};
+struct IDependency: Base {
+	IDependency(char c, double d);
+	IDependency(int i);
+	virtual void foo() = 0;
+};
+
+//@SUT.h
+#include "IDependency.h"
+
+struct SUT {
+	void bar(IDependency &d) {
+		d.foo(42);
+	}
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+	SUT sut;
+	struct /*$*/Fake/*$$*/: IDependency {
+	    Fake()
+	    :IDependency(int())
+	    {
+	    }
+
+	    void base() {
+		}
+	} fake;
+	sut.bar(fake);
+}
+//=
+#include "SUT.h"
+
+void testSUT() {
+	SUT sut;
+	struct Fake: IDependency {
+	    void foo()
+	    {
+	    }
+	    Fake()
+	    :IDependency(int())
+	    {
+	    }
+	    void base() {
+		}
+	} fake;
+	sut.bar(fake);
+}
+
+//!Incomplete local sub class
+//@.config
+primaryFile=A.cpp
+//@IDependency.h
+#include "stl_fake.h"
+struct A {
+};
+
+struct IDependency {
+  virtual ~IDependency() {}
+  virtual void foo1(const int & i) const = 0;
+  virtual A* foo2(const float & f) throw() = 0;
+  virtual std::string foo3(double & d) throw(A) = 0;
+  virtual void alreadyImplemented() = 0;
+};
+
+//@SUT.h
+#include "IDependency.h"
+struct SUT {
+  SUT(IDependency* dep);
+  void bar();
+private:
+  IDependency* dependency;
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void test(){
+  struct /*$*/Fake/*$$*/ : IDependency {
+    void alreadyImplemented()
+    {
+    }
+  } fake;
+  SUT sut(&fake);
+  sut.bar1();
+}
+//=
+#include "SUT.h"
+
+void test(){
+  struct Fake : IDependency {
+      void foo1(const int & i) const
+      {
+      }
+      A *foo2(const float & f)
+      {
+          return 0;
+      }
+      std::string foo3(double & d) throw (A)
+      {
+          return std::string();
+      }
+      void alreadyImplemented()
+      {
+      }
+  } fake;
+  SUT sut(&fake);
+  sut.bar1();
+}
+
+//!Non-local sub type
+//@.config
+primaryFile=A.cpp
+//@IDependency.h
+struct A {
+};
+
+namespace Ns {
+  struct B {
+  };
+}
+
+struct X {
+};
+
+struct IDependency {
+  virtual ~IDependency();
+  virtual Ns::B foo1(const int * i, double * d, A a) = 0;
+  virtual A foo2(const float & f, Ns::B const& b, A & a) = 0;
+  virtual void foo3(const float &, X, int, int) = 0;
+};
+
+//@SUT.h
+#include "IDependency.h"
+
+struct SUT {
+  SUT(IDependency* dep);
+  void bar();
+private:
+  IDependency* dependency;
+};
+
+//@A.cpp
+#include "SUT.h"
+
+namespace Ns {
+  struct /*$*/Fake/*$$*/ : IDependency {
+  };
+}
+
+void test(){
+  Ns::Fake fake;
+  SUT sut(&fake);
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+namespace Ns {
+  struct Fake : IDependency {
+      Ns::B foo1(const int *i, double *d, A a)
+      {
+          return Ns::B();
+      }
+      A foo2(const float & f, const Ns::B & b, A & a)
+      {
+          return A();
+      }
+      void foo3(const float & f, X x, int i, int j)
+      {
+      }
+  };
+}
+
+void test(){
+  Ns::Fake fake;
+  SUT sut(&fake);
+  sut.bar();
+}
+
+//!Prefix operator
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  T fake;
+  void bar() {
+    ++fake;
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+    Fake& operator ++() {
+      return *this;
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Postfix operator
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  T fake;
+  void bar() {
+    fake++;
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+    Fake operator ++(int) {
+      return Fake();
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Binary operator
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  bool bar() {
+    T fake1;
+    T fake2;
+    return fake1==fake2;
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+    bool operator ==(const Fake & f) const {
+        return bool();
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Missing member function return instance of itself
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T fake;
+    T res = fake.foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+    Fake foo() const {
+      return Fake();
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Bug with temporary object as argument
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+struct A {
+};
+
+template <typename T>
+struct SUT {
+  void bar() {
+    T::foo(A());
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      static void foo(const A & a)
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Call of member function with pointer syntax
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+    T* fake = new T(42);
+    fake->foo();
+    (*fake).foo(3.1415);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      Fake(const int& i)
+      {
+      }
+
+      void foo() const
+      {
+      }
+
+      void foo(const double& d) const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Call of ctor in initializer list
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+#include "stl_fake.h"
+template<typename T>
+struct SUT {
+  SUT(std::string s) : t(s) {
+  }
+  void bar() {
+    t.foo();
+  }
+private:
+  T t;
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut("mockator");
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+      Fake(const std::string& s)
+      {
+      }
+
+      void foo() const
+      {
+      }
+  };
+  SUT<Fake> sut("mockator");
+  sut.bar();
+}
+
+//!SUT in namespace with non-inlined template functions
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+namespace Ns {
+template<typename T>
+struct SUT {
+	SUT(int i);
+	void bar();
+private:
+	T t;
+};
+}
+
+template<typename T>
+Ns::SUT<T>::SUT(int i) : t(i) {
+}
+
+template<typename T>
+void Ns::SUT<T>::bar() {
+	t.foo(3.1415);
+}
+
+//@A.cpp
+#include "SUT.h"
+void testSUT() {
+	class /*$*/Fake/*$$*/ {
+	};
+	Ns::SUT<Fake> sut(42);
+	sut.bar();
+}
+//=
+#include "SUT.h"
+void testSUT() {
+	class Fake {
+	public:
+		Fake(const int& i) {
+		}
+
+		void foo(const double& d) const {
+		}
+	};
+	Ns::SUT<Fake> sut(42);
+	sut.bar();
+}
+
+//!Funcall operator vs. ctors
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template<typename T>
+struct SUT {
+	T bar() {
+		T t1 = T(1);
+		T t2 = t1(2);
+		return T(3);
+	}
+};
+
+//@A.cpp
+#include "SUT.h"
+void testSUT() {
+	class /*$*/Fake/*$$*/ {
+	};
+	SUT<Fake> sut;
+	sut.bar();
+}
+//=
+#include "SUT.h"
+void testSUT() {
+	class Fake {
+	public:
+		Fake(const int& i) {
+		}
+
+		Fake operator ()(const int& i) {
+          return Fake();
+		}
+	};
+	SUT<Fake> sut;
+	sut.bar();
+}
+
+//!Prefix vs. postfix operator
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T>
+struct SUT {
+  void bar() {
+	T t;
+	t++;
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+    Fake& operator ++() {
+      return *this;
+    }	
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+void testSUT() {
+  struct Fake {
+    Fake operator ++(int) {
+      return Fake();
+    }
+    Fake& operator ++() {
+      return *this;
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Example in project report 1
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template<typename T>
+struct SUT {
+  char const* bar() {
+    T t("test");
+    t.foo1();
+    double d = 3.1415 + t.foo2('c');
+    T::foo3();
+    return t.foo4(42);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+void testSUT() {
+  struct Fake {
+    Fake(const std::string& s) {
+    }
+
+    void foo1() const {
+    }
+
+    double foo2(const char& c) const {
+      return double();
+    }
+
+    static void foo3() {
+    }
+
+    const char* foo4(const int& i) const {
+      return 0;
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Example in project report 2
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+#include "stl_fake.h"
+namespace NS { struct A { }; }
+
+template <typename T>
+struct SUT {
+  typedef T Fake_type;
+  Fake_type fake;
+  typedef unsigned int Positive;
+  void bar() {
+    std::string s = "mockator";
+    T fake2(s);
+    fake.foo1(NS::A());
+    Positive p = 42;
+    if (!fake2.foo2(p)) { return; };
+    bar2();
+  }
+  NS::A bar2();
+};
+bool isPrime(int candidate) { return false; }
+
+template <typename T>
+NS::A SUT<T>::bar2() {
+  return fake.foo3(true, isPrime(42));
+}
+
+//@A.cpp
+#include "SUT.h"
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+void testSUT() {
+  struct Fake {
+    Fake(const std::string& s) {
+    }
+
+    Fake() {
+    }
+
+    void foo1(const NS::A& nSA) const {
+    }
+
+    bool foo2(const unsigned int& p) const {
+      return bool();
+    }
+
+    NS::A foo3(const bool& b, const bool& isPrime) const {
+      return NS::A();
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!int vs. unsigned int issue
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+#include "stl_fake.h"
+
+struct Share {
+};
+
+template<typename STOCKEXCHANGE>
+struct Trader {
+  void sell(Share const& share, unsigned int amount) {
+    STOCKEXCHANGE exchange;
+	exchange.sell(share, amount);
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+void testSUT() {
+  struct /*$*/Fake/*$$*/Exchange {
+  };
+  Trader<FakeExchange> trader;
+  trader.sell(Share{}, 1000000);
+}
+//=
+#include "SUT.h"
+void testSUT() {
+  struct FakeExchange {
+    void sell(const Share& share, const unsigned int& amount) const {
+	}
+  };
+  Trader<FakeExchange> trader;
+  trader.sell(Share{}, 1000000);
+}
+
+//!Reuse of Template Parameter
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename S, typename T = S>
+struct SUT {
+  T fake;
+  void bar() {
+    S::foo1();
+    fake.foo2();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT() {
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT() {
+  struct Fake {
+      static void foo1()
+      {
+      }
+
+      void foo2() const
+      {
+      }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
+
+//!Template partial specialization
+//@.config
+primaryFile=A.cpp
+//@SUT.h
+template <typename T1, typename T2>
+struct SUT {
+  void bar() {
+	  T1::bar();
+  }
+};
+
+template <typename T>
+struct SUT<T, int> {
+  void bar() {
+	  T t;
+	  t.foo();
+  }
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void testSUT(){
+  struct /*$*/Fake/*$$*/ {
+  };
+  SUT<Fake, int> sut;
+  sut.bar();
+}
+//=
+#include "SUT.h"
+
+void testSUT(){
+  struct Fake {
+    void foo() const {
+    }
+  };
+  SUT<Fake, int> sut;
+  sut.bar();
+}

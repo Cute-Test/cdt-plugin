@@ -1,0 +1,12 @@
+//!Passed To Free Function Test
+//@main.cpp
+struct IDependency {
+  virtual ~IDependency();
+};
+
+void sut(int i, IDependency const& d) {
+}
+
+void testSUT() {
+  sut(42, dependency);
+}

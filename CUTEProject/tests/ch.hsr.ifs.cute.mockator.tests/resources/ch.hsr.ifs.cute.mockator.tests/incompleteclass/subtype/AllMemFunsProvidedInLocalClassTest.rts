@@ -1,0 +1,12 @@
+//!All Mem Funs Provided In Local Class Test
+//@main.cpp
+struct IDependency {
+  virtual ~IDependency();
+  virtual void foo() = 0;
+};
+void testSUT(){
+  struct  : IDependency {
+    void foo() {
+    }
+  } fake;
+}

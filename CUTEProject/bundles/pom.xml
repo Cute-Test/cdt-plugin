@@ -13,8 +13,8 @@
 		<module>ch.hsr.ifs.testframework</module>
 		<module>ch.hsr.ifs.cute.framework.extension</module>
 		<module>ch.hsr.ifs.cute.ui</module>
-		<module>ch.hsr.ifs.cute.help</module>
 		<module>ch.hsr.ifs.cute.headers</module>
+		<module>ch.hsr.ifs.cute.mockator</module>
 		<module>ch.hsr.ifs.cute.gcov</module>
 		<module>ch.hsr.ifs.cute.core</module>
 		<module>ch.hsr.ifs.cute.boost</module>

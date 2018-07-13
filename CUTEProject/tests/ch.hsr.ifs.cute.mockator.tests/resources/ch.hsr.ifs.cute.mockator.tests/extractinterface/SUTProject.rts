@@ -1,0 +1,47 @@
+//!SUT Project
+//@.config
+newFileCreation=true
+newFiles=FooInterface.h
+
+//@A.cpp
+#include "Foo.h"
+
+//@Foo.h
+struct Foo {
+  void bar() {
+  }
+};
+//=
+#include "FooInterface.h"
+
+struct Foo : FooInterface{
+  void bar() {
+  }
+};
+
+//@FooInterface.h
+//=
+ 
+#ifndef FOOINTERFACE_H_
+#define FOOINTERFACE_H_
+
+struct FooInterface
+{
+    virtual ~FooInterface()
+    {
+    }
+
+    virtual void bar() = 0;
+};
+#endif
+
+//@B.cpp
+#include "Foo.h"
+
+void foobar(Foo* f) {
+}
+//=
+#include "Foo.h"
+
+void foobar(FooInterface* f) {
+}

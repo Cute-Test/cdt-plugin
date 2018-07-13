@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension point="org.eclipse.help.toc">
+      <toc file="toc.xml" />
+      <toc file="maintoc.xml" primary="true" />
+   </extension>
+   <extension point="org.eclipse.ui.intro.configExtension">
+      <configExtension
+            configId="org.eclipse.ui.intro.universalConfig"
+            content="intro/mockator_tutorials.xml">
+      </configExtension>
+      <configExtension
+            configId="org.eclipse.ui.intro.universalConfig"
+            content="intro/mockator_overview.xml">
+      </configExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+<contextProvider
+      class="ch.hsr.ifs.mockator.help.AbstractContextProvider1">
+</contextProvider>
+<contexts
+                        file="ch.hsr.ifs.mockator.help.contexts1">
+                  </contexts>
+   </extension>
+</plugin>

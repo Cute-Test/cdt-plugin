@@ -1,0 +1,26 @@
+//!Shadow free function
+//@.config
+newFiles=shadows/foo.cpp
+newFileCreation=true
+needsManagedCProject=true
+
+//@A.cpp
+extern int foo(char);
+
+int bar() {
+  return /*$*/foo/*$$*/('d');
+}
+//=
+__attribute__((weak)) int foo(char);
+
+int bar() {
+  return foo('d');
+}
+
+//@shadows/foo.cpp
+//=
+#include "../A.cpp"
+
+int foo(char c) {
+    return int ();
+}

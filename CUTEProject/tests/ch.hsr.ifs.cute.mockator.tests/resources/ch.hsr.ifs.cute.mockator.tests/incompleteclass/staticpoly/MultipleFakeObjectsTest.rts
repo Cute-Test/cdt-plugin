@@ -1,0 +1,23 @@
+//!Multiple Fake Objects Test
+//@main.cpp
+template <typename S, typename T>
+struct Bar{
+  S foo1;
+  T foo2;
+
+  void doIt() {
+    foo1.f();
+    foo2.g();
+  }
+};
+
+void testBar(){
+  struct Fake1{
+  };
+
+  struct Fake2{
+  };
+
+  Bar<Fake1, Fake2> bar;
+  bar.doIt();
+}

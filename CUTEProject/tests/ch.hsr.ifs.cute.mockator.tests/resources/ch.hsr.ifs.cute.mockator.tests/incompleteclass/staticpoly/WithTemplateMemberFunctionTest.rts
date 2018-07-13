@@ -1,0 +1,16 @@
+//!With Template Member Function Test
+//@main.cpp
+struct SUT{
+  template <typename T>
+  void bar(T const* t) {
+    t->foo();
+  }
+};
+
+void testSUT(){
+  struct Fake{
+  };
+  SUT sut;
+  Fake *fake = new Fake;
+  sut.bar(fake);
+}

@@ -1,0 +1,24 @@
+//!String Parameter Bug Test
+//@main.cpp
+namespace std {
+  template<typename _CharT>
+  class basic_string;
+  typedef basic_string<char> string;
+}
+template <typename T>
+struct SUT {
+  T fake;
+  void bar() {
+    std::string s = "mockator";
+    fake.foo(s);
+  }
+};
+
+void testSUT() {
+  struct Fake{
+    void foo(std::string const& s) const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

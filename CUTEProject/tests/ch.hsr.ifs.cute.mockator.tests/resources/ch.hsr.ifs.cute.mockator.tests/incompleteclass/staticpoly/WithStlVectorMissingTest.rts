@@ -1,0 +1,33 @@
+//!With Stl Vector Missing Test
+//@main.cpp
+namespace std {
+  template<typename _Tp>
+  class allocator { };
+
+  template<typename _Tp, typename _Alloc = std::allocator<_Tp> >
+  class vector {
+    public:
+    typedef _Tp value_type;
+      void push_back(const value_type& __x);
+    };
+
+    template<typename _CharT>
+    class basic_string;
+    typedef basic_string<char> string;
+}
+template<typename T>
+struct SUT {
+    void bar() {
+    std::vector<std::string> s;
+      T mock;
+      mock.foo(s);
+    }
+};
+
+void testSUT() {
+    struct Mock
+    {
+    };
+    SUT<Mock> sut;
+    sut.bar();
+}

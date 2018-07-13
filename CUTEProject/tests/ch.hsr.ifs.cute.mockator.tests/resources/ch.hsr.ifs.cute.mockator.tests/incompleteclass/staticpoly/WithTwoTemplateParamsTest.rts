@@ -1,0 +1,17 @@
+//!With Two Template Params Test
+//@main.cpp
+template <typename T1, typename T2>
+struct SUT{
+  static void bar() {
+    T2 t;
+    t.foo();
+  }
+};
+
+void testSUT(){
+  struct A{
+  };
+  struct Fake{
+  };
+  SUT<A, Fake>::bar();
+}

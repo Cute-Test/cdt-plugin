@@ -1,0 +1,72 @@
+//!Delete INIT_MOCKATOR call
+//@main.cpp
+#include "mockator.h"
+template <typename T>
+struct SUT {
+  void bar() {
+    T mock(42);
+  }
+};
+
+namespace testSUT_Ns
+{
+    namespace Mock_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> callsMock{1};
+        struct /*$*/Mock/*$$*/
+        {
+            Mock(const int & i)
+            :mock_id{ reserveNextCallId(allCalls) }
+            {
+                callsMock.push_back(calls{});
+                callsMock[mock_id].push_back(call{"Mock(const int&)", i});
+            }
+            const size_t mock_id;
+        };
+    }
+}
+
+void testSUT() {
+    using namespace testSUT_Ns::Mock_Ns;
+    INIT_MOCKATOR();
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock(const int&)"}};
+    ASSERT_EQUAL(expectedMock, callsMock[1]);
+}
+//=
+#include "mockator.h"
+template <typename T>
+struct SUT {
+  void bar() {
+    T mock(42);
+  }
+};
+
+namespace testSUT_Ns
+{
+    namespace Mock_Ns
+    {
+        INIT_MOCKATOR();
+        std::vector<calls> callsMock{1};
+        struct Mock
+        {
+            Mock(const int & i)
+            :mock_id{ reserveNextCallId(allCalls) }
+            {
+                callsMock.push_back(calls{});
+                callsMock[mock_id].push_back(call{"Mock(const int&)", i});
+            }
+            const size_t mock_id;
+        };
+    }
+}
+
+void testSUT() {
+    using namespace testSUT_Ns::Mock_Ns;
+    SUT<Mock> sut;
+    sut.bar();
+    calls expectedMock = {{"Mock(const int&)"}};
+    ASSERT_EQUAL(expectedMock, callsMock[1]);
+}

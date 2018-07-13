@@ -1,0 +1,16 @@
+//!Ctor Ptr Dependency Should Be Marked Test
+//@main.cpp
+struct IDependency {
+  virtual ~IDependency();
+};
+
+struct SUT{
+  SUT(int i, IDependency* d) : i(i), d(d) {}
+private:
+  IDependency* d;
+  int i;
+};
+
+void testSUT() {
+  SUT sut(42, dependency);
+}

@@ -1,0 +1,24 @@
+//!Char Array And String Test
+//@main.cpp
+namespace std {
+  template<typename _CharT>
+  class basic_string;
+  typedef basic_string<char> string;
+}
+template <typename T>
+struct SUT{
+  T fake;
+  void bar() {
+    char s[] = "schiri";
+    fake.foo(s);
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    void foo(const char s[]) const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}
