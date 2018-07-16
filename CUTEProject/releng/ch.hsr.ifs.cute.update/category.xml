@@ -9,16 +9,12 @@
    <feature url="ch.hsr.ifs.cute.feature_5.4.0.qualifier.jar" id="ch.hsr.ifs.cute.feature" version="5.4.0.qualifier">
       <category name="CUTE Plugin"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute.mockator.feature_5.4.0.qualifier.jar" id="ch.hsr.ifs.cute.mockator.feature" version="5.4.0.qualifier">
-      <category name="ch.hsr.ifs.cute.mockator"/>
+   <feature url="ch.hsr.ifs.cute.mockator.examples.feature_5.4.0.qualifier.jar" id="ch.hsr.ifs.cute.mockator.examples.feature" version="5.4.0.qualifier">
+      <category name="CUTE Plugin"/>
    </feature>
-   <feature url="features/ch.hsr.ifs.cute.mockator.examples.feature_5.4.0.qualifier.jar" id="ch.hsr.ifs.cute.mockator.examples.feature" version="5.4.0.qualifier">
-      <category name="ch.hsr.ifs.cute.mockator.examples"/>
+   <feature url="ch.hsr.ifs.cute.mockator.feature_5.4.0.qualifier.jar" id="ch.hsr.ifs.cute.mockator.feature" version="5.4.0.qualifier">
+      <category name="CUTE Plugin"/>
    </feature>
-   <category-def name="CUTE Plugin" label="CUTE Plugin">
-      <description>
-         This is the update site for the Oxygen release of CUTE 2.2.
-      </description>
-   </category-def>
+   <category-def name="CUTE Plugin" label="CUTE Plugin"/>
    <category-def name="OptFeatures" label="CUTE Optional Features"/>
 </site>

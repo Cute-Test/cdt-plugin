@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="ch.hsr.ifs.cute.feature"
-      label="CUTE"
+      label="%featureName"
       version="5.4.0.qualifier"
-      provider-name="IFS Institute for Software"
+      provider-name="%providerName"
       plugin="ch.hsr.ifs.cute.ui"
       image="eclipse_update_120.jpg">
 
-   <description>
+   <description url="%updateSiteUrl">
       %description
    </description>
 
