@@ -1,0 +1,26 @@
+//!Qualified Names In Fun Calls 1 Test
+//@main.cpp
+namespace a {
+  struct A {
+  };
+}
+namespace b {
+  struct A {
+  };
+}
+template <typename T>
+struct SUT{
+  T fake;
+  void bar() {
+    fake.foo(a::A());	
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    void foo(b::A const& a) const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

@@ -1,0 +1,19 @@
+//!Test Double Already Provided Test
+//@main.cpp
+namespace A {
+  namespace B {
+    template <typename T>
+    struct SUT{
+      void bar() {
+        T::foo();
+      }
+    };
+  }
+}
+
+void testSUT(){
+  struct Fake{
+  };
+  A::B::SUT<Fake> sut;
+  sut.bar();
+}

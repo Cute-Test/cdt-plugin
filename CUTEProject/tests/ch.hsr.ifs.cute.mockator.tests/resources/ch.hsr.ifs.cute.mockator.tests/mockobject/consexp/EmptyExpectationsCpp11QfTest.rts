@@ -1,0 +1,56 @@
+//!Empty Expectations Cpp 11 Qf Test
+//@.config
+primaryFile=main.cpp
+//@main.cpp
+#include "mockator.h"
+#include "cute.h"
+template<typename T>
+struct SUT {
+   void bar() {
+     T mock;
+     mock.foo();
+   }
+};
+
+void testSUT() {
+   using namespace mockator;
+   static std::vector<calls> allCalls{1};
+   struct Mock
+   {
+     Mock() {
+     }
+
+     void foo() const {
+     }
+   };
+   SUT<Mock> sut;
+   sut.bar();
+   calls expectedMock = {5, {"Mock()"}};
+   ASSERT_EQUAL(expectedMock, allCalls[1]);
+}
+//=
+#include "mockator.h"
+template<typename T>
+struct SUT {
+   void bar() {
+     T mock;
+     mock.foo();
+   }
+};
+
+void testSUT() {
+   using namespace mockator;
+   static std::vector<calls> allCalls{1};
+   struct Mock
+   {
+     Mock() {
+     }
+
+     void foo() const {
+     }
+   };
+   SUT<Mock> sut;
+   sut.bar();
+   calls expectedMock = {};
+   ASSERT_EQUAL(expectedMock, allCalls[1]);
+}

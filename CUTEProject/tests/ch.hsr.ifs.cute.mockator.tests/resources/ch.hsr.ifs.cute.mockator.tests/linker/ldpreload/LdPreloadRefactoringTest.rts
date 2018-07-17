@@ -1,0 +1,84 @@
+//!Run-time preload of free function
+//@.config
+primaryFile=A.cpp
+newFiles=foo1.cpp
+newFileCreation=true
+
+//@foo.h
+int foo(int);
+
+//@foo.cpp
+#include "foo.h"
+
+int foo(int i) {
+  return i*i;
+}
+
+//@A.cpp
+#include "foo.h"
+#include <cstdlib>
+
+int bar() {
+  return /*$*/foo/*$$*/(22);
+}
+
+//@foo1.cpp
+//=
+#include "foo.h"
+#include <dlfcn.h>
+
+int foo(int i)
+{
+    typedef int (*funPtr)(int);
+    static funPtr origFun = nullptr;
+    
+    if(!origFun){
+        void *tmpPtr = dlsym(RTLD_NEXT, "_Z3fooi");
+        origFun = reinterpret_cast<funPtr>(tmpPtr);
+    }
+
+    return origFun(i);
+}
+
+//!Run-time preload of member function
+//@.config
+newFiles=getValue.cpp
+newFileCreation=true
+primaryFile=A.cpp
+
+//@foo.h
+struct Foo {
+	int getValue(int);
+};
+
+//@foo.cpp
+#include "foo.h"
+
+int Foo::getValue(int i) {
+	return 42;
+}
+
+//@A.cpp
+#include "foo.h"
+
+int bar() {
+  Foo foo;
+  return /*$*/foo.getValue/*$$*/(3);
+}
+
+//@getValue.cpp
+//=
+#include "foo.h"
+#include <dlfcn.h>
+#include <cstring>
+
+int Foo::getValue(int i)
+{
+    typedef int (Foo::*funPtr)(int);
+    static funPtr origFun = nullptr;
+    if(!origFun){
+        void *tmpPtr = dlsym(RTLD_NEXT, "_ZN3Foo8getValueEi");
+        memcpy(&origFun, &tmpPtr, sizeof (&tmpPtr));
+    }
+    return (this->*origFun)(i);
+}

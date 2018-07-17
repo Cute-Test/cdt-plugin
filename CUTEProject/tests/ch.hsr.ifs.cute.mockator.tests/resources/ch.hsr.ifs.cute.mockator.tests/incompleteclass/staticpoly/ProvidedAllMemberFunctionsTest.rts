@@ -1,0 +1,22 @@
+//!Provided All Member Functions Test
+//@main.cpp
+template <typename T>
+struct SUT{
+  void bar() {
+    T fake;
+    fake.foo1();
+    T::foo2();
+  }
+};
+
+void testSUT(){
+  struct Fake{
+    void foo1() const {
+    }
+
+    static void foo2() {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

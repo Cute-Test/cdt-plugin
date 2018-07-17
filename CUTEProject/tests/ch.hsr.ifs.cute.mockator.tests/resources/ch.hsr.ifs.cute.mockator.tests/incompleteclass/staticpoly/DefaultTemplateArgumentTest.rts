@@ -1,0 +1,13 @@
+//!Default Template Argument Test
+//@main.cpp
+template <typename T = int>
+void sut(T const& t) {
+  t.foo();
+}
+    
+void testSUT(){
+    struct Fake {
+  };
+  Fake fake;
+  sut(fake);
+}

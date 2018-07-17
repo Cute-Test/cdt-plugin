@@ -1,0 +1,22 @@
+//!Multiple References One Member Function Missing Test
+//@main.cpp
+template <typename T>
+struct SUT {
+  void sut1() {
+      T t;
+      t.bar();
+  }
+  void sut2() {
+      T t;
+      t.foo();
+  }
+};
+void testSUT(){
+  struct Fake {
+    void bar() const {
+    }
+    };
+    SUT<Fake> sut;
+    sut.sut1();
+    sut.sut2();
+}

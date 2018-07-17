@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<introContent>
+	<extensionContent id="ch.hsr.ifs.mockator.help" style="css/mockator.css"
+		alt-style="css/mockator.properties" name="C++ Seams and Mock Object Support"
+		path="tutorials/@">
+		<group label="Mockator - C++ Seams and Mock Object Support" id="content-group"
+			style-id="content-group">
+			<link style-id="content-link" label="Seams"
+				url="http://org.eclipse.ui.intro/showHelpTopic?id=/ch.hsr.ifs.mockator.help/html/seams.html"
+				id="mockator">
+				<text>Learn how to refactor your code towards seams.</text>
+			</link>
+			<link style-id="content-link" label="Mock Objects"
+				url="http://org.eclipse.ui.intro/showHelpTopic?id=/ch.hsr.ifs.mockator.help/html/mockobjects.html"
+				id="mockator">
+				<text>Learn how to create mock objects.</text>
+			</link>
+		</group>
+	</extensionContent>
+</introContent>

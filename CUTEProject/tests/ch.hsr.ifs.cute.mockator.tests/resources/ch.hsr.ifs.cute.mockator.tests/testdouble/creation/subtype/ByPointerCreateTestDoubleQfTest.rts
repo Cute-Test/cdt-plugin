@@ -1,0 +1,37 @@
+//!By pointer
+//@IDependency.h
+namespace Ns {
+struct IDependency {
+    virtual ~IDependency();
+};
+}
+
+//@SUT.h
+#include "IDependency.h"
+
+struct SUT {
+    void inject(int i, Ns::IDependency* d) {}
+private:
+    Ns::IDependency* d;
+};
+
+//@A.cpp
+#include "SUT.h"
+#include "IDependency.h"
+
+void test() {
+    SUT sut;
+    sut.inject(42, foo);
+}
+
+//=
+#include "SUT.h"
+#include "IDependency.h"
+
+void test() {
+    SUT sut;
+    struct Foo : Ns::IDependency
+    {
+    } foo;
+    sut.inject(42, &foo);
+}

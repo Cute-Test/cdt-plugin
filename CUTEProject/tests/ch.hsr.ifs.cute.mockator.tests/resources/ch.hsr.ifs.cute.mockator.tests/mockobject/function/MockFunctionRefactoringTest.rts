@@ -1,0 +1,213 @@
+//!Function call origin in same tu as its definition 
+//@.config
+fatalError=true
+primaryFile=A.cpp
+
+//@A.cpp
+namespace A {
+  void foo() {
+  }
+}
+
+void sut() {
+  /*$*/foo/*$$*/();
+}
+
+//!Inline functions not supported
+//@.config
+fatalError=true
+
+//@A.cpp
+inline void /*$*/foo/*$$*/;
+
+//!Template functions not supported
+//@.config
+fatalError=true
+
+//@A.cpp
+template<typename T>
+void foo(T t);
+
+void bar() {
+  /*$*/foo/*$$*/(3);
+}
+
+//!Mocking free function
+//@.config
+newFiles=foo.cpp,foo.h
+newFileCreation=true
+primaryFile=sut.cpp
+cppStandard=C++11
+withCuteNature=true
+
+//@nsfoo.h
+namespace Ns {
+    void foo();
+}
+//=
+namespace Ns {
+    __attribute__((weak)) void foo();
+}
+
+//@sut.h
+void sut();
+
+//@sut.cpp
+#include "sut.h"
+#include "nsfoo.h"
+
+void sut() {
+    Ns::/*$*/foo/*$$*/();
+}
+
+//@foo.cpp
+//=
+#include "sut.h"
+#include "nsfoo.h"
+#include "cute.h"
+#include "mockator.h"
+
+namespace testfoo_Ns {
+    mockator::calls allCalls;
+}
+
+void Ns::foo() {
+    testfoo_Ns::allCalls.push_back(mockator::call { "foo()" });
+}
+
+void testfoo() {
+    INIT_MOCKATOR();
+    calls expected = { { "foo()" } };
+    ASSERT_EQUAL(expected, testfoo_Ns::allCalls);
+}
+
+cute::suite make_suite_foo(){
+    cute::suite s;
+    s.push_back(CUTE(testfoo));
+    return s;
+}
+
+//@foo.h
+//=
+#include "cute_suite.h"
+
+extern cute::suite make_suite_foo();
+
+//!Mocking member function
+//@.config
+newFiles=bar.cpp,bar.h
+newFileCreation=true
+cppStandard=C++03
+primaryFile=sut.cpp
+withCuteNature=true
+
+//@foobar.h
+struct Foo {
+  int bar(int i);
+};
+//=
+struct Foo {
+  __attribute__((weak)) int bar(int i);
+};
+
+//@sut.h
+#include "foobar.h"
+int sut();
+
+//@sut.cpp
+#include "sut.h"
+
+int sut() {
+    Foo foo;
+    return foo./*$*/bar/*$$*/(42);
+}
+
+//@bar.cpp
+//=
+#include "sut.h"
+#include "foobar.h"
+#include "cute.h"
+#include "mockator.h"
+
+namespace testbar_Ns {
+    mockator::calls allCalls;
+}
+
+int Foo::bar(int i) {
+    testbar_Ns::allCalls.push_back(mockator::call("bar(int)", i ));
+    return int();
+}
+
+void testbar() {
+    INIT_MOCKATOR();
+    calls expected;
+	expected += call("bar(int)", int());
+    ASSERT_EQUAL(expected, testbar_Ns::allCalls);
+}
+
+cute::suite make_suite_bar(){
+    cute::suite s;
+    s.push_back(CUTE(testbar));
+    return s;
+}
+
+//@bar.h
+//=
+#include "cute_suite.h"
+
+extern cute::suite make_suite_bar();
+
+
+//!Mocking member function without CUTE
+//@.config
+newFiles=bar.cpp,bar.h
+newFileCreation=true
+primaryFile=sut.cpp
+cppStandard=C++11
+withCuteNature=false
+
+//@foobar.h
+struct Foo {
+  void bar(double, char);
+};
+//=
+struct Foo {
+    __attribute__((weak)) void bar(double, char);
+};
+
+//@sut.h
+void sut();
+
+//@sut.cpp
+#include "sut.h"
+#include "foobar.h"
+
+void sut() {
+    Foo foo;
+    foo./*$*/bar/*$$*/(3.1415, 'c');
+}
+
+//@bar.cpp
+//=
+#include "sut.h"
+#include "foobar.h"
+#include <cassert>
+#include "mockator.h"
+
+namespace testbar_Ns {
+    mockator::calls allCalls;
+}
+
+void Foo::bar(double d, char c) {
+    testbar_Ns::allCalls.push_back(mockator::call{"bar(double, char)", d, c });
+}
+
+void testbar() {
+    INIT_MOCKATOR();
+    calls expected = {{ "bar(double, char)", double{}, char{} }};
+	assert(expected == testbar_Ns::allCalls);
+}
+
+//@bar.h
+//=
+extern void testbar();

@@ -1,0 +1,21 @@
+//!With Temporary Fake Instance Test
+//@main.cpp
+template <typename T>
+struct SUT {
+  void bar1() {
+    bar2(T(3));
+  }
+      
+  void bar2(T const& t) {
+    t.foo();
+  }
+};
+
+void testSUT(){
+  struct Fake {
+    void foo() const {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar1();
+}

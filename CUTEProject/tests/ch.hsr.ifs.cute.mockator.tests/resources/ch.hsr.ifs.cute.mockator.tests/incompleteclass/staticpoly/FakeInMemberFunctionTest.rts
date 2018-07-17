@@ -1,0 +1,18 @@
+//!Fake In Member Function Test
+//@main.cpp
+template <typename T>
+struct SUT{
+  void bar() {
+    T fake;
+    fake.foo();
+  }
+};
+
+class Test {
+  void test1() {
+    struct Fake{
+    };
+    SUT<Fake> sut;
+    sut.bar();
+  }
+};

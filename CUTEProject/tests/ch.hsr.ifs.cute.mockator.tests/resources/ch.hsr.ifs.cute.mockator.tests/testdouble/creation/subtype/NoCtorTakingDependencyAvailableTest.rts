@@ -1,0 +1,13 @@
+//!No Ctor Taking Dependency Available Test
+//@main.cpp
+struct IDependency {
+  virtual ~IDependency();
+};
+
+struct SUT{
+  SUT(SUT const& s) {}
+};
+
+void testSUT() {
+  SUT sut(dependency);
+}

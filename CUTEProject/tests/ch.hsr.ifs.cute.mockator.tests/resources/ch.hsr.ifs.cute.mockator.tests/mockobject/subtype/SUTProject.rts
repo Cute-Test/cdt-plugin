@@ -1,0 +1,23 @@
+//!SUT Project
+//@A.cpp
+#include "SUTFromOtherProject.h"
+
+//@IDependency.h
+struct IDependency {
+  virtual ~IDependency();
+  virtual void foo(double) = 0;
+  virtual void bar(int i) = 0;
+};
+
+//@SUTFromOtherProject.h
+#include "IDependency.h"
+
+struct SUT {
+  SUT(IDependency& d) : d(d) {}
+  void bar() {
+    d.foo(3.1415);
+    d.bar(42);
+  }
+private:
+  IDependency& d;
+};

@@ -1,0 +1,31 @@
+package ch.hsr.ifs.cute.mockator.preprocessor.qf;
+
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.jface.text.IDocument;
+
+import ch.hsr.ifs.cute.mockator.base.i18n.I18N;
+import ch.hsr.ifs.cute.mockator.project.cdt.options.IncludeFileHandler;
+
+
+public class ActivateTraceFunctionQuickFix extends TraceFunctionQuickFix {
+
+   @Override
+   public String getLabel() {
+      return I18N.TraceFunctionActivate;
+   }
+
+   @Override
+   public boolean isApplicable(final IMarker marker) {
+      return super.isApplicable(marker) && !isTraceFunctionActive(marker);
+   }
+
+   @Override
+   public void apply(final IMarker marker, final IDocument document) {
+      addIncludeFile(marker);
+   }
+
+   private void addIncludeFile(final IMarker marker) {
+      final IncludeFileHandler handler = new IncludeFileHandler(getCProject().getProject());
+      handler.addInclude(getPathOfSiblingHeaderFile(marker));
+   }
+}

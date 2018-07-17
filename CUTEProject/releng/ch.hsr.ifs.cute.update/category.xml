@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="ch.hsr.ifs.cute.boost.feature_5.5.0.qualifier.jar" id="ch.hsr.ifs.cute.boost.feature" version="5.5.0.qualifier">
+      <category name="OptFeatures"/>
+   </feature>
+   <feature url="ch.hsr.ifs.cute.gcov.feature_5.5.0.qualifier.jar" id="ch.hsr.ifs.cute.gcov.feature" version="5.5.0.qualifier">
+      <category name="OptFeatures"/>
+   </feature>
+   <feature url="ch.hsr.ifs.cute.feature_5.5.0.qualifier.jar" id="ch.hsr.ifs.cute.feature" version="5.5.0.qualifier">
+      <category name="CUTE Plugin"/>
+   </feature>
+   <feature url="ch.hsr.ifs.cute.mockator.examples.feature_5.5.0.qualifier.jar" id="ch.hsr.ifs.cute.mockator.examples.feature" version="5.5.0.qualifier">
+      <category name="CUTE Plugin"/>
+   </feature>
+   <feature url="ch.hsr.ifs.cute.mockator.feature_5.5.0.qualifier.jar" id="ch.hsr.ifs.cute.mockator.feature" version="5.5.0.qualifier">
+      <category name="CUTE Plugin"/>
+   </feature>
+   <category-def name="CUTE Plugin" label="CUTE Plugin"/>
+   <category-def name="OptFeatures" label="CUTE Optional Features"/>
+</site>

@@ -1,0 +1,232 @@
+//!New test double class for C++03
+//@.config
+cppStandard=C++03
+primaryFile=A.cpp
+
+//@A.cpp
+#include "cute.h"
+template<typename T>
+struct SUT {};
+
+void testFoo() {
+	SUT</*$*/Foo/*$$*/> foo;
+}
+
+void runSuite() {
+	cute::suite testSuite;
+	testSuite.push_back(CUTE(testFoo));
+}
+//=
+#include "cute.h"
+template<typename T>
+struct SUT {};
+
+namespace testSuite
+{
+    namespace testFoo_Ns
+    {
+        struct Foo
+        {
+        };
+    }
+}
+void testFoo() {
+    using namespace testSuite::testFoo_Ns;
+	SUT<Foo> foo;
+}
+
+void runSuite() {
+	cute::suite testSuite;
+	testSuite.push_back(CUTE(testFoo));
+}
+
+//!Without CUTE suite for C++03
+//@.config
+cppStandard=C++03
+primaryFile=A.cpp
+
+//@A.cpp
+template<typename T>
+struct SUT {};
+
+void testBar() {
+	SUT</*$*/Foo/*$$*/> foo;
+}
+
+//=
+template<typename T>
+struct SUT {};
+
+namespace testBar_Ns
+{
+    struct Foo
+    {
+    };
+}
+void testBar() {
+    using namespace testBar_Ns;
+	SUT<Foo> foo;
+}
+
+//!Into existing suite NS for C++03
+//@.config
+cppStandard=C++03
+primaryFile=A.cpp
+
+//@A.cpp
+#include "cute.h"
+template<typename T>
+struct SUT {};
+
+namespace testSuite
+{
+	namespace testBar_Ns
+	{
+	    struct Bar
+	    {
+	    };
+	}
+}
+
+void testBar() {
+    using namespace testSuite::testBar_Ns;
+	SUT<Bar> bar;
+}
+
+void testFoo() {
+	SUT</*$*/Foo/*$$*/> foo;
+}
+
+void runSuite() {
+	cute::suite testSuite;
+	testSuite.push_back(CUTE(testBar));
+	testSuite.push_back(CUTE(testFoo));
+}
+
+//=
+#include "cute.h"
+template<typename T>
+struct SUT {};
+
+namespace testSuite
+{
+	namespace testBar_Ns
+	{
+	    struct Bar
+	    {
+	    };
+	}
+    namespace testFoo_Ns
+    {
+        struct Foo
+        {
+        };}
+}
+
+void testBar() {
+    using namespace testSuite::testBar_Ns;
+	SUT<Bar> bar;
+}
+
+void testFoo() {
+    using namespace testSuite::testFoo_Ns;
+	SUT<Foo> foo;
+}
+
+void runSuite() {
+	cute::suite testSuite;
+	testSuite.push_back(CUTE(testBar));
+	testSuite.push_back(CUTE(testFoo));
+}
+
+//!With provided namespace for C++03
+//@.config
+cppStandard=C++03
+primaryFile=A.cpp
+
+//@A.cpp
+template<typename T>
+struct SUT {};
+
+namespace testBar_Ns
+{
+    struct Bar
+    {
+    };
+}
+
+void testBar() {
+	SUT</*$*/Foo/*$$*/> foo;
+}
+
+//=
+template<typename T>
+struct SUT {};
+
+namespace testBar_Ns
+{
+    struct Bar
+    {
+    };
+
+    struct Foo
+    {
+    };
+}
+void testBar() {
+    using namespace testBar_Ns;
+	SUT<Foo> foo;
+}
+
+//!With provided using namespace for C++03
+//@.config
+cppStandard=C++03
+primaryFile=A.cpp
+
+//@A.cpp
+template<typename T>
+struct SUT {};
+
+void testBar() {
+    using namespace testBar_Ns;
+	SUT</*$*/Foo/*$$*/> foo;
+}
+
+//=
+template<typename T>
+struct SUT {};
+
+namespace testBar_Ns
+{
+    struct Foo
+    {
+    };
+}
+void testBar() {
+    using namespace testBar_Ns;
+	SUT<Foo> foo;
+}
+
+//!New test double class with C++11
+//@.config
+cppStandard=C++11
+primaryFile=A.cpp
+
+//@A.cpp
+template<typename T>
+struct SUT {};
+
+void testFoo() {
+	SUT</*$*/Foo/*$$*/> foo;
+}
+
+//=
+template<typename T>
+struct SUT {};
+
+void testFoo() {
+    struct Foo
+    {
+    };
+	SUT<Foo> foo;
+}

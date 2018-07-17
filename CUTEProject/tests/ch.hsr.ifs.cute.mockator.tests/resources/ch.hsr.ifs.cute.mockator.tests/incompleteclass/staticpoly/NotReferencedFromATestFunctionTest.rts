@@ -1,0 +1,16 @@
+//!Not Referenced From A Test Function
+//@main.cpp
+template <typename T>
+struct SUT{
+  void bar() {
+    T fake;
+    fake.foo();
+  }
+};
+
+int calc(int i){
+  struct Fake{
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

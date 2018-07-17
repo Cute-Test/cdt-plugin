@@ -1,0 +1,64 @@
+//!Test New Test Function
+//@main.cpp
+void runSuite(){
+	cute::suite s;
+}
+//=
+void newTestFunction(){
+	ASSERTM("start writing tests", false);
+}
+
+void runSuite(){
+	cute::suite s;
+	s.push_back(CUTE(newTestFunction));
+}
+//!Test New Test Function ChangeBody
+//@.config
+insertText=myTestName
+sendTab=true
+insertText2=ASSERT(true);
+//@main.cpp
+void runSuite(){
+	cute::suite s;
+}
+//=
+void myTestName(){
+	ASSERT(true);
+}
+
+void runSuite(){
+	cute::suite s;
+	s.push_back(CUTE(myTestName));
+}
+//!Test New Test Function Missing Suite
+//@.config
+insertText=myTestName2
+//@main.cpp
+//=
+void myTestName2(){
+	ASSERTM("start writing tests", false);
+}
+
+cute::suite make_suite(){
+	cute::suite s;
+	s.push_back(CUTE(myTestName2));
+	return s;
+}
+//!Test New Test Function End Of File
+//@.config
+insertText=myTestName
+sendTab=true
+insertText2=ASSERT(true);
+//@main.cpp
+void runSuite(){
+	cute::suite s;
+}
+/*$*//*$$*/
+//=
+void runSuite(){
+	cute::suite s;
+	s.push_back(CUTE(myTestName));
+}
+void myTestName(){
+	ASSERT(true);
+}

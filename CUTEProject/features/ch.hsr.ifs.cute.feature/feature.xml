@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="ch.hsr.ifs.cute.feature"
+      label="%featureName"
+      version="5.5.0.qualifier"
+      provider-name="%providerName"
+      plugin="ch.hsr.ifs.cute.ui"
+      image="eclipse_update_120.jpg">
+
+   <description url="%updateSiteUrl">
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://www.cute-test.com/updatesite/"/>
+      <discovery label="CDT update site" url="http://download.eclipse.org/tools/cdt/releases/helios/"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.cdt.core" version="5.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.workbench" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.compare" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.debug.ui" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.console" version="3.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.launch" version="7.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.debug.core" version="7.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.filesystem" version="1.3.200" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.cdt.dsf.gdb"/>
+      <import plugin="org.eclipse.cdt.dsf.gdb.ui"/>
+      <import plugin="org.eclipse.cdt.ui" version="5.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.core" version="7.0.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.testframework"/>
+      <import plugin="org.eclipse.core.expressions" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ltk.core.refactoring" version="3.5.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.views" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.editors" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.ui" version="7.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.core" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.core.cxx" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.ui.cxx" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.headers"/>
+      <import plugin="org.eclipse.ui.intro"/>
+      <import plugin="org.eclipse.ui.intro.universal"/>
+      <import plugin="org.eclipse.help"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="ch.hsr.ifs.cute.core"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.ui" version="8.2.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.e4.core.di"/>
+      <import plugin="ch.hsr.ifs.iltis.cpp.versionator"/>
+   </requires>
+
+   <plugin
+         id="ch.hsr.ifs.testframework"
+         download-size="0"
+         install-size="0"
+         version="5.5.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.core"
+         download-size="0"
+         install-size="0"
+         version="5.5.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.ui"
+         download-size="0"
+         install-size="0"
+         version="5.5.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.help"
+         download-size="0"
+         install-size="0"
+         version="5.5.0.qualifier"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.headers"
+         download-size="0"
+         install-size="0"
+         version="5.5.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.framework.extension"
+         download-size="0"
+         install-size="0"
+         version="5.5.0.qualifier"
+         fragment="true"/>
+
+</feature>

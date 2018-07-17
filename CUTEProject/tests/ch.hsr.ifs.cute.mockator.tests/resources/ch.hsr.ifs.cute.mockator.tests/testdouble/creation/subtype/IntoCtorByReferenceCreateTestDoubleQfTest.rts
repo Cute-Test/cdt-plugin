@@ -1,0 +1,32 @@
+//!Into ctor by reference
+//@IDependency.h
+struct IDependency {
+    virtual ~IDependency() {}
+};
+
+//@SUT.h
+#include "IDependency.h"
+
+struct SUT {
+    SUT(IDependency const& d) : d(d) {}
+private:
+    IDependency& d;
+};
+
+//@A.cpp
+#include "SUT.h"
+
+void test() {
+    SUT* sut = new SUT(foo);
+}
+
+//=
+#include "SUT.h"
+#include "IDependency.h"
+
+void test() {
+    struct Foo : IDependency
+    {
+    } foo;
+    SUT* sut = new SUT(foo);
+}

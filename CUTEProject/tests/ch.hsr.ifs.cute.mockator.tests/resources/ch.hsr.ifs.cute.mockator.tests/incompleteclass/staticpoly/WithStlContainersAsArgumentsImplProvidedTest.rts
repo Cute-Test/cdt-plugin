@@ -1,0 +1,39 @@
+//!With Stl Containers As Arguments Impl Provided Test
+//@main.cpp
+namespace std {
+    template<typename _Tp>
+    struct less { };
+    
+    template<typename _Tp>
+    class allocator { };
+    
+    template<class _T1, class _T2>
+    struct pair { };
+            
+    template <typename _Key, typename _Tp, typename _Compare = std::less<_Key>,
+               typename _Alloc = std::allocator<std::pair<const _Key, _Tp> > >
+    class map { };
+      
+    template<typename _CharT>
+    class basic_string;
+    typedef basic_string<char> string;
+}
+template <typename T>
+struct SUT {
+  void bar() {
+    T t;
+    std::map<std::string, int> m;
+    m['theAnswer'] = 42;
+    t.foo(m);
+  }
+};
+
+void testSUT() {
+  struct Fake {
+    void foo(std::map<std::string, int>& m) const
+    {
+    }
+  };
+  SUT<Fake> sut;
+  sut.bar();
+}

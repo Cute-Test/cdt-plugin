@@ -1,0 +1,23 @@
+//!With Test Double In Ns Test
+//@main.cpp
+template <typename T>
+struct SUT{
+  void bar() {
+    T fake;
+    fake.foo("test");
+    fake.foo(42);
+  }
+};
+
+namespace testSUTNs {
+  struct Fake {
+    void foo(std::string const& s) const {
+    }
+  };
+}
+
+void test(){
+  using namespace testSUTNs;
+  SUT<Fake> sut;
+  sut.bar();
+}

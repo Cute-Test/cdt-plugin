@@ -1,0 +1,38 @@
+//!Into member function with only forward decl
+//@IDependency.h
+struct IDependency {
+    virtual ~IDependency();
+};
+
+//@SUT.h
+class IDependency;
+
+struct SUT {
+    void inject(IDependency&);
+};
+
+//@SUT.cpp
+#include "SUT.h"
+
+void SUT::inject(IDependency& d) {
+}
+
+//@A.cpp
+#include "SUT.h"
+
+void test() {
+    SUT sut;
+    sut.inject(foo);
+}
+
+//=
+#include "SUT.h"
+#include "IDependency.h"
+
+void test() {
+    SUT sut;
+    struct Foo : IDependency
+    {
+    } foo;
+    sut.inject(foo);
+}

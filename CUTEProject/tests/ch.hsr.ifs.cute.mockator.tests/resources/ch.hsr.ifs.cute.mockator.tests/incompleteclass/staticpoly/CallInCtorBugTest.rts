@@ -1,0 +1,14 @@
+//!Call In Ctor Bug Test
+//@main.cpp
+template <typename T>
+struct SUT {
+  SUT(int i) {
+    T::foo();
+    }
+};
+    
+void testSUT(){
+    struct Fake {
+  };
+  SUT<Fake> sut(3);
+}
