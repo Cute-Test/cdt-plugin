@@ -173,7 +173,7 @@
  <extension
        point="org.eclipse.ui.ide.projectNatureImages">
     <image
-          icon="icons/ovr16/cute_ovr.gif"
+          icon="icons/ovr16/cute_ovr.png"
           id="ch.hsr.ifs.cute.cuteProjectImage"
           natureId="ch.hsr.ifs.cute.ui.cutenature">
     </image>
