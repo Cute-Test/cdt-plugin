@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: CUTE Help
 Bundle-SymbolicName: ch.hsr.ifs.cute.help; singleton:=true
-Bundle-Version: 5.5.0.qualifier
+Bundle-Version: 5.5.1.qualifier
 Bundle-Vendor: IFS Institute for Software
 Require-Bundle: org.eclipse.ui.intro,
  org.eclipse.ui.intro.universal,
