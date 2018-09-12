@@ -140,6 +140,9 @@ public class CuteHeadersManager {
    public static List<URL> getFileList(Bundle bundle, String subPath, String filePattern, String versionNumber) {
       String path = getFolderPath(subPath, versionNumber);
       Enumeration<URL> en = bundle.findEntries(path, filePattern, false);
+      if (en == null) {
+    	  throw new RuntimeException("CUTE headers not found in bundle at path " + path);
+      }
       List<URL> list = new ArrayList<>();
       while (en.hasMoreElements()) {
          list.add(en.nextElement());

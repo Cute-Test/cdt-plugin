@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.mockator.feature"
       label="%featureName"
-      version="5.5.1.qualifier"
+      version="5.1.2.qualifier"
       provider-name="%providerName"
       plugin="ch.hsr.ifs.cute.mockator">
 
@@ -36,7 +36,7 @@
       <import plugin="org.eclipse.cdt.debug.core" version="7.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.core" version="5.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.ui" version="5.7.0" match="greaterOrEqual"/>
-      <import plugin="ch.hsr.ifs.cute.ui" version="5.4.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.ui" version="5.1.2" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.cdt.managedbuilder.gnu.ui" version="8.3.0" match="greaterOrEqual"/>
@@ -47,13 +47,13 @@
          id="ch.hsr.ifs.cute.mockator"
          download-size="0"
          install-size="0"
-         version="5.5.1.qualifier"
+         version="5.1.2.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.mockator.help"
          download-size="0"
          install-size="0"
-         version="5.5.1.qualifier"/>
+         version="5.1.2.qualifier"/>
 
 </feature>

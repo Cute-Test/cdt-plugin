@@ -4,7 +4,7 @@
     <parent>
         <groupId>ch.hsr.ifs.cute</groupId>
         <artifactId>ch.hsr.ifs.cute.releng</artifactId>
-        <version>5.5.1-SNAPSHOT</version>
+        <version>5.1.2-SNAPSHOT</version>
     </parent>
     <artifactId>ch.hsr.ifs.cute.target.develop</artifactId>
     <packaging>eclipse-target-definition</packaging>

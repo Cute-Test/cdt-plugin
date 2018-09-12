@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.mockator.examples.feature"
       label="%featureName"
-      version="5.5.1.qualifier"
+      version="5.1.2.qualifier"
       provider-name="%providerName"
       plugin="ch.hsr.ifs.cute.mockator">
 
@@ -19,7 +19,7 @@
    </url>
 
    <requires>
-      <import feature="ch.hsr.ifs.cute.mockator.feature" version="5.4.0.qualifier"/>
+      <import feature="ch.hsr.ifs.cute.mockator.feature" version="5.1.2" match="compatible"/>
    </requires>
 
    <plugin
