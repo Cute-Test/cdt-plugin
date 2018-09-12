@@ -8,12 +8,12 @@ location "http://download.eclipse.org/releases/photon" {
 }
 
 location "http://download.eclipse.org/tools/cdt/releases/9.5" {
-	org.eclipse.cdt.sdk.feature.group 9.5.1
+	org.eclipse.cdt.sdk.feature.group 9.5.2
 }
 
 location "https://www.cevelop.com/iltis" {
-	ch.hsr.ifs.iltis.core.core.feature.feature.group 1.1.0
-	ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group 1.1.0
-	ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group 1.1.0
-	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group 1.1.0
+	ch.hsr.ifs.iltis.core.core.feature.feature.group 1.1.2
+	ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group 1.1.2
+	ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group 1.1.2
+	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group 1.1.1
 }
