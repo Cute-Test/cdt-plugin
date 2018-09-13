@@ -4,7 +4,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Fragment-Host: ch.hsr.ifs.cute.mockator
 Require-Bundle: org.junit,
  ch.hsr.ifs.iltis.testing.highlevel.testingplugin
-Bundle-Version: 5.1.2.qualifier
+Bundle-Version: 5.5.3.qualifier
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ch.hsr.ifs.cute.mockator.tests;singleton:=true
 Bundle-Vendor: IFS Institut for Software
