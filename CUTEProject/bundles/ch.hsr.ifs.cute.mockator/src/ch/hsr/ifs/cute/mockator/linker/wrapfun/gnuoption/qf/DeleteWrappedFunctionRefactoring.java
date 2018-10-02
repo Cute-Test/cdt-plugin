@@ -31,7 +31,7 @@ class DeleteWrappedFunctionRefactoring extends MockatorRefactoring {
 
    public DeleteWrappedFunctionRefactoring(final ICElement element, final Optional<ITextSelection> selection, final ICProject project,
                                            final IDocument doc) {
-      super(element, selection, project);
+      super(element, selection);
       this.doc = doc;
    }
 

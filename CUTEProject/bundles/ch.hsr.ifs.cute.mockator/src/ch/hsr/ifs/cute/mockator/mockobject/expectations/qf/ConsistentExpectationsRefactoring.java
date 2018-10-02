@@ -14,6 +14,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.collections.impl.factory.Lists;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -24,6 +25,7 @@ import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.cute.mockator.base.i18n.I18N;
+import ch.hsr.ifs.cute.mockator.infos.ConsistentExpectationsInfo;
 import ch.hsr.ifs.cute.mockator.mockobject.asserteq.AssertEqualFinderVisitor;
 import ch.hsr.ifs.cute.mockator.mockobject.asserteq.AssertKind.ExpectedActualPair;
 import ch.hsr.ifs.cute.mockator.mockobject.expectations.reconcile.ExpectationsReconciler;
@@ -37,16 +39,16 @@ import ch.hsr.ifs.cute.mockator.testdouble.entities.ExistingTestDoubleMemFun;
 
 class ConsistentExpectationsRefactoring extends MockatorRefactoring {
 
-   private final ConsistentExpectationsCodanArgs ca;
-   private final LinkedEditModeStrategy          linkedEditMode;
-   private final CppStandard                     cppStd;
-   private final List<ExistingTestDoubleMemFun>  expectationsToAdd;
+   private final ConsistentExpectationsInfo     info;
+   private final LinkedEditModeStrategy         linkedEditMode;
+   private final CppStandard                    cppStd;
+   private final List<ExistingTestDoubleMemFun> expectationsToAdd;
 
    public ConsistentExpectationsRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject project,
-                                            final ConsistentExpectationsCodanArgs ca, final CppStandard cppStd,
+                                            final ConsistentExpectationsInfo info, final CppStandard cppStd,
                                             final LinkedEditModeStrategy linkedEditMode) {
-      super(cElement, selection, project);
-      this.ca = ca;
+      super(cElement, selection);
+      this.info = info;
       this.cppStd = cppStd;
       this.linkedEditMode = linkedEditMode;
       expectationsToAdd = new ArrayList<>();
@@ -85,12 +87,12 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
    private void consolidateExpectations(final IASTName expectationsVector, final ASTRewrite rewriter) {
       final ExpectationsReconciler reconciler = new ExpectationsReconciler(rewriter, expectationsVector, getTestFunction(expectationsVector), cppStd,
             linkedEditMode);
-      reconciler.consolidateExpectations(expectationsToAdd, ca.getExpectationsToRemove());
+      reconciler.consolidateExpectations(expectationsToAdd, info.getExpectationsToRemove());
    }
 
    private void collectExpectationsToAdd(final IASTTranslationUnit ast, final IASTName expectationsVector) {
       for (final ExistingMemFunCallRegistration registration : collectRegisteredCalls(expectationsVector, ast)) {
-         if (ca.getExpectationsToAdd().contains(registration.getMemFunSignature())) {
+         if (info.expectationsToAdd.contains(registration.getMemFunSignature())) {
             expectationsToAdd.add(registration.getExistingMemFun());
          }
       }
@@ -100,15 +102,19 @@ class ConsistentExpectationsRefactoring extends MockatorRefactoring {
       final RegistrationCandidatesFinder finder = new RegistrationCandidatesFinder(ast, cppStd);
       final ICPPASTFunctionDefinition testFunction = getTestFunction(expectationsVector);
 
-      return getRegistrationVector(testFunction, expectationsVector).map(regVector -> finder.findCallRegistrations(regVector)).orElse(
-            new ArrayList<>());
+      return getRegistrationVector(testFunction, expectationsVector).map(regVector -> finder.findCallRegistrations(regVector)).orElse(Lists.mutable
+            .empty());
    }
 
    private static Optional<IASTName> getRegistrationVector(final ICPPASTFunctionDefinition testFun, final IASTName expectationsVector) {
       for (final ExpectedActualPair expectedActual : getAssertedCalls(testFun)) {
-         if (equalsName(expectedActual.actual(), expectationsVector)) { return Optional.of(expectedActual.expected().getName()); }
+         if (equalsName(expectedActual.actual(), expectationsVector)) {
+            return Optional.of(expectedActual.expected().getName());
+         }
 
-         if (equalsName(expectedActual.expected(), expectationsVector)) { return Optional.of(expectedActual.actual().getName()); }
+         if (equalsName(expectedActual.expected(), expectationsVector)) {
+            return Optional.of(expectedActual.actual().getName());
+         }
       }
 
       return Optional.empty();

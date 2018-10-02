@@ -10,13 +10,15 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.swt.graphics.Image;
 
+import ch.hsr.ifs.iltis.cpp.core.resources.info.MarkerInfo;
+
 import ch.hsr.ifs.cute.mockator.base.i18n.I18N;
+import ch.hsr.ifs.cute.mockator.infos.ConsistentExpectationsInfo;
 import ch.hsr.ifs.cute.mockator.mockobject.linkedmode.MockObjectLinkedEditModeFactory;
 import ch.hsr.ifs.cute.mockator.project.properties.AssertionOrder;
 import ch.hsr.ifs.cute.mockator.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.cute.mockator.refsupport.linkededit.ChangeEdit;
 import ch.hsr.ifs.cute.mockator.refsupport.linkededit.LinkedModeInfoCreater;
-import ch.hsr.ifs.cute.mockator.refsupport.qf.CodanArguments;
 import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorQfWithRefactoringSupport;
 import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorRefactoring;
 import ch.hsr.ifs.cute.mockator.testdouble.entities.ExistingTestDoubleMemFun;
@@ -31,7 +33,7 @@ public class ConsistentExpectationsQuickFix extends MockatorQfWithRefactoringSup
 
    @Override
    public String getDescription() {
-      return getCodanArguments(marker).getResolutionDesc();
+      return getMarkerInfo(marker).resolutionDescString;
    }
 
    @Override
@@ -40,13 +42,13 @@ public class ConsistentExpectationsQuickFix extends MockatorQfWithRefactoringSup
    }
 
    @Override
-   protected ConsistentExpectationsCodanArgs getCodanArguments(final IMarker marker) {
-      return new ConsistentExpectationsCodanArgs(marker);
+   protected ConsistentExpectationsInfo getMarkerInfo(final IMarker marker) {
+      return MarkerInfo.fromCodanProblemMarker(ConsistentExpectationsInfo::new, marker);
    }
 
    @Override
-   protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final CodanArguments ca) {
-      return new ConsistentExpectationsRefactoring(cElement, selection, getCProject(), (ConsistentExpectationsCodanArgs) ca, getCppStandard(),
+   protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final MarkerInfo<?> info) {
+      return new ConsistentExpectationsRefactoring(cElement, selection, getCProject(), (ConsistentExpectationsInfo) info, getCppStandard(),
             getLinkedEditStrategy());
    }
 

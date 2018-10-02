@@ -1,8 +1,5 @@
 package ch.hsr.ifs.cute.mockator.extractinterface;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -11,22 +8,21 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
-import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringDescriptor;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;
 
 import ch.hsr.ifs.cute.mockator.base.i18n.I18N;
 import ch.hsr.ifs.cute.mockator.extractinterface.context.ExtractInterfaceContext;
+import ch.hsr.ifs.cute.mockator.infos.ExtractInterfaceInfo;
 import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorRefactoring;
 
 
 public class ExtractInterfaceRefactoring extends MockatorRefactoring {
 
-   public static final String            ID = "ch.hsr.ifs.mockator.plugin.extractinterface.ExtractInterfaceRefactoring";
    private final ExtractInterfaceContext context;
    private ExtractInterfaceHandler       handler;
 
    public ExtractInterfaceRefactoring(final ExtractInterfaceContext context) {
-      super(context.getTuOfSelection(), context.getSelection(), context.getCProject());
+      super(context.getTuOfSelection(), context.getSelection());
       this.context = context;
    }
 
@@ -62,22 +58,16 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
 
    @Override
    protected RefactoringDescriptor getRefactoringDescriptor() {
-      return new ExtractInterfaceDescriptor(ID, project.getProject().getName(), "Extract Interface Refactoring", getRefactoringDescription(),
-            getArgumentMap());
+      return new ExtractInterfaceDescriptor(project.getProject().getName(), "Extract Interface Refactoring", getRefactoringDescription(),
+            new ExtractInterfaceInfo().also(i -> {
+               i.interfaceName = context.getNewInterfaceName();
+               i.replaceAllOccurences = context.shouldReplaceAllOccurences();
+            }));
    }
 
    private String getRefactoringDescription() {
       final String className = ASTUtil.getQfNameF(context.getChosenClass());
       return String.format("Extract interface for class '%s'", className);
-   }
-
-   private Map<String, String> getArgumentMap() {
-      final Map<String, String> args = new HashMap<>();
-      args.put(CRefactoringDescriptor.FILE_NAME, getTranslationUnit().getLocationURI().toString());
-      args.put(CRefactoringDescriptor.SELECTION, selectedRegion.getOffset() + "," + selectedRegion.getLength());
-      args.put(ExtractInterfaceDescriptor.NEW_INTERFACE_NAME, context.getNewInterfaceName());
-      args.put(ExtractInterfaceDescriptor.REPLACE_ALL_OCCURENCES, String.valueOf(context.shouldReplaceAllOccurences()));
-      return args;
    }
 
    @Override
@@ -88,7 +78,7 @@ public class ExtractInterfaceRefactoring extends MockatorRefactoring {
       handler.performChanges();
    }
 
-   public ExtractInterfaceContext getContext() {
+   public ExtractInterfaceContext getMockatorContext() {
       return context;
    }
 

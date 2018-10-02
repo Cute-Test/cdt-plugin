@@ -1,17 +1,16 @@
 package ch.hsr.ifs.cute.mockator.tests.testdouble.creation.subtype;
 
-import ch.hsr.ifs.cute.mockator.tests.AbstractQuickfixTest;
-import ch.hsr.ifs.iltis.cpp.core.ast.checker.helper.IProblemId;
-import ch.hsr.ifs.cute.mockator.base.misc.IdHelper.ProblemId;
+import ch.hsr.ifs.cute.mockator.ids.IdHelper.ProblemId;
 import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorQuickFix;
 import ch.hsr.ifs.cute.mockator.testdouble.creation.subtype.CreateTestDoubleSubTypeQuickFix;
+import ch.hsr.ifs.cute.mockator.tests.AbstractQuickfixTest;
 
 
 public class IntoCtorByReferenceCreateTestDoubleQfTest extends AbstractQuickfixTest {
 
    @Override
-   protected IProblemId getProblemId() {
+   protected ProblemId getProblemId() {
       return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE;
    }
 

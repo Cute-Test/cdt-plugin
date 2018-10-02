@@ -41,7 +41,7 @@ public class PreprocessorRefactoring extends MockatorRefactoring {
    private IPath newSourceFilePath;
 
    public PreprocessorRefactoring(final ICElement element, final Optional<ITextSelection> selection, final ICProject cproject) {
-      super(element, selection, cproject);
+      super(element, selection);
    }
 
    @Override

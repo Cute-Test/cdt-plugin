@@ -5,9 +5,11 @@ import org.eclipse.cdt.core.dom.ast.IASTPreprocessorStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
 import ch.hsr.ifs.cute.mockator.MockatorConstants;
+import ch.hsr.ifs.cute.mockator.ids.IdHelper.ProblemId;
+import ch.hsr.ifs.cute.mockator.infos.GnuOptionInfo;
+
 import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.AbstractIndexAstChecker;
-import ch.hsr.ifs.cute.mockator.base.misc.IdHelper.ProblemId;
 
 
 public class GnuOptionChecker extends AbstractIndexAstChecker {
@@ -22,7 +24,7 @@ public class GnuOptionChecker extends AbstractIndexAstChecker {
          final IASTPreprocessorIfdefStatement ifDefStmt = (IASTPreprocessorIfdefStatement) pStmt;
 
          if (isWrapMacroCheck(ifDefStmt)) {
-            reportProblem(ProblemId.WRAP_FUNCTION.getId(), ifDefStmt, unpackName(getMacroCheckName(ifDefStmt)));
+            reportProblem(ProblemId.WRAP_FUNCTION, ifDefStmt, new GnuOptionInfo(unpackName(getMacroCheckName(ifDefStmt))));
          }
       }
    }

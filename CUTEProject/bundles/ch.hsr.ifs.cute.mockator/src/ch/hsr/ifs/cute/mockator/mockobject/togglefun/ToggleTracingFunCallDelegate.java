@@ -40,7 +40,7 @@ public class ToggleTracingFunCallDelegate extends MockatorDelegate {
    }
 
    private ToggleTracingFunCallRefactoring getRefactoring() {
-      return new ToggleTracingFunCallRefactoring(getCppStd(), cElement, selection, cProject, getLinkedEditStrategy());
+      return new ToggleTracingFunCallRefactoring(getCppStd(), cElement, selection, getLinkedEditStrategy());
    }
 
    private LinkedEditModeStrategy getLinkedEditStrategy() {

@@ -9,6 +9,8 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 
+import ch.hsr.ifs.iltis.cpp.core.resources.info.MarkerInfo;
+
 import ch.hsr.ifs.cute.mockator.refsupport.linkededit.ChangeEdit;
 import ch.hsr.ifs.cute.mockator.refsupport.linkededit.LinkedModeInfoCreater;
 import ch.hsr.ifs.cute.mockator.refsupport.linkededit.LinkedModeStarter;
@@ -22,12 +24,12 @@ public abstract class MockatorQfWithRefactoringSupport extends MockatorQuickFix 
    public void apply(final IMarker marker, final IDocument document) {
       this.marker = marker;
       this.document = document;
-      ca = getCodanArguments(marker);
+      info = getMarkerInfo(marker);
       performRefactoring();
    }
 
    private void performRefactoring() {
-      final MockatorRefactoring refactoring = getRefactoring(getCElement(), getSelection(), ca);
+      final MockatorRefactoring refactoring = getRefactoring(getCElement(), getSelection(), info);
 
       if (shouldRunInCurrentThread) {
          runInCurrentThread(refactoring);
@@ -54,7 +56,7 @@ public abstract class MockatorQfWithRefactoringSupport extends MockatorQuickFix 
       getLinkedModeCreator(edit, document, refactoring).ifPresent((linkedMode) -> new LinkedModeStarter().accept(linkedMode));
    }
 
-   protected abstract MockatorRefactoring getRefactoring(ICElement cElement, Optional<ITextSelection> selection, CodanArguments ca);
+   protected abstract MockatorRefactoring getRefactoring(ICElement cElement, Optional<ITextSelection> selection, MarkerInfo<?> info);
 
    protected abstract Optional<LinkedModeInfoCreater> getLinkedModeCreator(ChangeEdit edit, IDocument document, MockatorRefactoring refactoring);
 }

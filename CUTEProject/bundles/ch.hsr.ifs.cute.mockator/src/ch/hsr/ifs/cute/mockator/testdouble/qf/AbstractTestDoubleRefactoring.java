@@ -32,7 +32,7 @@ public abstract class AbstractTestDoubleRefactoring extends MockatorRefactoring 
 
    public AbstractTestDoubleRefactoring(final CppStandard cppStd, final ICElement cElement, final Optional<ITextSelection> selection,
                                         final ICProject project) {
-      super(cElement, selection, project);
+      super(cElement, selection);
       this.cppStd = cppStd;
    }
 

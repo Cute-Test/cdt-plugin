@@ -106,7 +106,7 @@ class ExtractInterfaceWizardPage extends UserInputWizardPage {
    }
 
    private String getNewInterfaceClassProposal() {
-      final String newNameProposal = getMyRefactoring().getContext().getNewInterfaceNameProposal();
+      final String newNameProposal = getMyRefactoring().getMockatorContext().getNewInterfaceNameProposal();
       return newNameProposal == null ? "" : newNameProposal;
    }
 
@@ -129,7 +129,7 @@ class ExtractInterfaceWizardPage extends UserInputWizardPage {
    private void setNewInterfaceName(final String interfaceName) {
       setErrorMessage(null);
       setPageComplete(true);
-      getMyRefactoring().getContext().setNewInterfaceName(interfaceName);
+      getMyRefactoring().getMockatorContext().setNewInterfaceName(interfaceName);
    }
 
    private void createChooseMemFunsLabel(final Composite parent) {
@@ -147,7 +147,7 @@ class ExtractInterfaceWizardPage extends UserInputWizardPage {
 
          @Override
          public void widgetSelected(final SelectionEvent e) {
-            getMyRefactoring().getContext().setShouldReplaceAllOccurences(replaceAllCheckbox.getSelection());
+            getMyRefactoring().getMockatorContext().setShouldReplaceAllOccurences(replaceAllCheckbox.getSelection());
          }
       });
    }
@@ -193,7 +193,7 @@ class ExtractInterfaceWizardPage extends UserInputWizardPage {
    }
 
    private void selectUsedMemFuns() {
-      final Collection<IASTDeclaration> usedMemFuns = getMyRefactoring().getContext().getUsedPublicMemFuns();
+      final Collection<IASTDeclaration> usedMemFuns = getMyRefactoring().getMockatorContext().getUsedPublicMemFuns();
 
       for (final IASTDeclaration memFun : getMemFunsInTable()) {
          memFunsTableViewer.setChecked(memFun, usedMemFuns.contains(memFun));
@@ -205,11 +205,11 @@ class ExtractInterfaceWizardPage extends UserInputWizardPage {
    }
 
    private void updateChosenMemFuns() {
-      getMyRefactoring().getContext().setChosenMemFuns(getCheckedMemFuns());
+      getMyRefactoring().getMockatorContext().setChosenMemFuns(getCheckedMemFuns());
    }
 
    private Collection<IASTDeclaration> getAvailableMemFuns() {
-      return getMyRefactoring().getContext().getAvailablePupMemFuns();
+      return getMyRefactoring().getMockatorContext().getAvailablePupMemFuns();
    }
 
    private Collection<IASTDeclaration> getCheckedMemFuns() {

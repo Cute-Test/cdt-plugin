@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
 
-import ch.hsr.ifs.cute.mockator.base.misc.IdHelper.ProblemId;
+import ch.hsr.ifs.cute.mockator.ids.IdHelper.ProblemId;
 import ch.hsr.ifs.cute.mockator.project.cdt.options.IncludeFileHandler;
 import ch.hsr.ifs.cute.mockator.refsupport.tu.SiblingTranslationUnitFinder;
 import ch.hsr.ifs.cute.mockator.refsupport.utils.BindingTypeVerifier;

@@ -9,9 +9,11 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.checker.SimpleChecker;
 import ch.hsr.ifs.iltis.cpp.core.ast.checker.VisitorReport;
-import ch.hsr.ifs.cute.mockator.base.misc.IdHelper.ProblemId;
+
+import ch.hsr.ifs.cute.mockator.ids.IdHelper.ProblemId;
 import ch.hsr.ifs.cute.mockator.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.cute.mockator.incompleteclass.MissingMemberFunction;
+import ch.hsr.ifs.cute.mockator.infos.MissingMemFunInfo;
 import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 import ch.hsr.ifs.cute.mockator.refsupport.finder.ReferencingTestFunFinder;
 
@@ -20,14 +22,14 @@ public abstract class AbstractMissingMemFunChecker extends SimpleChecker<Problem
 
    protected void markIfHasMissingMemFuns(final VisitorReport<ProblemId> result) {
       final ICPPASTCompositeTypeSpecifier clazz = (ICPPASTCompositeTypeSpecifier) result.getNode();
-      if (!hasReferencingTestFunctions(clazz)) { return; }
+      if (!hasReferencingTestFunctions(clazz)) return;
       final MissingMemFunFinder finder = getMissingMemFunsFinder();
-      createCodanArgs(clazz, finder.findMissingMemberFunctions(clazz)).ifPresent((codanArgs) -> mark(clazz, codanArgs));
+      createInfo(clazz, finder.findMissingMemberFunctions(clazz)).ifPresent((codanArgs) -> mark(clazz, codanArgs));
    }
 
-   private Optional<MissingMemFunCodanArguments> createCodanArgs(final ICPPASTCompositeTypeSpecifier clazz,
+   private Optional<MissingMemFunInfo> createInfo(final ICPPASTCompositeTypeSpecifier clazz,
          final Collection<? extends MissingMemberFunction> missingMemFuns) {
-      return new MissingMemFunCodanArgsProvider(getCppStandard(), missingMemFuns, clazz).createMemFunCodanArgs();
+      return new MissingMemFunInfoProvider(getCppStandard(), missingMemFuns, clazz).createInfo();
    }
 
    private boolean hasReferencingTestFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
@@ -36,8 +38,8 @@ public abstract class AbstractMissingMemFunChecker extends SimpleChecker<Problem
       return !referencingTestFunctions.isEmpty();
    }
 
-   private void mark(final ICPPASTCompositeTypeSpecifier clazz, final MissingMemFunCodanArguments ca) {
-      getNameToMark(clazz).ifPresent((name) -> addNodeForReporting(new VisitorReport<>(getProblemId(), clazz), ca.toArray()));
+   private void mark(final ICPPASTCompositeTypeSpecifier clazz, final MissingMemFunInfo info) {
+      getNameToMark(clazz).ifPresent((name) -> addNodeForReporting(new VisitorReport<>(getProblemId(), clazz), info));
    }
 
    protected abstract Optional<IASTName> getNameToMark(ICPPASTCompositeTypeSpecifier clazz);

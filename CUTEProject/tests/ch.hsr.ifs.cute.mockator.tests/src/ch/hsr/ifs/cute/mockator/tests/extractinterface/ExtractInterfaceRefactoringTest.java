@@ -82,7 +82,7 @@ public class ExtractInterfaceRefactoringTest extends AbstractRefactoringTest {
    protected void simulateUserInput(final RefactoringContext context) {
       final CRefactoringContext ccontext = (CRefactoringContext) context;
       if (ccontext != null) {
-         final ExtractInterfaceContext eiContext = ((ExtractInterfaceRefactoring) context.getRefactoring()).getContext();
+         final ExtractInterfaceContext eiContext = ((ExtractInterfaceRefactoring) context.getRefactoring()).getMockatorContext();
          eiContext.setCRefContext(ccontext);
          final IASTTranslationUnit ast = getAst(ccontext);
          eiContext.setSelectedName(getSelectedName(ast));

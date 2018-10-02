@@ -9,11 +9,12 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.swt.graphics.Image;
 
+import ch.hsr.ifs.iltis.cpp.core.resources.info.MarkerInfo;
+
 import ch.hsr.ifs.cute.mockator.base.i18n.I18N;
 import ch.hsr.ifs.cute.mockator.base.util.UiUtil;
 import ch.hsr.ifs.cute.mockator.refsupport.linkededit.ChangeEdit;
 import ch.hsr.ifs.cute.mockator.refsupport.linkededit.LinkedModeInfoCreater;
-import ch.hsr.ifs.cute.mockator.refsupport.qf.CodanArguments;
 import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorQfWithRefactoringSupport;
 import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorRefactoring;
 
@@ -26,7 +27,7 @@ public class DeleteWrappedFunctionQuickFix extends MockatorQfWithRefactoringSupp
    }
 
    @Override
-   protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> sel, final CodanArguments ca) {
+   protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> sel, final MarkerInfo<?> info) {
       final IDocument doc = UiUtil.getCurrentDocument().get();
       return new DeleteWrappedFunctionRefactoring(cElement, sel, getCProject(), doc);
    }

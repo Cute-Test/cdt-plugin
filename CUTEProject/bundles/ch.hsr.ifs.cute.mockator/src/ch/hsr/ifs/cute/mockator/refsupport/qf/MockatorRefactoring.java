@@ -19,7 +19,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICElement;
-import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -44,8 +43,8 @@ public abstract class MockatorRefactoring extends CRefactoring {
 
    protected static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
 
-   public MockatorRefactoring(final ICElement element, final Optional<ITextSelection> selection, final ICProject project) {
-      super(element, selection, project);
+   public MockatorRefactoring(final ICElement element, final Optional<ITextSelection> selection) {
+      super(element, selection);
       saveAllDirtyEditors();
    }
 

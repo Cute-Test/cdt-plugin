@@ -5,7 +5,9 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 
-import ch.hsr.ifs.cute.mockator.incompleteclass.checker.MissingMemFunCodanArguments;
+import ch.hsr.ifs.iltis.cpp.core.resources.info.MarkerInfo;
+
+import ch.hsr.ifs.cute.mockator.infos.MissingMemFunInfo;
 import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorQfWithRefactoringSupport;
 
 
@@ -24,11 +26,11 @@ public abstract class AbstractTestDoubleQuickFix extends MockatorQfWithRefactori
    protected abstract String getResolutionLabelHeader();
 
    private String getNameOfTestDouble() {
-      return getCodanArguments(marker).getTestDoubleName();
+      return getMarkerInfo(marker).testDoubleName;
    }
 
    @Override
-   protected MissingMemFunCodanArguments getCodanArguments(final IMarker marker) {
-      return new MissingMemFunCodanArguments(marker);
+   protected MissingMemFunInfo getMarkerInfo(final IMarker marker) {
+      return MarkerInfo.fromCodanProblemMarker(MissingMemFunInfo::new, marker);
    }
 }

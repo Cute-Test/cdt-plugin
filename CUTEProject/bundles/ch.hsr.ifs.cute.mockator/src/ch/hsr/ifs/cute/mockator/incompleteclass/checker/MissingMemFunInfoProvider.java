@@ -10,30 +10,42 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import ch.hsr.ifs.cute.mockator.fakeobject.FakeObjectDefaultCtorProvider;
 import ch.hsr.ifs.cute.mockator.incompleteclass.DefaultCtorProvider;
 import ch.hsr.ifs.cute.mockator.incompleteclass.MissingMemberFunction;
+import ch.hsr.ifs.cute.mockator.infos.MissingMemFunInfo;
 import ch.hsr.ifs.cute.mockator.mockobject.MockObjectDefaultCtorProvider;
 import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 
 
-class MissingMemFunCodanArgsProvider {
+class MissingMemFunInfoProvider {
 
    private final CppStandard                                 cppStd;
    private final Collection<? extends MissingMemberFunction> missingMemFuns;
    private final ICPPASTCompositeTypeSpecifier               clazz;
 
-   public MissingMemFunCodanArgsProvider(final CppStandard cppStd, final Collection<? extends MissingMemberFunction> missingMemFuns,
-                                         final ICPPASTCompositeTypeSpecifier clazz) {
+   public MissingMemFunInfoProvider(final CppStandard cppStd, final Collection<? extends MissingMemberFunction> missingMemFuns,
+                                    final ICPPASTCompositeTypeSpecifier clazz) {
       this.cppStd = cppStd;
       this.missingMemFuns = missingMemFuns;
       this.clazz = clazz;
    }
 
-   public Optional<MissingMemFunCodanArguments> createMemFunCodanArgs() {
-      if (missingMemFuns.isEmpty()) { return Optional.empty(); }
+   public Optional<MissingMemFunInfo> createInfo() {
+      if (missingMemFuns.isEmpty()) return Optional.empty();
 
-      final Collection<MissingMemberFunction> fake = collectMissingMemFuns(getFakeCtorProvider());
-      final Collection<MissingMemberFunction> mock = collectMissingMemFuns(getMockCtorProvider());
-      final String className = clazz.getName().toString();
-      return Optional.of(new MissingMemFunCodanArguments(className, getFunSignatures(fake), getFunSignatures(mock)));
+      return Optional.of(new MissingMemFunInfo().also(i -> {
+         i.testDoubleName = clazz.getName().toString();
+         i.missingMemFunsForFake = getFunSignatures(collectMissingMemFuns(getFakeCtorProvider()));
+         i.missingMemFunsForMock = getFunSignatures(collectMissingMemFuns(getMockCtorProvider()));
+      }));
+   }
+
+   public Optional<MissingMemFunInfo> createMemFunCodanArgs() {
+      if (missingMemFuns.isEmpty()) return Optional.empty();
+      return Optional.of(new MissingMemFunInfo().also(i -> {
+         i.testDoubleName = clazz.getName().toString();
+         i.missingMemFunsForFake = getFunSignatures(collectMissingMemFuns(getFakeCtorProvider()));
+         i.missingMemFunsForMock = getFunSignatures(collectMissingMemFuns(getMockCtorProvider()));
+      }));
+
    }
 
    private MockObjectDefaultCtorProvider getMockCtorProvider() {

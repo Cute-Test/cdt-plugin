@@ -11,6 +11,8 @@ import org.eclipse.jface.text.ITextSelection;
 
 import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
+import ch.hsr.ifs.iltis.cpp.core.resources.info.MarkerInfo;
+
 import ch.hsr.ifs.cute.mockator.incompleteclass.MissingMemberFunction;
 import ch.hsr.ifs.cute.mockator.mockobject.expectations.ExpectedNameCreator;
 import ch.hsr.ifs.cute.mockator.mockobject.linkedmode.MockObjectLinkedEditModeFactory;
@@ -19,7 +21,6 @@ import ch.hsr.ifs.cute.mockator.project.properties.AssertionOrder;
 import ch.hsr.ifs.cute.mockator.project.properties.LinkedEditModeStrategy;
 import ch.hsr.ifs.cute.mockator.refsupport.linkededit.ChangeEdit;
 import ch.hsr.ifs.cute.mockator.refsupport.linkededit.LinkedModeInfoCreater;
-import ch.hsr.ifs.cute.mockator.refsupport.qf.CodanArguments;
 import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorRefactoring;
 import ch.hsr.ifs.cute.mockator.testdouble.qf.AbstractTestDoubleQuickFix;
 
@@ -41,7 +42,7 @@ abstract class MockObjectQuickFix extends AbstractTestDoubleQuickFix {
    }
 
    @Override
-   protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final CodanArguments ca) {
+   protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final MarkerInfo<?> info) {
       return new MockObjectRefactoring(getCppStandard(), cElement, selection, getCProject(), getLinkedEditStrategy());
    }
 
@@ -57,7 +58,7 @@ abstract class MockObjectQuickFix extends AbstractTestDoubleQuickFix {
    }
 
    private String getNameForExpectationsVector() {
-      final String testDoubleName = getCodanArguments(marker).getTestDoubleName();
+      final String testDoubleName = getMarkerInfo(marker).testDoubleName;
       return new ExpectedNameCreator(testDoubleName).getNameForExpectationsVector();
    }
 
@@ -67,6 +68,6 @@ abstract class MockObjectQuickFix extends AbstractTestDoubleQuickFix {
 
    @Override
    public String getDescription() {
-      return getCodanArguments(marker).getMissingMemFunsForMock();
+      return getMarkerInfo(marker).missingMemFunsForMock;
    }
 }

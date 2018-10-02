@@ -44,7 +44,7 @@ public class RemoveInitMockatorRefactoring extends MockatorRefactoring {
 
    public RemoveInitMockatorRefactoring(final IDocument doc, final ICElement cElement, final Optional<ITextSelection> selection,
                                         final ICProject cProject) {
-      super(cElement, selection, cProject);
+      super(cElement, selection);
       this.doc = doc;
    }
 

@@ -1,19 +1,25 @@
 package ch.hsr.ifs.cute.mockator.mockobject.expectations.qf;
 
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.Optional;
 
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.impl.factory.Lists;
+import org.eclipse.collections.impl.list.mutable.FastList;
 import org.eclipse.core.runtime.CoreException;
 
 import ch.hsr.ifs.iltis.core.core.data.AbstractPair;
 import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+
 import ch.hsr.ifs.iltis.cpp.core.ast.checker.VisitorReport;
-import ch.hsr.ifs.cute.mockator.base.misc.IdHelper.ProblemId;
+import ch.hsr.ifs.iltis.cpp.core.collections.StringList;
+
+import ch.hsr.ifs.cute.mockator.ids.IdHelper.ProblemId;
+import ch.hsr.ifs.cute.mockator.infos.ConsistentExpectationsInfo;
 import ch.hsr.ifs.cute.mockator.mockobject.asserteq.AssertEqualFinderVisitor;
 import ch.hsr.ifs.cute.mockator.mockobject.asserteq.AssertKind.ExpectedActualPair;
 import ch.hsr.ifs.cute.mockator.mockobject.expectations.MemFunCallExpectation;
@@ -34,8 +40,8 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
       for (final ExpectedActualPair expectedActual : getAssertedCalls(testFun)) {
          getExpectationsAndRegistrations(expectedActual).ifPresent((expReg) -> {
             final ExpectionsInfo expectations = getExpectations(testFun, expReg.getExpectations());
-            markDiffsIfNecessary(expectations.getExpectations(), expectations.getAssignExpectationsVector(), getCallRegistrations(expReg
-                  .getRegistrations()));
+            markDiffsIfNecessary(new FastList<>(expectations.getExpectations()), expectations.getAssignExpectationsVector(), getCallRegistrations(
+                  expReg.getRegistrations()));
          });
       }
    }
@@ -61,29 +67,23 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
       return new CallsVectorTypeVerifier(idExpr).isVectorOfCallsVector();
    }
 
-   private void markDiffsIfNecessary(final Collection<MemFunCallExpectation> expectedCalls, final IASTName toMark,
-         final Collection<ExistingMemFunCallRegistration> callRegistrations) {
-      final Collection<MemFunSignature> toRemove = orderPreservingDiff(expectedCalls, callRegistrations);
-      final Collection<MemFunSignature> toAdd = orderPreservingDiff(callRegistrations, expectedCalls);
+   private void markDiffsIfNecessary(final MutableList<MemFunCallExpectation> expectedCalls, final IASTName toMark,
+         final MutableList<ExistingMemFunCallRegistration> callRegistrations) {
+
+      final MutableList<MemFunCallExpectation> toRemove = orderPreservingDiff(expectedCalls, callRegistrations);
+      final MutableList<ExistingMemFunCallRegistration> toAdd = orderPreservingDiff(callRegistrations, expectedCalls);
 
       if (!toRemove.isEmpty() || !toAdd.isEmpty()) {
          mark(toMark, toRemove, toAdd);
       }
    }
 
-   private static Collection<MemFunSignature> orderPreservingDiff(final Collection<? extends MemFunSignature> setA,
-         final Collection<? extends MemFunSignature> setB) {
-      final Collection<MemFunSignature> diff = new LinkedHashSet<>();
-
-      for (final MemFunSignature signature : setA) {
-         if (!signature.isCovered(setB)) {
-            diff.add(signature);
-         }
-      }
-      return diff;
+   private static <T extends MemFunSignature> MutableList<T> orderPreservingDiff(final MutableList<T> setA,
+         final MutableList<? extends MemFunSignature> setB) {
+      return setA.select(m -> m.isCovered(setB), Lists.mutable.<T>ofInitialCapacity(setA.size()));
    }
 
-   private Collection<ExistingMemFunCallRegistration> getCallRegistrations(final IASTIdExpression vector) {
+   private MutableList<ExistingMemFunCallRegistration> getCallRegistrations(final IASTIdExpression vector) {
       try {
          final IASTTranslationUnit ast = getModelCache().getAST();
          final RegistrationCandidatesFinder finder = new RegistrationCandidatesFinder(ast, getCppStandard());
@@ -97,12 +97,17 @@ public class InconsistentExpectationsChecker extends TestFunctionChecker {
       return CppStandard.fromCompilerFlags(getProject());
    }
 
-   private void mark(final IASTName toMark, final Collection<MemFunSignature> toRemove, final Collection<MemFunSignature> toAdd) {
-      addNodeForReporting(new VisitorReport<>(getProblemId(), toMark), getCodanArgs(toRemove, toAdd));
+   private void mark(final IASTName toMark, final MutableList<MemFunCallExpectation> toRemove,
+         final MutableList<ExistingMemFunCallRegistration> toAdd) {
+      addNodeForReporting(new VisitorReport<>(getProblemId(), toMark), getInfo(toRemove, toAdd));
    }
 
-   private static Object[] getCodanArgs(final Collection<MemFunSignature> toRemove, final Collection<MemFunSignature> toAdd) {
-      return new ConsistentExpectationsCodanArgs(toRemove, toAdd).toArray();
+   private static ConsistentExpectationsInfo getInfo(final MutableList<MemFunCallExpectation> toRemove,
+         final MutableList<ExistingMemFunCallRegistration> toAdd) {
+      return new ConsistentExpectationsInfo().also(i -> {
+         i.expectationsToAdd = toAdd.collect(MemFunSignature::toString, StringList.newList(toAdd.size()));
+         i.expectationsToRemove = toRemove.collect(MemFunSignature::toString, StringList.newList(toRemove.size()));
+      });
    }
 
    private static ExpectionsInfo getExpectations(final IASTFunctionDefinition function, final IASTIdExpression expectedCalls) {

@@ -1,17 +1,16 @@
 package ch.hsr.ifs.cute.mockator.tests.linker.gnuoption;
 
-import ch.hsr.ifs.cute.mockator.tests.AbstractQuickfixTest;
-import ch.hsr.ifs.iltis.cpp.core.ast.checker.helper.IProblemId;
-import ch.hsr.ifs.cute.mockator.base.misc.IdHelper.ProblemId;
+import ch.hsr.ifs.cute.mockator.ids.IdHelper.ProblemId;
 import ch.hsr.ifs.cute.mockator.linker.wrapfun.gnuoption.qf.DeleteWrappedFunctionQuickFix;
 import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorQuickFix;
+import ch.hsr.ifs.cute.mockator.tests.AbstractQuickfixTest;
 
 
 public class DeleteWrappedFunctionQfTest extends AbstractQuickfixTest {
 
    @Override
-   protected IProblemId getProblemId() {
+   protected ProblemId getProblemId() {
       return ProblemId.WRAP_FUNCTION;
    }
 

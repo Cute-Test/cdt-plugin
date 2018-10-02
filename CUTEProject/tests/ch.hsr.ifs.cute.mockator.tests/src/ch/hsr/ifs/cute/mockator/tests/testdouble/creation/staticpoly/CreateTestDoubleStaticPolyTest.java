@@ -4,9 +4,9 @@ import java.util.Properties;
 
 import org.eclipse.ltk.core.refactoring.Refactoring;
 
-import ch.hsr.ifs.cute.mockator.tests.AbstractRefactoringTest;
 import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 import ch.hsr.ifs.cute.mockator.testdouble.creation.staticpoly.cppstd.RefactoringByStdFactory;
+import ch.hsr.ifs.cute.mockator.tests.AbstractRefactoringTest;
 
 
 public class CreateTestDoubleStaticPolyTest extends AbstractRefactoringTest {

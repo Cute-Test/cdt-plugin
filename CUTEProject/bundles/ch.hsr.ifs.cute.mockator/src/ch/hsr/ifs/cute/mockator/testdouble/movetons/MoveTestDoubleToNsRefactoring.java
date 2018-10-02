@@ -28,7 +28,7 @@ public class MoveTestDoubleToNsRefactoring extends MockatorRefactoring {
 
    public MoveTestDoubleToNsRefactoring(final CppStandard cppStd, final ICElement cElement, final Optional<ITextSelection> selection,
                                         final ICProject cProject) {
-      super(cElement, selection, cProject);
+      super(cElement, selection);
       this.cppStd = cppStd;
    }
 

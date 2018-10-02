@@ -7,6 +7,8 @@ import org.eclipse.cdt.internal.ui.editor.CEditor;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.ui.IMarkerResolution2;
 
+import ch.hsr.ifs.iltis.cpp.core.resources.info.MarkerInfo;
+
 import ch.hsr.ifs.cute.mockator.base.util.UiUtil;
 import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 
@@ -14,19 +16,19 @@ import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 @SuppressWarnings("restriction")
 public abstract class MockatorQuickFix extends AbstractCodanCMarkerResolution implements IMarkerResolution2 {
 
-   protected CodanArguments ca;
-   protected IMarker        marker;
-   protected boolean        shouldRunInCurrentThread;
-   private CEditor          cEditor;
+   protected MarkerInfo<?> info;
+   protected IMarker       marker;
+   protected boolean       shouldRunInCurrentThread;
+   private CEditor         cEditor;
 
    @Override
    public boolean isApplicable(final IMarker marker) {
-      ca = getCodanArguments(marker);
+      info = getMarkerInfo(marker);
       this.marker = marker;
       return super.isApplicable(marker);
    }
 
-   protected CodanArguments getCodanArguments(final IMarker marker) {
+   protected MarkerInfo<?> getMarkerInfo(final IMarker marker) {
       return null;
    }
 

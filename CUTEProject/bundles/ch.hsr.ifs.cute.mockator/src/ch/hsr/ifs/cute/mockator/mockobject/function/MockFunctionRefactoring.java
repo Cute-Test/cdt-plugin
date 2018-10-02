@@ -37,7 +37,7 @@ public class MockFunctionRefactoring extends MockatorRefactoring implements Mock
 
    public MockFunctionRefactoring(final CppStandard cppStd, final ICElement cElement, final Optional<ITextSelection> selection,
                                   final ICProject referencedProj, final ICProject mockatorProj) {
-      super(cElement, selection, referencedProj);
+      super(cElement, selection);
       this.cppStd = cppStd;
       this.mockatorProj = mockatorProj;
       destination = mockatorProj.getPath();

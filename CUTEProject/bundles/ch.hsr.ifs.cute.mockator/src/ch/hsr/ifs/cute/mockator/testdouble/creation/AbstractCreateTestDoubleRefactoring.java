@@ -28,7 +28,7 @@ import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorRefactoring;
 public abstract class AbstractCreateTestDoubleRefactoring extends MockatorRefactoring {
 
    public AbstractCreateTestDoubleRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject cProject) {
-      super(cElement, selection, cProject);
+      super(cElement, selection);
    }
 
    @Override

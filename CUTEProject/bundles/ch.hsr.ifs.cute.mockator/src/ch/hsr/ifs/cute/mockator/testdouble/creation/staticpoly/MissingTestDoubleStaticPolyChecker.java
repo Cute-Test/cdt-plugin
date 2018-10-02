@@ -11,7 +11,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTTypeId;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.checker.VisitorReport;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
-import ch.hsr.ifs.cute.mockator.base.misc.IdHelper.ProblemId;
+
+import ch.hsr.ifs.cute.mockator.ids.IdHelper.ProblemId;
+import ch.hsr.ifs.cute.mockator.infos.MissingTestDoubleStaticPolyInfo;
 import ch.hsr.ifs.cute.mockator.testdouble.support.TestFunctionChecker;
 
 
@@ -34,7 +36,7 @@ public class MissingTestDoubleStaticPolyChecker extends TestFunctionChecker {
 
          if (binding instanceof IProblemBinding) {
             if (isPartOfTemplateId(name) && isTypeId(name)) {
-            	addNodeForReporting(getProblemId(), name, name.toString());
+            	addNodeForReporting(getProblemId(), name, new MissingTestDoubleStaticPolyInfo(name.toString()));
             }
          }
 

@@ -1,10 +1,10 @@
 package ch.hsr.ifs.cute.mockator.mockobject.registrations.finder;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.impl.factory.Lists;
 
 import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 import ch.hsr.ifs.cute.mockator.project.properties.CppStdFactory;
@@ -18,8 +18,8 @@ public class CallRegistrationCollector {
       this.cppStd = cppStd;
    }
 
-   public Collection<ExistingMemFunCallRegistration> getRegistrations(final List<IASTName> registrationVectorUses) {
-      final List<ExistingMemFunCallRegistration> callRegistrations = new ArrayList<>();
+   public MutableList<ExistingMemFunCallRegistration> getRegistrations(final List<IASTName> registrationVectorUses) {
+      final MutableList<ExistingMemFunCallRegistration> callRegistrations = Lists.mutable.empty();
       final RegistrationFinder finder = getRegistrationFinder();
 
       for (final IASTName usage : registrationVectorUses) {

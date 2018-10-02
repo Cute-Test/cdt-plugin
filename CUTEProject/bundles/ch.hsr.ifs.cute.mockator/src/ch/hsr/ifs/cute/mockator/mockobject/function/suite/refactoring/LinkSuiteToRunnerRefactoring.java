@@ -58,7 +58,7 @@ public class LinkSuiteToRunnerRefactoring extends MockatorRefactoring {
    private IPath                  destinationPath;
 
    public LinkSuiteToRunnerRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject cProject) {
-      super(cElement, selection, cProject);
+      super(cElement, selection);
    }
 
    @Override

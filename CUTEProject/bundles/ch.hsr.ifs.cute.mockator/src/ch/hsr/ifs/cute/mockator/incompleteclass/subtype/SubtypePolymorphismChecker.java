@@ -29,10 +29,10 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.core.ast.checker.VisitorReport;
-import ch.hsr.ifs.iltis.cpp.core.ast.checker.helper.IProblemId;
 import ch.hsr.ifs.iltis.cpp.core.ast.visitor.SimpleVisitor;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
-import ch.hsr.ifs.cute.mockator.base.misc.IdHelper.ProblemId;
+
+import ch.hsr.ifs.cute.mockator.ids.IdHelper.ProblemId;
 import ch.hsr.ifs.cute.mockator.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.cute.mockator.incompleteclass.checker.AbstractMissingMemFunChecker;
 
@@ -106,9 +106,9 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
 		}
 
 		@Override
-		public Set<? extends IProblemId> getProblemIds() {
+		public Set<ProblemId> getProblemIds() {
 			return EnumSet.of(getProblemId());
-		}
+      }
 
 	}
 

@@ -24,7 +24,7 @@ import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorRefactoring;
 public abstract class LinkerRefactoring extends MockatorRefactoring {
 
    public LinkerRefactoring(final ICElement element, final Optional<ITextSelection> selection, final ICProject project) {
-      super(element, selection, project);
+      super(element, selection);
    }
 
    @Override

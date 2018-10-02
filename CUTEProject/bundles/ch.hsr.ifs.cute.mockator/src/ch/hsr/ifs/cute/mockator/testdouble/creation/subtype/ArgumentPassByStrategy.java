@@ -1,9 +1,7 @@
 package ch.hsr.ifs.cute.mockator.testdouble.creation.subtype;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
@@ -20,10 +18,12 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPReferenceType;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+
+import ch.hsr.ifs.iltis.cpp.core.resources.info.IStringifyable;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 
-enum ArgumentPassByStrategy {
+public enum ArgumentPassByStrategy implements IStringifyable<ArgumentPassByStrategy> {
 
    asPointer {
 
@@ -47,14 +47,15 @@ enum ArgumentPassByStrategy {
    }
    };
 
-   private static final ICPPNodeFactory                     nodeFactory    = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private static final Map<String, ArgumentPassByStrategy> STRING_TO_ENUM = new HashMap<>();
+   private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+   // TODO(tstauber - Oct 1, 2018) REMOVE AFTER TESTING 
+   //   private static final Map<String, ArgumentPassByStrategy> STRING_TO_ENUM = new HashMap<>();
 
-   static {
-      for (final ArgumentPassByStrategy standard : values()) {
-         STRING_TO_ENUM.put(standard.toString(), standard);
-      }
-   }
+   //   static {
+   //      for (final ArgumentPassByStrategy standard : values()) {
+   //         STRING_TO_ENUM.put(standard.toString(), standard);
+   //      }
+   //   }
 
    public abstract void adaptArguments(IASTName problemArg, String nameOfNewInstance, ASTRewrite rewriter);
 
@@ -99,16 +100,29 @@ enum ArgumentPassByStrategy {
    public static ArgumentPassByStrategy getStrategy(final IType type) {
       if (type instanceof ICPPReferenceType) {
          return asReference;
-      } else if (type instanceof IPointerType) { return asPointer; }
+      } else if (type instanceof IPointerType) {
+         return asPointer;
+      }
 
       throw new ILTISException("Pass by value is not possible with subtype polymorphism").rethrowUnchecked();
    }
 
-   public static ArgumentPassByStrategy fromName(final String name) {
-      final ArgumentPassByStrategy strategy = STRING_TO_ENUM.get(name);
+   //   public static ArgumentPassByStrategy fromName(final String name) {
+   //      final ArgumentPassByStrategy strategy = valueOf(name);
+   ////      final ArgumentPassByStrategy strategy = STRING_TO_ENUM.get(name);
+   //
+   //      if (strategy == null) { throw new ILTISException(String.format("Unknown pass by strategy '%s'", name)).rethrowUnchecked(); }
+   //
+   //      return strategy;
+   //   }
 
-      if (strategy == null) { throw new ILTISException(String.format("Unknown pass by strategy '%s'", name)).rethrowUnchecked(); }
+   @Override
+   public ArgumentPassByStrategy unstringify(String string) {
+      return valueOf(string);
+   }
 
-      return strategy;
+   @Override
+   public String stringify() {
+      return toString();
    }
 }

@@ -8,9 +8,18 @@ import ch.hsr.ifs.iltis.core.core.resources.StringUtil;
 public abstract class MemFunSignature implements Comparable<MemFunSignature> {
 
    private static final String REGEX_PREFIX = "^";
-   private final String        funSignature;
+   private String              funSignature;
+
+   /**
+    * Default constructor for IStringifyable
+    */
+   public MemFunSignature() {}
 
    public MemFunSignature(final String funSignature) {
+      setFunSignature(funSignature);
+   }
+
+   protected void setFunSignature(final String funSignature) {
       this.funSignature = StringUtil.unquote(funSignature);
    }
 
@@ -57,4 +66,5 @@ public abstract class MemFunSignature implements Comparable<MemFunSignature> {
 
       return false;
    }
+
 }

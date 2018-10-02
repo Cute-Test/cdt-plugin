@@ -10,10 +10,9 @@ import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.checker.SimpleChecker;
 import ch.hsr.ifs.iltis.cpp.core.ast.checker.VisitorReport;
-import ch.hsr.ifs.iltis.cpp.core.ast.checker.helper.IProblemId;
 import ch.hsr.ifs.iltis.cpp.core.ast.visitor.SimpleVisitor;
 
-import ch.hsr.ifs.cute.mockator.base.misc.IdHelper.ProblemId;
+import ch.hsr.ifs.cute.mockator.ids.IdHelper.ProblemId;
 import ch.hsr.ifs.cute.mockator.project.properties.FunctionsToAnalyze;
 
 
@@ -34,16 +33,16 @@ public abstract class TestFunctionChecker extends SimpleChecker<ProblemId> imple
             final IASTFunctionDefinition candidate = (IASTFunctionDefinition) declaration;
 
             if (isValidTestFunction(candidate)) {
-            	arguments.get(0).accept(new VisitorReport<ProblemId>(getProblemId(), candidate));
+               arguments.get(0).accept(new VisitorReport<ProblemId>(getProblemId(), candidate));
             }
 
             return PROCESS_SKIP;
          }
 
-		@Override
-		public Set<? extends IProblemId> getProblemIds() {
-			return EnumSet.of(getProblemId());
-		}
+         @Override
+         public Set<ProblemId> getProblemIds() {
+            return EnumSet.of(getProblemId());
+         }
       };
    }
 

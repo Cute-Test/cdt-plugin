@@ -27,6 +27,6 @@ public class ToggleTracingFunCallRefactoringTest extends AbstractRefactoringTest
    @Override
    protected Refactoring createRefactoring() {
       return new ToggleTracingFunCallRefactoring(cppStandard, getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(),
-            getCurrentCProject(), linkedEditStrategy);
+            linkedEditStrategy);
    }
 }

@@ -1,17 +1,16 @@
 package ch.hsr.ifs.cute.mockator.tests.fakeobject.subtype;
 
-import ch.hsr.ifs.cute.mockator.tests.AbstractQuickfixTest;
-import ch.hsr.ifs.iltis.cpp.core.ast.checker.helper.IProblemId;
-import ch.hsr.ifs.cute.mockator.base.misc.IdHelper.ProblemId;
 import ch.hsr.ifs.cute.mockator.fakeobject.FakeObjectQuickFix;
+import ch.hsr.ifs.cute.mockator.ids.IdHelper.ProblemId;
 import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorQuickFix;
+import ch.hsr.ifs.cute.mockator.tests.AbstractQuickfixTest;
 
 
 public class FakeObjectSubTypeQfTest extends AbstractQuickfixTest {
 
    @Override
-   protected IProblemId getProblemId() {
+   protected ProblemId getProblemId() {
       return ProblemId.SUBTYPE_MISSING_MEMFUNS_IMPL;
    }
 

@@ -47,7 +47,7 @@ public class ConvertToMockObjectRefactoring extends MockatorRefactoring {
 
    public ConvertToMockObjectRefactoring(final CppStandard cppStd, final ICElement element, final Optional<ITextSelection> selection,
                                          final ICProject cproject, final LinkedEditModeStrategy linkedEditStrategy) {
-      super(element, selection, cproject);
+      super(element, selection);
       this.cppStd = cppStd;
       this.linkedEditStrategy = linkedEditStrategy;
    }

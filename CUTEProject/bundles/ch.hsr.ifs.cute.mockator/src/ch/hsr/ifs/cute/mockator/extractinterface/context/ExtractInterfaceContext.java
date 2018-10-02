@@ -22,7 +22,7 @@ import ch.hsr.ifs.iltis.core.core.functional.functions.Builder;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringContext;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;
 
-
+//FIXME replace with ExtractInterfaceInfo
 public final class ExtractInterfaceContext {
 
    private final ICProject                              cProject;

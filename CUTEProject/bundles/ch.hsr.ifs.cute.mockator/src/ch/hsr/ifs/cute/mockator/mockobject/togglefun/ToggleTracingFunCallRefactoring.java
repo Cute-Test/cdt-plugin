@@ -12,7 +12,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.cdt.core.model.ICElement;
-import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -46,8 +45,8 @@ public class ToggleTracingFunCallRefactoring extends MockatorRefactoring {
    private MockObject                   mockObject;
 
    public ToggleTracingFunCallRefactoring(final CppStandard cppStd, final ICElement element, final Optional<ITextSelection> selection,
-                                          final ICProject cProject, final LinkedEditModeStrategy linkedEdit) {
-      super(element, selection, cProject);
+                                          final LinkedEditModeStrategy linkedEdit) {
+      super(element, selection);
       this.cppStd = cppStd;
       this.linkedEdit = linkedEdit;
    }
