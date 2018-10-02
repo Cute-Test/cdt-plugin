@@ -1,233 +1,178 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-	<extension-point id="wizardAddition" name="%extension-point.name" schema="schema/ch.hsr.ifs.cute.ui.wizardAddition.exsd"/>
-	<extension point="org.eclipse.ui.newWizards">
-		<wizard
+    <extension-point id="wizardAddition" name="%extension-point.name" schema="schema/ch.hsr.ifs.cute.ui.wizardAddition.exsd"/>
+    <extension point="org.eclipse.ui.newWizards">
+        <wizard
 		category="org.eclipse.cdt.ui.newCWizards"
 		finalPerspective="org.eclipse.cdt.ui.CPerspective"
 		icon="icons/logo_16.png"
 		id="cute_plugin.createSuiteWizard"
 		name="%wizard.name.Suite">
-			<class class="ch.hsr.ifs.cute.ui.project.wizard.NewSuiteFileCreationWizard">
-				<parameter name="cfile" value="true"/>
-			</class>
-			<description>%wizard.description.AddingSuite</description>
-		</wizard>
-	</extension>
- <extension
-       point="org.eclipse.ui.actionSets">
-    <actionSet
+            <class class="ch.hsr.ifs.cute.ui.project.wizard.NewSuiteFileCreationWizard">
+                <parameter name="cfile" value="true"/>
+            </class>
+            <description>%wizard.description.AddingSuite</description>
+        </wizard>
+    </extension>
+    <extension point="org.eclipse.ui.actionSets">
+        <actionSet
           id="ch.hsr.ifr.cute.sourceGeneratorActions"
           label="%actionSet.label.TestSourceActions"
           visible="true">
-       <menu
+            <menu
              id="ch.hsr.ifs.cute.menu"
-             label="%menu.label.TestSourceGenerators">
-       </menu>
-       <action
+             label="%menu.label.TestSourceGenerators"></menu>
+            <action
              class="ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate"
              definitionId="ch.hsr.ifs.cute.newTestFunctionCommand"
              id="ch.hsr.ifs.cute.newTestFunctionAction"
-             label="%action.label.NewTestFunction">
-       </action>
-       <action
+             label="%action.label.NewTestFunction"></action>
+            <action
              class="ch.hsr.ifs.cute.ui.sourceactions.AddTestToSuiteDelegate"
              definitionId="ch.hsr.ifs.cute.addTestCommand"
              id="ch.hsr.ifs.cute.addTestToSuiteAction"
              label="%action.label.AddTest2"
              style="push"
-             tooltip="%addTestToSuitDesc">
-       </action>
-    </actionSet>
- </extension>
- 
-  <extension
-       point="org.eclipse.ui.popupMenus">
-    <viewerContribution
+             tooltip="%addTestToSuitDesc"></action>
+        </actionSet>
+    </extension>
+    <extension point="org.eclipse.ui.popupMenus">
+        <viewerContribution
           id="ch.hsr.ifs.cute.cEditorContribution"
           targetID="#CEditorContext">
-       <action
+            <action
              class="ch.hsr.ifs.cute.ui.sourceactions.AddTestToSuiteDelegate"
              definitionId="ch.hsr.ifs.cute.addTestCommand"
              id="ch.hsr.ifs.cute.addTestMemberSuiteAction"
              label="%action.label.AddTest2"
-             menubarPath="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cute.testCodeMenu">
-       </action>
-       <action
+             menubarPath="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cute.testCodeMenu"></action>
+            <action
              class="ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate"
              definitionId="ch.hsr.ifs.cute.newTestFunctionCommand"
              id="ch.hsr.ifs.cute.newTestFunctionAction"
              label="%action.label.NewTestFunction2"
-             menubarPath="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cute.testCodeMenu">
-       </action>
-       <menu
+             menubarPath="org.eclipse.cdt.ui.source.menu/ch.hsr.ifs.cute.testCodeMenu"></action>
+            <menu
              id="ch.hsr.ifs.cute.testCodeMenu"
              label="%menu.label.TestCode"
              path="org.eclipse.cdt.ui.source.menu">
-          <groupMarker
-                name="ch.hsr.ifs.cute.testCodeMenu">
-          </groupMarker>
-       </menu>
-    </viewerContribution>
- </extension>
- <extension
-       point="org.eclipse.ui.commands">
-    <command
+                <groupMarker
+                name="ch.hsr.ifs.cute.testCodeMenu"></groupMarker>
+            </menu>
+        </viewerContribution>
+    </extension>
+    <extension point="org.eclipse.ui.commands">
+        <command id="ch.hsr.ifs.cute.newTestFunctionCommand"
           categoryId="org.eclipse.cdt.ui.category.source"
           description="%command.description.CreateTestFunction"
-          id="ch.hsr.ifs.cute.newTestFunctionCommand"
-          name="%command.name.NewTestFunction">
-    </command>
-    <command
+          name="%command.name.NewTestFunction"/>
+        <command id="ch.hsr.ifs.cute.addTestCommand"
           categoryId="org.eclipse.cdt.ui.category.source"
           description="%addTestToSuitDesc"
-          id="ch.hsr.ifs.cute.addTestCommand"
-          name="%command.name.AddTest">
-    </command>
-    <command
-          id="ch.hsr.ifs.cute.ui.changeCuteVersionCommand"
-          name="%command.name.1">
-    </command>
-    <command
-          id="ch.hsr.ifs.cute.ui.addRemoveCuteNatureCommand"
+          name="%command.name.AddTest"/>
+        <command id="ch.hsr.ifs.cute.ui.changeCuteVersionCommand"
+          name="%command.name.1"/>
+        <command id="ch.hsr.ifs.cute.ui.addRemoveCuteNatureCommand"
           name="%command.name.2">
-       <commandParameter
-             id="ch.hsr.ifs.cute.ui.handleCuteNatureParameter"
+            <commandParameter id="ch.hsr.ifs.cute.ui.handleCuteNatureParameter"
              name="Add/Remove CUTE Nature"
-             optional="true">
-       </commandParameter>
-    </command>
- </extension>
- <extension
-       point="org.eclipse.ui.bindings">
-    <key
+             optional="true"></commandParameter>
+        </command>
+    </extension>
+    <extension point="org.eclipse.ui.bindings">
+        <key
           commandId="ch.hsr.ifs.cute.newTestFunctionCommand"
           contextId="org.eclipse.cdt.ui.cEditorScope"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-          sequence="M1+M3+F">
-    </key>
-    <key
+          sequence="M1+M3+F"></key>
+        <key
           commandId="ch.hsr.ifs.cute.addTestCommand"
           contextId="org.eclipse.cdt.ui.cEditorScope"
           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-          sequence="M1+M3+G">
-    </key>
- </extension>
- 
- <extension
-       point="org.eclipse.core.expressions.propertyTesters">
-    <propertyTester
+          sequence="M1+M3+G"></key>
+    </extension>
+    <extension point="org.eclipse.core.expressions.propertyTesters">
+        <propertyTester id="ch.hsr.ifs.ProjectNaturePropertyTester"
           class="ch.hsr.ifs.cute.ui.project.ProjectNaturePropertyTester"
-          id="ch.hsr.ifs.ProjectNaturePropertyTester"
           namespace="ch.hsr.ifs"
           properties="projectNature1"
-          type="org.eclipse.core.runtime.IAdaptable">
-    </propertyTester>
- </extension>
-
- <extension
-       id="ch.hsr.ifs.cute.ui.cuteProblem"
+          type="org.eclipse.core.runtime.IAdaptable"></propertyTester>
+    </extension>
+    <extension id="ch.hsr.ifs.cute.ui.cuteProblem"
        name="%extension.name.0"
        point="org.eclipse.core.resources.markers">
-    <super
-          type="org.eclipse.core.resources.problemmarker">
-    </super>
-    <super
-          type="org.eclipse.core.resources.textmarker">
-    </super>
-    <super
-          type="org.eclipse.cdt.codan.core.codanProblem">
-    </super>
-    <persistent
-          value="false">
-    </persistent>
- </extension>
-   <extension
-       point="org.eclipse.ui.navigator.navigatorContent">
- <commonWizard
+        <super
+          type="org.eclipse.core.resources.problemmarker"/>
+        <super
+          type="org.eclipse.core.resources.textmarker"/>
+        <super
+          type="org.eclipse.cdt.codan.core.codanProblem"/>
+        <persistent
+          value="false"/>
+    </extension>
+    <extension point="org.eclipse.ui.navigator.navigatorContent">
+        <commonWizard
             associatedExtensionId="org.eclipse.cdt.ui.navigator.content"
             menuGroupId="org.eclipse.cdt.ui"
             type="new"
             wizardId="cute_plugin.createSuiteWizard">
-         <enablement>
-            	<instanceof value="org.eclipse.cdt.core.model.ICElement" />
+            <enablement>
+                <instanceof value="org.eclipse.cdt.core.model.ICElement" />
             </enablement>
-	   </commonWizard>
- </extension>
- 
-    <extension
+        </commonWizard>
+    </extension>
+    <extension point="org.eclipse.core.resources.natures"
          id="ch.hsr.ifs.cute.ui.cutenature"
-         name="%extension.name.1"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run
-               class="ch.hsr.ifs.cute.ui.project.CuteNature">
-         </run>
-      </runtime>
-      <requires-nature
-            id="org.eclipse.cdt.core.cnature">
-      </requires-nature>
-   </extension>
- 
- <extension
-       point="org.eclipse.ui.ide.projectNatureImages">
-    <image
+         name="%extension.name.1">
+        <runtime>
+            <run
+               class="ch.hsr.ifs.cute.ui.project.CuteNature"/>
+        </runtime>
+        <requires-nature
+            id="org.eclipse.cdt.core.cnature"/>
+    </extension>
+    <extension point="org.eclipse.ui.ide.projectNatureImages">
+        <image id="ch.hsr.ifs.cute.cuteProjectImage"
           icon="icons/ovr16/cute_ovr.png"
-          id="ch.hsr.ifs.cute.cuteProjectImage"
-          natureId="ch.hsr.ifs.cute.ui.cutenature">
-    </image>
- </extension>
- 
-    <extension
+          natureId="ch.hsr.ifs.cute.ui.cutenature"></image>
+    </extension>
+    <extension point="org.eclipse.cdt.ui.CDTWizard"
          id="cute wizard"
-         name="%extension.name.2"
-         point="org.eclipse.cdt.ui.CDTWizard">
-       <wizard
+         name="%extension.name.2">
+        <wizard
              class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteProjectCategoryWizard"
-             name="CUTE Category">
-       </wizard>
-       <wizard
+             name="CUTE Category"></wizard>
+        <wizard
              class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteProjectWizard"
-             name="CUTE Project">
-       </wizard>
-       <wizard
+             name="CUTE Project"></wizard>
+        <wizard
              class="ch.hsr.ifs.cute.ui.project.wizard.NewCuteSuiteProjectWizard"
-             name="CUTE Suite">
-       </wizard>
-   </extension>
-    <extension
-         point="org.eclipse.cdt.codan.core.checkers"
+             name="CUTE Suite"></wizard>
+    </extension>
+    <extension point="org.eclipse.cdt.codan.core.checkers"
          id="org.eclipse.cdt.codan.core.internal.checkers">
-       <checker
+        <checker id="ch.hsr.ifs.cute.ui.unregisteredTestChecker"
              class="ch.hsr.ifs.cute.ui.checkers.UnregisteredTestChecker"
-             id="ch.hsr.ifs.cute.ui.unregisteredTestChecker"
              name="%checker.name">
-      <problem
+            <problem id="ch.hsr.ifs.cute.ui.problems.unregisteredTestMarker"
             category="ch.hsr.ifs.cute.cuteProblemCategory"
             defaultEnabled="true"
             defaultSeverity="Warning"
-            id="ch.hsr.ifs.cute.unregisteredTestMarker"
             messagePattern="%problem.messagePattern"
             name="%problem.name"
-            markerType="ch.hsr.ifs.cute.ui.cuteProblem">
-      </problem>
-      </checker>
-       <category
-             id="ch.hsr.ifs.cute.cuteProblemCategory"
-             name="%category.name">
-       </category>
-   </extension>
-    <extension
-          point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
-       <resolution
-             class="ch.hsr.ifs.cute.ui.checkers.UnregisteredTestResolution"
-             problemId="ch.hsr.ifs.cute.unregisteredTestMarker">
-       </resolution>
+            markerType="ch.hsr.ifs.cute.ui.cuteProblem"/>
+        </checker>
+        <category id="ch.hsr.ifs.cute.cuteProblemCategory"
+             name="%category.name"/>
     </extension>
-        <extension
+    <extension point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
+        <resolution class="ch.hsr.ifs.cute.ui.checkers.UnregisteredTestResolution"
+             problemId="ch.hsr.ifs.cute.problems.unregisteredTestMarker"/>
+    </extension>
+    <extension
           point="org.eclipse.ui.editors.markerAnnotationSpecification">
-       <specification
+        <specification
              annotationType="ch.hsr.ifs.cute.ui.unregisteredTestAnnotation"
              colorPreferenceKey="ch.hsr.ifs.cute.ui.keys.unregisteredTest.colorPreference"
              colorPreferenceValue="255,255,0"
@@ -252,158 +197,124 @@
              textStylePreferenceKey="ch.hsr.ifs.cute.ui.keys.unregisteredTest.textStylePreference"
              textStylePreferenceValue="SQUIGGLES"
              verticalRulerPreferenceKey="ch.hsr.ifs.cute.ui.keys.unregisteredTest.verticalRulerPreference"
-             verticalRulerPreferenceValue="true">
-       </specification>
+             verticalRulerPreferenceValue="true"></specification>
     </extension>
-    <extension
-          point="org.eclipse.ui.editors.annotationTypes">
-       <type
+    <extension point="org.eclipse.ui.editors.annotationTypes">
+        <type
              markerSeverity="1"
              markerType="ch.hsr.ifs.cute.ui.cuteProblem"
              name="ch.hsr.ifs.cute.ui.unregisteredTestAnnotation"
-             super="org.eclipse.ui.workbench.texteditor.warning">
-       </type>
+             super="org.eclipse.ui.workbench.texteditor.warning"></type>
     </extension>
-    <extension
-          point="org.eclipse.ui.ide.markerResolution">
-       <markerResolutionGenerator
+    <extension point="org.eclipse.ui.ide.markerResolution">
+        <markerResolutionGenerator
              class="org.eclipse.cdt.codan.internal.ui.CodanProblemMarkerResolutionGenerator"
-             markerType="ch.hsr.ifs.cute.ui.cuteProblem">
-       </markerResolutionGenerator>
+             markerType="ch.hsr.ifs.cute.ui.cuteProblem"></markerResolutionGenerator>
     </extension>
-    <extension
+    <extension point="org.eclipse.ui.menus"
           id="ch.hsr.ifs.cute.cuteMenuExtension"
-          name="CUTE Menu Extension"
-          point="org.eclipse.ui.menus">
-       <menuContribution
+          name="CUTE Menu Extension">
+        <menuContribution
              locationURI="popup:org.eclipse.ui.popup.any?after=buildGroup">
-          <menu
+            <menu
                 id="ch.hsr.ifs.cuteMenu"
                 label="%menu.label.0">
-             <command
+                <command
                    commandId="ch.hsr.ifs.cute.ui.addRemoveCuteNatureCommand"
                    label="%command.name.2"
                    style="push">
-                <visibleWhen>
-                   <with
-                         variable="activeMenuSelection">
-                      <iterate
+                    <visibleWhen>
+                        <with variable="activeMenuSelection">
+                            <iterate
                             ifEmpty="false"
                             operator="and">
-                         <adapt
-                               type="org.eclipse.core.resources.IProject">
-                            <and>
-                               <test
-                                     property="org.eclipse.core.resources.projectNature"
-                                     value="org.eclipse.cdt.core.cnature">
-                               </test>
-                               <not>
-                                  <test
-                                        property="org.eclipse.core.resources.projectNature"
-                                        value="ch.hsr.ifs.cute.ui.cutenature">
-                                  </test>
-                               </not>
-                            </and>
-                         </adapt>
-                      </iterate>
-                   </with>
-                </visibleWhen>
-                <parameter
-                      name="ch.hsr.ifs.cute.ui.handleCuteNatureParameter"
-                      value="add">
-                </parameter>
-             </command>
-             <command
+                                <adapt type="org.eclipse.core.resources.IProject">
+                                    <and>
+                                        <test property="org.eclipse.core.resources.projectNature"
+                                     value="org.eclipse.cdt.core.cnature"/>
+                                        <not>
+                                            <test property="org.eclipse.core.resources.projectNature"
+                                        value="ch.hsr.ifs.cute.ui.cutenature"/>
+                                        </not>
+                                    </and>
+                                </adapt>
+                            </iterate>
+                        </with>
+                    </visibleWhen>
+                    <parameter name="ch.hsr.ifs.cute.ui.handleCuteNatureParameter"
+                      value="add"/>
+                </command>
+                <command
                    commandId="ch.hsr.ifs.cute.ui.addRemoveCuteNatureCommand"
                    label="%command.name.3"
                    style="push">
-                <visibleWhen>
-                   <with
-                         variable="activeMenuSelection">
-                      <iterate
+                    <visibleWhen>
+                        <with variable="activeMenuSelection">
+                            <iterate
                             ifEmpty="false"
                             operator="and">
-                         <adapt
-                               type="org.eclipse.core.resources.IProject">
-                            <test
-                                  property="org.eclipse.core.resources.projectNature"
-                                  value="ch.hsr.ifs.cute.ui.cutenature">
-                            </test>
-                         </adapt>
-                      </iterate>
-                   </with>
-                </visibleWhen>
-                <parameter
-                      name="ch.hsr.ifs.cute.ui.handleCuteNatureParameter"
-                      value="remove">
-                </parameter>
-             </command>
-             <command
+                                <adapt type="org.eclipse.core.resources.IProject">
+                                    <test property="org.eclipse.core.resources.projectNature"
+                                  value="ch.hsr.ifs.cute.ui.cutenature"/>
+                                </adapt>
+                            </iterate>
+                        </with>
+                    </visibleWhen>
+                    <parameter name="ch.hsr.ifs.cute.ui.handleCuteNatureParameter"
+                      value="remove"/>
+                </command>
+                <command
                    commandId="ch.hsr.ifs.cute.ui.changeCuteVersionCommand"
                    label="%action.label.0"
                    style="push">
-                <visibleWhen>
-                   <with
-                         variable="activeMenuSelection">
-                      <iterate
+                    <visibleWhen>
+                        <with variable="activeMenuSelection">
+                            <iterate
                             ifEmpty="false"
                             operator="and">
-                         <adapt
-                               type="org.eclipse.core.resources.IProject">
-                            <test
-                                  property="org.eclipse.core.resources.projectNature"
-                                  value="org.eclipse.cdt.core.cnature">
-                            </test>
-                         </adapt>
-                      </iterate>
-                   </with>
-                </visibleWhen>
-             </command>
-          </menu>
-
-       </menuContribution>
+                                <adapt type="org.eclipse.core.resources.IProject">
+                                    <test property="org.eclipse.core.resources.projectNature"
+                                  value="org.eclipse.cdt.core.cnature"/>
+                                </adapt>
+                            </iterate>
+                        </with>
+                    </visibleWhen>
+                </command>
+            </menu>
+        </menuContribution>
     </extension>
-    <extension
-          point="org.eclipse.ui.handlers">
-       <handler
+    <extension point="org.eclipse.ui.handlers">
+        <handler
              class="ch.hsr.ifs.cute.ui.actions.AddRemoveCuteNatureAction"
              commandId="ch.hsr.ifs.cute.ui.addRemoveCuteNatureCommand">
-          <enabledWhen>
-             <with
-                   variable="activeMenuSelection">
-                <iterate
+            <enabledWhen>
+                <with variable="activeMenuSelection">
+                    <iterate
                       ifEmpty="false"
                       operator="and">
-                   <adapt
-                         type="org.eclipse.core.resources.IProject">
-                      <test
-                            property="org.eclipse.core.resources.projectNature"
-                            value="org.eclipse.cdt.core.cnature">
-                      </test>
-                   </adapt>
-                </iterate>
-             </with>
-          </enabledWhen>
-       </handler>
-       <handler
+                        <adapt type="org.eclipse.core.resources.IProject">
+                            <test property="org.eclipse.core.resources.projectNature"
+                            value="org.eclipse.cdt.core.cnature"/>
+                        </adapt>
+                    </iterate>
+                </with>
+            </enabledWhen>
+        </handler>
+        <handler
              class="ch.hsr.ifs.cute.ui.actions.ChangeCuteVersionAction"
              commandId="ch.hsr.ifs.cute.ui.changeCuteVersionCommand">
-          <enabledWhen>
-             <with
-                   variable="activeMenuSelection">
-                <iterate
+            <enabledWhen>
+                <with variable="activeMenuSelection">
+                    <iterate
                       ifEmpty="false"
                       operator="and">
-                   <adapt
-                         type="org.eclipse.core.resources.IProject">
-                      <test
-                            property="org.eclipse.core.resources.projectNature"
-                            value="ch.hsr.ifs.cute.ui.cutenature">
-                      </test>
-                   </adapt>
-                </iterate>
-             </with>
-          </enabledWhen>
-       </handler>
+                        <adapt type="org.eclipse.core.resources.IProject">
+                            <test property="org.eclipse.core.resources.projectNature"
+                            value="ch.hsr.ifs.cute.ui.cutenature"/>
+                        </adapt>
+                    </iterate>
+                </with>
+            </enabledWhen>
+        </handler>
     </extension>
 </plugin>
