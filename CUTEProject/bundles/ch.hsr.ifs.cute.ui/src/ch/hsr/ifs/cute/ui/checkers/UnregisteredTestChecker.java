@@ -11,7 +11,6 @@ package ch.hsr.ifs.cute.ui.checkers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDeclarator;
@@ -32,10 +31,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+import ch.hsr.ifs.iltis.cpp.core.wrappers.AbstractIndexAstChecker;
+
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.ui.ASTUtil;
 import ch.hsr.ifs.cute.ui.FunctorFinderVisitor;
 import ch.hsr.ifs.cute.ui.IndirectAssertStatementCheckVisitor;
+import ch.hsr.ifs.cute.ui.ids.IdHelper.ProblemId;
 import ch.hsr.ifs.cute.ui.sourceactions.ASTHelper;
 
 
@@ -89,7 +91,7 @@ public class UnregisteredTestChecker extends AbstractIndexAstChecker {
          if (iastDeclaration instanceof IASTFunctionDefinition) {
             IASTFunctionDefinition iastFunctionDefinition = (IASTFunctionDefinition) iastDeclaration;
             if (!(registeredFunctionFinder.getRegisteredFunctionNames().contains(index.adaptBinding(toBeRegisteredBinding)))) {
-               reportProblem("ch.hsr.ifs.cute.unregisteredTestMarker", iastFunctionDefinition.getDeclarator());
+               reportProblem(ProblemId.UNREGISTERED_TEST, iastFunctionDefinition.getDeclarator());
             }
          }
       } catch (CoreException e) {
