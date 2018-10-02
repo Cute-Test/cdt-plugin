@@ -16,4 +16,7 @@ location "https://www.cevelop.com/iltis-unstable" {
 	ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group lazy
 	ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group lazy
 	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group lazy
+	
+	/* Add pASTa here, so it will be available in instances started from the plug-in development IDE */
+	ch.hsr.ifs.iltis.testing.tools.pasta.feature.feature.group lazy
 }
