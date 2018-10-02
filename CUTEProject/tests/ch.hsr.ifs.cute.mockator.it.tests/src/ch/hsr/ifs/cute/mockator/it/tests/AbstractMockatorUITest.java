@@ -88,6 +88,7 @@ public abstract class AbstractMockatorUITest {
       bot.tree().expandNode("C/C++").select("C++ Project");
       bot.button("Next >").click();
       return shell;
+      //TODO add Mockator nature to project
    }
 
    protected SWTBotMenu getSubMenuItem(final SWTBotMenu parentMenu, final String itemText) throws WidgetNotFoundException {
