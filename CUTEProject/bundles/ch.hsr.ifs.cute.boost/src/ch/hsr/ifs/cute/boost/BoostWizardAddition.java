@@ -25,24 +25,24 @@ import ch.hsr.ifs.cute.ui.ICuteWizardAdditionHandler;
  */
 public class BoostWizardAddition implements ICuteWizardAddition {
 
-   boolean copyBoost;
+    boolean copyBoost;
 
-   @Override
-   public Control createComposite(Composite parent) {
-      final Button check = new Button(parent, SWT.CHECK);
-      check.setText(Messages.BoostWizardAddition_0);
-      check.addSelectionListener(new SelectionAdapter() {
+    @Override
+    public Control createComposite(Composite parent) {
+        final Button check = new Button(parent, SWT.CHECK);
+        check.setText(Messages.BoostWizardAddition_0);
+        check.addSelectionListener(new SelectionAdapter() {
 
-         @Override
-         public void widgetSelected(SelectionEvent e) {
-            copyBoost = check.getSelection();
-         }
-      });
-      return check;
-   }
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                copyBoost = check.getSelection();
+            }
+        });
+        return check;
+    }
 
-   @Override
-   public ICuteWizardAdditionHandler getHandler() {
-      return new BoostHandler(this);
-   }
+    @Override
+    public ICuteWizardAdditionHandler getHandler() {
+        return new BoostHandler(this);
+    }
 }

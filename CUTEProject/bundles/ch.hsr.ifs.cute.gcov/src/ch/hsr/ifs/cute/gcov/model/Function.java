@@ -18,50 +18,50 @@ import java.util.List;
  */
 public class Function {
 
-   private final String     name;
-   private final int        called;
-   private final int        execBlocks;
-   private final List<Line> lines = new ArrayList<>();
-   private File             file;
+    private final String     name;
+    private final int        called;
+    private final int        execBlocks;
+    private final List<Line> lines = new ArrayList<>();
+    private File             file;
 
-   public Function(String name, int called, int execBlocks) {
-      super();
-      this.name = name;
-      this.called = called;
-      this.execBlocks = execBlocks;
-   }
+    public Function(String name, int called, int execBlocks) {
+        super();
+        this.name = name;
+        this.called = called;
+        this.execBlocks = execBlocks;
+    }
 
-   public File getFile() {
-      return file;
-   }
+    public File getFile() {
+        return file;
+    }
 
-   public void setFile(File file) {
-      this.file = file;
-   }
+    public void setFile(File file) {
+        this.file = file;
+    }
 
-   public String getName() {
-      return name;
-   }
+    public String getName() {
+        return name;
+    }
 
-   public int getCalled() {
-      return called;
-   }
+    public int getCalled() {
+        return called;
+    }
 
-   public int getExecBlocks() {
-      return execBlocks;
-   }
+    public int getExecBlocks() {
+        return execBlocks;
+    }
 
-   public List<Line> getLines() {
-      return lines;
-   }
+    public List<Line> getLines() {
+        return lines;
+    }
 
-   public void addLine(Line l) {
-      lines.add(l);
-      l.setFunction(this);
-   }
+    public void addLine(Line l) {
+        lines.add(l);
+        l.setFunction(this);
+    }
 
-   @Override
-   public String toString() {
-      return name;
-   }
+    @Override
+    public String toString() {
+        return name;
+    }
 }

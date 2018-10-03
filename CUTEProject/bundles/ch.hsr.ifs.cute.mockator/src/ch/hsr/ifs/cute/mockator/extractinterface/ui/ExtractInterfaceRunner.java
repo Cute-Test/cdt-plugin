@@ -18,25 +18,25 @@ import ch.hsr.ifs.cute.mockator.extractinterface.context.ExtractInterfaceContext
 
 class ExtractInterfaceRunner extends RefactoringRunner {
 
-   public ExtractInterfaceRunner(final Optional<ITextSelection> selection, final ICElement element, final IShellProvider shell,
-                                 final ICProject cProject) {
-      super(element, selection, shell, cProject);
-   }
+    public ExtractInterfaceRunner(final Optional<ITextSelection> selection, final ICElement element, final IShellProvider shell,
+                                  final ICProject cProject) {
+        super(element, selection, shell, cProject);
+    }
 
-   @Override
-   public void run() {
-      final ExtractInterfaceRefactoring refactoring = createRefactoring();
-      final RefactoringWizard wizard = createWizard(refactoring);
-      run(wizard, refactoring, SAVE_REFACTORING);
-   }
+    @Override
+    public void run() {
+        final ExtractInterfaceRefactoring refactoring = createRefactoring();
+        final RefactoringWizard wizard = createWizard(refactoring);
+        run(wizard, refactoring, SAVE_REFACTORING);
+    }
 
-   private static RefactoringWizard createWizard(final Refactoring refactoring) {
-      return new ExtractInterfaceWizard(refactoring);
-   }
+    private static RefactoringWizard createWizard(final Refactoring refactoring) {
+        return new ExtractInterfaceWizard(refactoring);
+    }
 
-   private ExtractInterfaceRefactoring createRefactoring() {
-      final ExtractInterfaceContext context = new ExtractInterfaceContext.ContextBuilder((ITranslationUnit) element, selection, project)
-            .replaceAllOccurences(true).build();
-      return new ExtractInterfaceRefactoring(context);
-   }
+    private ExtractInterfaceRefactoring createRefactoring() {
+        final ExtractInterfaceContext context = new ExtractInterfaceContext.ContextBuilder((ITranslationUnit) element, selection, project)
+                .replaceAllOccurences(true).build();
+        return new ExtractInterfaceRefactoring(context);
+    }
 }

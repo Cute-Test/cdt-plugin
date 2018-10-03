@@ -19,6 +19,6 @@ import org.eclipse.cdt.managedbuilder.core.IOption;
  */
 public interface GetOptionsStrategy {
 
-   String[] getValues(IOption option) throws BuildException;
+    String[] getValues(IOption option) throws BuildException;
 
 }

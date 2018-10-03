@@ -21,44 +21,52 @@ import ch.hsr.ifs.cute.mockator.refsupport.tu.SiblingTranslationUnitFinder;
 
 public abstract class TraceFunctionQuickFix extends MockatorQuickFix {
 
-   protected boolean isTraceFunctionActive(final IMarker marker) {
-      final IncludeFileHandler includeHandler = new IncludeFileHandler(getCProject().getProject());
-      final IResource siblingHeaderFile = getPathOfSiblingHeaderFile(marker);
+    protected boolean isTraceFunctionActive(final IMarker marker) {
+        final IncludeFileHandler includeHandler = new IncludeFileHandler(getCProject().getProject());
+        final IResource siblingHeaderFile = getPathOfSiblingHeaderFile(marker);
 
-      if (siblingHeaderFile == null) { return true; }
+        if (siblingHeaderFile == null) {
+            return true;
+        }
 
-      return includeHandler.hasInclude(siblingHeaderFile);
-   }
+        return includeHandler.hasInclude(siblingHeaderFile);
+    }
 
-   @Override
-   public String getDescription() {
-      return null;
-   }
+    @Override
+    public String getDescription() {
+        return null;
+    }
 
-   @Override
-   public Image getImage() {
-      return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION);
-   }
+    @Override
+    public Image getImage() {
+        return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION);
+    }
 
-   protected IResource getPathOfSiblingHeaderFile(final IMarker marker) {
-      try {
-         final ITranslationUnit tu = getTranslationUnitViaWorkspace(marker);
+    protected IResource getPathOfSiblingHeaderFile(final IMarker marker) {
+        try {
+            final ITranslationUnit tu = getTranslationUnitViaWorkspace(marker);
 
-         if (tu == null) { return null; }
+            if (tu == null) {
+                return null;
+            }
 
-         // If we have a template function then the marker will be in the header file
-         if (tu.isHeaderUnit()) { return tu.getResource(); }
+            // If we have a template function then the marker will be in the header file
+            if (tu.isHeaderUnit()) {
+                return tu.getResource();
+            }
 
-         final Optional<String> path = getSiblingFilePath(tu, getIndexFromMarker(marker));
-         if (path.isPresent()) { return FileUtil.toIFile(path.get()); }
-      } catch (final CoreException e) {
-         throw new ILTISException(e).rethrowUnchecked();
-      }
+            final Optional<String> path = getSiblingFilePath(tu, getIndexFromMarker(marker));
+            if (path.isPresent()) {
+                return FileUtil.toIFile(path.get());
+            }
+        } catch (final CoreException e) {
+            throw new ILTISException(e).rethrowUnchecked();
+        }
 
-      return null;
-   }
+        return null;
+    }
 
-   private Optional<String> getSiblingFilePath(final ITranslationUnit tu, final IIndex index) throws CoreException {
-      return new SiblingTranslationUnitFinder((IFile) tu.getResource(), tu.getAST(), index).getSiblingTuPath();
-   }
+    private Optional<String> getSiblingFilePath(final ITranslationUnit tu, final IIndex index) throws CoreException {
+        return new SiblingTranslationUnitFinder((IFile) tu.getResource(), tu.getAST(), index).getSiblingTuPath();
+    }
 }

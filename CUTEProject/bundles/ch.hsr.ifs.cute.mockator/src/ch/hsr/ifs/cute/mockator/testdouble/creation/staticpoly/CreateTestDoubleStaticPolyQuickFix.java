@@ -18,20 +18,20 @@ import ch.hsr.ifs.cute.mockator.testdouble.creation.staticpoly.cppstd.Refactorin
 
 public class CreateTestDoubleStaticPolyQuickFix extends AbstractCreateTestDoubleQuickFix {
 
-   @Override
-   protected MockatorRefactoring getRefactoring(final ICElement e, final Optional<ITextSelection> sel, final MarkerInfo<?> info) {
-      return new RefactoringByStdFactory().getRefactoring(e, sel, getCProject(), getCppStandard());
-   }
+    @Override
+    protected MockatorRefactoring getRefactoring(final ICElement e, final Optional<ITextSelection> sel, final MarkerInfo<?> info) {
+        return new RefactoringByStdFactory().getRefactoring(e, sel, getCProject(), getCppStandard());
+    }
 
-   @Override
-   protected Optional<LinkedModeInfoCreater> getLinkedModeCreator(final ChangeEdit edit, final IDocument document,
-         final MockatorRefactoring refactoring) {
-      final LinkedModeInfoCreater creator = new StaticPolyTestDoubleSupport(edit, document, getNameOfNewClass());
-      return Optional.of(creator);
-   }
+    @Override
+    protected Optional<LinkedModeInfoCreater> getLinkedModeCreator(final ChangeEdit edit, final IDocument document,
+            final MockatorRefactoring refactoring) {
+        final LinkedModeInfoCreater creator = new StaticPolyTestDoubleSupport(edit, document, getNameOfNewClass());
+        return Optional.of(creator);
+    }
 
-   @Override
-   protected String getQfLabel() {
-      return I18N.CreateCompileSeamQuickfix;
-   }
+    @Override
+    protected String getQfLabel() {
+        return I18N.CreateCompileSeamQuickfix;
+    }
 }

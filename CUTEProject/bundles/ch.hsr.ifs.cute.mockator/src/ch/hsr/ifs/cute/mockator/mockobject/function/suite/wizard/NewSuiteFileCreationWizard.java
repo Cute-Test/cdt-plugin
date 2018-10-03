@@ -31,49 +31,49 @@ import ch.hsr.ifs.cute.mockator.mockobject.function.suite.refactoring.LinkSuiteT
 @SuppressWarnings("restriction")
 public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 
-   private NewSuiteFileCreationWizardPage     page;
-   private final ICProject                    mockatorCProject;
-   private final MockFunctionCommunication    mockFunction;
-   private final LinkSuiteToRunnerRefactoring runnerRefactoring;
+    private NewSuiteFileCreationWizardPage     page;
+    private final ICProject                    mockatorCProject;
+    private final MockFunctionCommunication    mockFunction;
+    private final LinkSuiteToRunnerRefactoring runnerRefactoring;
 
-   public NewSuiteFileCreationWizard(final ICProject mockatorCProject, final MockFunctionCommunication mockFunction,
-                                     final LinkSuiteToRunnerRefactoring runnerRefactoring) {
-      this.mockatorCProject = mockatorCProject;
-      this.mockFunction = mockFunction;
-      this.runnerRefactoring = runnerRefactoring;
-      setDefaultPageImageDescriptor(CPluginImages.DESC_WIZBAN_NEW_SOURCEFILE);
-      setDialogSettings(CUIPlugin.getDefault().getDialogSettings());
-      setWindowTitle(I18N.NewSuiteWizardNewCuiteSuiteFile);
-   }
+    public NewSuiteFileCreationWizard(final ICProject mockatorCProject, final MockFunctionCommunication mockFunction,
+                                      final LinkSuiteToRunnerRefactoring runnerRefactoring) {
+        this.mockatorCProject = mockatorCProject;
+        this.mockFunction = mockFunction;
+        this.runnerRefactoring = runnerRefactoring;
+        setDefaultPageImageDescriptor(CPluginImages.DESC_WIZBAN_NEW_SOURCEFILE);
+        setDialogSettings(CUIPlugin.getDefault().getDialogSettings());
+        setWindowTitle(I18N.NewSuiteWizardNewCuiteSuiteFile);
+    }
 
-   @Override
-   public void addPages() {
-      super.addPages();
-      page = new NewSuiteFileCreationWizardPage(mockatorCProject, mockFunction, runnerRefactoring);
-      addPage(page);
-   }
+    @Override
+    public void addPages() {
+        super.addPages();
+        page = new NewSuiteFileCreationWizardPage(mockatorCProject, mockFunction, runnerRefactoring);
+        addPage(page);
+    }
 
-   @Override
-   public boolean performFinish() {
-      try {
-         final WorkbenchRunnableAdapter adapter = new WorkbenchRunnableAdapter(createWorkspaceRunnable(), WorkspaceUtil.getWorkspaceRoot());
-         getContainer().run(true, true, adapter);
-      } catch (final InvocationTargetException e) {
-         ExceptionUtil.showException(e);
-         return false;
-      } catch (final InterruptedException e) {
-         Thread.currentThread().interrupt();
-         return false;
-      }
+    @Override
+    public boolean performFinish() {
+        try {
+            final WorkbenchRunnableAdapter adapter = new WorkbenchRunnableAdapter(createWorkspaceRunnable(), WorkspaceUtil.getWorkspaceRoot());
+            getContainer().run(true, true, adapter);
+        } catch (final InvocationTargetException e) {
+            ExceptionUtil.showException(e);
+            return false;
+        } catch (final InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return false;
+        }
 
-      return true;
-   }
+        return true;
+    }
 
-   private IWorkspaceRunnable createWorkspaceRunnable() {
-      final IWorkspaceRunnable op = monitor -> page.createNewSuiteLinkedToRunner(monitor);
-      return op;
-   }
+    private IWorkspaceRunnable createWorkspaceRunnable() {
+        final IWorkspaceRunnable op = monitor -> page.createNewSuiteLinkedToRunner(monitor);
+        return op;
+    }
 
-   @Override
-   public void init(final IWorkbench workbench, final IStructuredSelection selection) {}
+    @Override
+    public void init(final IWorkbench workbench, final IStructuredSelection selection) {}
 }

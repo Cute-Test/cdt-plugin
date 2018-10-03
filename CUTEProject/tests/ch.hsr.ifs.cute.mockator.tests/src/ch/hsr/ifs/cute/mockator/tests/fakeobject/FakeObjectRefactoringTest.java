@@ -9,9 +9,9 @@ import ch.hsr.ifs.cute.mockator.tests.AbstractRefactoringTest;
 
 public class FakeObjectRefactoringTest extends AbstractRefactoringTest {
 
-   @Override
-   protected Refactoring createRefactoring() {
-      return new FakeObjectRefactoring(CppStandard.Cpp03Std, getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(),
-            getCurrentCProject());
-   }
+    @Override
+    protected Refactoring createRefactoring() {
+        return new FakeObjectRefactoring(CppStandard.Cpp03Std, getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(),
+                getCurrentCProject());
+    }
 }

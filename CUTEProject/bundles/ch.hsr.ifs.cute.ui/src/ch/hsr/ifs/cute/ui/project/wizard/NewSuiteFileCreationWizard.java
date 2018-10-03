@@ -24,48 +24,48 @@ import org.eclipse.ui.IWorkbench;
 
 public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 
-   private NewSuiteFileCreationWizardPage page = null;
-   private IStructuredSelection           selection;
+    private NewSuiteFileCreationWizardPage page = null;
+    private IStructuredSelection           selection;
 
-   public NewSuiteFileCreationWizard() {
-      super();
-      setDefaultPageImageDescriptor(CPluginImages.DESC_WIZBAN_NEW_SOURCEFILE);
-      setDialogSettings(CUIPlugin.getDefault().getDialogSettings());
-      setWindowTitle("New CUTE Suite File");
-   }
+    public NewSuiteFileCreationWizard() {
+        super();
+        setDefaultPageImageDescriptor(CPluginImages.DESC_WIZBAN_NEW_SOURCEFILE);
+        setDialogSettings(CUIPlugin.getDefault().getDialogSettings());
+        setWindowTitle("New CUTE Suite File");
+    }
 
-   @Override
-   public void addPages() {
-      super.addPages();
-      page = new NewSuiteFileCreationWizardPage();
-      addPage(page);
-      page.init(getSelection());
-   }
+    @Override
+    public void addPages() {
+        super.addPages();
+        page = new NewSuiteFileCreationWizardPage();
+        addPage(page);
+        page.init(getSelection());
+    }
 
-   @Override
-   public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
-      selection = currentSelection;
-   }
+    @Override
+    public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
+        selection = currentSelection;
+    }
 
-   private IStructuredSelection getSelection() {
-      return selection;
-   }
+    private IStructuredSelection getSelection() {
+        return selection;
+    }
 
-   protected ISchedulingRule getSchedulingRule() {
-      return ResourcesPlugin.getWorkspace().getRoot(); // look all by default
-   }
+    protected ISchedulingRule getSchedulingRule() {
+        return ResourcesPlugin.getWorkspace().getRoot(); // look all by default
+    }
 
-   @Override
-   public boolean performFinish() {
-      IWorkspaceRunnable op = monitor -> page.createFile(monitor);
-      try {
-         getContainer().run(true, true, new WorkbenchRunnableAdapter(op, getSchedulingRule()));
-      } catch (InvocationTargetException e) {
-         e.printStackTrace();
-         return false;
-      } catch (InterruptedException e) {
-         return false;
-      }
-      return true;
-   }
+    @Override
+    public boolean performFinish() {
+        IWorkspaceRunnable op = monitor -> page.createFile(monitor);
+        try {
+            getContainer().run(true, true, new WorkbenchRunnableAdapter(op, getSchedulingRule()));
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            return false;
+        } catch (InterruptedException e) {
+            return false;
+        }
+        return true;
+    }
 }

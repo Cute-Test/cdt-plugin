@@ -23,37 +23,37 @@ import ch.hsr.ifs.testframework.launch.ILaunchObserver;
  */
 public class LaunchObserver implements ILaunchObserver {
 
-   @Override
-   public void notifyBeforeLaunch(IProject project) throws CoreException {
-      cleanGcdaFilesInRefedProjects(project);
-   }
+    @Override
+    public void notifyBeforeLaunch(IProject project) throws CoreException {
+        cleanGcdaFilesInRefedProjects(project);
+    }
 
-   private void cleanGcdaFilesInRefedProjects(IProject project) throws CoreException {
-      cleanGcdaFilesinProject(project);
-      for (IProject refProj : project.getReferencedProjects()) {
-         cleanGcdaFilesinProject(refProj);
-      }
-   }
+    private void cleanGcdaFilesInRefedProjects(IProject project) throws CoreException {
+        cleanGcdaFilesinProject(project);
+        for (IProject refProj : project.getReferencedProjects()) {
+            cleanGcdaFilesinProject(refProj);
+        }
+    }
 
-   private void cleanGcdaFilesinProject(IProject refProj) throws CoreException {
-      refProj.accept(resource -> {
-         if (resource instanceof IFile) {
-            IFile file = (IFile) resource;
-            String fileExtension = file.getFileExtension();
-            if (fileExtension != null && fileExtension.equals("gcda")) {
-               file.delete(true, new NullProgressMonitor());
+    private void cleanGcdaFilesinProject(IProject refProj) throws CoreException {
+        refProj.accept(resource -> {
+            if (resource instanceof IFile) {
+                IFile file = (IFile) resource;
+                String fileExtension = file.getFileExtension();
+                if (fileExtension != null && fileExtension.equals("gcda")) {
+                    file.delete(true, new NullProgressMonitor());
+                }
             }
-         }
-         return true;
-      });
-   }
+            return true;
+        });
+    }
 
-   @Override
-   public void notifyTermination(final IProject project) throws CoreException {
-      Job gcovUpdateJob = new GcovUpdateJob("Running GCov", project);
-      gcovUpdateJob.schedule();
-   }
+    @Override
+    public void notifyTermination(final IProject project) throws CoreException {
+        Job gcovUpdateJob = new GcovUpdateJob("Running GCov", project);
+        gcovUpdateJob.schedule();
+    }
 
-   @Override
-   public void notifyAfterLaunch(IProject project) throws CoreException {}
+    @Override
+    public void notifyAfterLaunch(IProject project) throws CoreException {}
 }

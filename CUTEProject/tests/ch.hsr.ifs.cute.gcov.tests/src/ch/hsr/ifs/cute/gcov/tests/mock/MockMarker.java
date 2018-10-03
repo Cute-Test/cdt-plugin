@@ -22,130 +22,130 @@ import org.eclipse.core.runtime.CoreException;
  */
 public class MockMarker implements IMarker {
 
-   private final String        type;
-   private final IResource     res;
-   private Map<String, Object> attributes = new HashMap<>();
+    private final String        type;
+    private final IResource     res;
+    private Map<String, Object> attributes = new HashMap<>();
 
-   public MockMarker(String type, IResource resource) {
-      super();
-      this.type = type;
-      res = resource;
-   }
+    public MockMarker(String type, IResource resource) {
+        super();
+        this.type = type;
+        res = resource;
+    }
 
-   @Override
-   public void delete() throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void delete() throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public boolean exists() {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public boolean exists() {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public Object getAttribute(String attributeName) throws CoreException {
-      return attributes.get(attributeName);
-   }
+    @Override
+    public Object getAttribute(String attributeName) throws CoreException {
+        return attributes.get(attributeName);
+    }
 
-   @Override
-   public int getAttribute(String attributeName, int defaultValue) {
-      Object ret;
-      try {
-         ret = getAttribute(attributeName);
-      } catch (CoreException e) {
-         return defaultValue;
-      }
-      if (ret instanceof Integer) {
-         return (Integer) ret;
-      } else {
-         return defaultValue;
-      }
-   }
+    @Override
+    public int getAttribute(String attributeName, int defaultValue) {
+        Object ret;
+        try {
+            ret = getAttribute(attributeName);
+        } catch (CoreException e) {
+            return defaultValue;
+        }
+        if (ret instanceof Integer) {
+            return (Integer) ret;
+        } else {
+            return defaultValue;
+        }
+    }
 
-   @Override
-   public String getAttribute(String attributeName, String defaultValue) {
-      Object ret;
-      try {
-         ret = getAttribute(attributeName);
-      } catch (CoreException e) {
-         return defaultValue;
-      }
-      if (ret instanceof String) {
-         return (String) ret;
-      } else {
-         return defaultValue;
-      }
-   }
+    @Override
+    public String getAttribute(String attributeName, String defaultValue) {
+        Object ret;
+        try {
+            ret = getAttribute(attributeName);
+        } catch (CoreException e) {
+            return defaultValue;
+        }
+        if (ret instanceof String) {
+            return (String) ret;
+        } else {
+            return defaultValue;
+        }
+    }
 
-   @Override
-   public boolean getAttribute(String attributeName, boolean defaultValue) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public boolean getAttribute(String attributeName, boolean defaultValue) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public Map<String, Object> getAttributes() throws CoreException {
-      return attributes;
-   }
+    @Override
+    public Map<String, Object> getAttributes() throws CoreException {
+        return attributes;
+    }
 
-   @Override
-   public Object[] getAttributes(String[] attributeNames) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public Object[] getAttributes(String[] attributeNames) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public long getCreationTime() throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public long getCreationTime() throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public long getId() {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public long getId() {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IResource getResource() {
-      return res;
-   }
+    @Override
+    public IResource getResource() {
+        return res;
+    }
 
-   @Override
-   public String getType() throws CoreException {
-      return type;
-   }
+    @Override
+    public String getType() throws CoreException {
+        return type;
+    }
 
-   @Override
-   public boolean isSubtypeOf(String superType) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public boolean isSubtypeOf(String superType) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void setAttribute(String attributeName, int value) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void setAttribute(String attributeName, int value) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void setAttribute(String attributeName, Object value) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void setAttribute(String attributeName, Object value) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void setAttribute(String attributeName, boolean value) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void setAttribute(String attributeName, boolean value) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void setAttributes(String[] attributeNames, Object[] values) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void setAttributes(String[] attributeNames, Object[] values) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   @SuppressWarnings("unchecked")
-   public void setAttributes(Map<String, ? extends Object> attributes) throws CoreException {
-      this.attributes = (Map<String, Object>) attributes;
-   }
+    @Override
+    @SuppressWarnings("unchecked")
+    public void setAttributes(Map<String, ? extends Object> attributes) throws CoreException {
+        this.attributes = (Map<String, Object>) attributes;
+    }
 
-   @Override
-   public <T> T getAdapter(Class<T> adapter) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public <T> T getAdapter(Class<T> adapter) {
+        throw new NotYetImplementedException();
+    }
 
 }

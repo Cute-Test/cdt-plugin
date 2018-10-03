@@ -39,73 +39,73 @@ import ch.hsr.ifs.cute.ui.ProjectTools;
  */
 public class BoostHandler implements ICuteWizardAdditionHandler, IIncludeStrategyProvider {
 
-   private final BoostWizardAddition addition;
+    private final BoostWizardAddition addition;
 
-   public BoostHandler(BoostWizardAddition boostWizardAddition) {
-      this.addition = boostWizardAddition;
-   }
+    public BoostHandler(BoostWizardAddition boostWizardAddition) {
+        this.addition = boostWizardAddition;
+    }
 
-   @Override
-   public void configureProject(IProject project, IProgressMonitor pm) throws CoreException {
-      SubMonitor mon = SubMonitor.convert(pm, 2);
-      if (addition.copyBoost) {
-         mon.beginTask(Messages.BoostHandler_beginTaskFolders, 2);
-         IFolder boostSrcFolder = ProjectTools.createFolder(project, "boost", false);
-         IFolder boostFolder = ProjectTools.createFolder(project, "boost/boost", false);
-         List<URL> urls = getBoostFiles("boost");
-         copyFilesToFolder(boostFolder, new NullProgressMonitor(), urls);
-         ProjectTools.setIncludePaths(boostSrcFolder.getFullPath(), project, this);
-      }
-      mon.done();
-   }
+    @Override
+    public void configureProject(IProject project, IProgressMonitor pm) throws CoreException {
+        SubMonitor mon = SubMonitor.convert(pm, 2);
+        if (addition.copyBoost) {
+            mon.beginTask(Messages.BoostHandler_beginTaskFolders, 2);
+            IFolder boostSrcFolder = ProjectTools.createFolder(project, "boost", false);
+            IFolder boostFolder = ProjectTools.createFolder(project, "boost/boost", false);
+            List<URL> urls = getBoostFiles("boost");
+            copyFilesToFolder(boostFolder, new NullProgressMonitor(), urls);
+            ProjectTools.setIncludePaths(boostSrcFolder.getFullPath(), project, this);
+        }
+        mon.done();
+    }
 
-   @SuppressWarnings("rawtypes")
-   private List<URL> getBoostFiles(String folder) {
-      Enumeration en = Activator.getDefault().getBundle().findEntries(folder, "*", false);
-      List<URL> list = new ArrayList<>();
-      while (en.hasMoreElements()) {
-         list.add((URL) en.nextElement());
-      }
-      return list;
-   }
+    @SuppressWarnings("rawtypes")
+    private List<URL> getBoostFiles(String folder) {
+        Enumeration en = Activator.getDefault().getBundle().findEntries(folder, "*", false);
+        List<URL> list = new ArrayList<>();
+        while (en.hasMoreElements()) {
+            list.add((URL) en.nextElement());
+        }
+        return list;
+    }
 
-   private void copyFilesToFolder(IFolder folder, IProgressMonitor monitor, List<URL> urls) throws CoreException {
-      SubMonitor mon = SubMonitor.convert(monitor, urls.size());
-      for (URL url : urls) {
-         String fileName = url.getFile();
-         if (fileName.endsWith("/")) {
-            IFolder subFolder = ProjectTools.createFolder(folder.getProject(), "boost" + fileName, false);
-            copyFilesToFolder(subFolder, mon, getBoostFiles(fileName));
-         } else {
-            String[] elements = fileName.split("/");
-            String filename = elements[elements.length - 1];
-            mon.subTask(Messages.BoostHandler_copy + filename);
-            IFile targetFile = folder.getFile(filename);
-            try {
-               targetFile.create(url.openStream(), IResource.FORCE, SubMonitor.convert(monitor, 1));
-            } catch (IOException e) {
-               throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, 42, e.getMessage(), e));
+    private void copyFilesToFolder(IFolder folder, IProgressMonitor monitor, List<URL> urls) throws CoreException {
+        SubMonitor mon = SubMonitor.convert(monitor, urls.size());
+        for (URL url : urls) {
+            String fileName = url.getFile();
+            if (fileName.endsWith("/")) {
+                IFolder subFolder = ProjectTools.createFolder(folder.getProject(), "boost" + fileName, false);
+                copyFilesToFolder(subFolder, mon, getBoostFiles(fileName));
+            } else {
+                String[] elements = fileName.split("/");
+                String filename = elements[elements.length - 1];
+                mon.subTask(Messages.BoostHandler_copy + filename);
+                IFile targetFile = folder.getFile(filename);
+                try {
+                    targetFile.create(url.openStream(), IResource.FORCE, SubMonitor.convert(monitor, 1));
+                } catch (IOException e) {
+                    throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, 42, e.getMessage(), e));
+                }
+                mon.worked(1);
+                mon.done();
             }
-            mon.worked(1);
-            mon.done();
-         }
-      }
-   }
+        }
+    }
 
-   @Override
-   public void configureLibProject(IProject project) throws CoreException {
-      // Do nothing
-   }
+    @Override
+    public void configureLibProject(IProject project) throws CoreException {
+        // Do nothing
+    }
 
-   @Override
-   public GetOptionsStrategy getStrategy(int optionType) {
-      switch (optionType) {
-      case IOption.INCLUDE_PATH:
-         return new IncludePathStrategy();
+    @Override
+    public GetOptionsStrategy getStrategy(int optionType) {
+        switch (optionType) {
+        case IOption.INCLUDE_PATH:
+            return new IncludePathStrategy();
 
-      default:
-         throw new IllegalArgumentException("Illegal Argument: " + optionType);
-      }
-   }
+        default:
+            throw new IllegalArgumentException("Illegal Argument: " + optionType);
+        }
+    }
 
 }

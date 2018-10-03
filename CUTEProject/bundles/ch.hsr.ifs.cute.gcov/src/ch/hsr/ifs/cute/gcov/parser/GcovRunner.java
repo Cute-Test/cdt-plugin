@@ -38,71 +38,73 @@ import ch.hsr.ifs.cute.gcov.GcovPlugin;
  */
 public class GcovRunner {
 
-   public static void runGcov(String filePath, File workingDirectory, IProject project) throws CoreException {
-      String[] cmdLine;
-      if (runningCygwin(project)) {
-         cmdLine = getCygwinGcovCommand(filePath);
-      } else {
-         cmdLine = getGcovCommand(filePath);
-      }
+    public static void runGcov(String filePath, File workingDirectory, IProject project) throws CoreException {
+        String[] cmdLine;
+        if (runningCygwin(project)) {
+            cmdLine = getCygwinGcovCommand(filePath);
+        } else {
+            cmdLine = getGcovCommand(filePath);
+        }
 
-      String[] envp = getEnvironmentVariables(project);
-      Process p = DebugPlugin.exec(cmdLine, workingDirectory, envp);
-      String programName = cmdLine[0];
-      Map<String, String> processAttributes = new HashMap<>();
-      processAttributes.put(IProcess.ATTR_PROCESS_TYPE, programName);
+        String[] envp = getEnvironmentVariables(project);
+        Process p = DebugPlugin.exec(cmdLine, workingDirectory, envp);
+        String programName = cmdLine[0];
+        Map<String, String> processAttributes = new HashMap<>();
+        processAttributes.put(IProcess.ATTR_PROCESS_TYPE, programName);
 
-      if (p != null) {
-         final Launch launch = new Launch(null, ILaunchManager.RUN_MODE, null);
-         IProcess process = DebugPlugin.newProcess(launch, p, programName, processAttributes);
-         if (process == null) {
-            p.destroy();
-            GcovPlugin.log("Gcov Process is null");
-         } else {
-            //TODO: tcorbat: Why not p.waitFor()?
-            while (!process.isTerminated()) {
-               try {
-                  Thread.sleep(50);
-               } catch (InterruptedException e) {}
+        if (p != null) {
+            final Launch launch = new Launch(null, ILaunchManager.RUN_MODE, null);
+            IProcess process = DebugPlugin.newProcess(launch, p, programName, processAttributes);
+            if (process == null) {
+                p.destroy();
+                GcovPlugin.log("Gcov Process is null");
+            } else {
+                //TODO: tcorbat: Why not p.waitFor()?
+                while (!process.isTerminated()) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {}
+                }
             }
-         }
-         try {
-            project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-         } catch (CoreException e) {
-            GcovPlugin.log(e);
-         }
-      } else {
-         GcovPlugin.log("Could not create gcov process");
-      }
-   }
+            try {
+                project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+            } catch (CoreException e) {
+                GcovPlugin.log(e);
+            }
+        } else {
+            GcovPlugin.log("Could not create gcov process");
+        }
+    }
 
-   private static String[] getGcovCommand(String iPath) {
-      String[] cmdLine = { "gcov", "-f", "-b", iPath };
-      return cmdLine;
-   }
+    private static String[] getGcovCommand(String iPath) {
+        String[] cmdLine = { "gcov", "-f", "-b", iPath };
+        return cmdLine;
+    }
 
-   private static boolean runningCygwin(IProject project) {
-      final IConfiguration config = getConfiguration(project);
-      if (config != null) {
-         final IToolChain toolChain = config.getToolChain();
-         if (toolChain != null) { return toolChain.getName().startsWith("Cygwin"); }
-      }
-      return false;
-   }
+    private static boolean runningCygwin(IProject project) {
+        final IConfiguration config = getConfiguration(project);
+        if (config != null) {
+            final IToolChain toolChain = config.getToolChain();
+            if (toolChain != null) {
+                return toolChain.getName().startsWith("Cygwin");
+            }
+        }
+        return false;
+    }
 
-   private static String[] getEnvironmentVariables(IProject project) {
-      IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-      final IEnvironmentVariableProvider environmentVariableProvider = ManagedBuildManager.getEnvironmentVariableProvider();
-      IEnvironmentVariable[] variables = environmentVariableProvider.getVariables(info.getDefaultConfiguration(), true);
-      String[] variableStrings = new String[variables.length];
-      for (int i = 0; i < variableStrings.length; ++i) {
-         variableStrings[i] = variables[i].toString();
-      }
-      return variableStrings;
-   }
+    private static String[] getEnvironmentVariables(IProject project) {
+        IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+        final IEnvironmentVariableProvider environmentVariableProvider = ManagedBuildManager.getEnvironmentVariableProvider();
+        IEnvironmentVariable[] variables = environmentVariableProvider.getVariables(info.getDefaultConfiguration(), true);
+        String[] variableStrings = new String[variables.length];
+        for (int i = 0; i < variableStrings.length; ++i) {
+            variableStrings[i] = variables[i].toString();
+        }
+        return variableStrings;
+    }
 
-   private static String[] getCygwinGcovCommand(String iPath) {
-      String[] cmdLine = { "sh", "-c", "'gcov", "-f", "-b", iPath + "'" };
-      return cmdLine;
-   }
+    private static String[] getCygwinGcovCommand(String iPath) {
+        String[] cmdLine = { "sh", "-c", "'gcov", "-f", "-b", iPath + "'" };
+        return cmdLine;
+    }
 }

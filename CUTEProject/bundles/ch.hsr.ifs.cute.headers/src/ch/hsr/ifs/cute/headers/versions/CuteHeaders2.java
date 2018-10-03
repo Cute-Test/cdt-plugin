@@ -13,28 +13,28 @@ import ch.hsr.ifs.cute.headers.ICuteHeaders;
  */
 public enum CuteHeaders2 implements ICuteHeaders {
 
-   @CuteVersionNumber(major = 2, minor = 2, patch = 1)
-   _2_1();
+    @CuteVersionNumber(major = 2, minor = 2, patch = 1)
+    _2_1();
 
-   private CuteVersionNumber fVersionNumber;
+    private CuteVersionNumber fVersionNumber;
 
-   CuteHeaders2() {
-      try {
-         fVersionNumber = CuteHeaders2.class.getField(name()).getAnnotation(CuteVersionNumber.class);
-      } catch (NoSuchFieldException | SecurityException e) {
-         throwAnnotationMissingException(name(), CuteHeaders2.class.getSimpleName());
-      }
-      if (fVersionNumber == null) throwAnnotationMissingException(name(), CuteHeaders2.class.getSimpleName());
-   }
+    CuteHeaders2() {
+        try {
+            fVersionNumber = CuteHeaders2.class.getField(name()).getAnnotation(CuteVersionNumber.class);
+        } catch (NoSuchFieldException | SecurityException e) {
+            throwAnnotationMissingException(name(), CuteHeaders2.class.getSimpleName());
+        }
+        if (fVersionNumber == null) throwAnnotationMissingException(name(), CuteHeaders2.class.getSimpleName());
+    }
 
-   @Override
-   public CuteVersionNumber getVersionNumber() {
-      return fVersionNumber;
-   }
+    @Override
+    public CuteVersionNumber getVersionNumber() {
+        return fVersionNumber;
+    }
 
-   @Override
-   public boolean compatibleWith(CPPVersion cppVersion) {
-      return cppVersion.ordinal() >= CPPVersion.CPP_03.ordinal();
-   }
+    @Override
+    public boolean compatibleWith(CPPVersion cppVersion) {
+        return cppVersion.ordinal() >= CPPVersion.CPP_03.ordinal();
+    }
 
 }

@@ -9,13 +9,13 @@ import ch.hsr.ifs.cute.mockator.testdouble.creation.subtype.ArgumentPassByStrate
 
 public class CreateTestDoubleSubTypeInfo extends MarkerInfo<CreateTestDoubleSubTypeInfo> {
 
-   @MessageInfoArgument(0)
-   public String nameOfMissingInstance;
-   @InfoArgument
-   public String parentClassName;
-   @InfoArgument
-   public String targetIncludePath;
-   @InfoArgument
-   public ArgumentPassByStrategy passByStrategy;
+    @MessageInfoArgument(0)
+    public String                 nameOfMissingInstance;
+    @InfoArgument
+    public String                 parentClassName;
+    @InfoArgument
+    public String                 targetIncludePath;
+    @InfoArgument
+    public ArgumentPassByStrategy passByStrategy;
 
 }

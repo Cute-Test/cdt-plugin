@@ -30,59 +30,61 @@ import ch.hsr.ifs.cute.mockator.testdouble.support.MemFunSignature;
 
 public class ExistingTestDoubleMemFun extends AbstractTestDoubleMemFun {
 
-   private final ICPPASTFunctionDefinition function;
+    private final ICPPASTFunctionDefinition function;
 
-   public ExistingTestDoubleMemFun(final ICPPASTFunctionDefinition function) {
-      this.function = function;
-   }
+    public ExistingTestDoubleMemFun(final ICPPASTFunctionDefinition function) {
+        this.function = function;
+    }
 
-   private ICPPASTFunctionDeclarator getFunDecl() {
-      return (ICPPASTFunctionDeclarator) function.getDeclarator();
-   }
+    private ICPPASTFunctionDeclarator getFunDecl() {
+        return (ICPPASTFunctionDeclarator) function.getDeclarator();
+    }
 
-   private IASTName getFunctionName() {
-      return getFunDecl().getName();
-   }
+    private IASTName getFunctionName() {
+        return getFunDecl().getName();
+    }
 
-   public Optional<? extends MemFunSignature> getRegisteredCall(final CallRegistrationFinder finder) {
-      return finder.findRegisteredCall(function);
-   }
+    public Optional<? extends MemFunSignature> getRegisteredCall(final CallRegistrationFinder finder) {
+        return finder.findRegisteredCall(function);
+    }
 
-   public void addMockSupport(final MemFunMockSupportAdder mockSupportAdder, final CallRegistrationFinder finder) {
-      if (hasAlreadyMockSupport(finder)) { return; }
+    public void addMockSupport(final MemFunMockSupportAdder mockSupportAdder, final CallRegistrationFinder finder) {
+        if (hasAlreadyMockSupport(finder)) {
+            return;
+        }
 
-      mockSupportAdder.addMockSupport(function);
-   }
+        mockSupportAdder.addMockSupport(function);
+    }
 
-   private boolean hasAlreadyMockSupport(final CallRegistrationFinder finder) {
-      return getRegisteredCall(finder).isPresent();
-   }
+    private boolean hasAlreadyMockSupport(final CallRegistrationFinder finder) {
+        return getRegisteredCall(finder).isPresent();
+    }
 
-   @Override
-   public String getFunctionSignature() {
-      return new FunctionSignatureFormatter(getFunDecl()).getFunctionSignature();
-   }
+    @Override
+    public String getFunctionSignature() {
+        return new FunctionSignatureFormatter(getFunDecl()).getFunctionSignature();
+    }
 
-   @Override
-   public Collection<IASTInitializerClause> createDefaultArguments(final CppStandard cppStd, final LinkedEditModeStrategy linkedEditStrategy) {
-      return new DefaultArgumentCreator(linkedEditStrategy, cppStd).createDefaultArguments(getFunParams());
-   }
+    @Override
+    public Collection<IASTInitializerClause> createDefaultArguments(final CppStandard cppStd, final LinkedEditModeStrategy linkedEditStrategy) {
+        return new DefaultArgumentCreator(linkedEditStrategy, cppStd).createDefaultArguments(getFunParams());
+    }
 
-   private Collection<ICPPASTParameterDeclaration> getFunParams() {
-      return list(getFunDecl().getParameters());
-   }
+    private Collection<ICPPASTParameterDeclaration> getFunParams() {
+        return list(getFunDecl().getParameters());
+    }
 
-   @Override
-   public boolean isStatic() {
-      final IBinding binding = getFunctionName().resolveBinding();
-      return ((ICPPFunction) binding).isStatic();
-   }
+    @Override
+    public boolean isStatic() {
+        final IBinding binding = getFunctionName().resolveBinding();
+        return ((ICPPFunction) binding).isStatic();
+    }
 
-   public boolean isConstructor() {
-      return BindingTypeVerifier.isOfType(getFunctionName().resolveBinding(), ICPPConstructor.class);
-   }
+    public boolean isConstructor() {
+        return BindingTypeVerifier.isOfType(getFunctionName().resolveBinding(), ICPPConstructor.class);
+    }
 
-   public ICPPASTCompositeTypeSpecifier getContainingClass() {
-      return CPPVisitor.findAncestorWithType(getFunDecl(), ICPPASTCompositeTypeSpecifier.class).orElse(null);
-   }
+    public ICPPASTCompositeTypeSpecifier getContainingClass() {
+        return CPPVisitor.findAncestorWithType(getFunDecl(), ICPPASTCompositeTypeSpecifier.class).orElse(null);
+    }
 }

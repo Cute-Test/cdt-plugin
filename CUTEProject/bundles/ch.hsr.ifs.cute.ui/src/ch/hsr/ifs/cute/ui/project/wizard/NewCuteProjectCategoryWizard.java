@@ -22,29 +22,29 @@ import org.eclipse.jface.wizard.IWizard;
  */
 public class NewCuteProjectCategoryWizard extends AbstractCWizard {
 
-   protected static final String ID   = "ch.hsr.ifs.cutesuitegroup";
-   private static final String   NAME = "CUTE";
+    protected static final String ID   = "ch.hsr.ifs.cutesuitegroup";
+    private static final String   NAME = "CUTE";
 
-   @Override
-   public EntryDescriptor[] createItems(boolean supportedOnly, IWizard wizard) {
-      CuteWizardHandler handler = getHandler(wizard);
-      IToolChain[] tcs = ManagedBuildManager.getExtensionsToolChains(MBSWizardHandler.ARTIFACT, new CuteBuildPropertyValue().getId(), false);
-      for (IToolChain curToolChain : tcs) {
-         if (isValid(curToolChain, supportedOnly, wizard)) {
-            handler.addTc(curToolChain);
-         }
-      }
-      EntryDescriptor data = getEntryDescriptor(handler);
-      data.setDefaultForCategory(true);
-      return new EntryDescriptor[] { data };
-   }
+    @Override
+    public EntryDescriptor[] createItems(boolean supportedOnly, IWizard wizard) {
+        CuteWizardHandler handler = getHandler(wizard);
+        IToolChain[] tcs = ManagedBuildManager.getExtensionsToolChains(MBSWizardHandler.ARTIFACT, new CuteBuildPropertyValue().getId(), false);
+        for (IToolChain curToolChain : tcs) {
+            if (isValid(curToolChain, supportedOnly, wizard)) {
+                handler.addTc(curToolChain);
+            }
+        }
+        EntryDescriptor data = getEntryDescriptor(handler);
+        data.setDefaultForCategory(true);
+        return new EntryDescriptor[] { data };
+    }
 
-   protected EntryDescriptor getEntryDescriptor(CuteWizardHandler handler) {
-      return new EntryDescriptor(ID, null, NAME, true, handler, null);
-   }
+    protected EntryDescriptor getEntryDescriptor(CuteWizardHandler handler) {
+        return new EntryDescriptor(ID, null, NAME, true, handler, null);
+    }
 
-   protected CuteWizardHandler getHandler(IWizard wizard) {
-      return new CuteWizardHandler(parent, wizard);
-   }
+    protected CuteWizardHandler getHandler(IWizard wizard) {
+        return new CuteWizardHandler(parent, wizard);
+    }
 
 }

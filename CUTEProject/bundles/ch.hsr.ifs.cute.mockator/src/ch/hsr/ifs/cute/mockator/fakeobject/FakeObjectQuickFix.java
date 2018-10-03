@@ -18,23 +18,23 @@ import ch.hsr.ifs.cute.mockator.testdouble.qf.AbstractTestDoubleQuickFix;
 
 public class FakeObjectQuickFix extends AbstractTestDoubleQuickFix {
 
-   @Override
-   protected String getResolutionLabelHeader() {
-      return CreateMissingMemberFunctionQuickfix;
-   }
+    @Override
+    protected String getResolutionLabelHeader() {
+        return CreateMissingMemberFunctionQuickfix;
+    }
 
-   @Override
-   protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final MarkerInfo<?> info) {
-      return new FakeObjectRefactoring(getCppStandard(), cElement, selection, getCProject());
-   }
+    @Override
+    protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final MarkerInfo<?> info) {
+        return new FakeObjectRefactoring(getCppStandard(), cElement, selection, getCProject());
+    }
 
-   @Override
-   public String getDescription() {
-      return getMarkerInfo(marker).missingMemFunsForFake;
-   }
+    @Override
+    public String getDescription() {
+        return getMarkerInfo(marker).missingMemFunsForFake;
+    }
 
-   @Override
-   protected Optional<LinkedModeInfoCreater> getLinkedModeCreator(final ChangeEdit edit, final IDocument doc, final MockatorRefactoring ref) {
-      return Optional.empty();
-   }
+    @Override
+    protected Optional<LinkedModeInfoCreater> getLinkedModeCreator(final ChangeEdit edit, final IDocument doc, final MockatorRefactoring ref) {
+        return Optional.empty();
+    }
 }

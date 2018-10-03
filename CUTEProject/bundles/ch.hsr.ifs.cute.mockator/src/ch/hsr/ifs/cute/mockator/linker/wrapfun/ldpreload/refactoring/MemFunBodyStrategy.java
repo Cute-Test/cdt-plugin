@@ -24,51 +24,52 @@ import ch.hsr.ifs.cute.mockator.refsupport.utils.QualifiedNameCreator;
 
 class MemFunBodyStrategy extends CommonFunBodyStrategy {
 
-   // typedef int (Foo::*memFunType)() const;
-   @Override
-   protected IASTDeclarationStatement createFunTypedef(final ICPPASTFunctionDeclarator funDecl) {
-      final ICPPASTDeclSpecifier newSimpleDeclSpec = createNewFunDeclSpec(funDecl);
-      newSimpleDeclSpec.setStorageClass(IASTDeclSpecifier.sc_typedef);
-      final IASTSimpleDeclaration newDecl = nodeFactory.newSimpleDeclaration(newSimpleDeclSpec);
-      final ICPPASTQualifiedName fullyQualifiedName = getFullyQualifiedNameFor(getClassOf(funDecl));
-      final String typeDefName = String.format("(%s::*%s)", String.valueOf(fullyQualifiedName.toCharArray()), FUN_PTR);
-      final IASTName newName = nodeFactory.newName(typeDefName.toCharArray());
-      final ICPPASTFunctionDeclarator newFunDecl = nodeFactory.newFunctionDeclarator(newName);
-      addParams(funDecl, newFunDecl);
-      newFunDecl.setConst(funDecl.isConst());
-      newDecl.addDeclarator(newFunDecl);
-      return nodeFactory.newDeclarationStatement(newDecl);
-   }
+    // typedef int (Foo::*memFunType)() const;
+    @Override
+    protected IASTDeclarationStatement createFunTypedef(final ICPPASTFunctionDeclarator funDecl) {
+        final ICPPASTDeclSpecifier newSimpleDeclSpec = createNewFunDeclSpec(funDecl);
+        newSimpleDeclSpec.setStorageClass(IASTDeclSpecifier.sc_typedef);
+        final IASTSimpleDeclaration newDecl = nodeFactory.newSimpleDeclaration(newSimpleDeclSpec);
+        final ICPPASTQualifiedName fullyQualifiedName = getFullyQualifiedNameFor(getClassOf(funDecl));
+        final String typeDefName = String.format("(%s::*%s)", String.valueOf(fullyQualifiedName.toCharArray()), FUN_PTR);
+        final IASTName newName = nodeFactory.newName(typeDefName.toCharArray());
+        final ICPPASTFunctionDeclarator newFunDecl = nodeFactory.newFunctionDeclarator(newName);
+        addParams(funDecl, newFunDecl);
+        newFunDecl.setConst(funDecl.isConst());
+        newDecl.addDeclarator(newFunDecl);
+        return nodeFactory.newDeclarationStatement(newDecl);
+    }
 
-   private static ICPPASTCompositeTypeSpecifier getClassOf(final ICPPASTFunctionDeclarator funDecl) {
-      return CPPVisitor.findAncestorWithType(funDecl, ICPPASTCompositeTypeSpecifier.class).orElse(null);
-   }
+    private static ICPPASTCompositeTypeSpecifier getClassOf(final ICPPASTFunctionDeclarator funDecl) {
+        return CPPVisitor.findAncestorWithType(funDecl, ICPPASTCompositeTypeSpecifier.class).orElse(null);
+    }
 
-   private static ICPPASTQualifiedName getFullyQualifiedNameFor(final IASTCompositeTypeSpecifier clazz) {
-      return new QualifiedNameCreator(clazz.getName()).createQualifiedName();
-   }
+    private static ICPPASTQualifiedName getFullyQualifiedNameFor(final IASTCompositeTypeSpecifier clazz) {
+        return new QualifiedNameCreator(clazz.getName()).createQualifiedName();
+    }
 
-   // return (this->*origMemFun)();
-   @Override
-   protected IASTStatement createReturn(final ICPPASTFunctionDeclarator funDecl) {
-      final FunctionDelegateCallCreator creator = new FunctionDelegateCallCreator(funDecl);
-      return creator.createDelegate(nodeFactory.newName(String.format("(this->*%s)", ORIG_FUN).toCharArray()));
-   }
+    // return (this->*origMemFun)();
+    @Override
+    protected IASTStatement createReturn(final ICPPASTFunctionDeclarator funDecl) {
+        final FunctionDelegateCallCreator creator = new FunctionDelegateCallCreator(funDecl);
+        return creator.createDelegate(nodeFactory.newName(String.format("(this->*%s)", ORIG_FUN).toCharArray()));
+    }
 
-   // memcpy(&origFun, &tmpPtr, sizeof(&tmpPtr));
-   @Override
-   protected IASTStatement createReinterpretCast() {
-      final IASTInitializerClause[] args = new IASTInitializerClause[3];
-      args[0] = createPassByPtrFor(ORIG_FUN);
-      args[1] = createPassByPtrFor(TMP_PTR);
-      final ICPPASTUnaryExpression tmpPtr = nodeFactory.newUnaryExpression(IASTUnaryExpression.op_bracketedPrimary, createPassByPtrFor(TMP_PTR));
-      args[2] = nodeFactory.newUnaryExpression(IASTUnaryExpression.op_sizeof, tmpPtr);
-      final IASTIdExpression memCpy = nodeFactory.newIdExpression(nodeFactory.newName("memcpy".toCharArray()));
-      final ICPPASTFunctionCallExpression memcpyFunCall = nodeFactory.newFunctionCallExpression(memCpy, args);
-      return nodeFactory.newExpressionStatement(memcpyFunCall);
-   }
+    // memcpy(&origFun, &tmpPtr, sizeof(&tmpPtr));
+    @Override
+    protected IASTStatement createReinterpretCast() {
+        final IASTInitializerClause[] args = new IASTInitializerClause[3];
+        args[0] = createPassByPtrFor(ORIG_FUN);
+        args[1] = createPassByPtrFor(TMP_PTR);
+        final ICPPASTUnaryExpression tmpPtr = nodeFactory.newUnaryExpression(IASTUnaryExpression.op_bracketedPrimary, createPassByPtrFor(TMP_PTR));
+        args[2] = nodeFactory.newUnaryExpression(IASTUnaryExpression.op_sizeof, tmpPtr);
+        final IASTIdExpression memCpy = nodeFactory.newIdExpression(nodeFactory.newName("memcpy".toCharArray()));
+        final ICPPASTFunctionCallExpression memcpyFunCall = nodeFactory.newFunctionCallExpression(memCpy, args);
+        return nodeFactory.newExpressionStatement(memcpyFunCall);
+    }
 
-   private static ICPPASTUnaryExpression createPassByPtrFor(final String paramName) {
-      return nodeFactory.newUnaryExpression(IASTUnaryExpression.op_amper, nodeFactory.newIdExpression(nodeFactory.newName(paramName.toCharArray())));
-   }
+    private static ICPPASTUnaryExpression createPassByPtrFor(final String paramName) {
+        return nodeFactory.newUnaryExpression(IASTUnaryExpression.op_amper, nodeFactory.newIdExpression(nodeFactory.newName(paramName
+                .toCharArray())));
+    }
 }

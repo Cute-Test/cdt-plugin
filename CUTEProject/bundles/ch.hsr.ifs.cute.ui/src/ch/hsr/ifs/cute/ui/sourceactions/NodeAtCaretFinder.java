@@ -17,46 +17,48 @@ import org.eclipse.cdt.core.dom.ast.IASTStatement;
 
 public class NodeAtCaretFinder extends ASTVisitor {
 
-   int              selOffset;
-   private IASTNode matchingNode;
+    int              selOffset;
+    private IASTNode matchingNode;
 
-   {
-      shouldVisitDeclarations = true;
-      shouldVisitStatements = true;
-   }
+    {
+        shouldVisitDeclarations = true;
+        shouldVisitStatements = true;
+    }
 
-   public NodeAtCaretFinder(int offset) {
-      selOffset = offset;
-   }
+    public NodeAtCaretFinder(int offset) {
+        selOffset = offset;
+    }
 
-   @Override
-   public int leave(IASTDeclaration declaration) {
-      if (containsOffset(declaration)) {
-         this.matchingNode = declaration;
-         return PROCESS_ABORT;
-      }
-      return super.leave(declaration);
-   }
+    @Override
+    public int leave(IASTDeclaration declaration) {
+        if (containsOffset(declaration)) {
+            this.matchingNode = declaration;
+            return PROCESS_ABORT;
+        }
+        return super.leave(declaration);
+    }
 
-   @Override
-   public int leave(IASTStatement statement) {
-      if (containsOffset(statement)) {
-         this.matchingNode = statement;
-         return PROCESS_ABORT;
-      }
-      return super.leave(statement);
-   }
+    @Override
+    public int leave(IASTStatement statement) {
+        if (containsOffset(statement)) {
+            this.matchingNode = statement;
+            return PROCESS_ABORT;
+        }
+        return super.leave(statement);
+    }
 
-   private boolean containsOffset(IASTNode node) {
-      IASTFileLocation location = node.getFileLocation();
-      if (location == null) { return false; }
-      int nodeOffset = location.getNodeOffset();
-      int nodeLength = location.getNodeLength();
-      return selOffset >= nodeOffset && selOffset <= (nodeOffset + nodeLength);
-   }
+    private boolean containsOffset(IASTNode node) {
+        IASTFileLocation location = node.getFileLocation();
+        if (location == null) {
+            return false;
+        }
+        int nodeOffset = location.getNodeOffset();
+        int nodeLength = location.getNodeLength();
+        return selOffset >= nodeOffset && selOffset <= (nodeOffset + nodeLength);
+    }
 
-   public IASTNode getMatchingNode() {
-      return matchingNode;
-   }
+    public IASTNode getMatchingNode() {
+        return matchingNode;
+    }
 
 }

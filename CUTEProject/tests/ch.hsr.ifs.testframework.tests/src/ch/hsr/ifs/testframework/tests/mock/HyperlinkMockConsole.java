@@ -21,20 +21,20 @@ import org.eclipse.ui.console.IHyperlink;
  */
 public class HyperlinkMockConsole extends FileInputTextConsole {
 
-   private final List<HyperlinkLocation> links = new ArrayList<>();
+    private final List<HyperlinkLocation> links = new ArrayList<>();
 
-   public HyperlinkMockConsole(String inputFile) {
-      super(inputFile);
-   }
+    public HyperlinkMockConsole(String inputFile) {
+        super(inputFile);
+    }
 
-   @Override
-   public void addHyperlink(IHyperlink hyperlink, int offset, int length) throws BadLocationException {
-      super.addHyperlink(hyperlink, offset, length);
-      links.add(new HyperlinkLocation(hyperlink, offset, length));
-   }
+    @Override
+    public void addHyperlink(IHyperlink hyperlink, int offset, int length) throws BadLocationException {
+        super.addHyperlink(hyperlink, offset, length);
+        links.add(new HyperlinkLocation(hyperlink, offset, length));
+    }
 
-   public List<HyperlinkLocation> getLinks() {
-      return links;
-   }
+    public List<HyperlinkLocation> getLinks() {
+        return links;
+    }
 
 }

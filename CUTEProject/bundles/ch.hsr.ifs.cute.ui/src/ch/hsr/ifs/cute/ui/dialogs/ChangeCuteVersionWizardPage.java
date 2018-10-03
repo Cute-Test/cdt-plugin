@@ -28,35 +28,35 @@ import ch.hsr.ifs.cute.ui.project.wizard.CuteVersionComposite;
  */
 public class ChangeCuteVersionWizardPage extends WizardPage {
 
-   private Composite             composite;
-   private CuteVersionComposite  cuteVersionComp;
-   private final ImageDescriptor imageDesc;
-   private final ICuteHeaders    currentCuteHeaders;
+    private Composite             composite;
+    private CuteVersionComposite  cuteVersionComp;
+    private final ImageDescriptor imageDesc;
+    private final ICuteHeaders    currentCuteHeaders;
 
-   protected ChangeCuteVersionWizardPage(ICuteHeaders currentCuteHeaders) {
-      super("changeCuteVersionPage");
-      this.currentCuteHeaders = currentCuteHeaders;
-      imageDesc = CuteUIPlugin.getImageDescriptor("cute_logo.png");
-   }
+    protected ChangeCuteVersionWizardPage(ICuteHeaders currentCuteHeaders) {
+        super("changeCuteVersionPage");
+        this.currentCuteHeaders = currentCuteHeaders;
+        imageDesc = CuteUIPlugin.getImageDescriptor("cute_logo.png");
+    }
 
-   @Override
-   public void createControl(Composite parent) {
-      composite = new Composite(parent, SWT.NULL);
-      composite.setLayout(new GridLayout());
-      composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+    @Override
+    public void createControl(Composite parent) {
+        composite = new Composite(parent, SWT.NULL);
+        composite.setLayout(new GridLayout());
+        composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-      setTitle("Change CUTE Version");
+        setTitle("Change CUTE Version");
 
-      cuteVersionComp = new CuteVersionComposite(composite, currentCuteHeaders);
-      setControl(composite);
-   }
+        cuteVersionComp = new CuteVersionComposite(composite, currentCuteHeaders);
+        setControl(composite);
+    }
 
-   @Override
-   public Image getImage() {
-      return imageDesc.createImage();
-   }
+    @Override
+    public Image getImage() {
+        return imageDesc.createImage();
+    }
 
-   public String getVersionString() {
-      return cuteVersionComp.getVersionString();
-   }
+    public String getVersionString() {
+        return cuteVersionComp.getVersionString();
+    }
 }

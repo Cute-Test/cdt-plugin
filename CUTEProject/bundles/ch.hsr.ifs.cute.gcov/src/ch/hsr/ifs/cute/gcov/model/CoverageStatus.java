@@ -13,5 +13,5 @@ package ch.hsr.ifs.cute.gcov.model;
  *
  */
 public enum CoverageStatus {
-   Covered, PartiallyCovered, Uncovered
+    Covered, PartiallyCovered, Uncovered
 }

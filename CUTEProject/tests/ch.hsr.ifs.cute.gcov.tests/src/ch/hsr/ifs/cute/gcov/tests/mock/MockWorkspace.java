@@ -49,275 +49,275 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
 
 public class MockWorkspace implements IWorkspace {
 
-   List<IWorkspaceRunnable> actions = new ArrayList<>();
+    List<IWorkspaceRunnable> actions = new ArrayList<>();
 
-   @Override
-   public void addResourceChangeListener(IResourceChangeListener listener) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void addResourceChangeListener(IResourceChangeListener listener) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void addResourceChangeListener(IResourceChangeListener listener, int eventMask) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void addResourceChangeListener(IResourceChangeListener listener, int eventMask) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public ISavedState addSaveParticipant(Plugin plugin, ISaveParticipant participant) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public ISavedState addSaveParticipant(Plugin plugin, ISaveParticipant participant) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public ISavedState addSaveParticipant(String pluginId, ISaveParticipant participant) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public ISavedState addSaveParticipant(String pluginId, ISaveParticipant participant) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void build(int kind, IProgressMonitor monitor) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void build(int kind, IProgressMonitor monitor) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void checkpoint(boolean build) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void checkpoint(boolean build) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IProject[][] computePrerequisiteOrder(IProject[] projects) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IProject[][] computePrerequisiteOrder(IProject[] projects) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public ProjectOrder computeProjectOrder(IProject[] projects) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public ProjectOrder computeProjectOrder(IProject[] projects) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus copy(IResource[] resources, IPath destination, boolean force, IProgressMonitor monitor) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus copy(IResource[] resources, IPath destination, boolean force, IProgressMonitor monitor) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus copy(IResource[] resources, IPath destination, int updateFlags, IProgressMonitor monitor) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus copy(IResource[] resources, IPath destination, int updateFlags, IProgressMonitor monitor) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus delete(IResource[] resources, boolean force, IProgressMonitor monitor) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus delete(IResource[] resources, boolean force, IProgressMonitor monitor) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus delete(IResource[] resources, int updateFlags, IProgressMonitor monitor) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus delete(IResource[] resources, int updateFlags, IProgressMonitor monitor) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void deleteMarkers(IMarker[] markers) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void deleteMarkers(IMarker[] markers) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void forgetSavedTree(String pluginId) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void forgetSavedTree(String pluginId) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IFilterMatcherDescriptor[] getFilterMatcherDescriptors() {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IFilterMatcherDescriptor[] getFilterMatcherDescriptors() {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IFilterMatcherDescriptor getFilterMatcherDescriptor(String filterMatcherId) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IFilterMatcherDescriptor getFilterMatcherDescriptor(String filterMatcherId) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IProjectNatureDescriptor[] getNatureDescriptors() {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IProjectNatureDescriptor[] getNatureDescriptors() {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IProjectNatureDescriptor getNatureDescriptor(String natureId) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IProjectNatureDescriptor getNatureDescriptor(String natureId) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   @SuppressWarnings({ "rawtypes", "unchecked" })
-   public Map getDanglingReferences() {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public Map getDanglingReferences() {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IWorkspaceDescription getDescription() {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IWorkspaceDescription getDescription() {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IWorkspaceRoot getRoot() {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IWorkspaceRoot getRoot() {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IResourceRuleFactory getRuleFactory() {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IResourceRuleFactory getRuleFactory() {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public ISynchronizer getSynchronizer() {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public ISynchronizer getSynchronizer() {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public boolean isAutoBuilding() {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public boolean isAutoBuilding() {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public boolean isTreeLocked() {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public boolean isTreeLocked() {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IProjectDescription loadProjectDescription(IPath projectDescriptionFile) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IProjectDescription loadProjectDescription(IPath projectDescriptionFile) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IProjectDescription loadProjectDescription(InputStream projectDescriptionFile) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IProjectDescription loadProjectDescription(InputStream projectDescriptionFile) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus move(IResource[] resources, IPath destination, boolean force, IProgressMonitor monitor) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus move(IResource[] resources, IPath destination, boolean force, IProgressMonitor monitor) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus move(IResource[] resources, IPath destination, int updateFlags, IProgressMonitor monitor) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus move(IResource[] resources, IPath destination, int updateFlags, IProgressMonitor monitor) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IProjectDescription newProjectDescription(String projectName) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IProjectDescription newProjectDescription(String projectName) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void removeResourceChangeListener(IResourceChangeListener listener) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void removeResourceChangeListener(IResourceChangeListener listener) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void removeSaveParticipant(Plugin plugin) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void removeSaveParticipant(Plugin plugin) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void removeSaveParticipant(String pluginId) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void removeSaveParticipant(String pluginId) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void run(IWorkspaceRunnable action, ISchedulingRule rule, int flags, IProgressMonitor monitor) throws CoreException {
-      actions.add(action);
-      action.run(new NullProgressMonitor());
-   }
+    @Override
+    public void run(IWorkspaceRunnable action, ISchedulingRule rule, int flags, IProgressMonitor monitor) throws CoreException {
+        actions.add(action);
+        action.run(new NullProgressMonitor());
+    }
 
-   @Override
-   public void run(IWorkspaceRunnable action, IProgressMonitor monitor) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void run(IWorkspaceRunnable action, IProgressMonitor monitor) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void run(ICoreRunnable action, ISchedulingRule rule, int flags, IProgressMonitor monitor) throws CoreException {
-      throw new NotYetImplementedException();
+    @Override
+    public void run(ICoreRunnable action, ISchedulingRule rule, int flags, IProgressMonitor monitor) throws CoreException {
+        throw new NotYetImplementedException();
 
-   }
+    }
 
-   @Override
-   public void run(ICoreRunnable action, IProgressMonitor monitor) throws CoreException {
-      throw new NotYetImplementedException();
+    @Override
+    public void run(ICoreRunnable action, IProgressMonitor monitor) throws CoreException {
+        throw new NotYetImplementedException();
 
-   }
+    }
 
-   @Override
-   public IStatus save(boolean full, IProgressMonitor monitor) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus save(boolean full, IProgressMonitor monitor) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void setDescription(IWorkspaceDescription description) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void setDescription(IWorkspaceDescription description) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public String[] sortNatureSet(String[] natureIds) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public String[] sortNatureSet(String[] natureIds) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus validateEdit(IFile[] files, Object context) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus validateEdit(IFile[] files, Object context) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus validateLinkLocation(IResource resource, IPath location) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus validateLinkLocation(IResource resource, IPath location) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus validateLinkLocationURI(IResource resource, URI location) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus validateLinkLocationURI(IResource resource, URI location) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus validateName(String segment, int typeMask) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus validateName(String segment, int typeMask) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus validateNatureSet(String[] natureIds) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus validateNatureSet(String[] natureIds) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus validatePath(String path, int typeMask) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus validatePath(String path, int typeMask) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus validateProjectLocation(IProject project, IPath location) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus validateProjectLocation(IProject project, IPath location) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus validateProjectLocationURI(IProject project, URI location) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus validateProjectLocationURI(IProject project, URI location) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IPathVariableManager getPathVariableManager() {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IPathVariableManager getPathVariableManager() {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public <T> T getAdapter(Class<T> adapter) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public <T> T getAdapter(Class<T> adapter) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IStatus validateFiltered(IResource resource) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IStatus validateFiltered(IResource resource) {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public void build(IBuildConfiguration[] buildConfigs, int kind, boolean buildReferences, IProgressMonitor monitor) throws CoreException {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public void build(IBuildConfiguration[] buildConfigs, int kind, boolean buildReferences, IProgressMonitor monitor) throws CoreException {
+        throw new NotYetImplementedException();
+    }
 
-   @Override
-   public IBuildConfiguration newBuildConfig(String projectName, String configName) {
-      throw new NotYetImplementedException();
-   }
+    @Override
+    public IBuildConfiguration newBuildConfig(String projectName, String configName) {
+        throw new NotYetImplementedException();
+    }
 
 }

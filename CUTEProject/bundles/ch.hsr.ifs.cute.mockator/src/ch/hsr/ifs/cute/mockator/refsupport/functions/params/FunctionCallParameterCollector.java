@@ -15,26 +15,26 @@ import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 public class FunctionCallParameterCollector {
 
-   private final ICPPASTFunctionCallExpression funCall;
+    private final ICPPASTFunctionCallExpression funCall;
 
-   public FunctionCallParameterCollector(final ICPPASTFunctionCallExpression funCall) {
-      this.funCall = funCall;
-   }
+    public FunctionCallParameterCollector(final ICPPASTFunctionCallExpression funCall) {
+        this.funCall = funCall;
+    }
 
-   public List<ICPPASTParameterDeclaration> getFunctionParameters() {
-      final Map<String, Boolean> nameHistory = new HashMap<>();
-      final List<ICPPASTParameterDeclaration> params = new ArrayList<>();
+    public List<ICPPASTParameterDeclaration> getFunctionParameters() {
+        final Map<String, Boolean> nameHistory = new HashMap<>();
+        final List<ICPPASTParameterDeclaration> params = new ArrayList<>();
 
-      for (final IASTInitializerClause arg : funCall.getArguments()) {
-         final IASTExpression idExpr = CPPVisitor.findChildWithType(arg, IASTExpression.class).orElse(null);
+        for (final IASTInitializerClause arg : funCall.getArguments()) {
+            final IASTExpression idExpr = CPPVisitor.findChildWithType(arg, IASTExpression.class).orElse(null);
 
-         if (idExpr == null) {
-            continue;
-         }
+            if (idExpr == null) {
+                continue;
+            }
 
-         params.add(ParamDeclCreator.createParameterFrom(idExpr, nameHistory));
-      }
+            params.add(ParamDeclCreator.createParameterFrom(idExpr, nameHistory));
+        }
 
-      return params;
-   }
+        return params;
+    }
 }

@@ -12,30 +12,30 @@ import ch.hsr.ifs.cute.mockator.refsupport.utils.NodeContainer;
 
 public class NameFinder {
 
-   private final IASTNode startingNode;
+    private final IASTNode startingNode;
 
-   public NameFinder(final IASTNode startingNode) {
-      this.startingNode = startingNode;
-   }
+    public NameFinder(final IASTNode startingNode) {
+        this.startingNode = startingNode;
+    }
 
-   public Optional<IASTName> getNameMatchingCriteria(final Function<IASTName, Boolean> criteria) {
-      final NodeContainer<IASTName> matchingName = new NodeContainer<>();
-      startingNode.accept(new ASTVisitor() {
+    public Optional<IASTName> getNameMatchingCriteria(final Function<IASTName, Boolean> criteria) {
+        final NodeContainer<IASTName> matchingName = new NodeContainer<>();
+        startingNode.accept(new ASTVisitor() {
 
-         {
-            shouldVisitNames = true;
-         }
-
-         @Override
-         public int visit(final IASTName name) {
-            if (criteria.apply(name)) {
-               matchingName.setNode(name);
-               return PROCESS_ABORT;
+            {
+                shouldVisitNames = true;
             }
 
-            return PROCESS_CONTINUE;
-         }
-      });
-      return matchingName.getNode();
-   }
+            @Override
+            public int visit(final IASTName name) {
+                if (criteria.apply(name)) {
+                    matchingName.setNode(name);
+                    return PROCESS_ABORT;
+                }
+
+                return PROCESS_CONTINUE;
+            }
+        });
+        return matchingName.getNode();
+    }
 }

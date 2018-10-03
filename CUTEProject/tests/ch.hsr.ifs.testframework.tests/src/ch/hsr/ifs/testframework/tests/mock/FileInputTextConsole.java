@@ -32,61 +32,61 @@ import ch.hsr.ifs.testframework.tests.TestframeworkTestPlugin;
  */
 public class FileInputTextConsole extends TextConsole {
 
-   private final String inputFile;
+    private final String inputFile;
 
-   public FileInputTextConsole(String inputFile) {
-      super(inputFile, "FileInputTextConsole", null, true);
-      this.inputFile = inputFile;
-   }
+    public FileInputTextConsole(String inputFile) {
+        super(inputFile, "FileInputTextConsole", null, true);
+        this.inputFile = inputFile;
+    }
 
-   private String getFileText(String inputFile) throws CoreException, IOException {
-      Bundle bundle = TestframeworkTestPlugin.getDefault().getBundle();
-      Path path = new Path(inputFile);
-      BufferedReader br = null;
-      try {
-         String file2 = FileLocator.toFileURL(FileLocator.find(bundle, path, null)).getFile();
-         br = new BufferedReader(new FileReader(file2));
-         StringBuffer buffer = new StringBuffer();
-         String line;
-         while ((line = br.readLine()) != null) {
-            buffer.append(line);
-            buffer.append('\n');
-         }
-
-         return buffer.toString();
-      } finally {
-         if (br != null) {
-            try {
-               br.close();
-            } catch (IOException e) {
-               e.printStackTrace();
+    private String getFileText(String inputFile) throws CoreException, IOException {
+        Bundle bundle = TestframeworkTestPlugin.getDefault().getBundle();
+        Path path = new Path(inputFile);
+        BufferedReader br = null;
+        try {
+            String file2 = FileLocator.toFileURL(FileLocator.find(bundle, path, null)).getFile();
+            br = new BufferedReader(new FileReader(file2));
+            StringBuffer buffer = new StringBuffer();
+            String line;
+            while ((line = br.readLine()) != null) {
+                buffer.append(line);
+                buffer.append('\n');
             }
-         }
-      }
-   }
 
-   public void startTest() throws IOException {
-      IDocument doc = getDocument();
-      try {
-         doc.replace(0, doc.getLength(), getFileText(inputFile));
-      } catch (CoreException e) {
-         e.printStackTrace();
-      } catch (BadLocationException e) {
-         e.printStackTrace();
-      }
-   }
+            return buffer.toString();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
-   @Override
-   public IPageBookViewPage createPage(IConsoleView view) {
-      return null;
-   }
+    public void startTest() throws IOException {
+        IDocument doc = getDocument();
+        try {
+            doc.replace(0, doc.getLength(), getFileText(inputFile));
+        } catch (CoreException e) {
+            e.printStackTrace();
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+    }
 
-   @Override
-   protected IConsoleDocumentPartitioner getPartitioner() {
-      return null;
-   }
+    @Override
+    public IPageBookViewPage createPage(IConsoleView view) {
+        return null;
+    }
 
-   public void end() {
-      dispose();
-   }
+    @Override
+    protected IConsoleDocumentPartitioner getPartitioner() {
+        return null;
+    }
+
+    public void end() {
+        dispose();
+    }
 }

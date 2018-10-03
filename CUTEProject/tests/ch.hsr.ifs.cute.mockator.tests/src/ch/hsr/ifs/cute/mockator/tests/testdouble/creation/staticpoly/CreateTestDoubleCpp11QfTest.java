@@ -9,38 +9,38 @@ import ch.hsr.ifs.cute.mockator.tests.AbstractQuickfixTest;
 
 public class CreateTestDoubleCpp11QfTest extends AbstractQuickfixTest {
 
-   @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.MISSING_TEST_DOUBLE_STATICPOLY;
-   }
+    @Override
+    protected ProblemId getProblemId() {
+        return ProblemId.MISSING_TEST_DOUBLE_STATICPOLY;
+    }
 
-   @Override
-   protected CppStandard getCppStdToUse() {
-      return CppStandard.Cpp11Std;
-   }
+    @Override
+    protected CppStandard getCppStdToUse() {
+        return CppStandard.Cpp11Std;
+    }
 
-   @Override
-   protected boolean isManagedBuildProjectNecessary() {
-      return true;
-   }
+    @Override
+    protected boolean isManagedBuildProjectNecessary() {
+        return true;
+    }
 
-   @Override
-   protected boolean isRefactoringUsed() {
-      return true;
-   }
+    @Override
+    protected boolean isRefactoringUsed() {
+        return true;
+    }
 
-   @Override
-   protected MockatorQuickFix createMarkerResolution() {
-      return new CreateTestDoubleStaticPolyQuickFix();
-   }
+    @Override
+    protected MockatorQuickFix createMarkerResolution() {
+        return new CreateTestDoubleStaticPolyQuickFix();
+    }
 
-   @Override
-   protected String getResolutionMessage() {
-      return null;
-   }
+    @Override
+    protected String getResolutionMessage() {
+        return null;
+    }
 
-   @Override
-   protected String[] getMarkerMessages() {
-      return new String[] { "Compile seam \"Fake\" cannot be resolved" };
-   }
+    @Override
+    protected String[] getMarkerMessages() {
+        return new String[] { "Compile seam \"Fake\" cannot be resolved" };
+    }
 }

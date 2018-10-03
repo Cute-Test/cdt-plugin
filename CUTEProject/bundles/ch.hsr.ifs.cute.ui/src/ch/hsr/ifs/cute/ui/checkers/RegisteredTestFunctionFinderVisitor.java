@@ -42,208 +42,231 @@ import org.eclipse.cdt.internal.core.dom.parser.ASTQueries;
  */
 public class RegisteredTestFunctionFinderVisitor extends ASTVisitor {
 
-   {
-      shouldVisitDeclarations = true;
-   }
+    {
+        shouldVisitDeclarations = true;
+    }
 
-   private final List<IBinding> registeredTests;
-   private final IIndex         index;
+    private final List<IBinding> registeredTests;
+    private final IIndex         index;
 
-   public RegisteredTestFunctionFinderVisitor(IIndex iIndex) {
-      registeredTests = new ArrayList<>();
-      this.index = iIndex;
-   }
+    public RegisteredTestFunctionFinderVisitor(IIndex iIndex) {
+        registeredTests = new ArrayList<>();
+        this.index = iIndex;
+    }
 
-   public List<IBinding> getRegisteredFunctionNames() {
-      return registeredTests;
-   }
+    public List<IBinding> getRegisteredFunctionNames() {
+        return registeredTests;
+    }
 
-   @Override
-   public int visit(IASTDeclaration declaration) {
-      if (declaration instanceof IASTSimpleDeclaration) {
-         IASTSimpleDeclaration simpDecl = (IASTSimpleDeclaration) declaration;
-         if (simpDecl.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier) {
-            ICPPASTNamedTypeSpecifier nameDeclSpec = (ICPPASTNamedTypeSpecifier) simpDecl.getDeclSpecifier();
-            if (isCuteSuite(nameDeclSpec)) {
-               IASTName suiteName = simpDecl.getDeclarators()[0].getName();
-               IBinding suiteBinding = suiteName.resolveBinding();
-               IASTName[] suiteRefs = suiteName.getTranslationUnit().getReferences(suiteBinding);
-               for (IASTName ref : suiteRefs) {
-                  if (isPushBack(ref) || isPlusAssignOperator(ref)) {
-                     registeredTests.add(index.adaptBinding(getRegisteredFunctionBinding(ref)));
-                  }
-               }
+    @Override
+    public int visit(IASTDeclaration declaration) {
+        if (declaration instanceof IASTSimpleDeclaration) {
+            IASTSimpleDeclaration simpDecl = (IASTSimpleDeclaration) declaration;
+            if (simpDecl.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier) {
+                ICPPASTNamedTypeSpecifier nameDeclSpec = (ICPPASTNamedTypeSpecifier) simpDecl.getDeclSpecifier();
+                if (isCuteSuite(nameDeclSpec)) {
+                    IASTName suiteName = simpDecl.getDeclarators()[0].getName();
+                    IBinding suiteBinding = suiteName.resolveBinding();
+                    IASTName[] suiteRefs = suiteName.getTranslationUnit().getReferences(suiteBinding);
+                    for (IASTName ref : suiteRefs) {
+                        if (isPushBack(ref) || isPlusAssignOperator(ref)) {
+                            registeredTests.add(index.adaptBinding(getRegisteredFunctionBinding(ref)));
+                        }
+                    }
+                }
             }
-         }
-      }
-      return super.visit(declaration);
-   }
+        }
+        return super.visit(declaration);
+    }
 
-   private IBinding getRegisteredFunctionBinding(IASTName ref) {
-      final IASTInitializerClause[] arguments = getAddedArgument(ref);
-      if (isFunctionPushBack(arguments)) { return getFunction(arguments); }
-      if (isSimpleMemberFunctionPushBack(arguments)) { return getFunctionAtArgument(arguments, 0); }
-      if (isMemberFunctionPushBack(arguments)) { return getFunctionAtArgument(arguments, 1); }
-      if (isMemberFunctionWithContextPushBack(arguments)) { return getFunctionAtArgument(arguments, 1); }
-      if (isFunctorPushBack(arguments)) { return getFunctor(arguments); }
-      return null;
-   }
+    private IBinding getRegisteredFunctionBinding(IASTName ref) {
+        final IASTInitializerClause[] arguments = getAddedArgument(ref);
+        if (isFunctionPushBack(arguments)) {
+            return getFunction(arguments);
+        }
+        if (isSimpleMemberFunctionPushBack(arguments)) {
+            return getFunctionAtArgument(arguments, 0);
+        }
+        if (isMemberFunctionPushBack(arguments)) {
+            return getFunctionAtArgument(arguments, 1);
+        }
+        if (isMemberFunctionWithContextPushBack(arguments)) {
+            return getFunctionAtArgument(arguments, 1);
+        }
+        if (isFunctorPushBack(arguments)) {
+            return getFunctor(arguments);
+        }
+        return null;
+    }
 
-   private IASTInitializerClause[] getAddedArgument(IASTName ref) {
-      IASTInitializerClause[] arguments = null;
-      final IASTFunctionCallExpression funcCall = ASTQueries.findAncestorWithType(ref, IASTFunctionCallExpression.class);
-      if (funcCall != null) {
-         arguments = funcCall.getArguments();
-      } else {
-         final IASTBinaryExpression binaryExpression = ASTQueries.findAncestorWithType(ref, IASTBinaryExpression.class);
-         return new IASTInitializerClause[] { binaryExpression.getOperand2() };
-      }
-      return arguments;
-   }
+    private IASTInitializerClause[] getAddedArgument(IASTName ref) {
+        IASTInitializerClause[] arguments = null;
+        final IASTFunctionCallExpression funcCall = ASTQueries.findAncestorWithType(ref, IASTFunctionCallExpression.class);
+        if (funcCall != null) {
+            arguments = funcCall.getArguments();
+        } else {
+            final IASTBinaryExpression binaryExpression = ASTQueries.findAncestorWithType(ref, IASTBinaryExpression.class);
+            return new IASTInitializerClause[] { binaryExpression.getOperand2() };
+        }
+        return arguments;
+    }
 
-   private IBinding getFunctor(IASTInitializerClause[] arguments) {
-      IBinding targetBinding = null;
-      if (isFunctorPushBack(arguments)) {
-         IASTInitializerClause argument = arguments[0];
-         if (argument instanceof ICPPASTFunctionCallExpression) {
-            final ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) argument;
-            final IASTIdExpression idExp = (IASTIdExpression) funcCall.getFunctionNameExpression();
-            targetBinding = idExp.getName().resolveBinding();
-         } else if (argument instanceof IASTImplicitNameOwner) {
-            IASTImplicitNameOwner constructorExpression = (IASTImplicitNameOwner) argument;
-            IASTImplicitName[] implicitNames = constructorExpression.getImplicitNames();
-            if (implicitNames.length > 0) {
-               targetBinding = implicitNames[0].getBinding();
+    private IBinding getFunctor(IASTInitializerClause[] arguments) {
+        IBinding targetBinding = null;
+        if (isFunctorPushBack(arguments)) {
+            IASTInitializerClause argument = arguments[0];
+            if (argument instanceof ICPPASTFunctionCallExpression) {
+                final ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) argument;
+                final IASTIdExpression idExp = (IASTIdExpression) funcCall.getFunctionNameExpression();
+                targetBinding = idExp.getName().resolveBinding();
+            } else if (argument instanceof IASTImplicitNameOwner) {
+                IASTImplicitNameOwner constructorExpression = (IASTImplicitNameOwner) argument;
+                IASTImplicitName[] implicitNames = constructorExpression.getImplicitNames();
+                if (implicitNames.length > 0) {
+                    targetBinding = implicitNames[0].getBinding();
+                }
             }
-         }
-         if (targetBinding instanceof ICPPConstructor) {
-            final ICPPConstructor constructorBinding = (ICPPConstructor) targetBinding;
-            return constructorBinding.getClassOwner();
-         } else if (targetBinding instanceof ICPPClassType) { return targetBinding; }
-      }
-      return targetBinding;
-   }
-
-   private boolean isFunctorPushBack(IASTInitializerClause[] arguments) {
-      if (arguments.length == 1) {
-         IASTInitializerClause pushbackArgument = arguments[0];
-         if (pushbackArgument instanceof ICPPASTFunctionCallExpression) {
-            ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) pushbackArgument;
-            IASTImplicitName[] implicitNames = funcCall.getImplicitNames();
-            if (implicitNames.length != 0) { return implicitNames[0].resolveBinding() instanceof ICPPConstructor; }
-         }
-         return pushbackArgument instanceof ICPPASTSimpleTypeConstructorExpression;
-      }
-      return false;
-   }
-
-   private IBinding getFunctionAtArgument(IASTInitializerClause[] arguments, int innerArgumentNumber) {
-      if (arguments[0] instanceof ICPPASTFunctionCallExpression) {
-         ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
-         if (funcCall.getArguments().length > innerArgumentNumber && funcCall.getArguments()[innerArgumentNumber] instanceof IASTUnaryExpression) {
-            IASTUnaryExpression unExp = (IASTUnaryExpression) funcCall.getArguments()[innerArgumentNumber];
-            if (unExp.getOperand() instanceof IASTIdExpression) {
-               IASTIdExpression idExp = (IASTIdExpression) unExp.getOperand();
-               return idExp.getName().resolveBinding();
+            if (targetBinding instanceof ICPPConstructor) {
+                final ICPPConstructor constructorBinding = (ICPPConstructor) targetBinding;
+                return constructorBinding.getClassOwner();
+            } else if (targetBinding instanceof ICPPClassType) {
+                return targetBinding;
             }
-         }
-      }
-      return null;
-   }
+        }
+        return targetBinding;
+    }
 
-   private boolean isSimpleMemberFunctionPushBack(IASTInitializerClause[] arguments) {
-      if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
-         ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
-         return functionNameIs(funcCall, "cute::makeSimpleMemberFunctionTest");
-      }
-      return false;
-   }
+    private boolean isFunctorPushBack(IASTInitializerClause[] arguments) {
+        if (arguments.length == 1) {
+            IASTInitializerClause pushbackArgument = arguments[0];
+            if (pushbackArgument instanceof ICPPASTFunctionCallExpression) {
+                ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) pushbackArgument;
+                IASTImplicitName[] implicitNames = funcCall.getImplicitNames();
+                if (implicitNames.length != 0) {
+                    return implicitNames[0].resolveBinding() instanceof ICPPConstructor;
+                }
+            }
+            return pushbackArgument instanceof ICPPASTSimpleTypeConstructorExpression;
+        }
+        return false;
+    }
 
-   private boolean isMemberFunctionPushBack(IASTInitializerClause[] arguments) {
-      if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
-         ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
-         return functionNameIs(funcCall, "cute::makeMemberFunctionTest");
-      }
-      return false;
-   }
+    private IBinding getFunctionAtArgument(IASTInitializerClause[] arguments, int innerArgumentNumber) {
+        if (arguments[0] instanceof ICPPASTFunctionCallExpression) {
+            ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
+            if (funcCall.getArguments().length > innerArgumentNumber && funcCall.getArguments()[innerArgumentNumber] instanceof IASTUnaryExpression) {
+                IASTUnaryExpression unExp = (IASTUnaryExpression) funcCall.getArguments()[innerArgumentNumber];
+                if (unExp.getOperand() instanceof IASTIdExpression) {
+                    IASTIdExpression idExp = (IASTIdExpression) unExp.getOperand();
+                    return idExp.getName().resolveBinding();
+                }
+            }
+        }
+        return null;
+    }
 
-   private boolean isMemberFunctionWithContextPushBack(IASTInitializerClause[] arguments) {
-      if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
-         ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
-         return functionNameIs(funcCall, "cute::makeMemberFunctionTestWithContext");
-      }
-      return false;
-   }
+    private boolean isSimpleMemberFunctionPushBack(IASTInitializerClause[] arguments) {
+        if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
+            ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
+            return functionNameIs(funcCall, "cute::makeSimpleMemberFunctionTest");
+        }
+        return false;
+    }
 
-   private IBinding getFunction(IASTInitializerClause[] arguments) {
-      if (!isFunctionPushBack(arguments)) { return null; }
+    private boolean isMemberFunctionPushBack(IASTInitializerClause[] arguments) {
+        if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
+            ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
+            return functionNameIs(funcCall, "cute::makeMemberFunctionTest");
+        }
+        return false;
+    }
 
-      ICPPASTFunctionCallExpression cuteTestCall = (ICPPASTFunctionCallExpression) arguments[0];
-      IASTInitializerClause[] cuteTestArguments = cuteTestCall.getArguments();
+    private boolean isMemberFunctionWithContextPushBack(IASTInitializerClause[] arguments) {
+        if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
+            ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
+            return functionNameIs(funcCall, "cute::makeMemberFunctionTestWithContext");
+        }
+        return false;
+    }
 
-      if (cuteTestArguments.length == 0) { return null; }
+    private IBinding getFunction(IASTInitializerClause[] arguments) {
+        if (!isFunctionPushBack(arguments)) {
+            return null;
+        }
 
-      if (cuteTestArguments[0] instanceof IASTIdExpression) {
-         return ((IASTIdExpression) cuteTestArguments[0]).getName().resolveBinding();
-      } else if (cuteTestArguments[0] instanceof IASTUnaryExpression) {
-         IASTUnaryExpression unary = (IASTUnaryExpression) cuteTestArguments[0];
-         if (unary.getOperand() instanceof IASTIdExpression && unary.getOperator() == IASTUnaryExpression.op_amper) {
-            return ((IASTIdExpression) unary.getOperand()).getName().resolveBinding();
-         } else if (unary.getOperand() instanceof IASTUnaryExpression) {
-            IASTUnaryExpression innerUnary = (IASTUnaryExpression) unary.getOperand();
-            if (innerUnary.getOperand() instanceof IASTIdExpression) { return ((IASTIdExpression) innerUnary.getOperand()).getName()
-                  .resolveBinding(); }
-         }
-      }
+        ICPPASTFunctionCallExpression cuteTestCall = (ICPPASTFunctionCallExpression) arguments[0];
+        IASTInitializerClause[] cuteTestArguments = cuteTestCall.getArguments();
 
-      return null;
-   }
+        if (cuteTestArguments.length == 0) {
+            return null;
+        }
 
-   private boolean isFunctionPushBack(IASTInitializerClause[] arguments) {
-      if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
-         ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
-         return functionNameIs(funcCall, "cute::test");
-      }
-      return false;
-   }
+        if (cuteTestArguments[0] instanceof IASTIdExpression) {
+            return ((IASTIdExpression) cuteTestArguments[0]).getName().resolveBinding();
+        } else if (cuteTestArguments[0] instanceof IASTUnaryExpression) {
+            IASTUnaryExpression unary = (IASTUnaryExpression) cuteTestArguments[0];
+            if (unary.getOperand() instanceof IASTIdExpression && unary.getOperator() == IASTUnaryExpression.op_amper) {
+                return ((IASTIdExpression) unary.getOperand()).getName().resolveBinding();
+            } else if (unary.getOperand() instanceof IASTUnaryExpression) {
+                IASTUnaryExpression innerUnary = (IASTUnaryExpression) unary.getOperand();
+                if (innerUnary.getOperand() instanceof IASTIdExpression) {
+                    return ((IASTIdExpression) innerUnary.getOperand()).getName().resolveBinding();
+                }
+            }
+        }
 
-   protected boolean functionNameIs(ICPPASTFunctionCallExpression funcCall, String methodName) {
-      boolean isIdExpression = funcCall.getFunctionNameExpression() instanceof IASTIdExpression;
-      return isIdExpression && ((IASTIdExpression) funcCall.getFunctionNameExpression()).getName().toString().startsWith(methodName);
-   }
+        return null;
+    }
 
-   private boolean isPushBack(IASTName ref) {
-      IASTFunctionCallExpression funcCall = ASTQueries.findAncestorWithType(ref, IASTFunctionCallExpression.class);
-      if (funcCall != null) {
-         if (funcCall.getFunctionNameExpression() instanceof IASTFieldReference) {
-            IASTFieldReference idExp = (IASTFieldReference) funcCall.getFunctionNameExpression();
-            if (idExp.getFieldName().toString().equals("push_back")) { return true; }
-         }
-      }
-      return false;
-   }
+    private boolean isFunctionPushBack(IASTInitializerClause[] arguments) {
+        if (arguments.length == 1 && arguments[0] instanceof ICPPASTFunctionCallExpression) {
+            ICPPASTFunctionCallExpression funcCall = (ICPPASTFunctionCallExpression) arguments[0];
+            return functionNameIs(funcCall, "cute::test");
+        }
+        return false;
+    }
 
-   private boolean isPlusAssignOperator(IASTName ref) {
-      IASTBinaryExpression binaryExpression = ASTQueries.findAncestorWithType(ref, IASTBinaryExpression.class);
-      if (binaryExpression != null) { return binaryExpression.getOperator() == IASTBinaryExpression.op_plusAssign; }
-      return false;
-   }
+    protected boolean functionNameIs(ICPPASTFunctionCallExpression funcCall, String methodName) {
+        boolean isIdExpression = funcCall.getFunctionNameExpression() instanceof IASTIdExpression;
+        return isIdExpression && ((IASTIdExpression) funcCall.getFunctionNameExpression()).getName().toString().startsWith(methodName);
+    }
 
-   public static boolean isCuteSuite(IASTNamedTypeSpecifier typeSpec) {
-      IASTName typeName = typeSpec.getName();
+    private boolean isPushBack(IASTName ref) {
+        IASTFunctionCallExpression funcCall = ASTQueries.findAncestorWithType(ref, IASTFunctionCallExpression.class);
+        if (funcCall != null) {
+            if (funcCall.getFunctionNameExpression() instanceof IASTFieldReference) {
+                IASTFieldReference idExp = (IASTFieldReference) funcCall.getFunctionNameExpression();
+                if (idExp.getFieldName().toString().equals("push_back")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-      if ("cute::suite".equals(typeName.toString())) return true;
+    private boolean isPlusAssignOperator(IASTName ref) {
+        IASTBinaryExpression binaryExpression = ASTQueries.findAncestorWithType(ref, IASTBinaryExpression.class);
+        if (binaryExpression != null) {
+            return binaryExpression.getOperator() == IASTBinaryExpression.op_plusAssign;
+        }
+        return false;
+    }
 
-      IBinding typeBinding = typeName.resolveBinding();
-      if (typeBinding instanceof ITypedef) {
-         ITypedef typeDef = (ITypedef) typeBinding;
-         return "suite".equals(typeDef.getName()) && "cute".equals(typeDef.getOwner().getName());
-      } else if (typeBinding instanceof ICPPClassType) {
-         ICPPClassType type = (ICPPClassType) typeBinding;
-         return "suite".equals(type.getName()) && "cute".equals(type.getOwner().getName());
+    public static boolean isCuteSuite(IASTNamedTypeSpecifier typeSpec) {
+        IASTName typeName = typeSpec.getName();
 
-      } else return false;
+        if ("cute::suite".equals(typeName.toString())) return true;
 
-   }
+        IBinding typeBinding = typeName.resolveBinding();
+        if (typeBinding instanceof ITypedef) {
+            ITypedef typeDef = (ITypedef) typeBinding;
+            return "suite".equals(typeDef.getName()) && "cute".equals(typeDef.getOwner().getName());
+        } else if (typeBinding instanceof ICPPClassType) {
+            ICPPClassType type = (ICPPClassType) typeBinding;
+            return "suite".equals(type.getName()) && "cute".equals(type.getOwner().getName());
+
+        } else return false;
+
+    }
 
 }

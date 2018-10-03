@@ -15,12 +15,12 @@ import junit.framework.TestSuite;
 
 public class ConsoleParserTestSuite {
 
-   public static Test suite() {
+    public static Test suite() {
 
-      TestSuite suite = new TestSuite("Console Parser Test Suite");
-      suite.addTestSuite(ConsoleParserFailureTest.class);
-      return suite;
+        TestSuite suite = new TestSuite("Console Parser Test Suite");
+        suite.addTestSuite(ConsoleParserFailureTest.class);
+        return suite;
 
-   }
+    }
 
 }

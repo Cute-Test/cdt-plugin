@@ -8,15 +8,15 @@ import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.CDTTestingChecke
 
 public class ClassTemplateMemberFunctionsTest extends CDTTestingCheckerTest {
 
-   @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
-   }
+    @Override
+    protected ProblemId getProblemId() {
+        return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
+    }
 
-   @Test
-   public void runTest() throws Throwable {
-      final int markerExpectedOnLine = 1;
-      assertMarkerLines(markerExpectedOnLine);
-      assertMarkerMessages(new String[] { "Necessary member function(s) not existing in class A" });
-   }
+    @Test
+    public void runTest() throws Throwable {
+        final int markerExpectedOnLine = 1;
+        assertMarkerLines(markerExpectedOnLine);
+        assertMarkerMessages(new String[] { "Necessary member function(s) not existing in class A" });
+    }
 }

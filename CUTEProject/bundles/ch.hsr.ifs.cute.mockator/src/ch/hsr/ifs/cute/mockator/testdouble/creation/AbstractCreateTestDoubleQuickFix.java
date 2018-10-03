@@ -11,24 +11,24 @@ import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorQfWithRefactoringSupport;
 @SuppressWarnings("restriction")
 public abstract class AbstractCreateTestDoubleQuickFix extends MockatorQfWithRefactoringSupport {
 
-   @Override
-   public Image getImage() {
-      return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_STRUCT);
-   }
+    @Override
+    public Image getImage() {
+        return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_STRUCT);
+    }
 
-   @Override
-   public String getLabel() {
-      return NLS.bind(getQfLabel(), getNameOfNewClass());
-   }
+    @Override
+    public String getLabel() {
+        return NLS.bind(getQfLabel(), getNameOfNewClass());
+    }
 
-   protected abstract String getQfLabel();
+    protected abstract String getQfLabel();
 
-   protected String getNameOfNewClass() {
-      return CodanProblemMarker.getProblemArgument(marker, 0);
-   }
+    protected String getNameOfNewClass() {
+        return CodanProblemMarker.getProblemArgument(marker, 0);
+    }
 
-   @Override
-   public String getDescription() {
-      return null; // no description necessary
-   }
+    @Override
+    public String getDescription() {
+        return null; // no description necessary
+    }
 }

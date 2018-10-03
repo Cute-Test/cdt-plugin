@@ -9,38 +9,38 @@ import ch.hsr.ifs.cute.mockator.tests.AbstractQuickfixTest;
 
 public class CreateTestDoubleSubTypeByPtrQfTest extends AbstractQuickfixTest {
 
-   @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE;
-   }
+    @Override
+    protected ProblemId getProblemId() {
+        return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE;
+    }
 
-   @Override
-   protected CppStandard getCppStdToUse() {
-      return CppStandard.Cpp03Std;
-   }
+    @Override
+    protected CppStandard getCppStdToUse() {
+        return CppStandard.Cpp03Std;
+    }
 
-   @Override
-   protected boolean isManagedBuildProjectNecessary() {
-      return false;
-   }
+    @Override
+    protected boolean isManagedBuildProjectNecessary() {
+        return false;
+    }
 
-   @Override
-   protected boolean isRefactoringUsed() {
-      return true;
-   }
+    @Override
+    protected boolean isRefactoringUsed() {
+        return true;
+    }
 
-   @Override
-   protected MockatorQuickFix createMarkerResolution() {
-      return new CreateTestDoubleSubTypeQuickFix();
-   }
+    @Override
+    protected MockatorQuickFix createMarkerResolution() {
+        return new CreateTestDoubleSubTypeQuickFix();
+    }
 
-   @Override
-   protected String getResolutionMessage() {
-      return null;
-   }
+    @Override
+    protected String getResolutionMessage() {
+        return null;
+    }
 
-   @Override
-   protected String[] getMarkerMessages() {
-      return new String[] { "Object seam \"dependency\" cannot be resolved" };
-   }
+    @Override
+    protected String[] getMarkerMessages() {
+        return new String[] { "Object seam \"dependency\" cannot be resolved" };
+    }
 }

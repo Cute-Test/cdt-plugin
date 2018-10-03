@@ -10,13 +10,13 @@ import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.CDTTestingChecke
 
 public class FunctionCallSignaturesNoneMissingTest extends CDTTestingCheckerTest {
 
-   @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
-   }
+    @Override
+    protected ProblemId getProblemId() {
+        return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
+    }
 
-   @Test
-   public void runTest() throws Throwable {
-      assertEquals(0, findMarkers().length);
-   }
+    @Test
+    public void runTest() throws Throwable {
+        assertEquals(0, findMarkers().length);
+    }
 }

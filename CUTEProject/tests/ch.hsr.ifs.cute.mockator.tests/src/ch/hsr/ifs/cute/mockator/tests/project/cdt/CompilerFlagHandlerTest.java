@@ -9,41 +9,41 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.hsr.ifs.cute.mockator.tests.CdtCppTestProject;
 import ch.hsr.ifs.cute.mockator.project.cdt.options.CompilerFlagHandler;
+import ch.hsr.ifs.cute.mockator.tests.CdtCppTestProject;
 
 
 public class CompilerFlagHandlerTest {
 
-   private static final String COMPILER_FLAG = "-ftree-loop-im";
-   private CdtCppTestProject   project;
-   private CompilerFlagHandler handler;
+    private static final String COMPILER_FLAG = "-ftree-loop-im";
+    private CdtCppTestProject   project;
+    private CompilerFlagHandler handler;
 
-   @Before
-   public void setUp() throws CoreException {
-      project = CdtCppTestProject.withOpenedProject();
-      project.addCppNatures();
-      project.activateManagedBuild();
-      handler = new CompilerFlagHandler(project.getProject());
-   }
+    @Before
+    public void setUp() throws CoreException {
+        project = CdtCppTestProject.withOpenedProject();
+        project.addCppNatures();
+        project.activateManagedBuild();
+        handler = new CompilerFlagHandler(project.getProject());
+    }
 
-   @After
-   public void tearDown() throws CoreException {
-      project.dispose();
-   }
+    @After
+    public void tearDown() throws CoreException {
+        project.dispose();
+    }
 
-   @Test
-   public void hasCompilerFlagAfterAdding() throws BuildException {
-      assertFalse(project.hasCompilerFlag(COMPILER_FLAG));
-      handler.addCompilerFlag(COMPILER_FLAG);
-      assertTrue(project.hasCompilerFlag(COMPILER_FLAG));
-   }
+    @Test
+    public void hasCompilerFlagAfterAdding() throws BuildException {
+        assertFalse(project.hasCompilerFlag(COMPILER_FLAG));
+        handler.addCompilerFlag(COMPILER_FLAG);
+        assertTrue(project.hasCompilerFlag(COMPILER_FLAG));
+    }
 
-   @Test
-   public void compilerFlagMissingAfterRemoval() throws BuildException {
-      handler.addCompilerFlag(COMPILER_FLAG);
-      assertTrue(project.hasCompilerFlag(COMPILER_FLAG));
-      handler.removeCompilerFlag(COMPILER_FLAG);
-      assertFalse(project.hasCompilerFlag(COMPILER_FLAG));
-   }
+    @Test
+    public void compilerFlagMissingAfterRemoval() throws BuildException {
+        handler.addCompilerFlag(COMPILER_FLAG);
+        assertTrue(project.hasCompilerFlag(COMPILER_FLAG));
+        handler.removeCompilerFlag(COMPILER_FLAG);
+        assertFalse(project.hasCompilerFlag(COMPILER_FLAG));
+    }
 }

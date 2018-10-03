@@ -7,10 +7,10 @@ import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorDelegate;
 
 public class ExtractInterfaceDelegate extends MockatorDelegate {
 
-   @Override
-   protected void execute() {
-      final ExtractInterfaceAction action = new ExtractInterfaceAction(ExtractInterfaceDialogTitle, cProject);
-      action.setEditor(window.getActivePage().getActiveEditor());
-      action.run();
-   }
+    @Override
+    protected void execute() {
+        final ExtractInterfaceAction action = new ExtractInterfaceAction(ExtractInterfaceDialogTitle, cProject);
+        action.setEditor(window.getActivePage().getActiveEditor());
+        action.run();
+    }
 }

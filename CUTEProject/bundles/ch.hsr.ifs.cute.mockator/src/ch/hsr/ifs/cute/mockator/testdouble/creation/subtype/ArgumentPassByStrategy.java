@@ -25,104 +25,105 @@ import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 public enum ArgumentPassByStrategy implements IStringifyable<ArgumentPassByStrategy> {
 
-   asPointer {
+    asPointer {
 
-   @Override
-   public void adaptArguments(final IASTName problemArg, final String nameOfNewInstance, final ASTRewrite rewriter) {
-      final ICPPASTConstructorInitializer ctorInit = CPPVisitor.findAncestorWithType(problemArg, ICPPASTConstructorInitializer.class).orElse(null);
-      final ICPPASTFunctionCallExpression funCall = CPPVisitor.findAncestorWithType(problemArg, ICPPASTFunctionCallExpression.class).orElse(null);
+    @Override
+    public void adaptArguments(final IASTName problemArg, final String nameOfNewInstance, final ASTRewrite rewriter) {
+        final ICPPASTConstructorInitializer ctorInit = CPPVisitor.findAncestorWithType(problemArg, ICPPASTConstructorInitializer.class).orElse(null);
+        final ICPPASTFunctionCallExpression funCall = CPPVisitor.findAncestorWithType(problemArg, ICPPASTFunctionCallExpression.class).orElse(null);
 
-      if (ctorInit != null) {
-         adaptCtorArguments(nameOfNewInstance, rewriter, ctorInit);
-      } else if (funCall != null) {
-         adaptFunCallArguments(nameOfNewInstance, rewriter, funCall);
-      }
-   }
-   },
-   asReference {
+        if (ctorInit != null) {
+            adaptCtorArguments(nameOfNewInstance, rewriter, ctorInit);
+        } else if (funCall != null) {
+            adaptFunCallArguments(nameOfNewInstance, rewriter, funCall);
+        }
+    }
+    },
+    asReference {
 
-   @Override
-   public void adaptArguments(final IASTName problemArgument, final String nameOfNewInstance, final ASTRewrite rewriter) {
-      // no argument adaption necessary when passed by reference
-   }
-   };
+    @Override
+    public void adaptArguments(final IASTName problemArgument, final String nameOfNewInstance, final ASTRewrite rewriter) {
+        // no argument adaption necessary when passed by reference
+    }
+    };
 
-   private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   // TODO(tstauber - Oct 1, 2018) REMOVE AFTER TESTING 
-   //   private static final Map<String, ArgumentPassByStrategy> STRING_TO_ENUM = new HashMap<>();
+    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+    // TODO(tstauber - Oct 1, 2018) REMOVE AFTER TESTING
+    //   private static final Map<String, ArgumentPassByStrategy> STRING_TO_ENUM = new HashMap<>();
 
-   //   static {
-   //      for (final ArgumentPassByStrategy standard : values()) {
-   //         STRING_TO_ENUM.put(standard.toString(), standard);
-   //      }
-   //   }
+    //   static {
+    //      for (final ArgumentPassByStrategy standard : values()) {
+    //         STRING_TO_ENUM.put(standard.toString(), standard);
+    //      }
+    //   }
 
-   public abstract void adaptArguments(IASTName problemArg, String nameOfNewInstance, ASTRewrite rewriter);
+    public abstract void adaptArguments(IASTName problemArg, String nameOfNewInstance, ASTRewrite rewriter);
 
-   private static void adaptFunCallArguments(final String nameOfNewInstance, final ASTRewrite rewriter, final ICPPASTFunctionCallExpression funCall) {
-      final IASTInitializerClause[] argumentListWithAdaptedArgument = getArgumentListWithAdaptedArgument(funCall.getArguments(), nameOfNewInstance);
-      final ICPPASTFunctionCallExpression newFunCall = funCall.copy();
-      newFunCall.setArguments(argumentListWithAdaptedArgument);
-      rewriter.replace(funCall, newFunCall, null);
-   }
+    private static void adaptFunCallArguments(final String nameOfNewInstance, final ASTRewrite rewriter,
+            final ICPPASTFunctionCallExpression funCall) {
+        final IASTInitializerClause[] argumentListWithAdaptedArgument = getArgumentListWithAdaptedArgument(funCall.getArguments(), nameOfNewInstance);
+        final ICPPASTFunctionCallExpression newFunCall = funCall.copy();
+        newFunCall.setArguments(argumentListWithAdaptedArgument);
+        rewriter.replace(funCall, newFunCall, null);
+    }
 
-   private static void adaptCtorArguments(final String nameOfNewInstance, final ASTRewrite rewriter,
-         final ICPPASTConstructorInitializer ctorInitializer) {
-      final IASTInitializerClause[] argumentListWithAdaptedArgument = getArgumentListWithAdaptedArgument(ctorInitializer.getArguments(),
-            nameOfNewInstance);
-      final ICPPASTConstructorInitializer initializer = nodeFactory.newConstructorInitializer(argumentListWithAdaptedArgument);
-      rewriter.replace(ctorInitializer, initializer, null);
-   }
+    private static void adaptCtorArguments(final String nameOfNewInstance, final ASTRewrite rewriter,
+            final ICPPASTConstructorInitializer ctorInitializer) {
+        final IASTInitializerClause[] argumentListWithAdaptedArgument = getArgumentListWithAdaptedArgument(ctorInitializer.getArguments(),
+                nameOfNewInstance);
+        final ICPPASTConstructorInitializer initializer = nodeFactory.newConstructorInitializer(argumentListWithAdaptedArgument);
+        rewriter.replace(ctorInitializer, initializer, null);
+    }
 
-   private static IASTInitializerClause[] getArgumentListWithAdaptedArgument(final IASTInitializerClause[] arguments,
-         final String nameOfNewInstance) {
-      final List<IASTInitializerClause> params = new ArrayList<>();
+    private static IASTInitializerClause[] getArgumentListWithAdaptedArgument(final IASTInitializerClause[] arguments,
+            final String nameOfNewInstance) {
+        final List<IASTInitializerClause> params = new ArrayList<>();
 
-      for (final IASTInitializerClause arg : arguments) {
-         if (arg instanceof IASTIdExpression) {
-            final IASTIdExpression idExpr = (IASTIdExpression) arg;
+        for (final IASTInitializerClause arg : arguments) {
+            if (arg instanceof IASTIdExpression) {
+                final IASTIdExpression idExpr = (IASTIdExpression) arg;
 
-            if (idExpr.getName().toString().equals(nameOfNewInstance)) {
-               params.add(takeAddressOfArg(idExpr));
+                if (idExpr.getName().toString().equals(nameOfNewInstance)) {
+                    params.add(takeAddressOfArg(idExpr));
+                }
+            } else {
+                params.add(arg.copy());
             }
-         } else {
-            params.add(arg.copy());
-         }
-      }
+        }
 
-      return params.toArray(new IASTInitializerClause[params.size()]);
-   }
+        return params.toArray(new IASTInitializerClause[params.size()]);
+    }
 
-   private static ICPPASTUnaryExpression takeAddressOfArg(final IASTIdExpression idExpr) {
-      return nodeFactory.newUnaryExpression(IASTUnaryExpression.op_amper, idExpr.copy());
-   }
+    private static ICPPASTUnaryExpression takeAddressOfArg(final IASTIdExpression idExpr) {
+        return nodeFactory.newUnaryExpression(IASTUnaryExpression.op_amper, idExpr.copy());
+    }
 
-   public static ArgumentPassByStrategy getStrategy(final IType type) {
-      if (type instanceof ICPPReferenceType) {
-         return asReference;
-      } else if (type instanceof IPointerType) {
-         return asPointer;
-      }
+    public static ArgumentPassByStrategy getStrategy(final IType type) {
+        if (type instanceof ICPPReferenceType) {
+            return asReference;
+        } else if (type instanceof IPointerType) {
+            return asPointer;
+        }
 
-      throw new ILTISException("Pass by value is not possible with subtype polymorphism").rethrowUnchecked();
-   }
+        throw new ILTISException("Pass by value is not possible with subtype polymorphism").rethrowUnchecked();
+    }
 
-   //   public static ArgumentPassByStrategy fromName(final String name) {
-   //      final ArgumentPassByStrategy strategy = valueOf(name);
-   ////      final ArgumentPassByStrategy strategy = STRING_TO_ENUM.get(name);
-   //
-   //      if (strategy == null) { throw new ILTISException(String.format("Unknown pass by strategy '%s'", name)).rethrowUnchecked(); }
-   //
-   //      return strategy;
-   //   }
+    //   public static ArgumentPassByStrategy fromName(final String name) {
+    //      final ArgumentPassByStrategy strategy = valueOf(name);
+    ////      final ArgumentPassByStrategy strategy = STRING_TO_ENUM.get(name);
+    //
+    //      if (strategy == null) { throw new ILTISException(String.format("Unknown pass by strategy '%s'", name)).rethrowUnchecked(); }
+    //
+    //      return strategy;
+    //   }
 
-   @Override
-   public ArgumentPassByStrategy unstringify(String string) {
-      return valueOf(string);
-   }
+    @Override
+    public ArgumentPassByStrategy unstringify(String string) {
+        return valueOf(string);
+    }
 
-   @Override
-   public String stringify() {
-      return toString();
-   }
+    @Override
+    public String stringify() {
+        return toString();
+    }
 }

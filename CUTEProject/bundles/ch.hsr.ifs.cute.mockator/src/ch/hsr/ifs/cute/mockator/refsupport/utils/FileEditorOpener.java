@@ -16,60 +16,60 @@ import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
 public class FileEditorOpener {
 
-   private final IFile file;
+    private final IFile file;
 
-   public FileEditorOpener(final IFile file) {
-      this.file = file;
-   }
+    public FileEditorOpener(final IFile file) {
+        this.file = file;
+    }
 
-   public void openInEditor() {
-      final IWorkbenchPage activePage = getActivePage();
+    public void openInEditor() {
+        final IWorkbenchPage activePage = getActivePage();
 
-      if (activePage == null) return;
+        if (activePage == null) return;
 
-      try {
-         final String editorId = getEditorId();
-         // activate should be false otherwise this triggers another switch
-         // to a different editor
-         final boolean activate = false;
-         activePage.openEditor(new FileEditorInput(file), editorId, activate);
-      } catch (final Exception e) {
-         throw new ILTISException(e).rethrowUnchecked();
-      }
-   }
+        try {
+            final String editorId = getEditorId();
+            // activate should be false otherwise this triggers another switch
+            // to a different editor
+            final boolean activate = false;
+            activePage.openEditor(new FileEditorInput(file), editorId, activate);
+        } catch (final Exception e) {
+            throw new ILTISException(e).rethrowUnchecked();
+        }
+    }
 
-   private static IWorkbenchPage getActivePage() {
-      return CUIPlugin.getActivePage();
-   }
+    private static IWorkbenchPage getActivePage() {
+        return CUIPlugin.getActivePage();
+    }
 
-   private String getEditorId() throws CoreException {
-      final IContentType contentType = getFileContentType();
-      IEditorDescriptor desc = getEditorDescriptor(contentType);
+    private String getEditorId() throws CoreException {
+        final IContentType contentType = getFileContentType();
+        IEditorDescriptor desc = getEditorDescriptor(contentType);
 
-      if (desc == null) {
-         desc = getDefaultEditor();
-      }
+        if (desc == null) {
+            desc = getDefaultEditor();
+        }
 
-      return desc.getId();
-   }
+        return desc.getId();
+    }
 
-   private IEditorDescriptor getEditorDescriptor(final IContentType contentType) {
-      return getEditorRegistry().getDefaultEditor(file.getName(), contentType);
-   }
+    private IEditorDescriptor getEditorDescriptor(final IContentType contentType) {
+        return getEditorRegistry().getDefaultEditor(file.getName(), contentType);
+    }
 
-   private static IEditorRegistry getEditorRegistry() {
-      return PlatformUI.getWorkbench().getEditorRegistry();
-   }
+    private static IEditorRegistry getEditorRegistry() {
+        return PlatformUI.getWorkbench().getEditorRegistry();
+    }
 
-   private static IEditorDescriptor getDefaultEditor() {
-      return getEditorRegistry().findEditor(IEditorRegistry.SYSTEM_EXTERNAL_EDITOR_ID);
-   }
+    private static IEditorDescriptor getDefaultEditor() {
+        return getEditorRegistry().findEditor(IEditorRegistry.SYSTEM_EXTERNAL_EDITOR_ID);
+    }
 
-   private IContentType getFileContentType() throws CoreException {
-      final IContentDescription desc = file.getContentDescription();
+    private IContentType getFileContentType() throws CoreException {
+        final IContentDescription desc = file.getContentDescription();
 
-      if (desc != null) return desc.getContentType();
+        if (desc != null) return desc.getContentType();
 
-      return null;
-   }
+        return null;
+    }
 }

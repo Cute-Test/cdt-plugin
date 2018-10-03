@@ -23,41 +23,41 @@ import ch.hsr.ifs.testframework.tests.mock.DummyTestEventHandler;
  */
 public class PatternListenerErrorTest extends PatternListenerBase {
 
-   private static final String TEST_NAME_EXP = "xUnitTest";
-   private static final String MSG_EXP       = "instance of 'std::exception'";
+    private static final String TEST_NAME_EXP = "xUnitTest";
+    private static final String MSG_EXP       = "instance of 'std::exception'";
 
-   private String testNameStart;
-   private String testNameEnd;
-   private String errorMsg;
+    private String testNameStart;
+    private String testNameEnd;
+    private String errorMsg;
 
-   final class ErrorHandler extends DummyTestEventHandler {
+    final class ErrorHandler extends DummyTestEventHandler {
 
-      @Override
-      protected void handleError(IRegion reg, String testName, String msg) {
-         testNameEnd = testName;
-         errorMsg = msg;
-      }
+        @Override
+        protected void handleError(IRegion reg, String testName, String msg) {
+            testNameEnd = testName;
+            errorMsg = msg;
+        }
 
-      @Override
-      protected void handleTestStart(IRegion reg, String testname) {
-         testNameStart = testname;
-      }
-   }
+        @Override
+        protected void handleTestStart(IRegion reg, String testname) {
+            testNameStart = testname;
+        }
+    }
 
-   public void testListenerEvents() throws IOException, InterruptedException {
-      emulateTestRun();
-      assertEquals("Teststart name", TEST_NAME_EXP, testNameStart);
-      assertEquals("Testend name", TEST_NAME_EXP, testNameEnd);
-      assertEquals("Message", MSG_EXP, errorMsg);
-   }
+    public void testListenerEvents() throws IOException, InterruptedException {
+        emulateTestRun();
+        assertEquals("Teststart name", TEST_NAME_EXP, testNameStart);
+        assertEquals("Testend name", TEST_NAME_EXP, testNameEnd);
+        assertEquals("Message", MSG_EXP, errorMsg);
+    }
 
-   @Override
-   protected void addTestEventHandler(ConsolePatternListener lis) {
-      lis.addHandler(new ErrorHandler());
-   }
+    @Override
+    protected void addTestEventHandler(ConsolePatternListener lis) {
+        lis.addHandler(new ErrorHandler());
+    }
 
-   @Override
-   protected String getInputFileName() {
-      return "errorTest.txt";
-   }
+    @Override
+    protected String getInputFileName() {
+        return "errorTest.txt";
+    }
 }

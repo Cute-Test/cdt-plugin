@@ -14,30 +14,30 @@ import org.eclipse.core.runtime.CoreException;
 // have a project reference, we better set the reference via the IProjectDescription
 public class ReferencingProjectAdder {
 
-   private final IProject originProject;
+    private final IProject originProject;
 
-   public ReferencingProjectAdder(final IProject originProject) {
-      this.originProject = originProject;
-   }
+    public ReferencingProjectAdder(final IProject originProject) {
+        this.originProject = originProject;
+    }
 
-   public void setReferenceToProject(final IProject referencedProject) throws CoreException {
-      final ICProjectDescription desc = getProjectDescription();
+    public void setReferenceToProject(final IProject referencedProject) throws CoreException {
+        final ICProjectDescription desc = getProjectDescription();
 
-      for (final ICConfigurationDescription config : desc.getConfigurations()) {
-         final Map<String, String> refMap = config.getReferenceInfo();
-         refMap.put(referencedProject.getName(), "");
-         config.setReferenceInfo(refMap);
-      }
+        for (final ICConfigurationDescription config : desc.getConfigurations()) {
+            final Map<String, String> refMap = config.getReferenceInfo();
+            refMap.put(referencedProject.getName(), "");
+            config.setReferenceInfo(refMap);
+        }
 
-      storeProjectDescription(desc);
-   }
+        storeProjectDescription(desc);
+    }
 
-   private void storeProjectDescription(final ICProjectDescription desc) throws CoreException {
-      CCorePlugin.getDefault().setProjectDescription(originProject, desc);
-   }
+    private void storeProjectDescription(final ICProjectDescription desc) throws CoreException {
+        CCorePlugin.getDefault().setProjectDescription(originProject, desc);
+    }
 
-   private ICProjectDescription getProjectDescription() {
-      final boolean writableDesc = true;
-      return CCorePlugin.getDefault().getProjectDescription(originProject, writableDesc);
-   }
+    private ICProjectDescription getProjectDescription() {
+        final boolean writableDesc = true;
+        return CCorePlugin.getDefault().getProjectDescription(originProject, writableDesc);
+    }
 }

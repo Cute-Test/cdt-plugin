@@ -9,38 +9,38 @@ import ch.hsr.ifs.cute.mockator.tests.AbstractQuickfixTest;
 
 public class MockObjectCpp11StaticPolyQfTest extends AbstractQuickfixTest {
 
-   @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
-   }
+    @Override
+    protected ProblemId getProblemId() {
+        return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
+    }
 
-   @Override
-   protected CppStandard getCppStdToUse() {
-      return CppStandard.Cpp11Std;
-   }
+    @Override
+    protected CppStandard getCppStdToUse() {
+        return CppStandard.Cpp11Std;
+    }
 
-   @Override
-   protected boolean isManagedBuildProjectNecessary() {
-      return true;
-   }
+    @Override
+    protected boolean isManagedBuildProjectNecessary() {
+        return true;
+    }
 
-   @Override
-   protected boolean isRefactoringUsed() {
-      return true;
-   }
+    @Override
+    protected boolean isRefactoringUsed() {
+        return true;
+    }
 
-   @Override
-   protected MockatorQuickFix createMarkerResolution() {
-      return new MockObjectByFunsQuickFix();
-   }
+    @Override
+    protected MockatorQuickFix createMarkerResolution() {
+        return new MockObjectByFunsQuickFix();
+    }
 
-   @Override
-   protected String getResolutionMessage() {
-      return "<b>3 member function(s) to implement</b>:<br/>Mock()<br/>foo() const<br/>operator ++(int)";
-   }
+    @Override
+    protected String getResolutionMessage() {
+        return "<b>3 member function(s) to implement</b>:<br/>Mock()<br/>foo() const<br/>operator ++(int)";
+    }
 
-   @Override
-   protected String[] getMarkerMessages() {
-      return new String[] { "Necessary member function(s) not existing in class Mock" };
-   }
+    @Override
+    protected String[] getMarkerMessages() {
+        return new String[] { "Necessary member function(s) not existing in class Mock" };
+    }
 }

@@ -12,12 +12,12 @@ import ch.hsr.ifs.cute.gcov.util.ProjectUtil;
 
 public class ClearMarkersHandler extends AbstractHandler {
 
-   @Override
-   public Object execute(ExecutionEvent event) throws ExecutionException {
-      ISelection selection = HandlerUtil.getCurrentSelection(event);
-      IProject project = ProjectUtil.getSelectedProject(selection);
-      ProjectUtil.deleteMarkers(project);
-      return null;
-   }
+    @Override
+    public Object execute(ExecutionEvent event) throws ExecutionException {
+        ISelection selection = HandlerUtil.getCurrentSelection(event);
+        IProject project = ProjectUtil.getSelectedProject(selection);
+        ProjectUtil.deleteMarkers(project);
+        return null;
+    }
 
 }

@@ -26,24 +26,24 @@ import ch.hsr.ifs.cute.ui.project.wizard.Messages;
  */
 public class GcovWizardAddition implements ICuteWizardAddition {
 
-   boolean enableGcov = false;
+    boolean enableGcov = false;
 
-   @Override
-   public Control createComposite(Composite parent) {
-      final Button check = new Button(parent, SWT.CHECK);
-      check.setText(Messages.getString("CuteVersionWizardPage.EnableGcov"));
-      check.addSelectionListener(new SelectionAdapter() {
+    @Override
+    public Control createComposite(Composite parent) {
+        final Button check = new Button(parent, SWT.CHECK);
+        check.setText(Messages.getString("CuteVersionWizardPage.EnableGcov"));
+        check.addSelectionListener(new SelectionAdapter() {
 
-         @Override
-         public void widgetSelected(SelectionEvent e) {
-            enableGcov = check.getSelection();
-         }
-      });
-      return check;
-   }
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                enableGcov = check.getSelection();
+            }
+        });
+        return check;
+    }
 
-   @Override
-   public ICuteWizardAdditionHandler getHandler() {
-      return new GcovAdditionHandler(this);
-   }
+    @Override
+    public ICuteWizardAdditionHandler getHandler() {
+        return new GcovAdditionHandler(this);
+    }
 }

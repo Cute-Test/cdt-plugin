@@ -27,70 +27,72 @@ import org.osgi.framework.BundleContext;
 
 public class CuteCorePlugin extends AbstractUIPlugin {
 
-   public static final String PLUGIN_ID = "ch.hsr.ifs.cute.core";
+    public static final String PLUGIN_ID = "ch.hsr.ifs.cute.core";
 
-   private static CuteCorePlugin plugin;
-   private static final IPath    ICONS_PATH = new Path("$nl$/icons");
-   private Display               display;
+    private static CuteCorePlugin plugin;
+    private static final IPath    ICONS_PATH = new Path("$nl$/icons");
+    private Display               display;
 
-   public CuteCorePlugin() {
-      plugin = this;
-   }
+    public CuteCorePlugin() {
+        plugin = this;
+    }
 
-   @Override
-   public void start(BundleContext context) throws Exception {
-      super.start(context);
-      display = Display.getCurrent();
-   }
+    @Override
+    public void start(BundleContext context) throws Exception {
+        super.start(context);
+        display = Display.getCurrent();
+    }
 
-   @Override
-   public void stop(BundleContext context) throws Exception {
-      plugin = null;
-      super.stop(context);
-   }
+    @Override
+    public void stop(BundleContext context) throws Exception {
+        plugin = null;
+        super.stop(context);
+    }
 
-   public static CuteCorePlugin getDefault() {
-      return plugin;
-   }
+    public static CuteCorePlugin getDefault() {
+        return plugin;
+    }
 
-   public static String getUniqueIdentifier() {
-      if (getDefault() == null) { return PLUGIN_ID; }
-      return getDefault().getBundle().getSymbolicName();
-   }
+    public static String getUniqueIdentifier() {
+        if (getDefault() == null) {
+            return PLUGIN_ID;
+        }
+        return getDefault().getBundle().getSymbolicName();
+    }
 
-   public static ImageDescriptor getImageDescriptor(String relativePath) {
-      IPath path = ICONS_PATH.append(relativePath);
-      return createImageDescriptor(getDefault().getBundle(), path);
-   }
+    public static ImageDescriptor getImageDescriptor(String relativePath) {
+        IPath path = ICONS_PATH.append(relativePath);
+        return createImageDescriptor(getDefault().getBundle(), path);
+    }
 
-   public static IWorkbenchWindow getActiveWorkbenchWindow() {
-      if (plugin == null) return null;
-      IWorkbench workBench = plugin.getWorkbench();
-      if (workBench == null) return null;
-      return workBench.getActiveWorkbenchWindow();
-   }
+    public static IWorkbenchWindow getActiveWorkbenchWindow() {
+        if (plugin == null) return null;
+        IWorkbench workBench = plugin.getWorkbench();
+        if (workBench == null) return null;
+        return workBench.getActiveWorkbenchWindow();
+    }
 
-   public static IWorkbenchPage getActivePage() {
-      IWorkbenchWindow activeWorkbenchWindow = getActiveWorkbenchWindow();
-      if (activeWorkbenchWindow == null) return null;
-      return activeWorkbenchWindow.getActivePage();
-   }
+    public static IWorkbenchPage getActivePage() {
+        IWorkbenchWindow activeWorkbenchWindow = getActiveWorkbenchWindow();
+        if (activeWorkbenchWindow == null) return null;
+        return activeWorkbenchWindow.getActivePage();
+    }
 
-   private static ImageDescriptor createImageDescriptor(Bundle bundle, IPath path) {
-      URL url = FileLocator.find(bundle, path, null);
-      return ImageDescriptor.createFromURL(url);
-   }
+    private static ImageDescriptor createImageDescriptor(Bundle bundle, IPath path) {
+        URL url = FileLocator.find(bundle, path, null);
+        return ImageDescriptor.createFromURL(url);
+    }
 
-   public static void log(Throwable e) {
-      log(new Status(IStatus.ERROR, PLUGIN_ID, IStatus.ERROR, "Error", e));
-   }
+    public static void log(Throwable e) {
+        log(new Status(IStatus.ERROR, PLUGIN_ID, IStatus.ERROR, "Error", e));
+    }
 
-   public static void log(IStatus status) {
-      getDefault().getLog().log(status);
-   }
+    public static void log(IStatus status) {
+        getDefault().getLog().log(status);
+    }
 
-   public static Display getDisplay() {
-      return getDefault().display;
-   }
+    public static Display getDisplay() {
+        return getDefault().display;
+    }
 
 }

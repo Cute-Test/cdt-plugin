@@ -16,28 +16,33 @@ import ch.hsr.ifs.cute.mockator.refsupport.utils.TypeCreator;
 
 public class FunArgumentsTypeCollector {
 
-   private final Collection<IASTInitializerClause> funArgs;
+    private final Collection<IASTInitializerClause> funArgs;
 
-   public FunArgumentsTypeCollector(final Collection<IASTInitializerClause> funArgs) {
-      this.funArgs = funArgs;
-   }
+    public FunArgumentsTypeCollector(final Collection<IASTInitializerClause> funArgs) {
+        this.funArgs = funArgs;
+    }
 
-   public List<IType> getFunArgTypes() {
-      final List<IType> argTypes = new ArrayList<>();
+    public List<IType> getFunArgTypes() {
+        final List<IType> argTypes = new ArrayList<>();
 
-      for (final IASTInitializerClause arg : funArgs) {
-         getType(arg).ifPresent((type) -> argTypes.add(type));
-      }
+        for (final IASTInitializerClause arg : funArgs) {
+            getType(arg).ifPresent((type) -> argTypes.add(type));
+        }
 
-      return argTypes;
-   }
+        return argTypes;
+    }
 
-   private static Optional<IType> getType(final IASTInitializerClause clause) {
-      if (clause instanceof IASTExpression) { return Optional.of(((IASTExpression) clause).getExpressionType()); }
-      if (clause instanceof IASTTypeId) { return Optional.of(TypeCreator.byDeclarator(((IASTTypeId) clause).getAbstractDeclarator())); }
-      if (clause instanceof IASTParameterDeclaration) { return Optional.of(TypeCreator.byDeclarator(((IASTParameterDeclaration) clause)
-            .getDeclarator())); }
+    private static Optional<IType> getType(final IASTInitializerClause clause) {
+        if (clause instanceof IASTExpression) {
+            return Optional.of(((IASTExpression) clause).getExpressionType());
+        }
+        if (clause instanceof IASTTypeId) {
+            return Optional.of(TypeCreator.byDeclarator(((IASTTypeId) clause).getAbstractDeclarator()));
+        }
+        if (clause instanceof IASTParameterDeclaration) {
+            return Optional.of(TypeCreator.byDeclarator(((IASTParameterDeclaration) clause).getDeclarator()));
+        }
 
-      return Optional.empty();
-   }
+        return Optional.empty();
+    }
 }

@@ -35,56 +35,56 @@ import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
 
 public class CuteSuiteWizardHandlerTest {
 
-   CuteSuiteWizardHandler      cswh = null;
-   private IFolder             srcFolder;
-   private IFolder             cuteFolder;
-   private IProject            project;
-   private IScopeContext       scope;
-   private IEclipsePreferences node;
+    CuteSuiteWizardHandler      cswh = null;
+    private IFolder             srcFolder;
+    private IFolder             cuteFolder;
+    private IProject            project;
+    private IScopeContext       scope;
+    private IEclipsePreferences node;
 
-   @Before
-   public void setUp() throws Exception {
-      cswh = new CuteSuiteWizardHandler("theSuiteName");
-      IWorkspaceRoot iwsr = ResourcesPlugin.getWorkspace().getRoot();
-      project = iwsr.getProject("CSWHT");
-      scope = new ProjectScope(project);
-      node = scope.getNode(Activator.PLUGIN_ID);
-      node.put("c_dialect", CPPVersion.CPP_14.toString());
-      project.create(new NullProgressMonitor());
-      project.open(new NullProgressMonitor());
-      srcFolder = project.getProject().getFolder("/src");
-      srcFolder.create(true, true, new NullProgressMonitor());
-      cuteFolder = project.getProject().getFolder("/cute");
-      cuteFolder.create(true, true, new NullProgressMonitor());
-   }
+    @Before
+    public void setUp() throws Exception {
+        cswh = new CuteSuiteWizardHandler("theSuiteName");
+        IWorkspaceRoot iwsr = ResourcesPlugin.getWorkspace().getRoot();
+        project = iwsr.getProject("CSWHT");
+        scope = new ProjectScope(project);
+        node = scope.getNode(Activator.PLUGIN_ID);
+        node.put("c_dialect", CPPVersion.CPP_14.toString());
+        project.create(new NullProgressMonitor());
+        project.open(new NullProgressMonitor());
+        srcFolder = project.getProject().getFolder("/src");
+        srcFolder.create(true, true, new NullProgressMonitor());
+        cuteFolder = project.getProject().getFolder("/cute");
+        cuteFolder.create(true, true, new NullProgressMonitor());
+    }
 
-   @Test
-   public void testAddTestFiles() throws CoreException {
-      CuteHeaders2 h = CuteHeaders2._2_1;
-      addTestFiles(h);
-      assertCuteHeaderFilesExist();
-   }
+    @Test
+    public void testAddTestFiles() throws CoreException {
+        CuteHeaders2 h = CuteHeaders2._2_1;
+        addTestFiles(h);
+        assertCuteHeaderFilesExist();
+    }
 
-   private void addTestFiles(ICuteHeaders cuteHeader) throws CoreException {
-      cswh.copyExampleTestFiles(srcFolder, cuteHeader);
+    private void addTestFiles(ICuteHeaders cuteHeader) throws CoreException {
+        cswh.copyExampleTestFiles(srcFolder, cuteHeader);
 
-      IFile file = srcFolder.getFile("Test.cpp");
-      if (file.exists()) {
-         file.delete(true, false, new NullProgressMonitor());
-         assertFalse(file.exists());
-      }
-   }
+        IFile file = srcFolder.getFile("Test.cpp");
+        if (file.exists()) {
+            file.delete(true, false, new NullProgressMonitor());
+            assertFalse(file.exists());
+        }
+    }
 
-   private void assertCuteHeaderFilesExist() {
-      IFile file1 = srcFolder.getFile("suite.cpp");
-      IFile file2 = srcFolder.getFile("suite.h");
+    private void assertCuteHeaderFilesExist() {
+        IFile file1 = srcFolder.getFile("suite.cpp");
+        IFile file2 = srcFolder.getFile("suite.h");
 
-      assertTrue(file1.exists());
-      assertTrue(file2.exists());
-   }
+        assertTrue(file1.exists());
+        assertTrue(file2.exists());
+    }
 
-   @After
-   public void tearDown() throws Exception {
-      project.delete(true, new NullProgressMonitor());
-   }
+    @After
+    public void tearDown() throws Exception {
+        project.delete(true, new NullProgressMonitor());
+    }
 }

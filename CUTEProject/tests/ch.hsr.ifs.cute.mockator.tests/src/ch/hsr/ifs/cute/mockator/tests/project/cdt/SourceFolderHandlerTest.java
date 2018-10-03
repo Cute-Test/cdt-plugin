@@ -11,39 +11,39 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.hsr.ifs.cute.mockator.tests.CdtCppTestProject;
 import ch.hsr.ifs.cute.mockator.project.cdt.SourceFolderHandler;
+import ch.hsr.ifs.cute.mockator.tests.CdtCppTestProject;
 
 
 public class SourceFolderHandlerTest {
 
-   private static final String FOLDER_NAME = "mockator";
-   private CdtCppTestProject   project;
-   private SourceFolderHandler folderHandler;
+    private static final String FOLDER_NAME = "mockator";
+    private CdtCppTestProject   project;
+    private SourceFolderHandler folderHandler;
 
-   @Before
-   public void setUp() throws CoreException {
-      project = CdtCppTestProject.withOpenedProject();
-      folderHandler = new SourceFolderHandler(project.getProject());
-   }
+    @Before
+    public void setUp() throws CoreException {
+        project = CdtCppTestProject.withOpenedProject();
+        folderHandler = new SourceFolderHandler(project.getProject());
+    }
 
-   @After
-   public void tearDown() throws CoreException {
-      project.dispose();
-   }
+    @After
+    public void tearDown() throws CoreException {
+        project.dispose();
+    }
 
-   @Test
-   public void createFolder() throws CoreException {
-      final IFolder folder = folderHandler.createFolder(FOLDER_NAME, new NullProgressMonitor());
-      assertTrue(folder.exists());
-      assertEquals(FOLDER_NAME, folder.getName());
-   }
+    @Test
+    public void createFolder() throws CoreException {
+        final IFolder folder = folderHandler.createFolder(FOLDER_NAME, new NullProgressMonitor());
+        assertTrue(folder.exists());
+        assertEquals(FOLDER_NAME, folder.getName());
+    }
 
-   @Test
-   public void deleteFolder() throws CoreException {
-      final IFolder folder = folderHandler.createFolder(FOLDER_NAME, new NullProgressMonitor());
-      assertTrue(folder.exists());
-      folderHandler.deleteFolder(FOLDER_NAME, new NullProgressMonitor());
-      assertFalse(folder.exists());
-   }
+    @Test
+    public void deleteFolder() throws CoreException {
+        final IFolder folder = folderHandler.createFolder(FOLDER_NAME, new NullProgressMonitor());
+        assertTrue(folder.exists());
+        folderHandler.deleteFolder(FOLDER_NAME, new NullProgressMonitor());
+        assertFalse(folder.exists());
+    }
 }

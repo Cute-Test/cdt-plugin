@@ -8,15 +8,15 @@ import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.CDTTestingChecke
 
 public class MultipleFakeObjectsTest extends CDTTestingCheckerTest {
 
-   @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
-   }
+    @Override
+    protected ProblemId getProblemId() {
+        return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
+    }
 
-   @Test
-   public void runTest() throws Throwable {
-      assertMarkerLines(13, 16);
-      assertMarkerMessages(new String[] { "Necessary member function(s) not existing in class Fake1",
-                                          "Necessary member function(s) not existing in class Fake2" });
-   }
+    @Test
+    public void runTest() throws Throwable {
+        assertMarkerLines(13, 16);
+        assertMarkerMessages(new String[] { "Necessary member function(s) not existing in class Fake1",
+                                            "Necessary member function(s) not existing in class Fake2" });
+    }
 }

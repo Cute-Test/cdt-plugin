@@ -19,51 +19,53 @@ import java.util.List;
  */
 public class Line {
 
-   private Function       function;
-   private final int      nr;
-   private CoverageStatus status;
-   private List<Branch>   branches;
+    private Function       function;
+    private final int      nr;
+    private CoverageStatus status;
+    private List<Branch>   branches;
 
-   public Line(int nr, CoverageStatus status) {
-      super();
-      this.nr = nr;
-      this.status = status;
-   }
+    public Line(int nr, CoverageStatus status) {
+        super();
+        this.nr = nr;
+        this.status = status;
+    }
 
-   public void addBranch(Branch b) {
-      if (branches == null) {
-         branches = new ArrayList<>();
-      }
-      branches.add(b);
-      if (status == CoverageStatus.Covered && b.getStatus() == CoverageStatus.Uncovered) {
-         status = CoverageStatus.PartiallyCovered;
-      }
-   }
+    public void addBranch(Branch b) {
+        if (branches == null) {
+            branches = new ArrayList<>();
+        }
+        branches.add(b);
+        if (status == CoverageStatus.Covered && b.getStatus() == CoverageStatus.Uncovered) {
+            status = CoverageStatus.PartiallyCovered;
+        }
+    }
 
-   public Function getFunction() {
-      return function;
-   }
+    public Function getFunction() {
+        return function;
+    }
 
-   public void setFunction(Function function) {
-      this.function = function;
-   }
+    public void setFunction(Function function) {
+        this.function = function;
+    }
 
-   public int getNr() {
-      return nr;
-   }
+    public int getNr() {
+        return nr;
+    }
 
-   public CoverageStatus getStatus() {
-      return status;
-   }
+    public CoverageStatus getStatus() {
+        return status;
+    }
 
-   public List<Branch> getBranches() {
-      if (branches == null) { return Collections.emptyList(); }
-      return branches;
-   }
+    public List<Branch> getBranches() {
+        if (branches == null) {
+            return Collections.emptyList();
+        }
+        return branches;
+    }
 
-   @Override
-   public String toString() {
-      return nr + " " + status;
-   }
+    @Override
+    public String toString() {
+        return nr + " " + status;
+    }
 
 }

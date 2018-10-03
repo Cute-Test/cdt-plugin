@@ -12,18 +12,20 @@ import org.eclipse.jface.text.IDocument;
 
 public abstract class AddMemberFunctionBaseStrategy extends AddPushbackStatementStrategy {
 
-   protected static final String PARAMETERS_REQUIRED = "pArAmEtRs_ReQuIrEd";
-   protected final IFile         editorFile;
+    protected static final String PARAMETERS_REQUIRED = "pArAmEtRs_ReQuIrEd";
+    protected final IFile         editorFile;
 
-   public AddMemberFunctionBaseStrategy(IDocument doc, IASTTranslationUnit astTu, IFile editorFile, SuitePushBackFinder finder) {
-      super(doc, astTu, finder);
-      this.editorFile = editorFile;
-   }
+    public AddMemberFunctionBaseStrategy(IDocument doc, IASTTranslationUnit astTu, IFile editorFile, SuitePushBackFinder finder) {
+        super(doc, astTu, finder);
+        this.editorFile = editorFile;
+    }
 
-   protected boolean checkForConstructorWithParameters(IASTTranslationUnit astTu, IASTNode methodNode) {
-      IASTCompositeTypeSpecifier typeNode = ASTHelper.findParentOfType(IASTCompositeTypeSpecifier.class, methodNode);
-      if (typeNode == null) { return false; }
-      ArrayList<IASTDeclaration> constructors = ASTHelper.getConstructors(typeNode);
-      return ASTHelper.haveParameters(constructors);
-   }
+    protected boolean checkForConstructorWithParameters(IASTTranslationUnit astTu, IASTNode methodNode) {
+        IASTCompositeTypeSpecifier typeNode = ASTHelper.findParentOfType(IASTCompositeTypeSpecifier.class, methodNode);
+        if (typeNode == null) {
+            return false;
+        }
+        ArrayList<IASTDeclaration> constructors = ASTHelper.getConstructors(typeNode);
+        return ASTHelper.haveParameters(constructors);
+    }
 }

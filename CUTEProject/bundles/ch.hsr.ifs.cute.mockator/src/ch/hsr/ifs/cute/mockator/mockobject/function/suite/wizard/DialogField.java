@@ -23,118 +23,118 @@ import ch.hsr.ifs.cute.mockator.mockobject.function.suite.wizard.NewSuiteFileCre
 // Copied and adapted from CUTE
 class DialogField {
 
-   protected String                 fLabelText;
-   private Label                    fLabel;
-   private SourceFolderFieldAdapter fDialogFieldListener;
-   private boolean                  fEnabled;
+    protected String                 fLabelText;
+    private Label                    fLabel;
+    private SourceFolderFieldAdapter fDialogFieldListener;
+    private boolean                  fEnabled;
 
-   public DialogField() {
-      fEnabled = true;
-      fLabel = null;
-      fLabelText = "";
-   }
+    public DialogField() {
+        fEnabled = true;
+        fLabel = null;
+        fLabelText = "";
+    }
 
-   public void setLabelText(final String labeltext) {
-      fLabelText = labeltext;
-   }
+    public void setLabelText(final String labeltext) {
+        fLabelText = labeltext;
+    }
 
-   public final void setDialogFieldListener(final SourceFolderFieldAdapter sourceFolderAdapter) {
-      fDialogFieldListener = sourceFolderAdapter;
-   }
+    public final void setDialogFieldListener(final SourceFolderFieldAdapter sourceFolderAdapter) {
+        fDialogFieldListener = sourceFolderAdapter;
+    }
 
-   public void dialogFieldChanged() {
-      if (fDialogFieldListener != null) {
-         fDialogFieldListener.dialogFieldChanged();
-      }
-   }
+    public void dialogFieldChanged() {
+        if (fDialogFieldListener != null) {
+            fDialogFieldListener.dialogFieldChanged();
+        }
+    }
 
-   public boolean setFocus() {
-      return false;
-   }
+    public boolean setFocus() {
+        return false;
+    }
 
-   public void postSetFocusOnDialogField(final Display display) {
-      if (display != null) {
-         display.asyncExec(() -> setFocus());
-      }
-   }
+    public void postSetFocusOnDialogField(final Display display) {
+        if (display != null) {
+            display.asyncExec(() -> setFocus());
+        }
+    }
 
-   public Control[] doFillIntoGrid(final Composite parent, final int nColumns) {
-      assertEnoughColumns(nColumns);
-      final Label label = getLabelControl(parent);
-      label.setLayoutData(gridDataForLabel(nColumns));
-      return new Control[] { label };
-   }
+    public Control[] doFillIntoGrid(final Composite parent, final int nColumns) {
+        assertEnoughColumns(nColumns);
+        final Label label = getLabelControl(parent);
+        label.setLayoutData(gridDataForLabel(nColumns));
+        return new Control[] { label };
+    }
 
-   public int getNumberOfControls() {
-      return 1;
-   }
+    public int getNumberOfControls() {
+        return 1;
+    }
 
-   protected static GridData gridDataForLabel(final int span) {
-      final GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-      gd.horizontalSpan = span;
-      return gd;
-   }
+    protected static GridData gridDataForLabel(final int span) {
+        final GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+        gd.horizontalSpan = span;
+        return gd;
+    }
 
-   public Label getLabelControl(final Composite parent) {
-      if (fLabel == null) {
-         assertCompositeNotNull(parent);
+    public Label getLabelControl(final Composite parent) {
+        if (fLabel == null) {
+            assertCompositeNotNull(parent);
 
-         fLabel = new Label(parent, SWT.LEFT);
-         fLabel.setFont(parent.getFont());
-         fLabel.setEnabled(fEnabled);
-         if (fLabelText != null && !"".equals(fLabelText)) {
-            fLabel.setText(fLabelText);
-         } else {
-            fLabel.setText(".");
-            fLabel.setVisible(false);
-         }
-      }
-      return fLabel;
-   }
+            fLabel = new Label(parent, SWT.LEFT);
+            fLabel.setFont(parent.getFont());
+            fLabel.setEnabled(fEnabled);
+            if (fLabelText != null && !"".equals(fLabelText)) {
+                fLabel.setText(fLabelText);
+            } else {
+                fLabel.setText(".");
+                fLabel.setVisible(false);
+            }
+        }
+        return fLabel;
+    }
 
-   public static Control createEmptySpace(final Composite parent) {
-      return createEmptySpace(parent, 1);
-   }
+    public static Control createEmptySpace(final Composite parent) {
+        return createEmptySpace(parent, 1);
+    }
 
-   public static Control createEmptySpace(final Composite parent, final int span) {
-      final Label label = new Label(parent, SWT.LEFT);
-      final GridData gd = new GridData();
-      gd.horizontalAlignment = GridData.BEGINNING;
-      gd.grabExcessHorizontalSpace = false;
-      gd.horizontalSpan = span;
-      gd.horizontalIndent = 0;
-      gd.widthHint = 0;
-      gd.heightHint = 0;
-      label.setLayoutData(gd);
-      return label;
-   }
+    public static Control createEmptySpace(final Composite parent, final int span) {
+        final Label label = new Label(parent, SWT.LEFT);
+        final GridData gd = new GridData();
+        gd.horizontalAlignment = GridData.BEGINNING;
+        gd.grabExcessHorizontalSpace = false;
+        gd.horizontalSpan = span;
+        gd.horizontalIndent = 0;
+        gd.widthHint = 0;
+        gd.heightHint = 0;
+        label.setLayoutData(gd);
+        return label;
+    }
 
-   protected static boolean isOkToUse(final Control control) {
-      return control != null && !control.isDisposed();
-   }
+    protected static boolean isOkToUse(final Control control) {
+        return control != null && !control.isDisposed();
+    }
 
-   public final void setEnabled(final boolean enabled) {
-      if (enabled != fEnabled) {
-         fEnabled = enabled;
-         updateEnableState();
-      }
-   }
+    public final void setEnabled(final boolean enabled) {
+        if (enabled != fEnabled) {
+            fEnabled = enabled;
+            updateEnableState();
+        }
+    }
 
-   protected void updateEnableState() {
-      if (fLabel != null) {
-         fLabel.setEnabled(fEnabled);
-      }
-   }
+    protected void updateEnableState() {
+        if (fLabel != null) {
+            fLabel.setEnabled(fEnabled);
+        }
+    }
 
-   public final boolean isEnabled() {
-      return fEnabled;
-   }
+    public final boolean isEnabled() {
+        return fEnabled;
+    }
 
-   protected static void assertCompositeNotNull(final Composite comp) {
-      ILTISException.Unless.notNull("uncreated control requested with composite null", comp);
-   }
+    protected static void assertCompositeNotNull(final Composite comp) {
+        ILTISException.Unless.notNull("uncreated control requested with composite null", comp);
+    }
 
-   protected final void assertEnoughColumns(final int nColumns) {
-      ILTISException.Unless.isTrue("given number of columns is too small", nColumns >= getNumberOfControls());
-   }
+    protected final void assertEnoughColumns(final int nColumns) {
+        ILTISException.Unless.isTrue("given number of columns is too small", nColumns >= getNumberOfControls());
+    }
 }

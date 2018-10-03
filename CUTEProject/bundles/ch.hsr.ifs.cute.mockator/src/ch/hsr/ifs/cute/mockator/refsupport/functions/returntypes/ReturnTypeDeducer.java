@@ -46,6 +46,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPUnknownType;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeOfDependentExpression;
 
 import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.cute.mockator.refsupport.utils.NodeContainer;
@@ -54,290 +55,315 @@ import ch.hsr.ifs.cute.mockator.refsupport.utils.NodeContainer;
 @SuppressWarnings("restriction")
 public class ReturnTypeDeducer {
 
-   private static final ICPPNodeFactory    nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final ICPPASTFunctionDeclarator funDecl;
-   private final IType                     injectedType;
-   private final String                    memberClassName;
+    private static final ICPPNodeFactory    nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+    private final ICPPASTFunctionDeclarator funDecl;
+    private final IType                     injectedType;
+    private final String                    memberClassName;
 
-   public ReturnTypeDeducer(final ICPPASTFunctionDeclarator funDecl, final IType injectedType, final String memberClassName) {
-      this.funDecl = funDecl;
-      this.injectedType = injectedType;
-      this.memberClassName = memberClassName;
-   }
+    public ReturnTypeDeducer(final ICPPASTFunctionDeclarator funDecl, final IType injectedType, final String memberClassName) {
+        this.funDecl = funDecl;
+        this.injectedType = injectedType;
+        this.memberClassName = memberClassName;
+    }
 
-   public ICPPASTDeclSpecifier determineReturnType(final IASTExpression funCall) {
-      return findPossibleReturnType(funCall).map(ICPPASTDeclSpecifier::copy).orElse(createDefaultReturnType());
-   }
+    public ICPPASTDeclSpecifier determineReturnType(final IASTExpression funCall) {
+        return findPossibleReturnType(funCall).map(ICPPASTDeclSpecifier::copy).orElse(createDefaultReturnType());
+    }
 
-   private Optional<ICPPASTDeclSpecifier> findPossibleReturnType(final IASTExpression funCall) {
-      final ReturnTypeFinderVisitor visitor = new ReturnTypeFinderVisitor(injectedType, memberClassName, funDecl);
-      getNodeToAnalyse(funCall).accept(visitor);
-      return visitor.getReturnType();
-   }
+    private Optional<ICPPASTDeclSpecifier> findPossibleReturnType(final IASTExpression funCall) {
+        final ReturnTypeFinderVisitor visitor = new ReturnTypeFinderVisitor(injectedType, memberClassName, funDecl);
+        getNodeToAnalyse(funCall).accept(visitor);
+        return visitor.getReturnType();
+    }
 
-   private static IASTNode getNodeToAnalyse(final IASTExpression funCall) {
-      final IASTStatement stmt = CPPVisitor.findAncestorWithType(funCall, IASTStatement.class).orElse(null);
-      ILTISException.Unless.notNull("Could not determine return type for missing function", stmt);
-      return stmt;
-   }
+    private static IASTNode getNodeToAnalyse(final IASTExpression funCall) {
+        final IASTStatement stmt = CPPVisitor.findAncestorWithType(funCall, IASTStatement.class).orElse(null);
+        ILTISException.Unless.notNull("Could not determine return type for missing function", stmt);
+        return stmt;
+    }
 
-   private static ICPPASTDeclSpecifier createDefaultReturnType() {
-      final ICPPASTSimpleDeclSpecifier voidType = nodeFactory.newSimpleDeclSpecifier();
-      voidType.setType(IASTSimpleDeclSpecifier.t_void);
-      return voidType;
-   }
+    private static ICPPASTDeclSpecifier createDefaultReturnType() {
+        final ICPPASTSimpleDeclSpecifier voidType = nodeFactory.newSimpleDeclSpecifier();
+        voidType.setType(IASTSimpleDeclSpecifier.t_void);
+        return voidType;
+    }
 
-   // Inspired by TDD
-   private static class ReturnTypeFinderVisitor extends ASTVisitor {
+    // Inspired by TDD
+    private static class ReturnTypeFinderVisitor extends ASTVisitor {
 
-      private final NodeContainer<ICPPASTDeclSpecifier> returnType;
-      private final IType                               injectedType;
-      private final ICPPASTFunctionDeclarator           funDeclToAdapt;
-      private final String                              memberClassName;
+        private final NodeContainer<ICPPASTDeclSpecifier> returnType;
+        private final IType                               injectedType;
+        private final ICPPASTFunctionDeclarator           funDeclToAdapt;
+        private final String                              memberClassName;
 
-      {
-         shouldVisitStatements = true;
-         shouldVisitExpressions = true;
-      }
+        {
+            shouldVisitStatements = true;
+            shouldVisitExpressions = true;
+        }
 
-      public ReturnTypeFinderVisitor(final IType injectedType, final String memberClassName, final ICPPASTFunctionDeclarator funDeclToAdapt) {
-         this.injectedType = injectedType;
-         this.memberClassName = memberClassName;
-         this.funDeclToAdapt = funDeclToAdapt;
-         returnType = new NodeContainer<>();
-      }
+        public ReturnTypeFinderVisitor(final IType injectedType, final String memberClassName, final ICPPASTFunctionDeclarator funDeclToAdapt) {
+            this.injectedType = injectedType;
+            this.memberClassName = memberClassName;
+            this.funDeclToAdapt = funDeclToAdapt;
+            returnType = new NodeContainer<>();
+        }
 
-      public Optional<ICPPASTDeclSpecifier> getReturnType() {
-         return returnType.getNode();
-      }
+        public Optional<ICPPASTDeclSpecifier> getReturnType() {
+            return returnType.getNode();
+        }
 
-      @Override
-      public int visit(final IASTExpression expression) {
-         if (expression instanceof ICPPASTUnaryExpression) {
-            final IASTExpression operand = ((ICPPASTUnaryExpression) expression).getOperand();
+        @Override
+        public int visit(final IASTExpression expression) {
+            if (expression instanceof ICPPASTUnaryExpression) {
+                final IASTExpression operand = ((ICPPASTUnaryExpression) expression).getOperand();
 
-            if (operand instanceof ICPPASTLiteralExpression) {
-               return handleType(operand.getExpressionType());
-            } else if (operand instanceof ICPPASTFunctionCallExpression) {
-               return handleType(operand.getExpressionType());
-            } else if (operand instanceof ICPPASTBinaryExpression) {
-               return handleBinaryExpression((ICPPASTBinaryExpression) operand);
-            } else if (operand instanceof ICPPASTUnaryExpression) { return handleUnaryExpression((ICPPASTUnaryExpression) operand); }
-         } else if (expression instanceof ICPPASTBinaryExpression) { return handleBinaryExpression((ICPPASTBinaryExpression) expression); }
-
-         return PROCESS_CONTINUE;
-      }
-
-      private int handleType(final IType type) {
-         ICPPASTDeclSpecifier newReturnType;
-
-         if (type instanceof ICPPBasicType) {
-            newReturnType = createSimpleDecl(type);
-         } else if (type instanceof ICPPClassType) {
-            final ICPPClassType classType = (ICPPClassType) type;
-            newReturnType = createNamedTypeSpec(classType.getName());
-         } else if (type instanceof ITypedef) {
-            final IType underlyingType = ((ITypedef) type).getType();
-            newReturnType = createNamedTypeSpec(underlyingType.toString());
-         } else if (type instanceof ICPPTemplateTypeParameter && refersToInjectedType((ICPPTemplateTypeParameter) type)) {
-            newReturnType = createNamedTypeSpec(memberClassName);
-         } else {
-            return PROCESS_CONTINUE;
-         }
-
-         returnType.setNode(newReturnType.copy());
-         return PROCESS_ABORT;
-      }
-
-      private boolean refersToInjectedType(final ICPPTemplateTypeParameter type) {
-         return type.equals(injectedType);
-      }
-
-      @Override
-      public int visit(final IASTStatement statement) {
-         if (statement instanceof IASTCompoundStatement) { return PROCESS_CONTINUE; }
-
-         if (statement instanceof IASTDeclarationStatement) {
-            return handleDeclStatement((IASTDeclarationStatement) statement);
-         } else if (statement instanceof IASTExpressionStatement) {
-            return handleExprStatement((IASTExpressionStatement) statement);
-         } else if (statement instanceof IASTIfStatement) {
-            return handleIfStatement((IASTIfStatement) statement);
-         } else if (statement instanceof IASTReturnStatement) { return handleReturnStatement((IASTReturnStatement) statement); }
-
-         return PROCESS_CONTINUE;
-      }
-
-      private int handleDeclStatement(final IASTDeclarationStatement statement) {
-         final IASTDeclaration declaration = statement.getDeclaration();
-
-         if (!(declaration instanceof IASTSimpleDeclaration)) { return PROCESS_CONTINUE; }
-
-         final IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
-         ICPPASTDeclSpecifier declSpecifier = (ICPPASTDeclSpecifier) simpleDecl.getDeclSpecifier();
-
-         if (declSpecifier instanceof ICPPASTNamedTypeSpecifier) {
-            final IBinding binding = ((ICPPASTNamedTypeSpecifier) declSpecifier).getName().resolveBinding();
-
-            if (binding instanceof ICPPTemplateTypeParameter && refersToInjectedType((ICPPTemplateTypeParameter) binding)) {
-               declSpecifier = createNamedTypeSpec(memberClassName);
+                if (operand instanceof ICPPASTLiteralExpression) {
+                    return handleType(operand.getExpressionType());
+                } else if (operand instanceof ICPPASTFunctionCallExpression) {
+                    return handleType(operand.getExpressionType());
+                } else if (operand instanceof ICPPASTBinaryExpression) {
+                    return handleBinaryExpression((ICPPASTBinaryExpression) operand);
+                } else if (operand instanceof ICPPASTUnaryExpression) {
+                    return handleUnaryExpression((ICPPASTUnaryExpression) operand);
+                }
+            } else if (expression instanceof ICPPASTBinaryExpression) {
+                return handleBinaryExpression((ICPPASTBinaryExpression) expression);
             }
-         }
 
-         setPointerReturnType(getPointersInDecl(simpleDecl));
-         returnType.setNode(declSpecifier);
-         return PROCESS_ABORT;
-      }
+            return PROCESS_CONTINUE;
+        }
 
-      private int handleExprStatement(final IASTExpressionStatement exprStatement) {
-         final IASTExpression expr = exprStatement.getExpression();
+        private int handleType(final IType type) {
+            ICPPASTDeclSpecifier newReturnType;
 
-         if (expr instanceof ICPPASTBinaryExpression) {
-            return handleBinaryExpression((ICPPASTBinaryExpression) expr);
-         } else if (expr instanceof ICPPASTUnaryExpression) { return handleUnaryExpression((ICPPASTUnaryExpression) expr); }
+            if (type instanceof ICPPBasicType) {
+                newReturnType = createSimpleDecl(type);
+            } else if (type instanceof ICPPClassType) {
+                final ICPPClassType classType = (ICPPClassType) type;
+                newReturnType = createNamedTypeSpec(classType.getName());
+            } else if (type instanceof ITypedef) {
+                final IType underlyingType = ((ITypedef) type).getType();
+                newReturnType = createNamedTypeSpec(underlyingType.toString());
+            } else if (type instanceof ICPPTemplateTypeParameter && refersToInjectedType((ICPPTemplateTypeParameter) type)) {
+                newReturnType = createNamedTypeSpec(memberClassName);
+            } else {
+                return PROCESS_CONTINUE;
+            }
 
-         return PROCESS_CONTINUE;
-      }
+            returnType.setNode(newReturnType.copy());
+            return PROCESS_ABORT;
+        }
 
-      private int handleReturnStatement(final IASTReturnStatement returnStmt) {
-         if (isReturnTypeOfFunApplicable(returnStmt)) { return useReturnTypeOfParentFunction(returnStmt); }
+        private boolean refersToInjectedType(final ICPPTemplateTypeParameter type) {
+            return type.equals(injectedType);
+        }
 
-         return PROCESS_CONTINUE;
-      }
+        @Override
+        public int visit(final IASTStatement statement) {
+            if (statement instanceof IASTCompoundStatement) {
+                return PROCESS_CONTINUE;
+            }
 
-      private static boolean isReturnTypeOfFunApplicable(final IASTReturnStatement returnStmt) {
-         final IASTExpression returnVal = returnStmt.getReturnValue();
-         return returnVal instanceof ICPPASTFunctionCallExpression || returnVal instanceof ICPPASTUnaryExpression;
-      }
+            if (statement instanceof IASTDeclarationStatement) {
+                return handleDeclStatement((IASTDeclarationStatement) statement);
+            } else if (statement instanceof IASTExpressionStatement) {
+                return handleExprStatement((IASTExpressionStatement) statement);
+            } else if (statement instanceof IASTIfStatement) {
+                return handleIfStatement((IASTIfStatement) statement);
+            } else if (statement instanceof IASTReturnStatement) {
+                return handleReturnStatement((IASTReturnStatement) statement);
+            }
 
-      private int useReturnTypeOfParentFunction(final IASTReturnStatement returnStmt) {
-         final ICPPASTFunctionDefinition function = CPPVisitor.findAncestorWithType(returnStmt, ICPPASTFunctionDefinition.class).orElse(null);
-         final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) function.getDeclarator();
-         setPointerReturnType(getPointers(funDecl));
-         final ICPPASTDeclSpecifier declSpecifier = (ICPPASTDeclSpecifier) function.getDeclSpecifier();
+            return PROCESS_CONTINUE;
+        }
 
-         if (declSpecifier instanceof ICPPASTNamedTypeSpecifier) {
-            final ICPPASTNamedTypeSpecifier typeSpec = (ICPPASTNamedTypeSpecifier) declSpecifier;
-            final IBinding binding = typeSpec.getName().resolveBinding();
+        private int handleDeclStatement(final IASTDeclarationStatement statement) {
+            final IASTDeclaration declaration = statement.getDeclaration();
 
-            if (binding instanceof ITypedef) { return handleType((ITypedef) binding); }
-         }
+            if (!(declaration instanceof IASTSimpleDeclaration)) {
+                return PROCESS_CONTINUE;
+            }
 
-         returnType.setNode(declSpecifier.copy());
-         return PROCESS_ABORT;
-      }
+            final IASTSimpleDeclaration simpleDecl = (IASTSimpleDeclaration) declaration;
+            ICPPASTDeclSpecifier declSpecifier = (ICPPASTDeclSpecifier) simpleDecl.getDeclSpecifier();
 
-      private int handleIfStatement(final IASTIfStatement statement) {
-         final IASTExpression expr = statement.getConditionExpression();
+            if (declSpecifier instanceof ICPPASTNamedTypeSpecifier) {
+                final IBinding binding = ((ICPPASTNamedTypeSpecifier) declSpecifier).getName().resolveBinding();
 
-         if (expr instanceof ICPPASTBinaryExpression) {
-            return handleBinaryExpression((ICPPASTBinaryExpression) expr);
-         } else if (expr instanceof ICPPASTUnaryExpression) {
-            return handleUnaryExpression((ICPPASTUnaryExpression) expr);
-         } else if (expr instanceof ICPPASTFunctionCallExpression) { return handleType(CPPBasicType.BOOLEAN); }
+                if (binding instanceof ICPPTemplateTypeParameter && refersToInjectedType((ICPPTemplateTypeParameter) binding)) {
+                    declSpecifier = createNamedTypeSpec(memberClassName);
+                }
+            }
 
-         return PROCESS_CONTINUE;
-      }
+            setPointerReturnType(getPointersInDecl(simpleDecl));
+            returnType.setNode(declSpecifier);
+            return PROCESS_ABORT;
+        }
 
-      private int handleUnaryExpression(final ICPPASTUnaryExpression unaryExp) {
-         IType unaryExpType = unaryExp.getExpressionType();
-         final IASTExpression operand = unaryExp.getOperand();
-         final IType opType = operand.getExpressionType();
+        private int handleExprStatement(final IASTExpressionStatement exprStatement) {
+            final IASTExpression expr = exprStatement.getExpression();
 
-         if (operand instanceof ICPPASTUnaryExpression) {
-            handleType(((ICPPASTUnaryExpression) operand).getOperand().getExpressionType());
-         } else if (operand instanceof IASTIdExpression) {
-            unaryExpType = getType((IASTIdExpression) operand);
+            if (expr instanceof ICPPASTBinaryExpression) {
+                return handleBinaryExpression((ICPPASTBinaryExpression) expr);
+            } else if (expr instanceof ICPPASTUnaryExpression) {
+                return handleUnaryExpression((ICPPASTUnaryExpression) expr);
+            }
 
-            if (unaryExpType instanceof ITypedef) { return handleType(unaryExpType); }
-         } else if (opType instanceof ICPPTemplateTypeParameter) {
-            return handleType(opType);
-         } else if (unaryExpType instanceof ICPPUnknownType && unaryExp.getParent() instanceof IASTIfStatement) { return handleType(
-               CPPBasicType.BOOLEAN); }
+            return PROCESS_CONTINUE;
+        }
 
-         return handleType(unaryExpType);
-      }
+        private int handleReturnStatement(final IASTReturnStatement returnStmt) {
+            if (isReturnTypeOfFunApplicable(returnStmt)) {
+                return useReturnTypeOfParentFunction(returnStmt);
+            }
 
-      private int handleBinaryExpression(ICPPASTBinaryExpression binExp) {
-         final IASTExpression operand1 = binExp.getOperand1();
-         final IASTExpression operand2 = binExp.getOperand2();
+            return PROCESS_CONTINUE;
+        }
 
-         if (operand1 instanceof ICPPASTBinaryExpression) {
-            binExp = (ICPPASTBinaryExpression) operand1;
-         } else if (operand2 instanceof ICPPASTBinaryExpression) {
-            binExp = (ICPPASTBinaryExpression) operand2;
-         }
+        private static boolean isReturnTypeOfFunApplicable(final IASTReturnStatement returnStmt) {
+            final IASTExpression returnVal = returnStmt.getReturnValue();
+            return returnVal instanceof ICPPASTFunctionCallExpression || returnVal instanceof ICPPASTUnaryExpression;
+        }
 
-         final IType type = getType(binExp, operand1, operand2);
-         return handleType(type);
-      }
+        private int useReturnTypeOfParentFunction(final IASTReturnStatement returnStmt) {
+            final ICPPASTFunctionDefinition function = CPPVisitor.findAncestorWithType(returnStmt, ICPPASTFunctionDefinition.class).orElse(null);
+            final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) function.getDeclarator();
+            setPointerReturnType(getPointers(funDecl));
+            final ICPPASTDeclSpecifier declSpecifier = (ICPPASTDeclSpecifier) function.getDeclSpecifier();
 
-      private static IType getType(final ICPPASTBinaryExpression binExp, final IASTExpression operand1, final IASTExpression operand2) {
-         IType type = binExp.getExpressionType();
+            if (declSpecifier instanceof ICPPASTNamedTypeSpecifier) {
+                final ICPPASTNamedTypeSpecifier typeSpec = (ICPPASTNamedTypeSpecifier) declSpecifier;
+                final IBinding binding = typeSpec.getName().resolveBinding();
 
-         if (type instanceof TypeOfDependentExpression) {
-            type = operand1.getExpressionType();
+                if (binding instanceof ITypedef) {
+                    return handleType((ITypedef) binding);
+                }
+            }
+
+            returnType.setNode(declSpecifier.copy());
+            return PROCESS_ABORT;
+        }
+
+        private int handleIfStatement(final IASTIfStatement statement) {
+            final IASTExpression expr = statement.getConditionExpression();
+
+            if (expr instanceof ICPPASTBinaryExpression) {
+                return handleBinaryExpression((ICPPASTBinaryExpression) expr);
+            } else if (expr instanceof ICPPASTUnaryExpression) {
+                return handleUnaryExpression((ICPPASTUnaryExpression) expr);
+            } else if (expr instanceof ICPPASTFunctionCallExpression) {
+                return handleType(CPPBasicType.BOOLEAN);
+            }
+
+            return PROCESS_CONTINUE;
+        }
+
+        private int handleUnaryExpression(final ICPPASTUnaryExpression unaryExp) {
+            IType unaryExpType = unaryExp.getExpressionType();
+            final IASTExpression operand = unaryExp.getOperand();
+            final IType opType = operand.getExpressionType();
+
+            if (operand instanceof ICPPASTUnaryExpression) {
+                handleType(((ICPPASTUnaryExpression) operand).getOperand().getExpressionType());
+            } else if (operand instanceof IASTIdExpression) {
+                unaryExpType = getType((IASTIdExpression) operand);
+
+                if (unaryExpType instanceof ITypedef) {
+                    return handleType(unaryExpType);
+                }
+            } else if (opType instanceof ICPPTemplateTypeParameter) {
+                return handleType(opType);
+            } else if (unaryExpType instanceof ICPPUnknownType && unaryExp.getParent() instanceof IASTIfStatement) {
+                return handleType(CPPBasicType.BOOLEAN);
+            }
+
+            return handleType(unaryExpType);
+        }
+
+        private int handleBinaryExpression(ICPPASTBinaryExpression binExp) {
+            final IASTExpression operand1 = binExp.getOperand1();
+            final IASTExpression operand2 = binExp.getOperand2();
+
+            if (operand1 instanceof ICPPASTBinaryExpression) {
+                binExp = (ICPPASTBinaryExpression) operand1;
+            } else if (operand2 instanceof ICPPASTBinaryExpression) {
+                binExp = (ICPPASTBinaryExpression) operand2;
+            }
+
+            final IType type = getType(binExp, operand1, operand2);
+            return handleType(type);
+        }
+
+        private static IType getType(final ICPPASTBinaryExpression binExp, final IASTExpression operand1, final IASTExpression operand2) {
+            IType type = binExp.getExpressionType();
 
             if (type instanceof TypeOfDependentExpression) {
-               type = operand2.getExpressionType();
+                type = operand1.getExpressionType();
+
+                if (type instanceof TypeOfDependentExpression) {
+                    type = operand2.getExpressionType();
+                }
             }
-         }
 
-         if (operand1 instanceof IASTIdExpression) {
-            type = getType((IASTIdExpression) operand1);
-         }
+            if (operand1 instanceof IASTIdExpression) {
+                type = getType((IASTIdExpression) operand1);
+            }
 
-         return type;
-      }
+            return type;
+        }
 
-      private static IType getType(final IASTIdExpression idExpr) {
-         final IASTName name = idExpr.getName();
-         final IBinding var = name.resolveBinding();
+        private static IType getType(final IASTIdExpression idExpr) {
+            final IASTName name = idExpr.getName();
+            final IBinding var = name.resolveBinding();
 
-         if (var instanceof IVariable) { return ((IVariable) var).getType(); }
+            if (var instanceof IVariable) {
+                return ((IVariable) var).getType();
+            }
 
-         return null;
-      }
+            return null;
+        }
 
-      private static ICPPASTSimpleDeclSpecifier createSimpleDecl(final IType type) {
-         final ICPPASTSimpleDeclSpecifier simpleType = nodeFactory.newSimpleDeclSpecifier();
-         simpleType.setType(((ICPPBasicType) type).getKind());
-         return simpleType;
-      }
+        private static ICPPASTSimpleDeclSpecifier createSimpleDecl(final IType type) {
+            final ICPPASTSimpleDeclSpecifier simpleType = nodeFactory.newSimpleDeclSpecifier();
+            simpleType.setType(((ICPPBasicType) type).getKind());
+            return simpleType;
+        }
 
-      private static ICPPASTNamedTypeSpecifier createNamedTypeSpec(final String typeName) {
-         final IASTName name = nodeFactory.newName(typeName.toCharArray());
-         return nodeFactory.newTypedefNameSpecifier(name);
-      }
+        private static ICPPASTNamedTypeSpecifier createNamedTypeSpec(final String typeName) {
+            final IASTName name = nodeFactory.newName(typeName.toCharArray());
+            return nodeFactory.newTypedefNameSpecifier(name);
+        }
 
-      private static List<IASTPointerOperator> getPointers(final ICPPASTFunctionDeclarator funDecl) {
-         return list(funDecl.getPointerOperators());
-      }
+        private static List<IASTPointerOperator> getPointers(final ICPPASTFunctionDeclarator funDecl) {
+            return list(funDecl.getPointerOperators());
+        }
 
-      private static List<IASTPointerOperator> getPointersInDecl(final IASTSimpleDeclaration simpleDecl) {
-         final IASTDeclarator[] declarators = simpleDecl.getDeclarators();
+        private static List<IASTPointerOperator> getPointersInDecl(final IASTSimpleDeclaration simpleDecl) {
+            final IASTDeclarator[] declarators = simpleDecl.getDeclarators();
 
-         if (declarators.length == 0) { return new ArrayList<>(); }
+            if (declarators.length == 0) {
+                return new ArrayList<>();
+            }
 
-         return list(declarators[0].getPointerOperators());
-      }
+            return list(declarators[0].getPointerOperators());
+        }
 
-      private void setPointerReturnType(final Collection<IASTPointerOperator> pointers) {
-         clearExistingFunDeclPointers();
-         addNewPointersToFunDecl(pointers);
-      }
+        private void setPointerReturnType(final Collection<IASTPointerOperator> pointers) {
+            clearExistingFunDeclPointers();
+            addNewPointersToFunDecl(pointers);
+        }
 
-      private void clearExistingFunDeclPointers() {
-         final IASTPointerOperator[] pointerOperators = funDeclToAdapt.getPointerOperators();
-         for (int i = 0; i < pointerOperators.length; i++) {
-            pointerOperators[i] = null;
-         }
-      }
+        private void clearExistingFunDeclPointers() {
+            final IASTPointerOperator[] pointerOperators = funDeclToAdapt.getPointerOperators();
+            for (int i = 0; i < pointerOperators.length; i++) {
+                pointerOperators[i] = null;
+            }
+        }
 
-      private void addNewPointersToFunDecl(final Collection<IASTPointerOperator> pointers) {
-         for (final IASTPointerOperator pointer : pointers) {
-            funDeclToAdapt.addPointerOperator(pointer.copy());
-         }
-      }
-   }
+        private void addNewPointersToFunDecl(final Collection<IASTPointerOperator> pointers) {
+            for (final IASTPointerOperator pointer : pointers) {
+                funDeclToAdapt.addPointerOperator(pointer.copy());
+            }
+        }
+    }
 }

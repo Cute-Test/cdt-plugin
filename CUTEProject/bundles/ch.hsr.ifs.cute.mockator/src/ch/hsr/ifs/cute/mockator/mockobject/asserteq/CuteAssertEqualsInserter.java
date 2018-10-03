@@ -13,28 +13,28 @@ import ch.hsr.ifs.cute.mockator.project.properties.AssertionOrder;
 
 class CuteAssertEqualsInserter extends AbstractAssertEqualsInserter {
 
-   public CuteAssertEqualsInserter(final ICPPASTFunctionDefinition testFunction, final MockSupportContext context) {
-      super(testFunction, context);
-   }
+    public CuteAssertEqualsInserter(final ICPPASTFunctionDefinition testFunction, final MockSupportContext context) {
+        super(testFunction, context);
+    }
 
-   @Override
-   protected void insertWith(final ASTRewrite rewriter) {
-      final IASTExpressionStatement assertEqual = createAssertEqualStmt();
-      insertAssertEqual(rewriter, assertEqual);
-   }
+    @Override
+    protected void insertWith(final ASTRewrite rewriter) {
+        final IASTExpressionStatement assertEqual = createAssertEqualStmt();
+        insertAssertEqual(rewriter, assertEqual);
+    }
 
-   private IASTExpressionStatement createAssertEqualStmt() {
-      final IASTInitializerClause[] initializer = new IASTInitializerClause[] { createExpectations(), createActual() };
-      final IASTFunctionCallExpression assertEqual = nodeFactory.newFunctionCallExpression(getAssertMacroId(), initializer);
-      return nodeFactory.newExpressionStatement(assertEqual);
-   }
+    private IASTExpressionStatement createAssertEqualStmt() {
+        final IASTInitializerClause[] initializer = new IASTInitializerClause[] { createExpectations(), createActual() };
+        final IASTFunctionCallExpression assertEqual = nodeFactory.newFunctionCallExpression(getAssertMacroId(), initializer);
+        return nodeFactory.newExpressionStatement(assertEqual);
+    }
 
-   private IASTIdExpression getAssertMacroId() {
-      return nodeFactory.newIdExpression(nodeFactory.newName(getNameOfAssert().toCharArray()));
-   }
+    private IASTIdExpression getAssertMacroId() {
+        return nodeFactory.newIdExpression(nodeFactory.newName(getNameOfAssert().toCharArray()));
+    }
 
-   @Override
-   protected String getNameOfAssert() {
-      return AssertionOrder.fromProjectSettings(context.getProject().getProject()).getAssertionCommand().toString();
-   }
+    @Override
+    protected String getNameOfAssert() {
+        return AssertionOrder.fromProjectSettings(context.getProject().getProject()).getAssertionCommand().toString();
+    }
 }

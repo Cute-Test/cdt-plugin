@@ -7,12 +7,12 @@ import java.lang.annotation.Target;
 
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD) 
+@Target(ElementType.FIELD)
 public @interface CuteVersionNumber {
 
-   int major() default 0;
+    int major() default 0;
 
-   int minor() default 0;
+    int minor() default 0;
 
-   int patch() default 0;
+    int patch() default 0;
 }

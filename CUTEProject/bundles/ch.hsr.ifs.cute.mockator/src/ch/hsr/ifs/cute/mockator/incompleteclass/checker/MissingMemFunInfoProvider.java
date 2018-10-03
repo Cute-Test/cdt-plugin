@@ -17,54 +17,54 @@ import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 
 class MissingMemFunInfoProvider {
 
-   private final CppStandard                                 cppStd;
-   private final Collection<? extends MissingMemberFunction> missingMemFuns;
-   private final ICPPASTCompositeTypeSpecifier               clazz;
+    private final CppStandard                                 cppStd;
+    private final Collection<? extends MissingMemberFunction> missingMemFuns;
+    private final ICPPASTCompositeTypeSpecifier               clazz;
 
-   public MissingMemFunInfoProvider(final CppStandard cppStd, final Collection<? extends MissingMemberFunction> missingMemFuns,
-                                    final ICPPASTCompositeTypeSpecifier clazz) {
-      this.cppStd = cppStd;
-      this.missingMemFuns = missingMemFuns;
-      this.clazz = clazz;
-   }
+    public MissingMemFunInfoProvider(final CppStandard cppStd, final Collection<? extends MissingMemberFunction> missingMemFuns,
+                                     final ICPPASTCompositeTypeSpecifier clazz) {
+        this.cppStd = cppStd;
+        this.missingMemFuns = missingMemFuns;
+        this.clazz = clazz;
+    }
 
-   public Optional<MissingMemFunInfo> createInfo() {
-      if (missingMemFuns.isEmpty()) return Optional.empty();
+    public Optional<MissingMemFunInfo> createInfo() {
+        if (missingMemFuns.isEmpty()) return Optional.empty();
 
-      return Optional.of(new MissingMemFunInfo().also(i -> {
-         i.testDoubleName = clazz.getName().toString();
-         i.missingMemFunsForFake = getFunSignatures(collectMissingMemFuns(getFakeCtorProvider()));
-         i.missingMemFunsForMock = getFunSignatures(collectMissingMemFuns(getMockCtorProvider()));
-      }));
-   }
+        return Optional.of(new MissingMemFunInfo().also(i -> {
+            i.testDoubleName = clazz.getName().toString();
+            i.missingMemFunsForFake = getFunSignatures(collectMissingMemFuns(getFakeCtorProvider()));
+            i.missingMemFunsForMock = getFunSignatures(collectMissingMemFuns(getMockCtorProvider()));
+        }));
+    }
 
-   public Optional<MissingMemFunInfo> createMemFunCodanArgs() {
-      if (missingMemFuns.isEmpty()) return Optional.empty();
-      return Optional.of(new MissingMemFunInfo().also(i -> {
-         i.testDoubleName = clazz.getName().toString();
-         i.missingMemFunsForFake = getFunSignatures(collectMissingMemFuns(getFakeCtorProvider()));
-         i.missingMemFunsForMock = getFunSignatures(collectMissingMemFuns(getMockCtorProvider()));
-      }));
+    public Optional<MissingMemFunInfo> createMemFunCodanArgs() {
+        if (missingMemFuns.isEmpty()) return Optional.empty();
+        return Optional.of(new MissingMemFunInfo().also(i -> {
+            i.testDoubleName = clazz.getName().toString();
+            i.missingMemFunsForFake = getFunSignatures(collectMissingMemFuns(getFakeCtorProvider()));
+            i.missingMemFunsForMock = getFunSignatures(collectMissingMemFuns(getMockCtorProvider()));
+        }));
 
-   }
+    }
 
-   private MockObjectDefaultCtorProvider getMockCtorProvider() {
-      return new MockObjectDefaultCtorProvider(clazz, cppStd);
-   }
+    private MockObjectDefaultCtorProvider getMockCtorProvider() {
+        return new MockObjectDefaultCtorProvider(clazz, cppStd);
+    }
 
-   private FakeObjectDefaultCtorProvider getFakeCtorProvider() {
-      return new FakeObjectDefaultCtorProvider(clazz);
-   }
+    private FakeObjectDefaultCtorProvider getFakeCtorProvider() {
+        return new FakeObjectDefaultCtorProvider(clazz);
+    }
 
-   private List<MissingMemberFunction> collectMissingMemFuns(final DefaultCtorProvider defaultCtorProvider) {
-      final List<MissingMemberFunction> memFuns = new ArrayList<>();
-      memFuns.addAll(missingMemFuns);
+    private List<MissingMemberFunction> collectMissingMemFuns(final DefaultCtorProvider defaultCtorProvider) {
+        final List<MissingMemberFunction> memFuns = new ArrayList<>();
+        memFuns.addAll(missingMemFuns);
 
-      defaultCtorProvider.createMissingDefaultCtor(missingMemFuns).ifPresent((defaultCtor) -> memFuns.add(0, defaultCtor));
-      return memFuns;
-   }
+        defaultCtorProvider.createMissingDefaultCtor(missingMemFuns).ifPresent((defaultCtor) -> memFuns.add(0, defaultCtor));
+        return memFuns;
+    }
 
-   private static String getFunSignatures(final Collection<MissingMemberFunction> missingMemFuns) {
-      return new MissingMemFunSignaturesGenerator(missingMemFuns).getSignaturesWithStatistics();
-   }
+    private static String getFunSignatures(final Collection<MissingMemberFunction> missingMemFuns) {
+        return new MissingMemFunSignaturesGenerator(missingMemFuns).getSignaturesWithStatistics();
+    }
 }

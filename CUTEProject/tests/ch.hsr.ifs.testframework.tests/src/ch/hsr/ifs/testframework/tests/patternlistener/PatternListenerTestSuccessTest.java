@@ -23,42 +23,42 @@ import ch.hsr.ifs.testframework.tests.mock.DummyTestEventHandler;
  */
 public class PatternListenerTestSuccessTest extends PatternListenerBase {
 
-   private static final String TEST_NAME_EXP = "xUnitTest";
-   private static final String MSG_EXP       = "OK";
+    private static final String TEST_NAME_EXP = "xUnitTest";
+    private static final String MSG_EXP       = "OK";
 
-   private String testNameStart;
-   private String testNameEnd;
-   private String msgEnd;
+    private String testNameStart;
+    private String testNameEnd;
+    private String msgEnd;
 
-   final class TestSuccessHandler extends DummyTestEventHandler {
+    final class TestSuccessHandler extends DummyTestEventHandler {
 
-      @Override
-      protected void handleSuccess(IRegion reg, String name, String msg) {
-         testNameEnd = name;
-         msgEnd = msg;
-      }
+        @Override
+        protected void handleSuccess(IRegion reg, String name, String msg) {
+            testNameEnd = name;
+            msgEnd = msg;
+        }
 
-      @Override
-      protected void handleTestStart(IRegion reg, String testname) {
-         testNameStart = testname;
-      }
+        @Override
+        protected void handleTestStart(IRegion reg, String testname) {
+            testNameStart = testname;
+        }
 
-   }
+    }
 
-   public void testListenerEvents() throws IOException, InterruptedException {
-      emulateTestRun();
-      assertEquals("Teststart name", TEST_NAME_EXP, testNameStart);
-      assertEquals("Testend name", TEST_NAME_EXP, testNameEnd);
-      assertEquals("Message", MSG_EXP, msgEnd);
-   }
+    public void testListenerEvents() throws IOException, InterruptedException {
+        emulateTestRun();
+        assertEquals("Teststart name", TEST_NAME_EXP, testNameStart);
+        assertEquals("Testend name", TEST_NAME_EXP, testNameEnd);
+        assertEquals("Message", MSG_EXP, msgEnd);
+    }
 
-   @Override
-   protected void addTestEventHandler(ConsolePatternListener lis) {
-      lis.addHandler(new TestSuccessHandler());
-   }
+    @Override
+    protected void addTestEventHandler(ConsolePatternListener lis) {
+        lis.addHandler(new TestSuccessHandler());
+    }
 
-   @Override
-   protected String getInputFileName() {
-      return "successTest.txt";
-   }
+    @Override
+    protected String getInputFileName() {
+        return "successTest.txt";
+    }
 }

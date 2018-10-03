@@ -7,12 +7,12 @@ import ch.hsr.ifs.iltis.cpp.core.resources.info.annotations.MessageInfoArgument;
 
 public class MissingMemFunInfo extends MarkerInfo<MissingMemFunInfo> {
 
-   @MessageInfoArgument(0)
-   public String testDoubleName;
+    @MessageInfoArgument(0)
+    public String testDoubleName;
 
-   @InfoArgument
-   public String missingMemFunsForFake;
-   @InfoArgument
-   public String missingMemFunsForMock;
-   
+    @InfoArgument
+    public String missingMemFunsForFake;
+    @InfoArgument
+    public String missingMemFunsForMock;
+
 }

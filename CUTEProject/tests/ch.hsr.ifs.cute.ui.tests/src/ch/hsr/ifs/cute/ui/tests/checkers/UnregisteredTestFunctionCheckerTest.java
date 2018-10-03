@@ -10,14 +10,14 @@ import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.CDTTestingChecke
 
 public class UnregisteredTestFunctionCheckerTest extends CDTTestingCheckerTest {
 
-   @Test
-   public void runTest() throws Exception {
-      assertMarkerLines(expectedMarkerLinesFromProperties);
-   }
+    @Test
+    public void runTest() throws Exception {
+        assertMarkerLines(expectedMarkerLinesFromProperties);
+    }
 
-   @Override
-   protected IProblemId<?> getProblemId() {
-      return ProblemId.UNREGISTERED_TEST;
-   }
+    @Override
+    protected IProblemId<?> getProblemId() {
+        return ProblemId.UNREGISTERED_TEST;
+    }
 
 }

@@ -13,24 +13,24 @@ import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorQfWithRefactoringSupport;
 
 public abstract class AbstractTestDoubleQuickFix extends MockatorQfWithRefactoringSupport {
 
-   @Override
-   public Image getImage() {
-      return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_PUBLIC_METHOD);
-   }
+    @Override
+    public Image getImage() {
+        return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_PUBLIC_METHOD);
+    }
 
-   @Override
-   public String getLabel() {
-      return NLS.bind(getResolutionLabelHeader(), getNameOfTestDouble());
-   }
+    @Override
+    public String getLabel() {
+        return NLS.bind(getResolutionLabelHeader(), getNameOfTestDouble());
+    }
 
-   protected abstract String getResolutionLabelHeader();
+    protected abstract String getResolutionLabelHeader();
 
-   private String getNameOfTestDouble() {
-      return getMarkerInfo(marker).testDoubleName;
-   }
+    private String getNameOfTestDouble() {
+        return getMarkerInfo(marker).testDoubleName;
+    }
 
-   @Override
-   protected MissingMemFunInfo getMarkerInfo(final IMarker marker) {
-      return MarkerInfo.fromCodanProblemMarker(MissingMemFunInfo::new, marker);
-   }
+    @Override
+    protected MissingMemFunInfo getMarkerInfo(final IMarker marker) {
+        return MarkerInfo.fromCodanProblemMarker(MissingMemFunInfo::new, marker);
+    }
 }

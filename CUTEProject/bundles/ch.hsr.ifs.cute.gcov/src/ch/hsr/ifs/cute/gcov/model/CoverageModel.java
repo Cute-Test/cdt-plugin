@@ -21,31 +21,31 @@ import org.eclipse.core.resources.IFile;
  */
 public class CoverageModel {
 
-   private final Map<IFile, File> fileMap = new TreeMap<>((o1, o2) -> o1.getFullPath().toString().compareTo(o2.getFullPath().toString()));
+    private final Map<IFile, File> fileMap = new TreeMap<>((o1, o2) -> o1.getFullPath().toString().compareTo(o2.getFullPath().toString()));
 
-   public File addFileToModel(IFile file) {
-      File f = new File(file);
-      fileMap.put(file, f);
-      return f;
-   }
+    public File addFileToModel(IFile file) {
+        File f = new File(file);
+        fileMap.put(file, f);
+        return f;
+    }
 
-   public File getModelForFile(IFile file) {
-      return fileMap.get(file);
-   }
+    public File getModelForFile(IFile file) {
+        return fileMap.get(file);
+    }
 
-   public File removeFileFromModel(File file) {
-      return removeFileFromModel(file.getFile());
-   }
+    public File removeFileFromModel(File file) {
+        return removeFileFromModel(file.getFile());
+    }
 
-   public File removeFileFromModel(IFile file) {
-      return fileMap.remove(file);
-   }
+    public File removeFileFromModel(IFile file) {
+        return fileMap.remove(file);
+    }
 
-   public void clearModel() {
-      fileMap.clear();
-   }
+    public void clearModel() {
+        fileMap.clear();
+    }
 
-   public Collection<File> getMarkedFiles() {
-      return fileMap.values();
-   }
+    public Collection<File> getMarkedFiles() {
+        return fileMap.values();
+    }
 }

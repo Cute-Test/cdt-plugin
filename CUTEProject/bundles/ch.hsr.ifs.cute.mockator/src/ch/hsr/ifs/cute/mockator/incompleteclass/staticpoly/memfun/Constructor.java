@@ -19,57 +19,57 @@ import ch.hsr.ifs.cute.mockator.refsupport.functions.params.ParameterToFunctionA
 
 class Constructor extends AbstractStaticPolyMissingMemFun {
 
-   private final ICPPASTFunctionCallExpression funCall;
+    private final ICPPASTFunctionCallExpression funCall;
 
-   public Constructor(final ICPPASTFunctionCallExpression funCall) {
-      this.funCall = funCall;
-   }
+    public Constructor(final ICPPASTFunctionCallExpression funCall) {
+        this.funCall = funCall;
+    }
 
-   @Override
-   protected ICPPASTFunctionDeclarator createFunDecl() {
-      final IASTName funName = nodeFactory.newName(ASTUtil.getName(funCall).toCharArray());
-      final ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(funName);
-      new ParameterToFunctionAdder(funDecl).addParametersFromFunCall(funCall);
-      return funDecl;
-   }
+    @Override
+    protected ICPPASTFunctionDeclarator createFunDecl() {
+        final IASTName funName = nodeFactory.newName(ASTUtil.getName(funCall).toCharArray());
+        final ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(funName);
+        new ParameterToFunctionAdder(funDecl).addParametersFromFunCall(funCall);
+        return funDecl;
+    }
 
-   @Override
-   protected ICPPASTDeclSpecifier createReturnType(final ICPPASTFunctionDeclarator funDecl) {
-      return createCtorReturnType();
-   }
+    @Override
+    protected ICPPASTDeclSpecifier createReturnType(final ICPPASTFunctionDeclarator funDecl) {
+        return createCtorReturnType();
+    }
 
-   @Override
-   public ICPPASTFunctionDefinition createFunctionDefinition(final TestDoubleMemFunImplStrategy strategy, final CppStandard cppStd) {
-      final ICPPASTFunctionDefinition function = super.createFunctionDefinition(strategy, cppStd);
-      strategy.addCtorInitializer(function);
-      return function;
-   }
+    @Override
+    public ICPPASTFunctionDefinition createFunctionDefinition(final TestDoubleMemFunImplStrategy strategy, final CppStandard cppStd) {
+        final ICPPASTFunctionDefinition function = super.createFunctionDefinition(strategy, cppStd);
+        strategy.addCtorInitializer(function);
+        return function;
+    }
 
-   @Override
-   protected IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final ICPPASTFunctionDeclarator funDecl,
-         final ICPPASTDeclSpecifier specifier, final CppStandard cppStd) {
-      final IASTCompoundStatement newFunBody = createEmptyFunBody();
-      strategy.addCallVectorRegistration(newFunBody, funDecl, false);
-      return newFunBody;
-   }
+    @Override
+    protected IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final ICPPASTFunctionDeclarator funDecl,
+            final ICPPASTDeclSpecifier specifier, final CppStandard cppStd) {
+        final IASTCompoundStatement newFunBody = createEmptyFunBody();
+        strategy.addCallVectorRegistration(newFunBody, funDecl, false);
+        return newFunBody;
+    }
 
-   public boolean isDefaultConstructor() {
-      return funCall.getArguments().length == 0;
-   }
+    public boolean isDefaultConstructor() {
+        return funCall.getArguments().length == 0;
+    }
 
-   @Override
-   public boolean isCallEquivalent(final ICPPASTFunctionDefinition function, final ConstStrategy strategy) {
-      final FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) function.getDeclarator());
-      return checker.isEquivalent(funCall, strategy);
-   }
+    @Override
+    public boolean isCallEquivalent(final ICPPASTFunctionDefinition function, final ConstStrategy strategy) {
+        final FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) function.getDeclarator());
+        return checker.isEquivalent(funCall, strategy);
+    }
 
-   @Override
-   protected IASTExpression getUnderlyingExpression() {
-      return funCall;
-   }
+    @Override
+    protected IASTExpression getUnderlyingExpression() {
+        return funCall;
+    }
 
-   @Override
-   public boolean isStatic() {
-      return false;
-   }
+    @Override
+    public boolean isStatic() {
+        return false;
+    }
 }

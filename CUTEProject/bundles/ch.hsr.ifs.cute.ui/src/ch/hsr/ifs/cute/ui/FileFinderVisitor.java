@@ -22,25 +22,25 @@ import org.eclipse.core.runtime.CoreException;
  */
 public class FileFinderVisitor implements IResourceVisitor {
 
-   private final String sourceFileName;
-   private IFile        file;
+    private final String sourceFileName;
+    private IFile        file;
 
-   public FileFinderVisitor(String FileName) {
-      sourceFileName = FileName;
-   }
+    public FileFinderVisitor(String FileName) {
+        sourceFileName = FileName;
+    }
 
-   public IFile getFile() {
-      return file;
-   }
+    public IFile getFile() {
+        return file;
+    }
 
-   @Override
-   public boolean visit(IResource resource) throws CoreException {
-      if (resource.getName().endsWith(sourceFileName) && resource instanceof IFile) {
-         file = (IFile) resource;
-         return false;
-      } else {
-         return true;
-      }
-   }
+    @Override
+    public boolean visit(IResource resource) throws CoreException {
+        if (resource.getName().endsWith(sourceFileName) && resource instanceof IFile) {
+            file = (IFile) resource;
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 }

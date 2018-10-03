@@ -5,17 +5,17 @@ import java.util.Collection;
 
 public interface ToolChainProjectVariables {
 
-   String getCppCompilerToolId();
+    String getCppCompilerToolId();
 
-   String getCppCompilerOtherFlagsId();
+    String getCppCompilerOtherFlagsId();
 
-   Collection<String> getLinkerToolIds();
+    Collection<String> getLinkerToolIds();
 
-   String getLinkerOtherFlags();
+    String getLinkerOtherFlags();
 
-   String getPreprocessorDefinesId();
+    String getPreprocessorDefinesId();
 
-   String getCpp11ExperimentalFlag();
+    String getCpp11ExperimentalFlag();
 
-   String getCompilerPicId();
+    String getCompilerPicId();
 }

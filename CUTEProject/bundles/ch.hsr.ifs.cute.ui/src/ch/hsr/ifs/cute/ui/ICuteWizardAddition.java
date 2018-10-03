@@ -19,8 +19,8 @@ import org.eclipse.swt.widgets.Control;
  */
 public interface ICuteWizardAddition {
 
-   public Control createComposite(Composite parent);
+    public Control createComposite(Composite parent);
 
-   public ICuteWizardAdditionHandler getHandler();
+    public ICuteWizardAdditionHandler getHandler();
 
 }

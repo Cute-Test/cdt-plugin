@@ -9,38 +9,38 @@ import ch.hsr.ifs.cute.mockator.tests.AbstractQuickfixTest;
 
 public class DeleteWrappedFunctionQfTest extends AbstractQuickfixTest {
 
-   @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.WRAP_FUNCTION;
-   }
+    @Override
+    protected ProblemId getProblemId() {
+        return ProblemId.WRAP_FUNCTION;
+    }
 
-   @Override
-   protected CppStandard getCppStdToUse() {
-      return CppStandard.Cpp03Std;
-   }
+    @Override
+    protected CppStandard getCppStdToUse() {
+        return CppStandard.Cpp03Std;
+    }
 
-   @Override
-   protected boolean isManagedBuildProjectNecessary() {
-      return true;
-   }
+    @Override
+    protected boolean isManagedBuildProjectNecessary() {
+        return true;
+    }
 
-   @Override
-   protected boolean isRefactoringUsed() {
-      return true;
-   }
+    @Override
+    protected boolean isRefactoringUsed() {
+        return true;
+    }
 
-   @Override
-   protected MockatorQuickFix createMarkerResolution() {
-      return new DeleteWrappedFunctionQuickFix();
-   }
+    @Override
+    protected MockatorQuickFix createMarkerResolution() {
+        return new DeleteWrappedFunctionQuickFix();
+    }
 
-   @Override
-   protected String getResolutionMessage() {
-      return "Delete wrapped function";
-   }
+    @Override
+    protected String getResolutionMessage() {
+        return "Delete wrapped function";
+    }
 
-   @Override
-   protected String[] getMarkerMessages() {
-      return null; // new String[] {"Manage wrapped function \"_Z3foov\""};
-   }
+    @Override
+    protected String[] getMarkerMessages() {
+        return null; // new String[] {"Manage wrapped function \"_Z3foov\""};
+    }
 }

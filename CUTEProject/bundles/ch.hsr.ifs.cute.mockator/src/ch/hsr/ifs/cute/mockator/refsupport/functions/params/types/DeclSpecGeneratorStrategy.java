@@ -8,7 +8,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 interface DeclSpecGeneratorStrategy {
 
-   static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+    static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
 
-   ICPPASTDeclSpecifier createDeclSpec(IType type);
+    ICPPASTDeclSpecifier createDeclSpec(IType type);
 }

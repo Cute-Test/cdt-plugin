@@ -6,13 +6,13 @@ import ch.hsr.ifs.iltis.cpp.core.resources.info.annotations.MessageInfoArgument;
 
 public class GnuOptionInfo extends MarkerInfo<GnuOptionInfo> {
 
-   @MessageInfoArgument(0)
-   public String optionName;
+    @MessageInfoArgument(0)
+    public String optionName;
 
-   public GnuOptionInfo() {};
+    public GnuOptionInfo() {};
 
-   public GnuOptionInfo(String optionName) {
-      this.optionName = optionName;
-   }
+    public GnuOptionInfo(String optionName) {
+        this.optionName = optionName;
+    }
 
 }

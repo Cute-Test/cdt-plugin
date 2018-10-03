@@ -21,78 +21,78 @@ import ch.hsr.ifs.cute.mockator.refsupport.utils.NodeContainer;
 
 public class ExpectationsFinder {
 
-   private final MutableSet<MemFunCallExpectation> callExpectations;
-   private final NodeContainer<IASTName>           expectationVector;
-   private final IASTFunctionDefinition            testFunction;
+    private final MutableSet<MemFunCallExpectation> callExpectations;
+    private final NodeContainer<IASTName>           expectationVector;
+    private final IASTFunctionDefinition            testFunction;
 
-   public ExpectationsFinder(final IASTFunctionDefinition testFunction) {
-      this.testFunction = testFunction;
-      callExpectations = Sets.mutable.empty();
-      expectationVector = new NodeContainer<>();
-   }
+    public ExpectationsFinder(final IASTFunctionDefinition testFunction) {
+        this.testFunction = testFunction;
+        callExpectations = Sets.mutable.empty();
+        expectationVector = new NodeContainer<>();
+    }
 
-   public ExpectionsInfo getExpectations(final IASTName assertedExpectation) {
-      testFunction.accept(new ASTVisitor() {
+    public ExpectionsInfo getExpectations(final IASTName assertedExpectation) {
+        testFunction.accept(new ASTVisitor() {
 
-         {
-            shouldVisitNames = true;
-         }
-
-         @Override
-         public int visit(final IASTName name) {
-            if (!nameMatches(name)) {
-               return PROCESS_SKIP;
+            {
+                shouldVisitNames = true;
             }
 
-            return collectExpectations(name);
-         }
+            @Override
+            public int visit(final IASTName name) {
+                if (!nameMatches(name)) {
+                    return PROCESS_SKIP;
+                }
 
-         private boolean nameMatches(final IASTName name) {
-            return name.toString().equals(assertedExpectation.toString());
-         }
-
-         private int collectExpectations(final IASTName name) {
-            final IASTStatement stmt = CPPVisitor.findAncestorWithType(name, IASTStatement.class).orElse(null);
-
-            if (stmt instanceof IASTDeclarationStatement) {
-               new InitializerExpectationsFinder(callExpectations, expectationVector, assertedExpectation).collectExpectations(stmt);
-            } else if (stmt instanceof IASTExpressionStatement) {
-               new BoostVectorExpectationsFinder(callExpectations, expectationVector, assertedExpectation).collectExpectations(stmt);
+                return collectExpectations(name);
             }
 
-            if (callExpectations.isEmpty()) {
-               return PROCESS_CONTINUE;
+            private boolean nameMatches(final IASTName name) {
+                return name.toString().equals(assertedExpectation.toString());
             }
 
-            return PROCESS_ABORT;
-         }
-      });
+            private int collectExpectations(final IASTName name) {
+                final IASTStatement stmt = CPPVisitor.findAncestorWithType(name, IASTStatement.class).orElse(null);
 
-      return new ExpectionsInfo(callExpectations, getNameOfExpectationVector(assertedExpectation));
-   }
+                if (stmt instanceof IASTDeclarationStatement) {
+                    new InitializerExpectationsFinder(callExpectations, expectationVector, assertedExpectation).collectExpectations(stmt);
+                } else if (stmt instanceof IASTExpressionStatement) {
+                    new BoostVectorExpectationsFinder(callExpectations, expectationVector, assertedExpectation).collectExpectations(stmt);
+                }
 
-   private IASTName getNameOfExpectationVector(final IASTName assertedExpectation) {
-      return expectationVector.getNode().orElseGet(() -> {
-         final IBinding binding = assertedExpectation.resolveBinding();
-         final IASTName[] definitions = assertedExpectation.getTranslationUnit().getDefinitionsInAST(binding);
-         ILTISException.Unless.isTrue("Expectation vector must have a definition", definitions.length > 0);
-         return definitions[0];
-      });
-   }
+                if (callExpectations.isEmpty()) {
+                    return PROCESS_CONTINUE;
+                }
 
-   public class ExpectionsInfo extends AbstractPair<MutableSet<MemFunCallExpectation>, IASTName> {
+                return PROCESS_ABORT;
+            }
+        });
 
-      public ExpectionsInfo(final MutableSet<MemFunCallExpectation> expectations, final IASTName vectorName) {
-         super(expectations, vectorName);
-      }
+        return new ExpectionsInfo(callExpectations, getNameOfExpectationVector(assertedExpectation));
+    }
 
-      public MutableSet<MemFunCallExpectation> getExpectations() {
-         return first;
-      }
+    private IASTName getNameOfExpectationVector(final IASTName assertedExpectation) {
+        return expectationVector.getNode().orElseGet(() -> {
+            final IBinding binding = assertedExpectation.resolveBinding();
+            final IASTName[] definitions = assertedExpectation.getTranslationUnit().getDefinitionsInAST(binding);
+            ILTISException.Unless.isTrue("Expectation vector must have a definition", definitions.length > 0);
+            return definitions[0];
+        });
+    }
 
-      public IASTName getAssignExpectationsVector() {
-         return second;
-      }
+    public class ExpectionsInfo extends AbstractPair<MutableSet<MemFunCallExpectation>, IASTName> {
 
-   }
+        public ExpectionsInfo(final MutableSet<MemFunCallExpectation> expectations, final IASTName vectorName) {
+            super(expectations, vectorName);
+        }
+
+        public MutableSet<MemFunCallExpectation> getExpectations() {
+            return first;
+        }
+
+        public IASTName getAssignExpectationsVector() {
+            return second;
+        }
+
+    }
 }

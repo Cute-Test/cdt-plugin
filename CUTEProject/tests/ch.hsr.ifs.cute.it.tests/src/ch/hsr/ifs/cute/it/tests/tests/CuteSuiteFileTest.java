@@ -20,72 +20,72 @@ import ch.hsr.ifs.cute.it.tests.util.FileUtils;
 @RunWith(AutomatedUITestRunner.class)
 public class CuteSuiteFileTest extends AutomatedUITest {
 
-   private static final String TEST_CPP_FILENAME = "src/Test.cpp";
+    private static final String TEST_CPP_FILENAME = "src/Test.cpp";
 
-   private void setSuiteName() {
-      fBot.button("Next >").click();
-      fBot.text().setText(getProjectName() + "Suite");
-   }
+    private void setSuiteName() {
+        fBot.button("Next >").click();
+        fBot.text().setText(getProjectName() + "Suite");
+    }
 
-   @Test
-   @TestProjectType("CUTE Suite Project")
-   public void newLinkedSuiteFileTest() throws Exception {
-      final ICProject project = createProject(this::setSuiteName);
+    @Test
+    @TestProjectType("CUTE Suite Project")
+    public void newLinkedSuiteFileTest() throws Exception {
+        final ICProject project = createProject(this::setSuiteName);
 
-      SWTBotTreeItem srcFolder = fBot.tree().getTreeItem(getProjectName(project)).expand().getNode("src").select();
+        SWTBotTreeItem srcFolder = fBot.tree().getTreeItem(getProjectName(project)).expand().getNode("src").select();
 
-      updateIndex(project);
+        updateIndex(project);
 
-      clickContextMenuEntry(srcFolder, "New", "CUTE Suite File");
+        clickContextMenuEntry(srcFolder, "New", "CUTE Suite File");
 
-      final String fileName = "LinkedSuiteFile";
+        final String fileName = "LinkedSuiteFile";
 
-      fBot.textWithLabel("Suite name:").setText(fileName);
-      fBot.checkBox("Link to runner ").select();
-      fBot.waitUntil(BotConditions.comboBoxHasEntries(fBot.comboBoxWithLabel("Choose run method")));
-      fBot.button("Finish").click();
+        fBot.textWithLabel("Suite name:").setText(fileName);
+        fBot.checkBox("Link to runner ").select();
+        fBot.waitUntil(BotConditions.comboBoxHasEntries(fBot.comboBoxWithLabel("Choose run method")));
+        fBot.button("Finish").click();
 
-      IFile testFile = getFile(project, TEST_CPP_FILENAME);
-      getFile(project, "src/" + fileName + ".h");
-      getFile(project, "src/" + fileName + ".cpp");
+        IFile testFile = getFile(project, TEST_CPP_FILENAME);
+        getFile(project, "src/" + fileName + ".h");
+        getFile(project, "src/" + fileName + ".cpp");
 
-      fBot.waitUntil(BotConditions.fileContains(testFile, "#include \"" + fileName + ".h\""));
+        fBot.waitUntil(BotConditions.fileContains(testFile, "#include \"" + fileName + ".h\""));
 
-      String content = FileUtils.getCodeFromIFile(testFile);
-      assertTrue(content.contains("cute::suite " + fileName + " = make_suite_" + fileName + "();"));
-      assertTrue(content.contains("success &= runner(" + fileName + ", \"" + fileName + "\");"));
-   }
+        String content = FileUtils.getCodeFromIFile(testFile);
+        assertTrue(content.contains("cute::suite " + fileName + " = make_suite_" + fileName + "();"));
+        assertTrue(content.contains("success &= runner(" + fileName + ", \"" + fileName + "\");"));
+    }
 
-   @Test
-   @TestProjectType("CUTE Suite Project")
-   public void newSuiteFileTest() throws Exception {
+    @Test
+    @TestProjectType("CUTE Suite Project")
+    public void newSuiteFileTest() throws Exception {
 
-      final ICProject project = createProject(this::setSuiteName);
+        final ICProject project = createProject(this::setSuiteName);
 
-      SWTBotTreeItem srcFolder = fBot.tree().getTreeItem(getProjectName(project)).expand().getNode("src").select();
+        SWTBotTreeItem srcFolder = fBot.tree().getTreeItem(getProjectName(project)).expand().getNode("src").select();
 
-      clickContextMenuEntry(srcFolder, "New", "CUTE Suite File");
+        clickContextMenuEntry(srcFolder, "New", "CUTE Suite File");
 
-      final String fileName = "SuiteFile";
+        final String fileName = "SuiteFile";
 
-      fBot.textWithLabel("Suite name:").setText(fileName);
-      fBot.button("Finish").click();
+        fBot.textWithLabel("Suite name:").setText(fileName);
+        fBot.button("Finish").click();
 
-      getFile(project, TEST_CPP_FILENAME);
+        getFile(project, TEST_CPP_FILENAME);
 
-      IFile file = getFile(project, "src/" + fileName + ".h");
-      fBot.waitUntil(BotConditions.fileContains(file, "#include \"cute_suite.h\""));
-      String content = FileUtils.getCodeFromIFile(file);
+        IFile file = getFile(project, "src/" + fileName + ".h");
+        fBot.waitUntil(BotConditions.fileContains(file, "#include \"cute_suite.h\""));
+        String content = FileUtils.getCodeFromIFile(file);
 
-      assertTrue(content.contains("extern cute::suite make_suite_" + fileName + "();"));
+        assertTrue(content.contains("extern cute::suite make_suite_" + fileName + "();"));
 
-      file = getFile(project, "src/" + fileName + ".cpp");
-      fBot.waitUntil(BotConditions.fileContains(file, "#include \"" + fileName + ".h\""));
-      content = FileUtils.getCodeFromIFile(file);
+        file = getFile(project, "src/" + fileName + ".cpp");
+        fBot.waitUntil(BotConditions.fileContains(file, "#include \"" + fileName + ".h\""));
+        content = FileUtils.getCodeFromIFile(file);
 
-      assertTrue(content.contains("#include \"cute.h\""));
-      assertTrue(content.contains("void thisIsA" + fileName + "Test() {"));
-      assertTrue(content.contains("cute::suite make_suite_" + fileName + "() {"));
-      assertTrue(content.contains("s.push_back(CUTE(thisIsA" + fileName + "Test));"));
-   }
+        assertTrue(content.contains("#include \"cute.h\""));
+        assertTrue(content.contains("void thisIsA" + fileName + "Test() {"));
+        assertTrue(content.contains("cute::suite make_suite_" + fileName + "() {"));
+        assertTrue(content.contains("s.push_back(CUTE(thisIsA" + fileName + "Test));"));
+    }
 }

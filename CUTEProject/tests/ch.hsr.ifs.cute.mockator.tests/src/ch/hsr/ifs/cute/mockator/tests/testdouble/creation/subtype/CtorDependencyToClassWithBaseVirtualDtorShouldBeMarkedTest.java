@@ -8,15 +8,15 @@ import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.CDTTestingChecke
 
 public class CtorDependencyToClassWithBaseVirtualDtorShouldBeMarkedTest extends CDTTestingCheckerTest {
 
-   @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE;
-   }
+    @Override
+    protected ProblemId getProblemId() {
+        return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE;
+    }
 
-   @Test
-   public void testTestDoubleAlreadyProvided() throws Throwable {
-      final int markerExpectedOnLine = 15;
-      assertMarkerLines(markerExpectedOnLine);
-      assertMarkerMessages(new String[] { "Object seam \"dependency\" cannot be resolved" });
-   }
+    @Test
+    public void testTestDoubleAlreadyProvided() throws Throwable {
+        final int markerExpectedOnLine = 15;
+        assertMarkerLines(markerExpectedOnLine);
+        assertMarkerMessages(new String[] { "Object seam \"dependency\" cannot be resolved" });
+    }
 }

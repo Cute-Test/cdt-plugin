@@ -25,70 +25,73 @@ import ch.hsr.ifs.cute.mockator.project.properties.MarkMissingMemFuns;
 
 class StaticPolymorphismUseFinder implements Function<IASTFunctionDefinition, Collection<StaticPolyMissingMemFun>> {
 
-   private final ICProject                     cProject;
-   private final ICPPASTCompositeTypeSpecifier testDouble;
-   private final IIndex                        index;
+    private final ICProject                     cProject;
+    private final ICPPASTCompositeTypeSpecifier testDouble;
+    private final IIndex                        index;
 
-   public StaticPolymorphismUseFinder(final ICPPASTCompositeTypeSpecifier testDouble, final ICProject cProject, final IIndex index) {
-      this.testDouble = testDouble;
-      this.cProject = cProject;
-      this.index = index;
-   }
+    public StaticPolymorphismUseFinder(final ICPPASTCompositeTypeSpecifier testDouble, final ICProject cProject, final IIndex index) {
+        this.testDouble = testDouble;
+        this.cProject = cProject;
+        this.index = index;
+    }
 
-   @Override
-   public Collection<StaticPolyMissingMemFun> apply(final IASTFunctionDefinition testFunction) {
-      final Collection<StaticPolyMissingMemFun> missingMemFuns = new LinkedHashSet<>();
+    @Override
+    public Collection<StaticPolyMissingMemFun> apply(final IASTFunctionDefinition testFunction) {
+        final Collection<StaticPolyMissingMemFun> missingMemFuns = new LinkedHashSet<>();
 
-      for (final TemplateParamCombination declParam : getTestDoubleAsTemplateArgUsages(testFunction)) {
-         missingMemFuns.addAll(collectMissingMemFuns(testFunction, declParam));
-      }
+        for (final TemplateParamCombination declParam : getTestDoubleAsTemplateArgUsages(testFunction)) {
+            missingMemFuns.addAll(collectMissingMemFuns(testFunction, declParam));
+        }
 
-      return missingMemFuns;
-   }
+        return missingMemFuns;
+    }
 
-   private Collection<StaticPolyMissingMemFun> collectMissingMemFuns(final IASTFunctionDefinition testFun, final TemplateParamCombination declParam) {
-      Collection<StaticPolyMissingMemFun> missingFuns = collectUsedMemFunsInSut(declParam);
-      if (considerOnlyReferencedMemFuns()) {
-         missingFuns = filterNotReferenced(missingFuns, declParam.decl().getTranslationUnit(), testFun);
-      }
-      return missingFuns;
-   }
+    private Collection<StaticPolyMissingMemFun> collectMissingMemFuns(final IASTFunctionDefinition testFun,
+            final TemplateParamCombination declParam) {
+        Collection<StaticPolyMissingMemFun> missingFuns = collectUsedMemFunsInSut(declParam);
+        if (considerOnlyReferencedMemFuns()) {
+            missingFuns = filterNotReferenced(missingFuns, declParam.decl().getTranslationUnit(), testFun);
+        }
+        return missingFuns;
+    }
 
-   private boolean considerOnlyReferencedMemFuns() {
-      return MarkMissingMemFuns.fromProjectSettings(cProject.getProject()) == MarkMissingMemFuns.OnlyReferencedFromTest;
-   }
+    private boolean considerOnlyReferencedMemFuns() {
+        return MarkMissingMemFuns.fromProjectSettings(cProject.getProject()) == MarkMissingMemFuns.OnlyReferencedFromTest;
+    }
 
-   private Collection<StaticPolyMissingMemFun> collectUsedMemFunsInSut(final TemplateParamCombination declParam) {
-      final Collection<ICPPASTTemplateDeclaration> funs = getTemplateFunctions(declParam.decl());
-      final MissingMemFunCollector finder = new MissingMemFunCollector(declParam.decl(), testDouble, funs);
-      return finder.getMissingMemberFunctions(declParam.param());
-   }
+    private Collection<StaticPolyMissingMemFun> collectUsedMemFunsInSut(final TemplateParamCombination declParam) {
+        final Collection<ICPPASTTemplateDeclaration> funs = getTemplateFunctions(declParam.decl());
+        final MissingMemFunCollector finder = new MissingMemFunCollector(declParam.decl(), testDouble, funs);
+        return finder.getMissingMemberFunctions(declParam.param());
+    }
 
-   private static Collection<ICPPASTTemplateDeclaration> getTemplateFunctions(final ICPPASTTemplateDeclaration templateDecl) {
-      if (!hasClassInTemplateDecl(templateDecl)) { return new ArrayList<>(); }
+    private static Collection<ICPPASTTemplateDeclaration> getTemplateFunctions(final ICPPASTTemplateDeclaration templateDecl) {
+        if (!hasClassInTemplateDecl(templateDecl)) {
+            return new ArrayList<>();
+        }
 
-      final NotInlineDefMemFunFinderVisitor visitor = new NotInlineDefMemFunFinderVisitor(templateDecl);
-      templateDecl.getTranslationUnit().accept(visitor);
-      return visitor.getTemplateFunctions();
-   }
+        final NotInlineDefMemFunFinderVisitor visitor = new NotInlineDefMemFunFinderVisitor(templateDecl);
+        templateDecl.getTranslationUnit().accept(visitor);
+        return visitor.getTemplateFunctions();
+    }
 
-   private static boolean hasClassInTemplateDecl(final ICPPASTTemplateDeclaration templateDecl) {
-      return CPPVisitor.findChildWithType(templateDecl, ICPPASTCompositeTypeSpecifier.class).orElse(null) != null;
-   }
+    private static boolean hasClassInTemplateDecl(final ICPPASTTemplateDeclaration templateDecl) {
+        return CPPVisitor.findChildWithType(templateDecl, ICPPASTCompositeTypeSpecifier.class).orElse(null) != null;
+    }
 
-   private Collection<TemplateParamCombination> getTestDoubleAsTemplateArgUsages(final IASTFunctionDefinition testFunction) {
-      final ClassInTemplateIdFinderVisitor finder = new ClassInTemplateIdFinderVisitor(testDouble, cProject, index);
-      testFunction.accept(finder);
-      return finder.getTemplateParamCombinations();
-   }
+    private Collection<TemplateParamCombination> getTestDoubleAsTemplateArgUsages(final IASTFunctionDefinition testFunction) {
+        final ClassInTemplateIdFinderVisitor finder = new ClassInTemplateIdFinderVisitor(testDouble, cProject, index);
+        testFunction.accept(finder);
+        return finder.getTemplateParamCombinations();
+    }
 
-   private Collection<StaticPolyMissingMemFun> filterNotReferenced(final Collection<StaticPolyMissingMemFun> missingMemFuns,
-         final IASTTranslationUnit tuOfTemplate, final IASTFunctionDefinition testFunction) {
-      final NotReferencedFunctionFilter filter = getNotReferencedFunFilter(tuOfTemplate, testFunction);
-      return missingMemFuns.stream().filter(filter).collect(Collectors.toList());
-   }
+    private Collection<StaticPolyMissingMemFun> filterNotReferenced(final Collection<StaticPolyMissingMemFun> missingMemFuns,
+            final IASTTranslationUnit tuOfTemplate, final IASTFunctionDefinition testFunction) {
+        final NotReferencedFunctionFilter filter = getNotReferencedFunFilter(tuOfTemplate, testFunction);
+        return missingMemFuns.stream().filter(filter).collect(Collectors.toList());
+    }
 
-   private NotReferencedFunctionFilter getNotReferencedFunFilter(final IASTTranslationUnit tuOfTemplate, final IASTFunctionDefinition testFunction) {
-      return new NotReferencedFunctionFilter(index, cProject, (ICPPASTFunctionDefinition) testFunction);
-   }
+    private NotReferencedFunctionFilter getNotReferencedFunFilter(final IASTTranslationUnit tuOfTemplate, final IASTFunctionDefinition testFunction) {
+        return new NotReferencedFunctionFilter(index, cProject, (ICPPASTFunctionDefinition) testFunction);
+    }
 }

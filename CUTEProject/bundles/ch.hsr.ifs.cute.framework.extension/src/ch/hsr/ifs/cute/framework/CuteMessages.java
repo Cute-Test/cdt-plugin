@@ -19,18 +19,18 @@ import ch.hsr.ifs.testframework.Messages;
  */
 public class CuteMessages implements Messages {
 
-   private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.framework.messages";
+    private static final String BUNDLE_NAME = "ch.hsr.ifs.cute.framework.messages";
 
-   private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 
-   public CuteMessages() {}
+    public CuteMessages() {}
 
-   @Override
-   public String getString(String key) {
-      try {
-         return RESOURCE_BUNDLE.getString(key);
-      } catch (MissingResourceException e) {
-         return '!' + key + '!';
-      }
-   }
+    @Override
+    public String getString(String key) {
+        try {
+            return RESOURCE_BUNDLE.getString(key);
+        } catch (MissingResourceException e) {
+            return '!' + key + '!';
+        }
+    }
 }

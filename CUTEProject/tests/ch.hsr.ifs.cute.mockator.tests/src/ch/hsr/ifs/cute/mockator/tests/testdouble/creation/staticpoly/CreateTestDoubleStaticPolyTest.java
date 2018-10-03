@@ -11,17 +11,17 @@ import ch.hsr.ifs.cute.mockator.tests.AbstractRefactoringTest;
 
 public class CreateTestDoubleStaticPolyTest extends AbstractRefactoringTest {
 
-   private CppStandard cppStandard;
+    private CppStandard cppStandard;
 
-   @Override
-   protected void configureTest(final Properties refactoringProperties) {
-      super.configureTest(refactoringProperties);
-      cppStandard = CppStandard.fromName(refactoringProperties.getProperty("cppStandard"));
-   }
+    @Override
+    protected void configureTest(final Properties refactoringProperties) {
+        super.configureTest(refactoringProperties);
+        cppStandard = CppStandard.fromName(refactoringProperties.getProperty("cppStandard"));
+    }
 
-   @Override
-   protected Refactoring createRefactoring() {
-      return new RefactoringByStdFactory().getRefactoring(getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(),
-            getCurrentCProject(), cppStandard);
-   }
+    @Override
+    protected Refactoring createRefactoring() {
+        return new RefactoringByStdFactory().getRefactoring(getPrimaryCElementFromCurrentProject().get(), getSelectionOfPrimaryTestFile(),
+                getCurrentCProject(), cppStandard);
+    }
 }

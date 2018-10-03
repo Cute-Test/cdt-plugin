@@ -17,8 +17,8 @@ import org.eclipse.ui.IStartup;
  */
 public class GcovStartup implements IStartup {
 
-   @Override
-   public void earlyStartup() {
-      // Do nothing
-   }
+    @Override
+    public void earlyStartup() {
+        // Do nothing
+    }
 }

@@ -27,55 +27,57 @@ import ch.hsr.ifs.cute.headers.ICuteHeaders;
  */
 public class CuteVersionComposite extends Composite {
 
-   private Combo combo;
+    private Combo combo;
 
-   public CuteVersionComposite(Composite parent, ICuteHeaders currentCuteHeaders) {
-      super(parent, SWT.NULL);
-      createCuteVersionCompsite(currentCuteHeaders);
-   }
+    public CuteVersionComposite(Composite parent, ICuteHeaders currentCuteHeaders) {
+        super(parent, SWT.NULL);
+        createCuteVersionCompsite(currentCuteHeaders);
+    }
 
-   public CuteVersionComposite(Composite parent) {
-      this(parent, null);
-   }
+    public CuteVersionComposite(Composite parent) {
+        this(parent, null);
+    }
 
-   public String getVersionString() {
-      return combo.getText();
-   }
+    public String getVersionString() {
+        return combo.getText();
+    }
 
-   public String getErrorMessage() {
-      if (combo.getItems().length == 0) { return Messages.getString("CuteVersionComposite.NoCuteInstalled"); }
-      return null;
-   }
+    public String getErrorMessage() {
+        if (combo.getItems().length == 0) {
+            return Messages.getString("CuteVersionComposite.NoCuteInstalled");
+        }
+        return null;
+    }
 
-   public boolean isComplete() {
-      return !combo.getText().isEmpty();
-   }
+    public boolean isComplete() {
+        return !combo.getText().isEmpty();
+    }
 
-   private void createCuteVersionCompsite(ICuteHeaders currentCuteHeaders) {
-      GridLayout layout = new GridLayout(2, false);
-      layout.marginWidth = 0;
-      layout.marginHeight = 0;
-      setLayout(layout);
-      setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+    private void createCuteVersionCompsite(ICuteHeaders currentCuteHeaders) {
+        GridLayout layout = new GridLayout(2, false);
+        layout.marginWidth = 0;
+        layout.marginHeight = 0;
+        setLayout(layout);
+        setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-      Label label = new Label(this, SWT.HORIZONTAL);
-      label.setText(Messages.getString("CuteVersionComposite.CuteVersion"));
+        Label label = new Label(this, SWT.HORIZONTAL);
+        label.setText(Messages.getString("CuteVersionComposite.CuteVersion"));
 
-      combo = new Combo(this, SWT.READ_ONLY | SWT.DROP_DOWN);
+        combo = new Combo(this, SWT.READ_ONLY | SWT.DROP_DOWN);
 
-      int i = 0;
-      // TODO(tstauber - Apr 16, 2018) This should only show compatible headers
-      Iterator<ICuteHeaders> iter = ICuteHeaders.loadedHeaders().iterator();
-      while (iter.hasNext()) {
-         ICuteHeaders headers = iter.next();
-         combo.add(headers.getVersionString());
-         if (headers == currentCuteHeaders) combo.select(i);
-         if (!iter.hasNext()) combo.select(i);
-         i++;
-      }
+        int i = 0;
+        // TODO(tstauber - Apr 16, 2018) This should only show compatible headers
+        Iterator<ICuteHeaders> iter = ICuteHeaders.loadedHeaders().iterator();
+        while (iter.hasNext()) {
+            ICuteHeaders headers = iter.next();
+            combo.add(headers.getVersionString());
+            if (headers == currentCuteHeaders) combo.select(i);
+            if (!iter.hasNext()) combo.select(i);
+            i++;
+        }
 
-      GridData data = new GridData(GridData.FILL_HORIZONTAL);
-      combo.setLayoutData(data);
-   }
+        GridData data = new GridData(GridData.FILL_HORIZONTAL);
+        combo.setLayoutData(data);
+    }
 
 }

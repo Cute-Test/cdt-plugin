@@ -26,51 +26,51 @@ import ch.hsr.ifs.cute.ui.CuteUIPlugin;
  */
 public class ChangeCuteVersionWizard extends Wizard {
 
-   private final IProject              project;
-   private ChangeCuteVersionWizardPage page;
-   private ICuteHeaders                activeHeaders;
+    private final IProject              project;
+    private ChangeCuteVersionWizardPage page;
+    private ICuteHeaders                activeHeaders;
 
-   public ChangeCuteVersionWizard(IProject project) {
-      this.project = project;
-      try {
-         activeHeaders = ICuteHeaders.getForProject(project);
-      } catch (CoreException e) {
-         e.printStackTrace();
-         //activeHeadersVersionName remains null
-      }
-      setNeedsProgressMonitor(true);
-   }
+    public ChangeCuteVersionWizard(IProject project) {
+        this.project = project;
+        try {
+            activeHeaders = ICuteHeaders.getForProject(project);
+        } catch (CoreException e) {
+            e.printStackTrace();
+            //activeHeadersVersionName remains null
+        }
+        setNeedsProgressMonitor(true);
+    }
 
-   @Override
-   public void addPages() {
-      page = new ChangeCuteVersionWizardPage(activeHeaders);
-      addPage(page);
-   }
+    @Override
+    public void addPages() {
+        page = new ChangeCuteVersionWizardPage(activeHeaders);
+        addPage(page);
+    }
 
-   @Override
-   public boolean performFinish() {
-      try {
-         ICuteHeaders selectedHeaders = getHeaders(page.getVersionString());
-         if (selectedHeaders != activeHeaders) replaceHeaders(selectedHeaders);
-      } catch (InvocationTargetException e) {
-         CuteUIPlugin.log("Exception while performing version change", e);
-      } catch (InterruptedException e) {
-         CuteUIPlugin.log("Exception while performing version change", e);
-      }
-      return true;
-   }
+    @Override
+    public boolean performFinish() {
+        try {
+            ICuteHeaders selectedHeaders = getHeaders(page.getVersionString());
+            if (selectedHeaders != activeHeaders) replaceHeaders(selectedHeaders);
+        } catch (InvocationTargetException e) {
+            CuteUIPlugin.log("Exception while performing version change", e);
+        } catch (InterruptedException e) {
+            CuteUIPlugin.log("Exception while performing version change", e);
+        }
+        return true;
+    }
 
-   private void replaceHeaders(final ICuteHeaders newHeaders) throws InvocationTargetException, InterruptedException {
-      this.getContainer().run(true, false, monitor -> {
-         CuteHeadersManager.replaceCuteHeaders(project, newHeaders, monitor);
-      });
-   }
+    private void replaceHeaders(final ICuteHeaders newHeaders) throws InvocationTargetException, InterruptedException {
+        this.getContainer().run(true, false, monitor -> {
+            CuteHeadersManager.replaceCuteHeaders(project, newHeaders, monitor);
+        });
+    }
 
-   protected ICuteHeaders getHeaders(String cuteVersionString) {
-      for (ICuteHeaders cuteHeaders : ICuteHeaders.loadedHeaders()) {
-         if (cuteVersionString.equals(cuteHeaders.getVersionString())) return cuteHeaders;
-      }
-      return null;
-   }
+    protected ICuteHeaders getHeaders(String cuteVersionString) {
+        for (ICuteHeaders cuteHeaders : ICuteHeaders.loadedHeaders()) {
+            if (cuteVersionString.equals(cuteHeaders.getVersionString())) return cuteHeaders;
+        }
+        return null;
+    }
 
 }

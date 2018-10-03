@@ -10,14 +10,14 @@ import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
 class BasicTypeDeclSpecStrategy implements DeclSpecGeneratorStrategy {
 
-   @Override
-   public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
-      ILTISException.Unless.assignableFrom("This strategy can only handle basic types", IBasicType.class, type);
-      final ICPPASTSimpleDeclSpecifier simpleDeclSpec = nodeFactory.newSimpleDeclSpecifier();
-      final IBasicType basicType = (IBasicType) type;
-      simpleDeclSpec.setType(basicType.getKind());
-      simpleDeclSpec.setSigned(basicType.isSigned());
-      simpleDeclSpec.setUnsigned(basicType.isUnsigned());
-      return simpleDeclSpec;
-   }
+    @Override
+    public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
+        ILTISException.Unless.assignableFrom("This strategy can only handle basic types", IBasicType.class, type);
+        final ICPPASTSimpleDeclSpecifier simpleDeclSpec = nodeFactory.newSimpleDeclSpecifier();
+        final IBasicType basicType = (IBasicType) type;
+        simpleDeclSpec.setType(basicType.getKind());
+        simpleDeclSpec.setSigned(basicType.isSigned());
+        simpleDeclSpec.setUnsigned(basicType.isUnsigned());
+        return simpleDeclSpec;
+    }
 }

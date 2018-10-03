@@ -38,115 +38,117 @@ import ch.hsr.ifs.cute.ui.ASTUtil;
  */
 public class AddTestToSuite extends AbstractFunctionAction {
 
-   private static final String SCOPE = "::";
+    private static final String SCOPE = "::";
 
-   @Override
-   public MultiTextEdit createEdit(IFile file, IDocument doc, ISelection sel) throws CoreException {
-      IAddStrategy adder = new NullStrategy(doc);
-      IASTTranslationUnit astTu = null;
-      IIndex index = null;
-      initContext();
-      try {
-         if (sel != null && sel instanceof TextSelection) {
-            TextSelection selection = (TextSelection) sel;
+    @Override
+    public MultiTextEdit createEdit(IFile file, IDocument doc, ISelection sel) throws CoreException {
+        IAddStrategy adder = new NullStrategy(doc);
+        IASTTranslationUnit astTu = null;
+        IIndex index = null;
+        initContext();
+        try {
+            if (sel != null && sel instanceof TextSelection) {
+                TextSelection selection = (TextSelection) sel;
 
-            try {
-               astTu = acquireAST(file);
-               index = astTu.getIndex();
-               index.acquireReadLock();
-               NodeAtCaretFinder n = new NodeAtCaretFinder(selection.getOffset());
-               astTu.accept(n);
-               IASTFunctionDefinition def = getFunctionDefinition(n.getMatchingNode());
+                try {
+                    astTu = acquireAST(file);
+                    index = astTu.getIndex();
+                    index.acquireReadLock();
+                    NodeAtCaretFinder n = new NodeAtCaretFinder(selection.getOffset());
+                    astTu.accept(n);
+                    IASTFunctionDefinition def = getFunctionDefinition(n.getMatchingNode());
 
-               if (ASTUtil.isTestFunction(def)) {
-                  SuitePushBackFinder suiteFinder = new SuitePushBackFinder();
-                  astTu.accept(suiteFinder);
-                  IASTNode suite = suiteFinder.getSuiteNode();
+                    if (ASTUtil.isTestFunction(def)) {
+                        SuitePushBackFinder suiteFinder = new SuitePushBackFinder();
+                        astTu.accept(suiteFinder);
+                        IASTNode suite = suiteFinder.getSuiteNode();
 
-                  AddPushbackStatementStrategy lineStrategy = new NullStrategy(doc);
-                  IASTFunctionDeclarator declarator = def.getDeclarator();
-                  if (isMemberFunction(def)) { // In .cpp file
-                     if (ASTHelper.isFunctor(def.getDeclarator())) {
-                        lineStrategy = new AddFunctorStrategy(doc, astTu, n.getMatchingNode(), file, suiteFinder);
-                     } else {
-                        lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, declarator.getName(), suiteFinder);
-                     }
-                  } else if (isFunction(def)) {
-                     lineStrategy = new AddFunctionStrategy(doc, file, astTu, getQualifiedFunctionName(def), suiteFinder);
-                  }
-                  if (suite == null) {
-                     adder = new AddSuiteStrategy(lineStrategy);
-                  } else {
-                     adder = lineStrategy;
-                  }
+                        AddPushbackStatementStrategy lineStrategy = new NullStrategy(doc);
+                        IASTFunctionDeclarator declarator = def.getDeclarator();
+                        if (isMemberFunction(def)) { // In .cpp file
+                            if (ASTHelper.isFunctor(def.getDeclarator())) {
+                                lineStrategy = new AddFunctorStrategy(doc, astTu, n.getMatchingNode(), file, suiteFinder);
+                            } else {
+                                lineStrategy = new AddMemberFunctionStrategy(doc, file, astTu, declarator.getName(), suiteFinder);
+                            }
+                        } else if (isFunction(def)) {
+                            lineStrategy = new AddFunctionStrategy(doc, file, astTu, getQualifiedFunctionName(def), suiteFinder);
+                        }
+                        if (suite == null) {
+                            adder = new AddSuiteStrategy(lineStrategy);
+                        } else {
+                            adder = lineStrategy;
+                        }
 
-               }
-            } catch (InterruptedException e) {
-               CuteCorePlugin.log(e);
-            } finally {
-               disposeContext();
+                    }
+                } catch (InterruptedException e) {
+                    CuteCorePlugin.log(e);
+                } finally {
+                    disposeContext();
+                }
             }
-         }
 
-         return adder.getEdit();
-      } finally {
-         if (index != null) {
-            index.releaseReadLock();
-         }
-      }
-   }
-
-   protected IASTFunctionDefinition getFunctionDefIfIsFunctor(IASTNode n) {
-      if (n instanceof IASTSimpleDeclaration) {
-         IASTSimpleDeclaration sDecl = (IASTSimpleDeclaration) n;
-         if (sDecl.getDeclSpecifier() instanceof IASTCompositeTypeSpecifier) {
-            IASTCompositeTypeSpecifier comDeclSpec = (IASTCompositeTypeSpecifier) sDecl.getDeclSpecifier();
-            IASTDeclaration[] members = comDeclSpec.getMembers();
-            for (IASTDeclaration iastDeclaration : members) {
-               if (iastDeclaration instanceof IASTFunctionDefinition) {
-                  IASTFunctionDefinition funcDef = (IASTFunctionDefinition) iastDeclaration;
-                  IASTName funcName = funcDef.getDeclarator().getName();
-                  if (funcName instanceof ICPPASTOperatorName && funcName.toString().contains("()")) { return funcDef; }
-               }
+            return adder.getEdit();
+        } finally {
+            if (index != null) {
+                index.releaseReadLock();
             }
-         }
-      }
-      return n != null && n.getParent() != null ? getFunctionDefIfIsFunctor(n.getParent()) : null;
-   }
+        }
+    }
 
-   private boolean isFunction(IASTFunctionDefinition def) {
-      return bindingOfFunction(def) instanceof ICPPFunction;
-   }
+    protected IASTFunctionDefinition getFunctionDefIfIsFunctor(IASTNode n) {
+        if (n instanceof IASTSimpleDeclaration) {
+            IASTSimpleDeclaration sDecl = (IASTSimpleDeclaration) n;
+            if (sDecl.getDeclSpecifier() instanceof IASTCompositeTypeSpecifier) {
+                IASTCompositeTypeSpecifier comDeclSpec = (IASTCompositeTypeSpecifier) sDecl.getDeclSpecifier();
+                IASTDeclaration[] members = comDeclSpec.getMembers();
+                for (IASTDeclaration iastDeclaration : members) {
+                    if (iastDeclaration instanceof IASTFunctionDefinition) {
+                        IASTFunctionDefinition funcDef = (IASTFunctionDefinition) iastDeclaration;
+                        IASTName funcName = funcDef.getDeclarator().getName();
+                        if (funcName instanceof ICPPASTOperatorName && funcName.toString().contains("()")) {
+                            return funcDef;
+                        }
+                    }
+                }
+            }
+        }
+        return n != null && n.getParent() != null ? getFunctionDefIfIsFunctor(n.getParent()) : null;
+    }
 
-   private boolean isMemberFunction(IASTFunctionDefinition def) {
-      return bindingOfFunction(def) instanceof ICPPMethod;
-   }
+    private boolean isFunction(IASTFunctionDefinition def) {
+        return bindingOfFunction(def) instanceof ICPPFunction;
+    }
 
-   private IBinding bindingOfFunction(IASTFunctionDefinition def) {
-      return def.getDeclarator().getName().resolveBinding();
-   }
+    private boolean isMemberFunction(IASTFunctionDefinition def) {
+        return bindingOfFunction(def) instanceof ICPPMethod;
+    }
 
-   private IASTFunctionDefinition getFunctionDefinition(IASTNode node) {
-      if (node == null) return null;
-      if (node instanceof IASTFunctionDefinition) {
-         return (IASTFunctionDefinition) node;
-      } else {
-         IASTNode parent = node.getParent();
-         return getFunctionDefinition(parent);
-      }
-   }
+    private IBinding bindingOfFunction(IASTFunctionDefinition def) {
+        return def.getDeclarator().getName().resolveBinding();
+    }
 
-   private static String getQualifiedFunctionName(final IASTFunctionDefinition def) {
-      String result = def.getDeclarator().getName().toString();
+    private IASTFunctionDefinition getFunctionDefinition(IASTNode node) {
+        if (node == null) return null;
+        if (node instanceof IASTFunctionDefinition) {
+            return (IASTFunctionDefinition) node;
+        } else {
+            IASTNode parent = node.getParent();
+            return getFunctionDefinition(parent);
+        }
+    }
 
-      IASTNode parent = def.getParent();
+    private static String getQualifiedFunctionName(final IASTFunctionDefinition def) {
+        String result = def.getDeclarator().getName().toString();
 
-      while (parent instanceof ICPPASTNamespaceDefinition) {
-         final String namespaceName = ((ICPPASTNamespaceDefinition) parent).getName().toString();
-         result = namespaceName.isEmpty() ? result : namespaceName + SCOPE + result;
-         parent = parent.getParent();
-      }
+        IASTNode parent = def.getParent();
 
-      return result;
-   }
+        while (parent instanceof ICPPASTNamespaceDefinition) {
+            final String namespaceName = ((ICPPASTNamespaceDefinition) parent).getName().toString();
+            result = namespaceName.isEmpty() ? result : namespaceName + SCOPE + result;
+            parent = parent.getParent();
+        }
+
+        return result;
+    }
 }

@@ -26,50 +26,50 @@ import ch.hsr.ifs.cute.mockator.testdouble.entities.ExistingTestDoubleMemFun;
 
 public class ConsistentExpectationsQuickFix extends MockatorQfWithRefactoringSupport {
 
-   @Override
-   public Image getImage() {
-      return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_CONFIG);
-   }
+    @Override
+    public Image getImage() {
+        return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_CONFIG);
+    }
 
-   @Override
-   public String getDescription() {
-      return getMarkerInfo(marker).resolutionDescString;
-   }
+    @Override
+    public String getDescription() {
+        return getMarkerInfo(marker).resolutionDescString;
+    }
 
-   @Override
-   public String getLabel() {
-      return I18N.InconsistentExpectationsQuickfix;
-   }
+    @Override
+    public String getLabel() {
+        return I18N.InconsistentExpectationsQuickfix;
+    }
 
-   @Override
-   protected ConsistentExpectationsInfo getMarkerInfo(final IMarker marker) {
-      return MarkerInfo.fromCodanProblemMarker(ConsistentExpectationsInfo::new, marker);
-   }
+    @Override
+    protected ConsistentExpectationsInfo getMarkerInfo(final IMarker marker) {
+        return MarkerInfo.fromCodanProblemMarker(ConsistentExpectationsInfo::new, marker);
+    }
 
-   @Override
-   protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final MarkerInfo<?> info) {
-      return new ConsistentExpectationsRefactoring(cElement, selection, getCProject(), (ConsistentExpectationsInfo) info, getCppStandard(),
-            getLinkedEditStrategy());
-   }
+    @Override
+    protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final MarkerInfo<?> info) {
+        return new ConsistentExpectationsRefactoring(cElement, selection, getCProject(), (ConsistentExpectationsInfo) info, getCppStandard(),
+                getLinkedEditStrategy());
+    }
 
-   private LinkedEditModeStrategy getLinkedEditStrategy() {
-      final AssertionOrder assertionOrder = getAssertionOrderFor();
-      return assertionOrder.getLinkedEditModeStrategy(getCProject().getProject());
-   }
+    private LinkedEditModeStrategy getLinkedEditStrategy() {
+        final AssertionOrder assertionOrder = getAssertionOrderFor();
+        return assertionOrder.getLinkedEditModeStrategy(getCProject().getProject());
+    }
 
-   private AssertionOrder getAssertionOrderFor() {
-      return AssertionOrder.fromProjectSettings(getCProject().getProject());
-   }
+    private AssertionOrder getAssertionOrderFor() {
+        return AssertionOrder.fromProjectSettings(getCProject().getProject());
+    }
 
-   @Override
-   protected Optional<LinkedModeInfoCreater> getLinkedModeCreator(final ChangeEdit edit, final IDocument document,
-         final MockatorRefactoring refactoring) {
-      final MockObjectLinkedEditModeFactory factory = new MockObjectLinkedEditModeFactory(edit, getExpectationsToAdd(refactoring), getCppStandard(),
-            getAssertionOrderFor(), Optional.empty());
-      return Optional.of(factory.getLinkedModeInfoCreator(getLinkedEditStrategy()));
-   }
+    @Override
+    protected Optional<LinkedModeInfoCreater> getLinkedModeCreator(final ChangeEdit edit, final IDocument document,
+            final MockatorRefactoring refactoring) {
+        final MockObjectLinkedEditModeFactory factory = new MockObjectLinkedEditModeFactory(edit, getExpectationsToAdd(refactoring), getCppStandard(),
+                getAssertionOrderFor(), Optional.empty());
+        return Optional.of(factory.getLinkedModeInfoCreator(getLinkedEditStrategy()));
+    }
 
-   private static Collection<ExistingTestDoubleMemFun> getExpectationsToAdd(final MockatorRefactoring refactoring) {
-      return ((ConsistentExpectationsRefactoring) refactoring).getExpectationsToAdd();
-   }
+    private static Collection<ExistingTestDoubleMemFun> getExpectationsToAdd(final MockatorRefactoring refactoring) {
+        return ((ConsistentExpectationsRefactoring) refactoring).getExpectationsToAdd();
+    }
 }

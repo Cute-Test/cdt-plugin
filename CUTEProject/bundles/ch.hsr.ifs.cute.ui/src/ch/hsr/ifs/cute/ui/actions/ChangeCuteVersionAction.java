@@ -33,51 +33,51 @@ import ch.hsr.ifs.cute.ui.dialogs.ChangeCuteVersionWizard;
  */
 public class ChangeCuteVersionAction extends AbstractHandler implements IWorkbenchWindowActionDelegate {
 
-   IProject project;
+    IProject project;
 
-   @Override
-   public void dispose() {}
+    @Override
+    public void dispose() {}
 
-   @Override
-   public void init(IWorkbenchWindow window) {}
+    @Override
+    public void init(IWorkbenchWindow window) {}
 
-   @Override
-   public void run(IAction action) {
-      changeVersion();
-   }
+    @Override
+    public void run(IAction action) {
+        changeVersion();
+    }
 
-   private void changeVersion() {
-      Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
-      ChangeCuteVersionWizard wizard = new ChangeCuteVersionWizard(project);
+    private void changeVersion() {
+        Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
+        ChangeCuteVersionWizard wizard = new ChangeCuteVersionWizard(project);
 
-      WizardDialog dialog = new WizardDialog(shell, wizard);
-      dialog.create();
-      dialog.open();
-   }
+        WizardDialog dialog = new WizardDialog(shell, wizard);
+        dialog.create();
+        dialog.open();
+    }
 
-   @Override
-   public void selectionChanged(IAction action, ISelection selection) {
-      updateSelection(selection);
-   }
+    @Override
+    public void selectionChanged(IAction action, ISelection selection) {
+        updateSelection(selection);
+    }
 
-   private void updateSelection(ISelection selection) {
-      if (selection instanceof TreeSelection) {
-         TreeSelection treeSel = (TreeSelection) selection;
-         if (treeSel.getFirstElement() instanceof IProject) {
-            project = (IProject) treeSel.getFirstElement();
-         }
-         if (treeSel.getFirstElement() instanceof ICProject) {
-            ICProject cproject = (ICProject) treeSel.getFirstElement();
-            project = cproject.getProject();
-         }
-      }
-   }
+    private void updateSelection(ISelection selection) {
+        if (selection instanceof TreeSelection) {
+            TreeSelection treeSel = (TreeSelection) selection;
+            if (treeSel.getFirstElement() instanceof IProject) {
+                project = (IProject) treeSel.getFirstElement();
+            }
+            if (treeSel.getFirstElement() instanceof ICProject) {
+                ICProject cproject = (ICProject) treeSel.getFirstElement();
+                project = cproject.getProject();
+            }
+        }
+    }
 
-   @Override
-   public Object execute(ExecutionEvent event) throws ExecutionException {
-      ISelection selection = HandlerUtil.getCurrentSelection(event);
-      updateSelection(selection);
-      changeVersion();
-      return null;
-   }
+    @Override
+    public Object execute(ExecutionEvent event) throws ExecutionException {
+        ISelection selection = HandlerUtil.getCurrentSelection(event);
+        updateSelection(selection);
+        changeVersion();
+        return null;
+    }
 }

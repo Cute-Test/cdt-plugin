@@ -22,16 +22,16 @@ import junit.framework.TestSuite;
  */
 public class PluginUITestSuiteAll extends TestSuite {
 
-   public PluginUITestSuiteAll() {
-      super("Testframework All Core Tests");
-      addTest(ConsoleParserTestSuite.suite());
-      addTest(PatternListenerSuite.suite());
-      addTest(ModelBuilderSuite.suite());
-      addTest(HyperlinkSuite.suite());
-   }
+    public PluginUITestSuiteAll() {
+        super("Testframework All Core Tests");
+        addTest(ConsoleParserTestSuite.suite());
+        addTest(PatternListenerSuite.suite());
+        addTest(ModelBuilderSuite.suite());
+        addTest(HyperlinkSuite.suite());
+    }
 
-   public static Test suite() {
-      return new PluginUITestSuiteAll();
-   }
+    public static Test suite() {
+        return new PluginUITestSuiteAll();
+    }
 
 }

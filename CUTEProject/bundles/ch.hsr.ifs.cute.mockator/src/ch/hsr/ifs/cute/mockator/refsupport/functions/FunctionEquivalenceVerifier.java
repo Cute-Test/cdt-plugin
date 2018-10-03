@@ -17,46 +17,46 @@ import ch.hsr.ifs.cute.mockator.refsupport.functions.params.ParamTypeEquivalence
 
 public class FunctionEquivalenceVerifier {
 
-   public enum ConstStrategy {
-      ConsiderConst, IgnoreConst
-   }
+    public enum ConstStrategy {
+        ConsiderConst, IgnoreConst
+    }
 
-   private final ICPPASTFunctionDeclarator funDecl;
+    private final ICPPASTFunctionDeclarator funDecl;
 
-   public FunctionEquivalenceVerifier(final ICPPASTFunctionDeclarator funDecl) {
-      this.funDecl = funDecl;
-   }
+    public FunctionEquivalenceVerifier(final ICPPASTFunctionDeclarator funDecl) {
+        this.funDecl = funDecl;
+    }
 
-   public boolean isEquivalent(final ICPPASTFunctionDeclarator other) {
-      if (!funDecl.getName().toString().equals(other.getName().toString())) return false;
+    public boolean isEquivalent(final ICPPASTFunctionDeclarator other) {
+        if (!funDecl.getName().toString().equals(other.getName().toString())) return false;
 
-      final ParamTypeEquivalenceTester tester = new ParamTypeEquivalenceTester(getParameterTypes(funDecl), getParameterTypes(other));
-      return tester.areParametersEquivalent() && funDecl.isConst() == other.isConst();
-   }
+        final ParamTypeEquivalenceTester tester = new ParamTypeEquivalenceTester(getParameterTypes(funDecl), getParameterTypes(other));
+        return tester.areParametersEquivalent() && funDecl.isConst() == other.isConst();
+    }
 
-   private static List<IType> getParameterTypes(final ICPPASTFunctionDeclarator funDecl) {
-      final FunctionParamTypeCollector helper = new FunctionParamTypeCollector(funDecl);
-      return helper.getParameterTypes();
-   }
+    private static List<IType> getParameterTypes(final ICPPASTFunctionDeclarator funDecl) {
+        final FunctionParamTypeCollector helper = new FunctionParamTypeCollector(funDecl);
+        return helper.getParameterTypes();
+    }
 
-   public boolean isEquivalent(final ICPPASTFunctionCallExpression functionCall, final ConstStrategy constStrategy) {
-      if (!funDecl.getName().toString().equals(ASTUtil.getName(functionCall).toString())) return false;
+    public boolean isEquivalent(final ICPPASTFunctionCallExpression functionCall, final ConstStrategy constStrategy) {
+        if (!funDecl.getName().toString().equals(ASTUtil.getName(functionCall).toString())) return false;
 
-      boolean result = areParamsEquivalentToArguments(functionCall, funDecl);
+        boolean result = areParamsEquivalentToArguments(functionCall, funDecl);
 
-      if (constStrategy == ConstStrategy.ConsiderConst) {
-         result = result && funDecl.isConst();
-      }
+        if (constStrategy == ConstStrategy.ConsiderConst) {
+            result = result && funDecl.isConst();
+        }
 
-      return result;
-   }
+        return result;
+    }
 
-   private static boolean areParamsEquivalentToArguments(final ICPPASTFunctionCallExpression funCall, final ICPPASTFunctionDeclarator function) {
-      final FunArgumentsTypeCollector ex = new FunArgumentsTypeCollector(list(funCall.getArguments()));
-      final FunctionParamTypeCollector helper = new FunctionParamTypeCollector(function);
-      final List<IType> paramTypes = helper.getParameterTypes();
-      final List<IType> funArgTypes = ex.getFunArgTypes();
-      final ParamTypeEquivalenceTester tester = new ParamTypeEquivalenceTester(funArgTypes, paramTypes);
-      return tester.areParametersEquivalent();
-   }
+    private static boolean areParamsEquivalentToArguments(final ICPPASTFunctionCallExpression funCall, final ICPPASTFunctionDeclarator function) {
+        final FunArgumentsTypeCollector ex = new FunArgumentsTypeCollector(list(funCall.getArguments()));
+        final FunctionParamTypeCollector helper = new FunctionParamTypeCollector(function);
+        final List<IType> paramTypes = helper.getParameterTypes();
+        final List<IType> funArgTypes = ex.getFunArgTypes();
+        final ParamTypeEquivalenceTester tester = new ParamTypeEquivalenceTester(funArgTypes, paramTypes);
+        return tester.areParametersEquivalent();
+    }
 }

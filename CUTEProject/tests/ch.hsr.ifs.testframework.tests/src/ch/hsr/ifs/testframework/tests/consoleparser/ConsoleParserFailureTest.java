@@ -28,30 +28,32 @@ import junit.framework.TestCase;
 
 public class ConsoleParserFailureTest extends TestCase {
 
-   public ConsoleParserFailureTest(String name) {
-      super(name);
-   }
+    public ConsoleParserFailureTest(String name) {
+        super(name);
+    }
 
-   @Test
+    @Test
 
-   public void testFailureContentWithColon() {
+    public void testFailureContentWithColon() {
 
-      TestCuteConsoleEventParser parser = new TestCuteConsoleEventParser();
-      String failureInput = "#failure poly::testComposite ../src/Test.cpp:80 testComposite: \"{ circle:42rectangle:4,circle:4 }\" == out.str() expected:  { circle:42rectangle:4,circle:4 }  but was:  { circle:42rectangle:4,2circle:4 }  ";
-      IRegion dummyRegion = new Region(0, 0);
-      List<TestEvent> eventsFrom = parser.eventsFrom(dummyRegion, failureInput);
-      assertThat(eventsFrom.size(), is(1));
+        TestCuteConsoleEventParser parser = new TestCuteConsoleEventParser();
+        String failureInput =
+                            "#failure poly::testComposite ../src/Test.cpp:80 testComposite: \"{ circle:42rectangle:4,circle:4 }\" == out.str() expected:  { circle:42rectangle:4,circle:4 }  but was:  { circle:42rectangle:4,2circle:4 }  ";
+        IRegion dummyRegion = new Region(0, 0);
+        List<TestEvent> eventsFrom = parser.eventsFrom(dummyRegion, failureInput);
+        assertThat(eventsFrom.size(), is(1));
 
-      TestEvent firstEvent = eventsFrom.get(0);
-      assertThat(firstEvent, is(instanceOf(TestFailureEvent.class)));
+        TestEvent firstEvent = eventsFrom.get(0);
+        assertThat(firstEvent, is(instanceOf(TestFailureEvent.class)));
 
-      TestFailureEvent failureEvent = (TestFailureEvent) firstEvent;
-      assertThat(failureEvent.getTestName(), is(equalTo("poly::testComposite")));
-      assertThat(failureEvent.getFileName(), is(equalTo("../src/Test.cpp")));
-      assertThat(failureEvent.getLineNo(), is(equalTo("80")));
-      assertThat(failureEvent.getReason(), is(equalTo("testComposite: \"{ circle:42rectangle:4,circle:4 }\" == out.str() expected:  { circle:42rectangle:4,circle:4 }  but was:  { circle:42rectangle:4,2circle:4 }  ")));
+        TestFailureEvent failureEvent = (TestFailureEvent) firstEvent;
+        assertThat(failureEvent.getTestName(), is(equalTo("poly::testComposite")));
+        assertThat(failureEvent.getFileName(), is(equalTo("../src/Test.cpp")));
+        assertThat(failureEvent.getLineNo(), is(equalTo("80")));
+        assertThat(failureEvent.getReason(), is(equalTo(
+                "testComposite: \"{ circle:42rectangle:4,circle:4 }\" == out.str() expected:  { circle:42rectangle:4,circle:4 }  but was:  { circle:42rectangle:4,2circle:4 }  ")));
 
-      assertThat(failureEvent.getReg(), is(dummyRegion));
-   }
+        assertThat(failureEvent.getReg(), is(dummyRegion));
+    }
 
 }

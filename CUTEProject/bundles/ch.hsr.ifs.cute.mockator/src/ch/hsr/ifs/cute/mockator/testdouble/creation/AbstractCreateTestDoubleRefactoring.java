@@ -27,42 +27,42 @@ import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorRefactoring;
 
 public abstract class AbstractCreateTestDoubleRefactoring extends MockatorRefactoring {
 
-   public AbstractCreateTestDoubleRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject cProject) {
-      super(cElement, selection);
-   }
+    public AbstractCreateTestDoubleRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject cProject) {
+        super(cElement, selection);
+    }
 
-   @Override
-   public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-      final RefactoringStatus status = super.checkInitialConditions(pm);
+    @Override
+    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+        final RefactoringStatus status = super.checkInitialConditions(pm);
 
-      checkSelectedNameIsInFunction(status, pm).ifPresent((name) -> {
-         final IBinding binding = name.resolveBinding();
+        checkSelectedNameIsInFunction(status, pm).ifPresent((name) -> {
+            final IBinding binding = name.resolveBinding();
 
-         if (!(binding instanceof IProblemBinding)) {
-            status.addFatalError("Selected name refers to an existing entity");
-         }
-      });
-      return status;
-   }
+            if (!(binding instanceof IProblemBinding)) {
+                status.addFatalError("Selected name refers to an existing entity");
+            }
+        });
+        return status;
+    }
 
-   protected void insertBeforeCurrentStmt(final IASTDeclarationStatement testDouble, final IASTTranslationUnit ast, final ASTRewrite rewriter) {
-      findFirstSelectedStmt(ast).ifPresent((stmt) -> rewriter.insertBefore(stmt.getParent(), stmt, testDouble, null));
-   }
+    protected void insertBeforeCurrentStmt(final IASTDeclarationStatement testDouble, final IASTTranslationUnit ast, final ASTRewrite rewriter) {
+        findFirstSelectedStmt(ast).ifPresent((stmt) -> rewriter.insertBefore(stmt.getParent(), stmt, testDouble, null));
+    }
 
-   private Optional<IASTStatement> findFirstSelectedStmt(final IASTTranslationUnit ast) {
-      final IASTStatement stmt = CPPVisitor.findAncestorWithType(getSelectedNode(ast), IASTStatement.class).orElse(null);
-      return Optional.of(stmt);
-   }
+    private Optional<IASTStatement> findFirstSelectedStmt(final IASTTranslationUnit ast) {
+        final IASTStatement stmt = CPPVisitor.findAncestorWithType(getSelectedNode(ast), IASTStatement.class).orElse(null);
+        return Optional.of(stmt);
+    }
 
-   protected ICPPASTCompositeTypeSpecifier createNewTestDoubleClass(final String name) {
-      final IASTName className = nodeFactory.newName(name.toCharArray());
-      final int structClassType = IASTCompositeTypeSpecifier.k_struct;
-      final ICPPASTCompositeTypeSpecifier newClass = nodeFactory.newCompositeTypeSpecifier(structClassType, className);
-      return newClass;
-   }
+    protected ICPPASTCompositeTypeSpecifier createNewTestDoubleClass(final String name) {
+        final IASTName className = nodeFactory.newName(name.toCharArray());
+        final int structClassType = IASTCompositeTypeSpecifier.k_struct;
+        final ICPPASTCompositeTypeSpecifier newClass = nodeFactory.newCompositeTypeSpecifier(structClassType, className);
+        return newClass;
+    }
 
-   @Override
-   public String getDescription() {
-      return I18N.CreateTestDoubleRefactoringDesc;
-   }
+    @Override
+    public String getDescription() {
+        return I18N.CreateTestDoubleRefactoringDesc;
+    }
 }

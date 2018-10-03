@@ -18,15 +18,15 @@ import junit.framework.TestSuite;
  */
 public class PatternListenerSuite {
 
-   public static Test suite() {
-      TestSuite suite = new TestSuite("Pattern Listener Suite");
-      suite.addTestSuite(PatternListenerSessionStartEndTest.class);
-      suite.addTestSuite(PatternListenerSuiteTest.class);
-      suite.addTestSuite(PatternListenerTestSuccessTest.class);
-      suite.addTestSuite(PatternListenerTestFailedTest.class);
-      suite.addTestSuite(PatternListenerTestEqualsFailed.class);
-      suite.addTestSuite(PatternListenerErrorTest.class);
-      suite.addTestSuite(TestFailureBackslashEscaped.class);
-      return suite;
-   }
+    public static Test suite() {
+        TestSuite suite = new TestSuite("Pattern Listener Suite");
+        suite.addTestSuite(PatternListenerSessionStartEndTest.class);
+        suite.addTestSuite(PatternListenerSuiteTest.class);
+        suite.addTestSuite(PatternListenerTestSuccessTest.class);
+        suite.addTestSuite(PatternListenerTestFailedTest.class);
+        suite.addTestSuite(PatternListenerTestEqualsFailed.class);
+        suite.addTestSuite(PatternListenerErrorTest.class);
+        suite.addTestSuite(TestFailureBackslashEscaped.class);
+        return suite;
+    }
 }

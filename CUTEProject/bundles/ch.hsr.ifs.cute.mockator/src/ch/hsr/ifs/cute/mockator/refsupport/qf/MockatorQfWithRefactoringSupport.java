@@ -18,45 +18,45 @@ import ch.hsr.ifs.cute.mockator.refsupport.linkededit.LinkedModeStarter;
 
 public abstract class MockatorQfWithRefactoringSupport extends MockatorQuickFix {
 
-   private IDocument document;
+    private IDocument document;
 
-   @Override
-   public void apply(final IMarker marker, final IDocument document) {
-      this.marker = marker;
-      this.document = document;
-      info = getMarkerInfo(marker);
-      performRefactoring();
-   }
+    @Override
+    public void apply(final IMarker marker, final IDocument document) {
+        this.marker = marker;
+        this.document = document;
+        info = getMarkerInfo(marker);
+        performRefactoring();
+    }
 
-   private void performRefactoring() {
-      final MockatorRefactoring refactoring = getRefactoring(getCElement(), getSelection(), info);
+    private void performRefactoring() {
+        final MockatorRefactoring refactoring = getRefactoring(getCElement(), getSelection(), info);
 
-      if (shouldRunInCurrentThread) {
-         runInCurrentThread(refactoring);
-      } else {
-         runInSeparateJob(refactoring);
-      }
-   }
+        if (shouldRunInCurrentThread) {
+            runInCurrentThread(refactoring);
+        } else {
+            runInSeparateJob(refactoring);
+        }
+    }
 
-   private Optional<ITextSelection> getSelection() {
-      final int offset = getOffset(marker, document);
-      return Optional.of(new TextSelection(document, offset, 0));
-   }
+    private Optional<ITextSelection> getSelection() {
+        final int offset = getOffset(marker, document);
+        return Optional.of(new TextSelection(document, offset, 0));
+    }
 
-   private void runInSeparateJob(final MockatorRefactoring refactoring) {
-      new MockatorRefactoringRunner(refactoring).runInNewJob((changeEdit) -> startLinkedMode(refactoring, changeEdit));
-   }
+    private void runInSeparateJob(final MockatorRefactoring refactoring) {
+        new MockatorRefactoringRunner(refactoring).runInNewJob((changeEdit) -> startLinkedMode(refactoring, changeEdit));
+    }
 
-   private void runInCurrentThread(final MockatorRefactoring refactoring) {
-      final ChangeEdit changeEdit = new MockatorRefactoringRunner(refactoring).runInCurrentThread(new NullProgressMonitor());
-      startLinkedMode(refactoring, changeEdit);
-   }
+    private void runInCurrentThread(final MockatorRefactoring refactoring) {
+        final ChangeEdit changeEdit = new MockatorRefactoringRunner(refactoring).runInCurrentThread(new NullProgressMonitor());
+        startLinkedMode(refactoring, changeEdit);
+    }
 
-   private void startLinkedMode(final MockatorRefactoring refactoring, final ChangeEdit edit) {
-      getLinkedModeCreator(edit, document, refactoring).ifPresent((linkedMode) -> new LinkedModeStarter().accept(linkedMode));
-   }
+    private void startLinkedMode(final MockatorRefactoring refactoring, final ChangeEdit edit) {
+        getLinkedModeCreator(edit, document, refactoring).ifPresent((linkedMode) -> new LinkedModeStarter().accept(linkedMode));
+    }
 
-   protected abstract MockatorRefactoring getRefactoring(ICElement cElement, Optional<ITextSelection> selection, MarkerInfo<?> info);
+    protected abstract MockatorRefactoring getRefactoring(ICElement cElement, Optional<ITextSelection> selection, MarkerInfo<?> info);
 
-   protected abstract Optional<LinkedModeInfoCreater> getLinkedModeCreator(ChangeEdit edit, IDocument document, MockatorRefactoring refactoring);
+    protected abstract Optional<LinkedModeInfoCreater> getLinkedModeCreator(ChangeEdit edit, IDocument document, MockatorRefactoring refactoring);
 }

@@ -8,7 +8,7 @@ import ch.hsr.ifs.cute.mockator.testdouble.creation.AbstractTestDoubleLinkedMode
 
 class StaticPolyTestDoubleSupport extends AbstractTestDoubleLinkedMode {
 
-   public StaticPolyTestDoubleSupport(final ChangeEdit edit, final IDocument document, final String newClassName) {
-      super(edit, document, newClassName);
-   }
+    public StaticPolyTestDoubleSupport(final ChangeEdit edit, final IDocument document, final String newClassName) {
+        super(edit, document, newClassName);
+    }
 }

@@ -20,48 +20,50 @@ import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 @SuppressWarnings("restriction")
 public abstract class UiUtil {
 
-   public static <T> void runInDisplayThread(final Consumer<T> callBack, final T param) {
-      final Runnable runnable = () -> callBack.accept(param);
-      final Display display = getDisplay();
+    public static <T> void runInDisplayThread(final Consumer<T> callBack, final T param) {
+        final Runnable runnable = () -> callBack.accept(param);
+        final Display display = getDisplay();
 
-      if (isDisplayThreadCurrentThread(display)) {
-         runnable.run();
-      } else {
-         display.syncExec(runnable);
-      }
-   }
+        if (isDisplayThreadCurrentThread(display)) {
+            runnable.run();
+        } else {
+            display.syncExec(runnable);
+        }
+    }
 
-   private static Display getDisplay() {
-      final Display display = PlatformUI.getWorkbench().getDisplay();
-      ILTISException.Unless.isFalse("Display should not be null or already disposed", display == null || display.isDisposed());
-      return display;
-   }
+    private static Display getDisplay() {
+        final Display display = PlatformUI.getWorkbench().getDisplay();
+        ILTISException.Unless.isFalse("Display should not be null or already disposed", display == null || display.isDisposed());
+        return display;
+    }
 
-   private static boolean isDisplayThreadCurrentThread(final Display display) {
-      return Thread.currentThread().equals(display.getThread());
-   }
+    private static boolean isDisplayThreadCurrentThread(final Display display) {
+        return Thread.currentThread().equals(display.getThread());
+    }
 
-   public static Optional<CEditor> getActiveCEditor() {
-      final IEditorPart editor = getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-      if (editor instanceof ICEditor) { return Optional.of((CEditor) editor); }
-      return Optional.empty();
-   }
+    public static Optional<CEditor> getActiveCEditor() {
+        final IEditorPart editor = getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+        if (editor instanceof ICEditor) {
+            return Optional.of((CEditor) editor);
+        }
+        return Optional.empty();
+    }
 
-   public static IWorkbenchWindow getActiveWorkbenchWindow() {
-      final IWorkbenchWindow activeWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-      ILTISException.Unless.notNull("Not called from the UI thread", activeWindow);
-      return activeWindow;
-   }
+    public static IWorkbenchWindow getActiveWorkbenchWindow() {
+        final IWorkbenchWindow activeWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        ILTISException.Unless.notNull("Not called from the UI thread", activeWindow);
+        return activeWindow;
+    }
 
-   public static Shell getWindowShell() {
-      return getActiveWorkbenchWindow().getShell();
-   }
+    public static Shell getWindowShell() {
+        return getActiveWorkbenchWindow().getShell();
+    }
 
-   public static Optional<IDocument> getCurrentDocument() {
-      return getActiveCEditor().map((editor) -> editor.getDocumentProvider().getDocument(editor.getEditorInput()));
-   }
+    public static Optional<IDocument> getCurrentDocument() {
+        return getActiveCEditor().map((editor) -> editor.getDocumentProvider().getDocument(editor.getEditorInput()));
+    }
 
-   public static void showInfoMessage(final String title, final String msg) {
-      MessageDialog.open(MessageDialog.INFORMATION, getWindowShell(), title, msg, SWT.NONE);
-   }
+    public static void showInfoMessage(final String title, final String msg) {
+        MessageDialog.open(MessageDialog.INFORMATION, getWindowShell(), title, msg, SWT.NONE);
+    }
 }

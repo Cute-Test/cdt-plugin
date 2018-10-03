@@ -48,129 +48,129 @@ import ch.hsr.ifs.cute.ui.CuteUIPlugin;
  */
 public class NewTestFunctionActionDelegate implements IEditorActionDelegate, IWorkbenchWindowActionDelegate {
 
-   protected IEditorPart                 editor;
-   protected LinkedModeUI                linkedModeUI;
-   protected final String                funcName;      // used for linking during 1st edit
-   protected final NewTestFunctionAction functionAction;
+    protected IEditorPart                 editor;
+    protected LinkedModeUI                linkedModeUI;
+    protected final String                funcName;      // used for linking during 1st edit
+    protected final NewTestFunctionAction functionAction;
 
-   public NewTestFunctionActionDelegate() {
-      this.funcName = "newTestFunction";
-      this.functionAction = new NewTestFunctionAction("newTestFunction");
-   }
+    public NewTestFunctionActionDelegate() {
+        this.funcName = "newTestFunction";
+        this.functionAction = new NewTestFunctionAction("newTestFunction");
+    }
 
-   @Override
-   public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-      editor = targetEditor;
-   }
+    @Override
+    public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+        editor = targetEditor;
+    }
 
-   @Override
-   public void dispose() {}
+    @Override
+    public void dispose() {}
 
-   @Override
-   public void init(IWorkbenchWindow window) {}
+    @Override
+    public void init(IWorkbenchWindow window) {}
 
-   @Override
-   public void selectionChanged(IAction action, ISelection selection) {}
+    @Override
+    public void selectionChanged(IAction action, ISelection selection) {}
 
-   protected boolean isCorrectEditor() {
-      if (editor == null) {
-         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-         if (page.isEditorAreaVisible() && page.getActiveEditor() != null && page.getActiveEditor() instanceof TextEditor) {
-            editor = page.getActiveEditor();
-         }
-      }
-      if (editor != null && editor instanceof TextEditor) {
-         if (editor.isDirty()) {
-            editor.doSave(new NullProgressMonitor());
-         }
-         return true;
-      }
-      return false;
-   }
+    protected boolean isCorrectEditor() {
+        if (editor == null) {
+            IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+            if (page.isEditorAreaVisible() && page.getActiveEditor() != null && page.getActiveEditor() instanceof TextEditor) {
+                editor = page.getActiveEditor();
+            }
+        }
+        if (editor != null && editor instanceof TextEditor) {
+            if (editor.isDirty()) {
+                editor.doSave(new NullProgressMonitor());
+            }
+            return true;
+        }
+        return false;
+    }
 
-   @Override
-   public void run(IAction action) {
-      try {
-         if (!isCorrectEditor()) return;
+    @Override
+    public void run(IAction action) {
+        try {
+            if (!isCorrectEditor()) return;
 
-         TextEditor ceditor = (TextEditor) editor;
-         IEditorInput editorInput = ceditor.getEditorInput();
-         IDocumentProvider prov = ceditor.getDocumentProvider();
-         IDocument doc = prov.getDocument(editorInput);
-         ISelection sel = ceditor.getSelectionProvider().getSelection();
-         IFileEditorInput fei = editorInput.getAdapter(IFileEditorInput.class);
-         if (fei != null) {
-            MultiTextEdit mEdit = functionAction.createEdit(fei.getFile(), doc, sel);
+            TextEditor ceditor = (TextEditor) editor;
+            IEditorInput editorInput = ceditor.getEditorInput();
+            IDocumentProvider prov = ceditor.getDocumentProvider();
+            IDocument doc = prov.getDocument(editorInput);
+            ISelection sel = ceditor.getSelectionProvider().getSelection();
+            IFileEditorInput fei = editorInput.getAdapter(IFileEditorInput.class);
+            if (fei != null) {
+                MultiTextEdit mEdit = functionAction.createEdit(fei.getFile(), doc, sel);
 
-            RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
-            processor.performEdits();
+                RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
+                processor.performEdits();
 
-            updateLinkedMode(doc, mEdit);
-         }
-      } catch (CoreException e) {
-         CuteUIPlugin.log("Exception while running new test function action", e);
-      } catch (MalformedTreeException e) {
-         CuteUIPlugin.log("Exception while running new test function action", e);
-      } catch (BadLocationException e) {
-         CuteUIPlugin.log("Exception while running new test function action", e);
-      } finally {
-         editor = null;
-      }
-   }
+                updateLinkedMode(doc, mEdit);
+            }
+        } catch (CoreException e) {
+            CuteUIPlugin.log("Exception while running new test function action", e);
+        } catch (MalformedTreeException e) {
+            CuteUIPlugin.log("Exception while running new test function action", e);
+        } catch (BadLocationException e) {
+            CuteUIPlugin.log("Exception while running new test function action", e);
+        } finally {
+            editor = null;
+        }
+    }
 
-   private void updateLinkedMode(IDocument doc, MultiTextEdit mEdit) throws BadLocationException {
-      ISourceViewer viewer = ((CEditor) editor).getViewer();
-      LinkedModeModel model = new LinkedModeModel();
+    private void updateLinkedMode(IDocument doc, MultiTextEdit mEdit) throws BadLocationException {
+        ISourceViewer viewer = ((CEditor) editor).getViewer();
+        LinkedModeModel model = new LinkedModeModel();
 
-      LinkedPositionGroup group = new LinkedPositionGroup();
+        LinkedPositionGroup group = new LinkedPositionGroup();
 
-      /* linking the name together (which will change together)for the very 1st edit, subsequent changes would need refactoring:rename */
-      TextEdit[] edits = mEdit.getChildren();
-      int totalEditLength = 0;
-      for (TextEdit textEdit : edits) {
-         String insert = ((InsertEdit) textEdit).getText();
-         if (insert.contains(funcName)) {
-            int start = textEdit.getOffset();
-            int indexOfFuncName = insert.indexOf(funcName);
-            group.addPosition(new LinkedPosition(viewer.getDocument(), start + indexOfFuncName + totalEditLength, funcName.length()));
-            totalEditLength += insert.length();
-         }
-      }
+        /* linking the name together (which will change together)for the very 1st edit, subsequent changes would need refactoring:rename */
+        TextEdit[] edits = mEdit.getChildren();
+        int totalEditLength = 0;
+        for (TextEdit textEdit : edits) {
+            String insert = ((InsertEdit) textEdit).getText();
+            if (insert.contains(funcName)) {
+                int start = textEdit.getOffset();
+                int indexOfFuncName = insert.indexOf(funcName);
+                group.addPosition(new LinkedPosition(viewer.getDocument(), start + indexOfFuncName + totalEditLength, funcName.length()));
+                totalEditLength += insert.length();
+            }
+        }
 
-      if (!group.isEmpty()) {
-         model.addGroup(group);
-         model.forceInstall();
+        if (!group.isEmpty()) {
+            model.addGroup(group);
+            model.forceInstall();
 
-         /* after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it */
-         String newLine = TextUtilities.getDefaultLineDelimiter(doc);
-         linkedModeUI = new EditorLinkedModeUI(model, viewer);
-         linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
-         linkedModeUI.setCyclingMode(LinkedModeUI.CYCLE_ALWAYS);
-         linkedModeUI.enter();
-      }
-   }
+            /* after pressing enter of 1st edit, for newTestfunction select "assert" line from start to end of it */
+            String newLine = TextUtilities.getDefaultLineDelimiter(doc);
+            linkedModeUI = new EditorLinkedModeUI(model, viewer);
+            linkedModeUI.setExitPosition(viewer, getCursorEndPosition(edits, newLine), getExitPositionLength(), Integer.MAX_VALUE);
+            linkedModeUI.setCyclingMode(LinkedModeUI.CYCLE_ALWAYS);
+            linkedModeUI.enter();
+        }
+    }
 
-   int getCursorEndPosition(TextEdit[] edits, String newLine) {
-      int result = edits[0].getOffset() + edits[0].getLength();
-      int leadingEditsLengthSum = 0;
-      for (TextEdit textEdit : edits) {
-         String insert = ((InsertEdit) textEdit).getText();
-         if (insert.contains(NewTestFunctionAction.TEST_STMT.trim())) {
-            result = (leadingEditsLengthSum + textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
-            break;
-         } else {
-            leadingEditsLengthSum += ((InsertEdit) textEdit).getLength();
-         }
-      }
-      return result;
-   }
+    int getCursorEndPosition(TextEdit[] edits, String newLine) {
+        int result = edits[0].getOffset() + edits[0].getLength();
+        int leadingEditsLengthSum = 0;
+        for (TextEdit textEdit : edits) {
+            String insert = ((InsertEdit) textEdit).getText();
+            if (insert.contains(NewTestFunctionAction.TEST_STMT.trim())) {
+                result = (leadingEditsLengthSum + textEdit.getOffset() + insert.indexOf(NewTestFunctionAction.TEST_STMT.trim()));
+                break;
+            } else {
+                leadingEditsLengthSum += ((InsertEdit) textEdit).getLength();
+            }
+        }
+        return result;
+    }
 
-   int getExitPositionLength() {
-      return NewTestFunctionAction.TEST_STMT.trim().length();
-   }
+    int getExitPositionLength() {
+        return NewTestFunctionAction.TEST_STMT.trim().length();
+    }
 
-   public LinkedModeUI testOnlyGetLinkedMode() {
-      return linkedModeUI;
-   }
+    public LinkedModeUI testOnlyGetLinkedMode() {
+        return linkedModeUI;
+    }
 
 }

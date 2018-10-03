@@ -15,16 +15,16 @@ import ch.hsr.ifs.cute.mockator.infos.ExtractInterfaceInfo;
 
 public class ExtractInterfaceContribution extends CRefactoringContribution<RefactoringId> {
 
-   @Override
-   public RefactoringDescriptor createDescriptor(RefactoringId id, String project, String description, String comment, Map<String, String> arguments,
-         int flags) throws IllegalArgumentException {
-      return id == RefactoringId.EXTRACT_INTERFACE ? new ExtractInterfaceDescriptor(project, description, comment, IInfo.fromMap(
-            ExtractInterfaceInfo::new, arguments)) : null;
-   }
+    @Override
+    public RefactoringDescriptor createDescriptor(RefactoringId id, String project, String description, String comment, Map<String, String> arguments,
+            int flags) throws IllegalArgumentException {
+        return id == RefactoringId.EXTRACT_INTERFACE ? new ExtractInterfaceDescriptor(project, description, comment, IInfo.fromMap(
+                ExtractInterfaceInfo::new, arguments)) : null;
+    }
 
-   @Override
-   protected Function<String, RefactoringId> getFromStringMethod() {
-      return RefactoringId::of;
-   }
+    @Override
+    protected Function<String, RefactoringId> getFromStringMethod() {
+        return RefactoringId::of;
+    }
 
 }

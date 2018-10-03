@@ -20,8 +20,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface ICuteWizardAdditionHandler {
 
-   public void configureProject(IProject project, IProgressMonitor pm) throws CoreException;
+    public void configureProject(IProject project, IProgressMonitor pm) throws CoreException;
 
-   public void configureLibProject(IProject project) throws CoreException;
+    public void configureLibProject(IProject project) throws CoreException;
 
 }

@@ -22,44 +22,54 @@ import org.eclipse.cdt.core.dom.ast.IASTStatement;
  */
 public class ASTUtil {
 
-   public static boolean isTestFunction(IASTDeclaration declaration) {
-      if (declaration instanceof IASTFunctionDefinition) {
-         IASTFunctionDefinition funcDef = (IASTFunctionDefinition) declaration;
-         if (hasNoParameters(funcDef)) {
-            if (containsAssert(funcDef)) { return true; }
-         }
-      }
-      return false;
-   }
+    public static boolean isTestFunction(IASTDeclaration declaration) {
+        if (declaration instanceof IASTFunctionDefinition) {
+            IASTFunctionDefinition funcDef = (IASTFunctionDefinition) declaration;
+            if (hasNoParameters(funcDef)) {
+                if (containsAssert(funcDef)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-   public static boolean containsAssert(IASTFunctionDefinition funcDef) {
-      IASTStatement functionBody = getFunctionBody(funcDef);
-      if (functionBody == null) { return false; }
-      AssertStatementCheckVisitor checker = new AssertStatementCheckVisitor();
-      functionBody.accept(checker);
-      return checker.hasAssertStmt;
-   }
+    public static boolean containsAssert(IASTFunctionDefinition funcDef) {
+        IASTStatement functionBody = getFunctionBody(funcDef);
+        if (functionBody == null) {
+            return false;
+        }
+        AssertStatementCheckVisitor checker = new AssertStatementCheckVisitor();
+        functionBody.accept(checker);
+        return checker.hasAssertStmt;
+    }
 
-   public static boolean containsIndirectAssert(IASTFunctionDefinition funcDef) {
-      IASTStatement functionBody = getFunctionBody(funcDef);
-      if (functionBody == null) { return false; }
-      IndirectAssertStatementCheckVisitor checker = new IndirectAssertStatementCheckVisitor();
-      functionBody.accept(checker);
-      return checker.hasIndirectAssertStmt;
-   }
+    public static boolean containsIndirectAssert(IASTFunctionDefinition funcDef) {
+        IASTStatement functionBody = getFunctionBody(funcDef);
+        if (functionBody == null) {
+            return false;
+        }
+        IndirectAssertStatementCheckVisitor checker = new IndirectAssertStatementCheckVisitor();
+        functionBody.accept(checker);
+        return checker.hasIndirectAssertStmt;
+    }
 
-   private static IASTStatement getFunctionBody(IASTFunctionDefinition funcDef) {
-      if (funcDef != null) { return funcDef.getBody(); }
-      return null;
-   }
+    private static IASTStatement getFunctionBody(IASTFunctionDefinition funcDef) {
+        if (funcDef != null) {
+            return funcDef.getBody();
+        }
+        return null;
+    }
 
-   public static boolean hasNoParameters(IASTFunctionDefinition funcDef) {
-      IASTFunctionDeclarator declarator = funcDef.getDeclarator();
-      if (declarator instanceof IASTStandardFunctionDeclarator) {
-         IASTStandardFunctionDeclarator stdFuncDecl = (IASTStandardFunctionDeclarator) declarator;
-         if (stdFuncDecl.getParameters() == null || stdFuncDecl.getParameters().length == 0) { return true; }
-      }
-      return false;
-   }
+    public static boolean hasNoParameters(IASTFunctionDefinition funcDef) {
+        IASTFunctionDeclarator declarator = funcDef.getDeclarator();
+        if (declarator instanceof IASTStandardFunctionDeclarator) {
+            IASTStandardFunctionDeclarator stdFuncDecl = (IASTStandardFunctionDeclarator) declarator;
+            if (stdFuncDecl.getParameters() == null || stdFuncDecl.getParameters().length == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

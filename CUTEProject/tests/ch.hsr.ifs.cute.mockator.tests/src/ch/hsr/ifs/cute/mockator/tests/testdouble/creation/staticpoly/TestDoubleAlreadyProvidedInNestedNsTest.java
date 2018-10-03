@@ -10,13 +10,13 @@ import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.CDTTestingChecke
 
 public class TestDoubleAlreadyProvidedInNestedNsTest extends CDTTestingCheckerTest {
 
-   @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.MISSING_TEST_DOUBLE_STATICPOLY;
-   }
+    @Override
+    protected ProblemId getProblemId() {
+        return ProblemId.MISSING_TEST_DOUBLE_STATICPOLY;
+    }
 
-   @Test
-   public void testTestDoubleAlreadyProvided() throws Throwable {
-      assertTrue(findMarkers().length == 0);
-   }
+    @Test
+    public void testTestDoubleAlreadyProvided() throws Throwable {
+        assertTrue(findMarkers().length == 0);
+    }
 }

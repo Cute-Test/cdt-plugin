@@ -7,23 +7,23 @@ import ch.hsr.ifs.iltis.core.core.resources.WorkspaceUtil;
 
 class UniqueProjectNameCreator {
 
-   private final String projectName;
+    private final String projectName;
 
-   public UniqueProjectNameCreator(final String projectName) {
-      this.projectName = projectName;
-   }
+    public UniqueProjectNameCreator(final String projectName) {
+        this.projectName = projectName;
+    }
 
-   public String getUniqueProjectName() {
-      String newProjectName = projectName;
+    public String getUniqueProjectName() {
+        String newProjectName = projectName;
 
-      for (int i = 1; getProject(newProjectName).exists(); ++i) {
-         newProjectName = projectName + i;
-      }
+        for (int i = 1; getProject(newProjectName).exists(); ++i) {
+            newProjectName = projectName + i;
+        }
 
-      return newProjectName;
-   }
+        return newProjectName;
+    }
 
-   private static IProject getProject(final String projectName) {
-      return WorkspaceUtil.getWorkspaceRoot().getProject(projectName);
-   }
+    private static IProject getProject(final String projectName) {
+        return WorkspaceUtil.getWorkspaceRoot().getProject(projectName);
+    }
 }

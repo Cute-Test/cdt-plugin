@@ -13,31 +13,33 @@ import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 
 public class DeclSpecGenerator {
 
-   private final IType type;
+    private final IType type;
 
-   public DeclSpecGenerator(final IType type) {
-      this.type = ASTUtil.windDownToRealType(type, true);
-   }
+    public DeclSpecGenerator(final IType type) {
+        this.type = ASTUtil.windDownToRealType(type, true);
+    }
 
-   public ICPPASTDeclSpecifier getDeclSpec() {
-      final DeclSpecGeneratorStrategy strategy = getStrategy(type);
-      return strategy.createDeclSpec(type);
-   }
+    public ICPPASTDeclSpecifier getDeclSpec() {
+        final DeclSpecGeneratorStrategy strategy = getStrategy(type);
+        return strategy.createDeclSpec(type);
+    }
 
-   private static DeclSpecGeneratorStrategy getStrategy(final IType type) {
-      if (type instanceof ICPPTemplateInstance && hasDefaultTemplateParams((ICPPTemplateInstance) type)) return new TemplateInstDeclSpecStrategy();
-      if (type instanceof ICPPBinding) return new BindingDeclSpecStrategy();
-      else if (type instanceof IBasicType) return new BasicTypeDeclSpecStrategy();
-      else return new DefaultDeclSpecStrategy();
-   }
+    private static DeclSpecGeneratorStrategy getStrategy(final IType type) {
+        if (type instanceof ICPPTemplateInstance && hasDefaultTemplateParams((ICPPTemplateInstance) type)) return new TemplateInstDeclSpecStrategy();
+        if (type instanceof ICPPBinding)
+            return new BindingDeclSpecStrategy();
+        else if (type instanceof IBasicType)
+            return new BasicTypeDeclSpecStrategy();
+        else return new DefaultDeclSpecStrategy();
+    }
 
-   private static boolean hasDefaultTemplateParams(final ICPPTemplateInstance templateInst) {
-      final ICPPTemplateDefinition templateDefinition = templateInst.getTemplateDefinition();
+    private static boolean hasDefaultTemplateParams(final ICPPTemplateInstance templateInst) {
+        final ICPPTemplateDefinition templateDefinition = templateInst.getTemplateDefinition();
 
-      for (final ICPPTemplateParameter param : templateDefinition.getTemplateParameters()) {
-         if (param.getDefaultValue() != null) return true;
-      }
+        for (final ICPPTemplateParameter param : templateDefinition.getTemplateParameters()) {
+            if (param.getDefaultValue() != null) return true;
+        }
 
-      return false;
-   }
+        return false;
+    }
 }

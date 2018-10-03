@@ -16,45 +16,45 @@ import org.eclipse.jface.dialogs.IMessageProvider;
 // Copied and adapted from CUTE
 class StatusUtil {
 
-   private StatusUtil() {
-      throw new AssertionError();
-   }
+    private StatusUtil() {
+        throw new AssertionError();
+    }
 
-   public static IStatus getMostSevere(final IStatus[] status) {
-      IStatus max = null;
+    public static IStatus getMostSevere(final IStatus[] status) {
+        IStatus max = null;
 
-      for (final IStatus curr : status) {
-         if (curr.matches(IStatus.ERROR)) return curr;
-         if (max == null || curr.getSeverity() > max.getSeverity()) {
-            max = curr;
-         }
-      }
+        for (final IStatus curr : status) {
+            if (curr.matches(IStatus.ERROR)) return curr;
+            if (max == null || curr.getSeverity() > max.getSeverity()) {
+                max = curr;
+            }
+        }
 
-      return max;
-   }
+        return max;
+    }
 
-   public static void applyToStatusLine(final DialogPage page, final IStatus status) {
-      String message = status.getMessage();
-      switch (status.getSeverity()) {
-      case IStatus.OK:
-         page.setMessage(message, IMessageProvider.NONE);
-         page.setErrorMessage(null);
-         break;
-      case IStatus.WARNING:
-         page.setMessage(message, IMessageProvider.WARNING);
-         page.setErrorMessage(null);
-         break;
-      case IStatus.INFO:
-         page.setMessage(message, IMessageProvider.INFORMATION);
-         page.setErrorMessage(null);
-         break;
-      default:
-         if (message.length() == 0) {
-            message = null;
-         }
-         page.setMessage(null);
-         page.setErrorMessage(message);
-         break;
-      }
-   }
+    public static void applyToStatusLine(final DialogPage page, final IStatus status) {
+        String message = status.getMessage();
+        switch (status.getSeverity()) {
+        case IStatus.OK:
+            page.setMessage(message, IMessageProvider.NONE);
+            page.setErrorMessage(null);
+            break;
+        case IStatus.WARNING:
+            page.setMessage(message, IMessageProvider.WARNING);
+            page.setErrorMessage(null);
+            break;
+        case IStatus.INFO:
+            page.setMessage(message, IMessageProvider.INFORMATION);
+            page.setErrorMessage(null);
+            break;
+        default:
+            if (message.length() == 0) {
+                message = null;
+            }
+            page.setMessage(null);
+            page.setErrorMessage(message);
+            break;
+        }
+    }
 }

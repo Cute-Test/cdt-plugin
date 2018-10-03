@@ -12,23 +12,23 @@ import ch.hsr.ifs.cute.mockator.project.properties.CppStdFactory;
 
 public class CallRegistrationCollector {
 
-   private final CppStandard cppStd;
+    private final CppStandard cppStd;
 
-   public CallRegistrationCollector(final CppStandard cppStd) {
-      this.cppStd = cppStd;
-   }
+    public CallRegistrationCollector(final CppStandard cppStd) {
+        this.cppStd = cppStd;
+    }
 
-   public MutableList<ExistingMemFunCallRegistration> getRegistrations(final List<IASTName> registrationVectorUses) {
-      final MutableList<ExistingMemFunCallRegistration> callRegistrations = Lists.mutable.empty();
-      final RegistrationFinder finder = getRegistrationFinder();
+    public MutableList<ExistingMemFunCallRegistration> getRegistrations(final List<IASTName> registrationVectorUses) {
+        final MutableList<ExistingMemFunCallRegistration> callRegistrations = Lists.mutable.empty();
+        final RegistrationFinder finder = getRegistrationFinder();
 
-      for (final IASTName usage : registrationVectorUses) {
-         finder.findRegistration(usage).ifPresent((candidate) -> callRegistrations.add(candidate));
-      }
-      return callRegistrations;
-   }
+        for (final IASTName usage : registrationVectorUses) {
+            finder.findRegistration(usage).ifPresent((candidate) -> callRegistrations.add(candidate));
+        }
+        return callRegistrations;
+    }
 
-   private RegistrationFinder getRegistrationFinder() {
-      return CppStdFactory.from(Cpp03RegistrationFinder.class, Cpp11RegistrationFinder.class).getHandler(cppStd);
-   }
+    private RegistrationFinder getRegistrationFinder() {
+        return CppStdFactory.from(Cpp03RegistrationFinder.class, Cpp11RegistrationFinder.class).getHandler(cppStd);
+    }
 }

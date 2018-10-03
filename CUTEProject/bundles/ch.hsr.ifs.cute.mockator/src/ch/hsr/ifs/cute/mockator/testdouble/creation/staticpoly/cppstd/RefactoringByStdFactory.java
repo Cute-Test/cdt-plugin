@@ -14,15 +14,15 @@ import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorRefactoring;
 
 public class RefactoringByStdFactory {
 
-   public MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject project,
-         final CppStandard std) {
-      switch (std) {
-      case Cpp03Std:
-         return new TestDoubleCpp03Refactoring(cElement, selection, project);
-      case Cpp11Std:
-         return new TestDoubleCpp11Refactoring(cElement, selection, project);
-      default:
-         throw new ILTISException("Unexpected C++ standard").rethrowUnchecked();
-      }
-   }
+    public MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject project,
+            final CppStandard std) {
+        switch (std) {
+        case Cpp03Std:
+            return new TestDoubleCpp03Refactoring(cElement, selection, project);
+        case Cpp11Std:
+            return new TestDoubleCpp11Refactoring(cElement, selection, project);
+        default:
+            throw new ILTISException("Unexpected C++ standard").rethrowUnchecked();
+        }
+    }
 }

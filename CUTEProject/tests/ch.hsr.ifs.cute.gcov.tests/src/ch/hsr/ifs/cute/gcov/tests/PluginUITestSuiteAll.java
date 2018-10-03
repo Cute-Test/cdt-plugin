@@ -20,14 +20,14 @@ import junit.framework.TestSuite;
  */
 public class PluginUITestSuiteAll extends TestSuite {
 
-   public PluginUITestSuiteAll() {
-      super("All Gcov Tests");
-      addTestSuite(ModelBuilderLineParserTest.class);
-      addTestSuite(DeleteMarkersTest.class);
-   }
+    public PluginUITestSuiteAll() {
+        super("All Gcov Tests");
+        addTestSuite(ModelBuilderLineParserTest.class);
+        addTestSuite(DeleteMarkersTest.class);
+    }
 
-   public static Test suite() {
-      return new PluginUITestSuiteAll();
-   }
+    public static Test suite() {
+        return new PluginUITestSuiteAll();
+    }
 
 }

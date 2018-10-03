@@ -9,41 +9,41 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.hsr.ifs.cute.mockator.tests.CdtCppTestProject;
 import ch.hsr.ifs.cute.mockator.project.cdt.options.MacroOptionHandler;
+import ch.hsr.ifs.cute.mockator.tests.CdtCppTestProject;
 
 
 public class MacroOptionHandlerTest {
 
-   private static final String MACRO = "-PLAT=x86_64";
-   private CdtCppTestProject   project;
-   private MacroOptionHandler  handler;
+    private static final String MACRO = "-PLAT=x86_64";
+    private CdtCppTestProject   project;
+    private MacroOptionHandler  handler;
 
-   @Before
-   public void setUp() throws CoreException {
-      project = CdtCppTestProject.withOpenedProject();
-      project.addCppNatures();
-      project.activateManagedBuild();
-      handler = new MacroOptionHandler(project.getProject());
-   }
+    @Before
+    public void setUp() throws CoreException {
+        project = CdtCppTestProject.withOpenedProject();
+        project.addCppNatures();
+        project.activateManagedBuild();
+        handler = new MacroOptionHandler(project.getProject());
+    }
 
-   @After
-   public void tearDown() throws CoreException {
-      project.dispose();
-   }
+    @After
+    public void tearDown() throws CoreException {
+        project.dispose();
+    }
 
-   @Test
-   public void hasMacroAfterAdding() throws BuildException {
-      assertFalse(project.hasMacroSet(MACRO));
-      handler.addMacro(MACRO);
-      assertTrue(project.hasMacroSet(MACRO));
-   }
+    @Test
+    public void hasMacroAfterAdding() throws BuildException {
+        assertFalse(project.hasMacroSet(MACRO));
+        handler.addMacro(MACRO);
+        assertTrue(project.hasMacroSet(MACRO));
+    }
 
-   @Test
-   public void macroMissingAfterRemoval() throws BuildException {
-      handler.addMacro(MACRO);
-      assertTrue(project.hasMacroSet(MACRO));
-      handler.removeMacro(MACRO);
-      assertFalse(project.hasMacroSet(MACRO));
-   }
+    @Test
+    public void macroMissingAfterRemoval() throws BuildException {
+        handler.addMacro(MACRO);
+        assertTrue(project.hasMacroSet(MACRO));
+        handler.removeMacro(MACRO);
+        assertFalse(project.hasMacroSet(MACRO));
+    }
 }

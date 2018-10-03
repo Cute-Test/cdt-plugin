@@ -15,20 +15,20 @@ import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 
 final class RegistrationCandidatesFinder {
 
-   private final IASTTranslationUnit ast;
-   private final CppStandard         cppStd;
+    private final IASTTranslationUnit ast;
+    private final CppStandard         cppStd;
 
-   public RegistrationCandidatesFinder(final IASTTranslationUnit ast, final CppStandard cppStd) {
-      this.ast = ast;
-      this.cppStd = cppStd;
-   }
+    public RegistrationCandidatesFinder(final IASTTranslationUnit ast, final CppStandard cppStd) {
+        this.ast = ast;
+        this.cppStd = cppStd;
+    }
 
-   public MutableList<ExistingMemFunCallRegistration> findCallRegistrations(final IASTName callRegistrationVector) {
-      final IASTName[] references = ast.getReferences(callRegistrationVector.resolveBinding());
-      return getRegistrations(list(references));
-   }
+    public MutableList<ExistingMemFunCallRegistration> findCallRegistrations(final IASTName callRegistrationVector) {
+        final IASTName[] references = ast.getReferences(callRegistrationVector.resolveBinding());
+        return getRegistrations(list(references));
+    }
 
-   private MutableList<ExistingMemFunCallRegistration> getRegistrations(final List<IASTName> callRegistrations) {
-      return new CallRegistrationCollector(cppStd).getRegistrations(callRegistrations);
-   }
+    private MutableList<ExistingMemFunCallRegistration> getRegistrations(final List<IASTName> callRegistrations) {
+        return new CallRegistrationCollector(cppStd).getRegistrations(callRegistrations);
+    }
 }

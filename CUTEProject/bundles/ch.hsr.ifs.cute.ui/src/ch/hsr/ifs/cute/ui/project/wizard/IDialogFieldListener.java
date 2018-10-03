@@ -13,5 +13,5 @@ package ch.hsr.ifs.cute.ui.project.wizard;
  */
 public interface IDialogFieldListener {
 
-   void dialogFieldChanged(DialogField field);
+    void dialogFieldChanged(DialogField field);
 }

@@ -20,44 +20,47 @@ import ch.hsr.ifs.cute.mockator.project.properties.LinkedEditModeStrategy;
 
 public class DefaultArgumentCreator {
 
-   private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final CppStandard            cppStd;
-   private final LinkedEditModeStrategy linkedEdit;
+    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+    private final CppStandard            cppStd;
+    private final LinkedEditModeStrategy linkedEdit;
 
-   public DefaultArgumentCreator(final LinkedEditModeStrategy linkedEdit, final CppStandard cppStd) {
-      this.linkedEdit = linkedEdit;
-      this.cppStd = cppStd;
-   }
+    public DefaultArgumentCreator(final LinkedEditModeStrategy linkedEdit, final CppStandard cppStd) {
+        this.linkedEdit = linkedEdit;
+        this.cppStd = cppStd;
+    }
 
-   public Collection<IASTInitializerClause> createDefaultArguments(final Collection<ICPPASTParameterDeclaration> funParams) {
-      final List<IASTInitializerClause> defaultArguments = new ArrayList<>();
+    public Collection<IASTInitializerClause> createDefaultArguments(final Collection<ICPPASTParameterDeclaration> funParams) {
+        final List<IASTInitializerClause> defaultArguments = new ArrayList<>();
 
-      if (linkedEdit != LinkedEditModeStrategy.ChooseArguments) { return defaultArguments; }
+        if (linkedEdit != LinkedEditModeStrategy.ChooseArguments) {
+            return defaultArguments;
+        }
 
-      addDefaultArgs(funParams, defaultArguments);
-      return defaultArguments;
-   }
+        addDefaultArgs(funParams, defaultArguments);
+        return defaultArguments;
+    }
 
-   private void addDefaultArgs(final Collection<ICPPASTParameterDeclaration> funParams, final List<IASTInitializerClause> defaultArgs) {
-      for (final ICPPASTParameterDeclaration p : funParams) {
-         final ICPPASTDeclSpecifier returnDeclSpec = (ICPPASTDeclSpecifier) p.getDeclSpecifier().copy();
-         returnDeclSpec.setStorageClass(IASTDeclSpecifier.sc_unspecified);
-         returnDeclSpec.setConst(false);
-         removeUnsignedIfNecessary(returnDeclSpec);
-         final IASTInitializer emptyInitializer = getEmptyInitializer(cppStd);
-         final ICPPASTSimpleTypeConstructorExpression returnType = nodeFactory.newSimpleTypeConstructorExpression(returnDeclSpec, emptyInitializer);
-         defaultArgs.add(returnType);
-      }
-   }
+    private void addDefaultArgs(final Collection<ICPPASTParameterDeclaration> funParams, final List<IASTInitializerClause> defaultArgs) {
+        for (final ICPPASTParameterDeclaration p : funParams) {
+            final ICPPASTDeclSpecifier returnDeclSpec = (ICPPASTDeclSpecifier) p.getDeclSpecifier().copy();
+            returnDeclSpec.setStorageClass(IASTDeclSpecifier.sc_unspecified);
+            returnDeclSpec.setConst(false);
+            removeUnsignedIfNecessary(returnDeclSpec);
+            final IASTInitializer emptyInitializer = getEmptyInitializer(cppStd);
+            final ICPPASTSimpleTypeConstructorExpression returnType = nodeFactory.newSimpleTypeConstructorExpression(returnDeclSpec,
+                    emptyInitializer);
+            defaultArgs.add(returnType);
+        }
+    }
 
-   private static void removeUnsignedIfNecessary(final ICPPASTDeclSpecifier declSpec) {
-      // unsigned int{} is not allowed in C++
-      if (declSpec instanceof ICPPASTSimpleDeclSpecifier && ((ICPPASTSimpleDeclSpecifier) declSpec).isUnsigned()) {
-         ((ICPPASTSimpleDeclSpecifier) declSpec).setUnsigned(false);
-      }
-   }
+    private static void removeUnsignedIfNecessary(final ICPPASTDeclSpecifier declSpec) {
+        // unsigned int{} is not allowed in C++
+        if (declSpec instanceof ICPPASTSimpleDeclSpecifier && ((ICPPASTSimpleDeclSpecifier) declSpec).isUnsigned()) {
+            ((ICPPASTSimpleDeclSpecifier) declSpec).setUnsigned(false);
+        }
+    }
 
-   private static IASTInitializer getEmptyInitializer(final CppStandard cppStd) {
-      return cppStd.getEmptyInitializer();
-   }
+    private static IASTInitializer getEmptyInitializer(final CppStandard cppStd) {
+        return cppStd.getEmptyInitializer();
+    }
 }

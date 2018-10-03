@@ -8,16 +8,16 @@ import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.CDTTestingChecke
 
 public class WithArgumentDeductionTest extends CDTTestingCheckerTest {
 
-   @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
-   }
+    @Override
+    protected ProblemId getProblemId() {
+        return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
+    }
 
-   @Test
-   public void runTest() throws Throwable {
-      final int markerExpectedOnLine = 7;
-      assertMarkerLines(markerExpectedOnLine);
-      assertMarkerMessages(new String[] { "Necessary member function(s) not existing in class Fake" });
+    @Test
+    public void runTest() throws Throwable {
+        final int markerExpectedOnLine = 7;
+        assertMarkerLines(markerExpectedOnLine);
+        assertMarkerMessages(new String[] { "Necessary member function(s) not existing in class Fake" });
 
-   }
+    }
 }

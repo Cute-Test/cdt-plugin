@@ -19,47 +19,47 @@ import ch.hsr.ifs.cute.mockator.refsupport.utils.TypeCreator;
 
 public class ParameterNameFunDecorator {
 
-   private static final ICPPNodeFactory    nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final ICPPASTFunctionDeclarator function;
+    private static final ICPPNodeFactory    nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+    private final ICPPASTFunctionDeclarator function;
 
-   public ParameterNameFunDecorator(final ICPPASTFunctionDeclarator function) {
-      this.function = function;
-   }
+    public ParameterNameFunDecorator(final ICPPASTFunctionDeclarator function) {
+        this.function = function;
+    }
 
-   public void adjustParamNamesIfNecessary() {
-      final ParameterNameCreator nameCreator = getParamNameCreator();
+    public void adjustParamNamesIfNecessary() {
+        final ParameterNameCreator nameCreator = getParamNameCreator();
 
-      for (final ICPPASTParameterDeclaration param : function.getParameters()) {
-         final ICPPASTDeclarator declarator = param.getDeclarator();
-         String paramName = declarator.getName().toString();
+        for (final ICPPASTParameterDeclaration param : function.getParameters()) {
+            final ICPPASTDeclarator declarator = param.getDeclarator();
+            String paramName = declarator.getName().toString();
 
-         if (!(paramName.isEmpty() && !isVoid(param))) {
-            continue;
-         }
+            if (!(paramName.isEmpty() && !isVoid(param))) {
+                continue;
+            }
 
-         final IType type = TypeCreator.byParamDeclaration(param);
+            final IType type = TypeCreator.byParamDeclaration(param);
 
-         if (type instanceof IProblemType && isNamedSpecifier(param)) {
-            final String typeName = ((ICPPASTNamedTypeSpecifier) param.getDeclSpecifier()).getName().toString();
-            paramName = nameCreator.getParamName(typeName).toString();
-         } else {
-            paramName = nameCreator.getParamName(type).toString();
-         }
+            if (type instanceof IProblemType && isNamedSpecifier(param)) {
+                final String typeName = ((ICPPASTNamedTypeSpecifier) param.getDeclSpecifier()).getName().toString();
+                paramName = nameCreator.getParamName(typeName).toString();
+            } else {
+                paramName = nameCreator.getParamName(type).toString();
+            }
 
-         declarator.setName(nodeFactory.newName(paramName.toCharArray()));
-      }
-   }
+            declarator.setName(nodeFactory.newName(paramName.toCharArray()));
+        }
+    }
 
-   private static boolean isNamedSpecifier(final ICPPASTParameterDeclaration param) {
-      return param.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier;
-   }
+    private static boolean isNamedSpecifier(final ICPPASTParameterDeclaration param) {
+        return param.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier;
+    }
 
-   private static ParameterNameCreator getParamNameCreator() {
-      final Map<String, Boolean> nameHistory = new HashMap<>();
-      return new ParameterNameCreator(nameHistory);
-   }
+    private static ParameterNameCreator getParamNameCreator() {
+        final Map<String, Boolean> nameHistory = new HashMap<>();
+        return new ParameterNameCreator(nameHistory);
+    }
 
-   private static boolean isVoid(final ICPPASTParameterDeclaration param) {
-      return ASTUtil.isVoid(param) && param.getDeclarator().getPointerOperators().length == 0;
-   }
+    private static boolean isVoid(final ICPPASTParameterDeclaration param) {
+        return ASTUtil.isVoid(param) && param.getDeclarator().getPointerOperators().length == 0;
+    }
 }

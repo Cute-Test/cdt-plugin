@@ -22,68 +22,72 @@ import ch.hsr.ifs.cute.mockator.refsupport.lookup.NodeLookup;
 
 public class ReferencingTestFunFinder {
 
-   private final ICProject                     cProject;
-   private final ICPPASTCompositeTypeSpecifier testDouble;
+    private final ICProject                     cProject;
+    private final ICPPASTCompositeTypeSpecifier testDouble;
 
-   public ReferencingTestFunFinder(final ICProject cProject, final ICPPASTCompositeTypeSpecifier testDouble) {
-      this.cProject = cProject;
-      this.testDouble = testDouble;
-   }
+    public ReferencingTestFunFinder(final ICProject cProject, final ICPPASTCompositeTypeSpecifier testDouble) {
+        this.cProject = cProject;
+        this.testDouble = testDouble;
+    }
 
-   public Collection<ICPPASTFunctionDefinition> findByIndexLookup(final CRefactoringContext context, final IProgressMonitor pm) {
-      return filterTestFunctions(getReferencingFunctions(testDouble, context, pm));
-   }
+    public Collection<ICPPASTFunctionDefinition> findByIndexLookup(final CRefactoringContext context, final IProgressMonitor pm) {
+        return filterTestFunctions(getReferencingFunctions(testDouble, context, pm));
+    }
 
-   public Collection<ICPPASTFunctionDefinition> findInAst(final IASTTranslationUnit ast) {
-      final List<ICPPASTFunctionDefinition> functions = new ArrayList<>();
+    public Collection<ICPPASTFunctionDefinition> findInAst(final IASTTranslationUnit ast) {
+        final List<ICPPASTFunctionDefinition> functions = new ArrayList<>();
 
-      for (final IASTName astNode : ast.getReferences(testDouble.getName().resolveBinding())) {
-         final ICPPASTFunctionDefinition function = getFunctionParent(astNode);
+        for (final IASTName astNode : ast.getReferences(testDouble.getName().resolveBinding())) {
+            final ICPPASTFunctionDefinition function = getFunctionParent(astNode);
 
-         if (function != null) {
-            functions.add(function);
-         }
-      }
+            if (function != null) {
+                functions.add(function);
+            }
+        }
 
-      return filterTestFunctions(functions);
-   }
+        return filterTestFunctions(functions);
+    }
 
-   public Collection<ICPPASTFunctionDefinition> filterTestFunctions(final Collection<ICPPASTFunctionDefinition> functions) {
-      final List<ICPPASTFunctionDefinition> testFunctions = functions.stream().filter((function) -> isValidTestFunction(function)).collect(Collectors
-            .toList());
-      addContainingFunctionIfNecessary(testFunctions);
-      return testFunctions;
-   }
+    public Collection<ICPPASTFunctionDefinition> filterTestFunctions(final Collection<ICPPASTFunctionDefinition> functions) {
+        final List<ICPPASTFunctionDefinition> testFunctions = functions.stream().filter((function) -> isValidTestFunction(function)).collect(
+                Collectors.toList());
+        addContainingFunctionIfNecessary(testFunctions);
+        return testFunctions;
+    }
 
-   private Collection<ICPPASTFunctionDefinition> getReferencingFunctions(final ICPPASTCompositeTypeSpecifier testDouble,
-         final CRefactoringContext context, final IProgressMonitor pm) {
-      final NodeLookup lookup = new NodeLookup(cProject, pm);
-      return lookup.findReferencingFunctions(testDouble.getName(), context);
-   }
+    private Collection<ICPPASTFunctionDefinition> getReferencingFunctions(final ICPPASTCompositeTypeSpecifier testDouble,
+            final CRefactoringContext context, final IProgressMonitor pm) {
+        final NodeLookup lookup = new NodeLookup(cProject, pm);
+        return lookup.findReferencingFunctions(testDouble.getName(), context);
+    }
 
-   private void addContainingFunctionIfNecessary(final List<ICPPASTFunctionDefinition> testFunctions) {
-      if (!testFunctions.isEmpty()) { return; }
+    private void addContainingFunctionIfNecessary(final List<ICPPASTFunctionDefinition> testFunctions) {
+        if (!testFunctions.isEmpty()) {
+            return;
+        }
 
-      final ICPPASTFunctionDefinition testFunction = getContainingTestFunction(testDouble);
+        final ICPPASTFunctionDefinition testFunction = getContainingTestFunction(testDouble);
 
-      if (testFunction != null) {
-         testFunctions.add(testFunction);
-      }
-   }
+        if (testFunction != null) {
+            testFunctions.add(testFunction);
+        }
+    }
 
-   private ICPPASTFunctionDefinition getContainingTestFunction(final ICPPASTCompositeTypeSpecifier testDouble) {
-      final ICPPASTFunctionDefinition containedFunction = getFunctionParent(testDouble);
+    private ICPPASTFunctionDefinition getContainingTestFunction(final ICPPASTCompositeTypeSpecifier testDouble) {
+        final ICPPASTFunctionDefinition containedFunction = getFunctionParent(testDouble);
 
-      if (containedFunction != null && isValidTestFunction(containedFunction)) { return containedFunction; }
+        if (containedFunction != null && isValidTestFunction(containedFunction)) {
+            return containedFunction;
+        }
 
-      return null;
-   }
+        return null;
+    }
 
-   private boolean isValidTestFunction(final ICPPASTFunctionDefinition function) {
-      return FunctionsToAnalyze.fromProjectSettings(cProject.getProject()).shouldConsider(function);
-   }
+    private boolean isValidTestFunction(final ICPPASTFunctionDefinition function) {
+        return FunctionsToAnalyze.fromProjectSettings(cProject.getProject()).shouldConsider(function);
+    }
 
-   private static ICPPASTFunctionDefinition getFunctionParent(final IASTNode astNode) {
-      return CPPVisitor.findAncestorWithType(astNode, ICPPASTFunctionDefinition.class).orElse(null);
-   }
+    private static ICPPASTFunctionDefinition getFunctionParent(final IASTNode astNode) {
+        return CPPVisitor.findAncestorWithType(astNode, ICPPASTFunctionDefinition.class).orElse(null);
+    }
 }

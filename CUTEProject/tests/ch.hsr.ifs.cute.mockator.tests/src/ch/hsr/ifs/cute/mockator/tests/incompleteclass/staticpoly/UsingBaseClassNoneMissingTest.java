@@ -10,13 +10,13 @@ import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.CDTTestingChecke
 
 public class UsingBaseClassNoneMissingTest extends CDTTestingCheckerTest {
 
-   @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
-   }
+    @Override
+    protected ProblemId getProblemId() {
+        return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
+    }
 
-   @Test
-   public void runTest() throws Throwable {
-      assertTrue(findMarkers().length == 0);
-   }
+    @Test
+    public void runTest() throws Throwable {
+        assertTrue(findMarkers().length == 0);
+    }
 }

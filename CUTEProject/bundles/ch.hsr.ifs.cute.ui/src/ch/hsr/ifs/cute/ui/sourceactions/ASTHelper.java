@@ -44,332 +44,343 @@ import org.eclipse.core.runtime.Path;
 
 public class ASTHelper {
 
-   private static final String EMPTY_STRING = "";
+    private static final String EMPTY_STRING = "";
 
-   public static String getClassStructName(IASTSimpleDeclaration simpleDeclaration) {
-      IASTDeclSpecifier declspecifier = simpleDeclaration.getDeclSpecifier();
-      if (declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier) { return ((ICPPASTCompositeTypeSpecifier) declspecifier)
-            .getName().toString(); }
-      return EMPTY_STRING;
-   }
+    public static String getClassStructName(IASTSimpleDeclaration simpleDeclaration) {
+        IASTDeclSpecifier declspecifier = simpleDeclaration.getDeclSpecifier();
+        if (declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier) {
+            return ((ICPPASTCompositeTypeSpecifier) declspecifier).getName().toString();
+        }
+        return EMPTY_STRING;
+    }
 
-   public static String getMethodName(IASTDeclaration declaration) {
-      if (declaration instanceof IASTFunctionDefinition) {
-         IASTFunctionDefinition fd = (IASTFunctionDefinition) declaration;
-         IASTFunctionDeclarator fdd = fd.getDeclarator();
-         String fname = fdd.getName().toString();
-         return fname;
-      } else if (declaration instanceof IASTSimpleDeclaration) {
-         IASTSimpleDeclaration sd = (IASTSimpleDeclaration) declaration;
-         IASTDeclarator sdd[] = sd.getDeclarators();
-         if (sdd.length == 0) return EMPTY_STRING;
-         String sname = sdd[0].getName().toString();
-         return sname;
-      }
-      return EMPTY_STRING;
-   }
-
-   public static ArrayList<IASTDeclaration> getConstructors(IASTCompositeTypeSpecifier typeNode) {
-      ArrayList<IASTDeclaration> result = new ArrayList<>();
-
-      String className = typeNode.getName().toString();
-      IASTDeclaration members[] = typeNode.getMembers();
-      for (IASTDeclaration member : members) {
-         if (member instanceof IASTFunctionDefinition) {
-            IASTFunctionDefinition fd = (IASTFunctionDefinition) member;
+    public static String getMethodName(IASTDeclaration declaration) {
+        if (declaration instanceof IASTFunctionDefinition) {
+            IASTFunctionDefinition fd = (IASTFunctionDefinition) declaration;
             IASTFunctionDeclarator fdd = fd.getDeclarator();
             String fname = fdd.getName().toString();
-            if (fname.equals(className)) result.add(fd);
-         } else if (member instanceof IASTSimpleDeclaration) {
-            IASTSimpleDeclaration sd = (IASTSimpleDeclaration) member;
+            return fname;
+        } else if (declaration instanceof IASTSimpleDeclaration) {
+            IASTSimpleDeclaration sd = (IASTSimpleDeclaration) declaration;
             IASTDeclarator sdd[] = sd.getDeclarators();
-            if (sdd.length == 0) continue;
+            if (sdd.length == 0) return EMPTY_STRING;
             String sname = sdd[0].getName().toString();
-            if (sname.equals(className)) result.add(sd);
-         }
-      }
-      return result;
-   }
+            return sname;
+        }
+        return EMPTY_STRING;
+    }
 
-   public static boolean haveParameters(IASTDeclaration i) {
-      try {
-         if (i instanceof IASTFunctionDefinition) {
-            IASTFunctionDefinition fd = (IASTFunctionDefinition) i;
-            ICPPASTFunctionDeclarator fdd = (ICPPASTFunctionDeclarator) fd.getDeclarator();
-            IASTParameterDeclaration fpara[] = fdd.getParameters();
-            if (fdd.takesVarArgs() || fpara.length > 0) return true;
-         } else if (i instanceof IASTSimpleDeclaration) {
-            IASTSimpleDeclaration sd = (IASTSimpleDeclaration) i;
-            IASTDeclarator sdd[] = sd.getDeclarators();
+    public static ArrayList<IASTDeclaration> getConstructors(IASTCompositeTypeSpecifier typeNode) {
+        ArrayList<IASTDeclaration> result = new ArrayList<>();
 
-            for (int j = 0; j < sdd.length; j++) {
-               if (!(sdd[j] instanceof ICPPASTFunctionDeclarator)) continue;
-               // insert test case
-               ICPPASTFunctionDeclarator fd = (ICPPASTFunctionDeclarator) sdd[j];
-               IASTParameterDeclaration fpara[] = fd.getParameters();
-               if (fd.takesVarArgs() || fpara != null && fpara.length > 0) return true;
+        String className = typeNode.getName().toString();
+        IASTDeclaration members[] = typeNode.getMembers();
+        for (IASTDeclaration member : members) {
+            if (member instanceof IASTFunctionDefinition) {
+                IASTFunctionDefinition fd = (IASTFunctionDefinition) member;
+                IASTFunctionDeclarator fdd = fd.getDeclarator();
+                String fname = fdd.getName().toString();
+                if (fname.equals(className)) result.add(fd);
+            } else if (member instanceof IASTSimpleDeclaration) {
+                IASTSimpleDeclaration sd = (IASTSimpleDeclaration) member;
+                IASTDeclarator sdd[] = sd.getDeclarators();
+                if (sdd.length == 0) continue;
+                String sname = sdd[0].getName().toString();
+                if (sname.equals(className)) result.add(sd);
             }
-         }
-      } catch (ClassCastException cce) {
-         return false;
-      }
-      return false;
-   }
+        }
+        return result;
+    }
 
-   public static boolean haveParameters(ArrayList<IASTDeclaration> al) {
-      for (IASTDeclaration i : al) {
-         if (haveParameters(i)) { return true; }
-      }
-      return false;
-   }
+    public static boolean haveParameters(IASTDeclaration i) {
+        try {
+            if (i instanceof IASTFunctionDefinition) {
+                IASTFunctionDefinition fd = (IASTFunctionDefinition) i;
+                ICPPASTFunctionDeclarator fdd = (ICPPASTFunctionDeclarator) fd.getDeclarator();
+                IASTParameterDeclaration fpara[] = fdd.getParameters();
+                if (fdd.takesVarArgs() || fpara.length > 0) return true;
+            } else if (i instanceof IASTSimpleDeclaration) {
+                IASTSimpleDeclaration sd = (IASTSimpleDeclaration) i;
+                IASTDeclarator sdd[] = sd.getDeclarators();
 
-   public static ArrayList<IASTDeclaration> getParameterlessMethods(ArrayList<IASTDeclaration> al) {
-      ArrayList<IASTDeclaration> result = new ArrayList<>();
+                for (int j = 0; j < sdd.length; j++) {
+                    if (!(sdd[j] instanceof ICPPASTFunctionDeclarator)) continue;
+                    // insert test case
+                    ICPPASTFunctionDeclarator fd = (ICPPASTFunctionDeclarator) sdd[j];
+                    IASTParameterDeclaration fpara[] = fd.getParameters();
+                    if (fd.takesVarArgs() || fpara != null && fpara.length > 0) return true;
+                }
+            }
+        } catch (ClassCastException cce) {
+            return false;
+        }
+        return false;
+    }
 
-      for (IASTDeclaration i : al) {
-         if (!haveParameters(i)) result.add(i);
-      }
-      return result;
-   }
+    public static boolean haveParameters(ArrayList<IASTDeclaration> al) {
+        for (IASTDeclaration i : al) {
+            if (haveParameters(i)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-   public static boolean isVoid(IASTDeclaration i) {
-      boolean result = false;
+    public static ArrayList<IASTDeclaration> getParameterlessMethods(ArrayList<IASTDeclaration> al) {
+        ArrayList<IASTDeclaration> result = new ArrayList<>();
 
-      try {
-         if (i instanceof IASTFunctionDefinition) {
-            IASTFunctionDefinition fd = (IASTFunctionDefinition) i;
-            IASTSimpleDeclSpecifier specifier = (IASTSimpleDeclSpecifier) fd.getDeclSpecifier();
-            if (specifier.getType() == IASTSimpleDeclSpecifier.t_void) result = true;
-         } else if (i instanceof IASTSimpleDeclaration) {
-            IASTSimpleDeclaration sd = (IASTSimpleDeclaration) i;
-            // CPPASTNamedTypeSpecifier returned via getDeclSpecifier?
-            IASTSimpleDeclSpecifier specifier = (IASTSimpleDeclSpecifier) sd.getDeclSpecifier();
-            if (specifier.getType() == IASTSimpleDeclSpecifier.t_void) result = true;
-         }
-      } catch (ClassCastException cce) {
-         return false;
-      }
+        for (IASTDeclaration i : al) {
+            if (!haveParameters(i)) result.add(i);
+        }
+        return result;
+    }
 
-      return result;
-   }
+    public static boolean isVoid(IASTDeclaration i) {
+        boolean result = false;
 
-   public static ArrayList<IASTDeclaration> removeVoidMethods(ArrayList<IASTDeclaration> member) {
-      return scanVoidMethods(member, false);
-   }
+        try {
+            if (i instanceof IASTFunctionDefinition) {
+                IASTFunctionDefinition fd = (IASTFunctionDefinition) i;
+                IASTSimpleDeclSpecifier specifier = (IASTSimpleDeclSpecifier) fd.getDeclSpecifier();
+                if (specifier.getType() == IASTSimpleDeclSpecifier.t_void) result = true;
+            } else if (i instanceof IASTSimpleDeclaration) {
+                IASTSimpleDeclaration sd = (IASTSimpleDeclaration) i;
+                // CPPASTNamedTypeSpecifier returned via getDeclSpecifier?
+                IASTSimpleDeclSpecifier specifier = (IASTSimpleDeclSpecifier) sd.getDeclSpecifier();
+                if (specifier.getType() == IASTSimpleDeclSpecifier.t_void) result = true;
+            }
+        } catch (ClassCastException cce) {
+            return false;
+        }
 
-   public static ArrayList<IASTDeclaration> getVoidMethods(ArrayList<IASTDeclaration> member) {
-      return scanVoidMethods(member, true);
-   }
+        return result;
+    }
 
-   private static ArrayList<IASTDeclaration> scanVoidMethods(ArrayList<IASTDeclaration> member, boolean flag) {
-      ArrayList<IASTDeclaration> result = new ArrayList<>();
+    public static ArrayList<IASTDeclaration> removeVoidMethods(ArrayList<IASTDeclaration> member) {
+        return scanVoidMethods(member, false);
+    }
 
-      for (IASTDeclaration simpleDeclaration : member) {
-         if (isVoid(simpleDeclaration) == flag) result.add(simpleDeclaration);
-      }
+    public static ArrayList<IASTDeclaration> getVoidMethods(ArrayList<IASTDeclaration> member) {
+        return scanVoidMethods(member, true);
+    }
 
-      return result;
-   }
+    private static ArrayList<IASTDeclaration> scanVoidMethods(ArrayList<IASTDeclaration> member, boolean flag) {
+        ArrayList<IASTDeclaration> result = new ArrayList<>();
 
-   public static ArrayList<IASTDeclaration> getPublicMethods(IASTSimpleDeclaration cppClass) {
+        for (IASTDeclaration simpleDeclaration : member) {
+            if (isVoid(simpleDeclaration) == flag) result.add(simpleDeclaration);
+        }
 
-      final ArrayList<IASTDeclaration> result = new ArrayList<>();
-      final IASTDeclSpecifier declspecifier = cppClass.getDeclSpecifier();
+        return result;
+    }
 
-      if (declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier) {
-         final ICPPASTCompositeTypeSpecifier cts = (ICPPASTCompositeTypeSpecifier) declspecifier;
-         final String className = cts.getName().toString();
-         boolean ispublicVisibility = false;
-         if (cts.getKey() == IASTCompositeTypeSpecifier.k_struct) ispublicVisibility = true;
-         else if (cts.getKey() == ICPPASTCompositeTypeSpecifier.k_class) ispublicVisibility = false;
-         else {
-            // TODO consider error handing
-            return result;
-         }
+    public static ArrayList<IASTDeclaration> getPublicMethods(IASTSimpleDeclaration cppClass) {
 
-         final IASTDeclaration members[] = cts.getMembers();
-         for (IASTDeclaration member : members) {
-            if (member instanceof ICPPASTVisibilityLabel) {
-               ispublicVisibility = changeVisibilityMode((ICPPASTVisibilityLabel) member);
-               continue;
+        final ArrayList<IASTDeclaration> result = new ArrayList<>();
+        final IASTDeclSpecifier declspecifier = cppClass.getDeclSpecifier();
+
+        if (declspecifier != null && declspecifier instanceof ICPPASTCompositeTypeSpecifier) {
+            final ICPPASTCompositeTypeSpecifier cts = (ICPPASTCompositeTypeSpecifier) declspecifier;
+            final String className = cts.getName().toString();
+            boolean ispublicVisibility = false;
+            if (cts.getKey() == IASTCompositeTypeSpecifier.k_struct)
+                ispublicVisibility = true;
+            else if (cts.getKey() == ICPPASTCompositeTypeSpecifier.k_class)
+                ispublicVisibility = false;
+            else {
+                // TODO consider error handing
+                return result;
             }
 
-            if (!ispublicVisibility) continue;
+            final IASTDeclaration members[] = cts.getMembers();
+            for (IASTDeclaration member : members) {
+                if (member instanceof ICPPASTVisibilityLabel) {
+                    ispublicVisibility = changeVisibilityMode((ICPPASTVisibilityLabel) member);
+                    continue;
+                }
 
-            String methodName = EMPTY_STRING;
-            if (member instanceof IASTSimpleDeclaration) {
-               IASTSimpleDeclaration simpleDeclaration1 = (IASTSimpleDeclaration) member;
-               IASTDeclarator declarator[] = simpleDeclaration1.getDeclarators();
-               if (declarator != null && declarator.length > 0) methodName = declarator[0].getName().toString();
+                if (!ispublicVisibility) continue;
 
-            } else if (member instanceof IASTFunctionDefinition) {
-               IASTFunctionDefinition funcdef = (IASTFunctionDefinition) member;
-               IASTFunctionDeclarator funcdeclarator = funcdef.getDeclarator();
-               methodName = funcdeclarator.getName().toString();
+                String methodName = EMPTY_STRING;
+                if (member instanceof IASTSimpleDeclaration) {
+                    IASTSimpleDeclaration simpleDeclaration1 = (IASTSimpleDeclaration) member;
+                    IASTDeclarator declarator[] = simpleDeclaration1.getDeclarators();
+                    if (declarator != null && declarator.length > 0) methodName = declarator[0].getName().toString();
+
+                } else if (member instanceof IASTFunctionDefinition) {
+                    IASTFunctionDefinition funcdef = (IASTFunctionDefinition) member;
+                    IASTFunctionDeclarator funcdeclarator = funcdef.getDeclarator();
+                    methodName = funcdeclarator.getName().toString();
+                }
+                if (methodName.isEmpty()) continue;
+                if (className.equals(methodName)) continue;// constructor
+
+                result.add(member);
             }
-            if (methodName.isEmpty()) continue;
-            if (className.equals(methodName)) continue;// constructor
+        }
+        return result;
+    }
 
-            result.add(member);
-         }
-      }
-      return result;
-   }
+    private static boolean changeVisibilityMode(ICPPASTVisibilityLabel node) {
+        final int visbility = node.getVisibility();
+        return visbility == ICPPASTVisibilityLabel.v_public;
+    }
 
-   private static boolean changeVisibilityMode(ICPPASTVisibilityLabel node) {
-      final int visbility = node.getVisibility();
-      return visbility == ICPPASTVisibilityLabel.v_public;
-   }
+    public static ArrayList<IASTSimpleDeclaration> removeTemplateClasses(ArrayList<IASTSimpleDeclaration> cppClassStruct) {
+        ArrayList<IASTSimpleDeclaration> result = new ArrayList<>();
 
-   public static ArrayList<IASTSimpleDeclaration> removeTemplateClasses(ArrayList<IASTSimpleDeclaration> cppClassStruct) {
-      ArrayList<IASTSimpleDeclaration> result = new ArrayList<>();
+        for (IASTSimpleDeclaration simpleDeclaration : cppClassStruct) {
+            if (simpleDeclaration.getParent() instanceof ICPPASTTemplateDeclaration) continue;
+            result.add(simpleDeclaration);
+        }
+        return result;
+    }
 
-      for (IASTSimpleDeclaration simpleDeclaration : cppClassStruct) {
-         if (simpleDeclaration.getParent() instanceof ICPPASTTemplateDeclaration) continue;
-         result.add(simpleDeclaration);
-      }
-      return result;
-   }
+    public static ArrayList<IASTDeclaration> getStaticMethods(ArrayList<IASTDeclaration> member) {
+        ArrayList<IASTDeclaration> result = new ArrayList<>();
 
-   public static ArrayList<IASTDeclaration> getStaticMethods(ArrayList<IASTDeclaration> member) {
-      ArrayList<IASTDeclaration> result = new ArrayList<>();
+        for (IASTDeclaration m : member) {
+            if (m instanceof IASTSimpleDeclaration) {
+                IASTSimpleDeclaration simpleDeclaration1 = (IASTSimpleDeclaration) m;
+                IASTDeclSpecifier specifier = simpleDeclaration1.getDeclSpecifier();
+                if (specifier.getStorageClass() == IASTDeclSpecifier.sc_static) result.add(m);
+            } else if (m instanceof IASTFunctionDefinition) {
+                IASTFunctionDefinition funcdef = (IASTFunctionDefinition) m;
+                IASTDeclSpecifier specifier = funcdef.getDeclSpecifier();
+                if (specifier.getStorageClass() == IASTDeclSpecifier.sc_static) result.add(m);
+            }
+        }
+        return result;
+    }
 
-      for (IASTDeclaration m : member) {
-         if (m instanceof IASTSimpleDeclaration) {
-            IASTSimpleDeclaration simpleDeclaration1 = (IASTSimpleDeclaration) m;
-            IASTDeclSpecifier specifier = simpleDeclaration1.getDeclSpecifier();
-            if (specifier.getStorageClass() == IASTDeclSpecifier.sc_static) result.add(m);
-         } else if (m instanceof IASTFunctionDefinition) {
-            IASTFunctionDefinition funcdef = (IASTFunctionDefinition) m;
-            IASTDeclSpecifier specifier = funcdef.getDeclSpecifier();
-            if (specifier.getStorageClass() == IASTDeclSpecifier.sc_static) result.add(m);
-         }
-      }
-      return result;
-   }
+    public static ArrayList<IASTDeclaration> getNonStaticMethods(ArrayList<IASTDeclaration> member) {
+        ArrayList<IASTDeclaration> result = new ArrayList<>();
 
-   public static ArrayList<IASTDeclaration> getNonStaticMethods(ArrayList<IASTDeclaration> member) {
-      ArrayList<IASTDeclaration> result = new ArrayList<>();
+        for (IASTDeclaration m : member) {
+            IASTDeclSpecifier specifier = null;;
+            if (m instanceof IASTSimpleDeclaration) {
+                IASTSimpleDeclaration simpleDeclaration1 = (IASTSimpleDeclaration) m;
+                specifier = simpleDeclaration1.getDeclSpecifier();
+            } else if (m instanceof IASTFunctionDefinition) {
+                IASTFunctionDefinition funcdef = (IASTFunctionDefinition) m;
+                specifier = funcdef.getDeclSpecifier();
+            }
+            if (specifier != null && specifier.getStorageClass() != IASTDeclSpecifier.sc_static) result.add(m);
+        }
 
-      for (IASTDeclaration m : member) {
-         IASTDeclSpecifier specifier = null;;
-         if (m instanceof IASTSimpleDeclaration) {
-            IASTSimpleDeclaration simpleDeclaration1 = (IASTSimpleDeclaration) m;
-            specifier = simpleDeclaration1.getDeclSpecifier();
-         } else if (m instanceof IASTFunctionDefinition) {
-            IASTFunctionDefinition funcdef = (IASTFunctionDefinition) m;
-            specifier = funcdef.getDeclSpecifier();
-         }
-         if (specifier != null && specifier.getStorageClass() != IASTDeclSpecifier.sc_static) result.add(m);
-      }
+        return result;
+    }
 
-      return result;
-   }
+    // remove the primitives variables
+    public static ArrayList<IASTSimpleDeclaration> getClassStructVariables(ArrayList<IASTSimpleDeclaration> variablesList) {
+        ArrayList<IASTSimpleDeclaration> result = new ArrayList<>();
 
-   // remove the primitives variables
-   public static ArrayList<IASTSimpleDeclaration> getClassStructVariables(ArrayList<IASTSimpleDeclaration> variablesList) {
-      ArrayList<IASTSimpleDeclaration> result = new ArrayList<>();
+        for (IASTSimpleDeclaration i : variablesList) {
+            if (i.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier) {
+                result.add(i);
+            }
+        }
 
-      for (IASTSimpleDeclaration i : variablesList) {
-         if (i.getDeclSpecifier() instanceof ICPPASTNamedTypeSpecifier) {
-            result.add(i);
-         }
-      }
+        return result;
+    }
 
-      return result;
-   }
+    public static String getVariableName(IASTSimpleDeclaration variable) {
+        IASTDeclarator declarators[] = variable.getDeclarators();
+        if (declarators != null && declarators.length > 0) {
+            return declarators[0].getName().toString();
+        }
+        return EMPTY_STRING;
+    }
 
-   public static String getVariableName(IASTSimpleDeclaration variable) {
-      IASTDeclarator declarators[] = variable.getDeclarators();
-      if (declarators != null && declarators.length > 0) { return declarators[0].getName().toString(); }
-      return EMPTY_STRING;
-   }
+    public static boolean isUnion(IASTDeclaration variable) {
+        if (variable instanceof IASTSimpleDeclaration) {
+            IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration) variable;
+            IASTDeclSpecifier specifier = simpleDeclaration.getDeclSpecifier();
+            if (specifier instanceof IASTCompositeTypeSpecifier) {
+                IASTCompositeTypeSpecifier cts = (IASTCompositeTypeSpecifier) specifier;
+                if (cts.getKey() == IASTCompositeTypeSpecifier.k_union) return true;
+            }
+        }
+        return false;
+    }
 
-   public static boolean isUnion(IASTDeclaration variable) {
-      if (variable instanceof IASTSimpleDeclaration) {
-         IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration) variable;
-         IASTDeclSpecifier specifier = simpleDeclaration.getDeclSpecifier();
-         if (specifier instanceof IASTCompositeTypeSpecifier) {
-            IASTCompositeTypeSpecifier cts = (IASTCompositeTypeSpecifier) specifier;
-            if (cts.getKey() == IASTCompositeTypeSpecifier.k_union) return true;
-         }
-      }
-      return false;
-   }
+    public static ArrayList<IASTDeclaration> removeUnion(ArrayList<IASTDeclaration> variablesList) {
+        ArrayList<IASTDeclaration> result = new ArrayList<>();
 
-   public static ArrayList<IASTDeclaration> removeUnion(ArrayList<IASTDeclaration> variablesList) {
-      ArrayList<IASTDeclaration> result = new ArrayList<>();
+        for (IASTDeclaration i : variablesList) {
+            if (!isUnion(i)) {
+                result.add(i);
+            }
+        }
 
-      for (IASTDeclaration i : variablesList) {
-         if (!isUnion(i)) {
-            result.add(i);
-         }
-      }
+        return result;
+    }
 
-      return result;
-   }
+    public static boolean isOperator(IASTSimpleDeclaration variable) {
+        if (getVariableName(variable).equals(Messages.getString("ASTHelper.Operator"))) return true;
+        return false;
+    }
 
-   public static boolean isOperator(IASTSimpleDeclaration variable) {
-      if (getVariableName(variable).equals(Messages.getString("ASTHelper.Operator"))) return true;
-      return false;
-   }
+    public static boolean isOperator(IASTFunctionDefinition variable) {
+        IASTFunctionDeclarator declarator = variable.getDeclarator();
+        if (declarator.getName().toString().equals(Messages.getString("ASTHelper.Operator"))) return true;
+        return false;
+    }
 
-   public static boolean isOperator(IASTFunctionDefinition variable) {
-      IASTFunctionDeclarator declarator = variable.getDeclarator();
-      if (declarator.getName().toString().equals(Messages.getString("ASTHelper.Operator"))) return true;
-      return false;
-   }
+    public static ArrayList<IASTDeclaration> removeOperator(ArrayList<IASTDeclaration> variablesList) {
+        ArrayList<IASTDeclaration> result = new ArrayList<>();
 
-   public static ArrayList<IASTDeclaration> removeOperator(ArrayList<IASTDeclaration> variablesList) {
-      ArrayList<IASTDeclaration> result = new ArrayList<>();
+        for (IASTDeclaration m : variablesList) {
+            if (m instanceof IASTSimpleDeclaration) {
+                IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration) m;
+                if (!isOperator(simpleDeclaration)) result.add(m);
 
-      for (IASTDeclaration m : variablesList) {
-         if (m instanceof IASTSimpleDeclaration) {
-            IASTSimpleDeclaration simpleDeclaration = (IASTSimpleDeclaration) m;
-            if (!isOperator(simpleDeclaration)) result.add(m);
+            } else if (m instanceof IASTFunctionDefinition) {
+                IASTFunctionDefinition funcdef = (IASTFunctionDefinition) m;
+                if (!isOperator(funcdef)) result.add(m);
+            }
+        }
+        return result;
+    }
 
-         } else if (m instanceof IASTFunctionDefinition) {
-            IASTFunctionDefinition funcdef = (IASTFunctionDefinition) m;
-            if (!isOperator(funcdef)) result.add(m);
-         }
-      }
-      return result;
-   }
+    @SuppressWarnings("unchecked")
+    public static <T extends IASTNode> T findParentOfType(Class<T> klass, IASTNode node) {
+        while (node != null) {
+            if (klass.isInstance(node)) {
+                return (T) node; // here an unchecked warning is generated
+                                 // because the code 'node instanceof T' is
+                                 // not valid as condition in the
+                                 // previous line.
+            }
+            node = node.getParent();
+        }
+        return null;
+    }
 
-   @SuppressWarnings("unchecked")
-   public static <T extends IASTNode> T findParentOfType(Class<T> klass, IASTNode node) {
-      while (node != null) {
-         if (klass.isInstance(node)) { return (T) node; // here an unchecked warning is generated
-                                                        // because the code 'node instanceof T' is
-                                                        // not valid as condition in the
-                                                        // previous line.
-         }
-         node = node.getParent();
-      }
-      return null;
-   }
+    public static boolean isFunctor(IASTFunctionDeclarator functionDeclarator) {
+        IASTName name = functionDeclarator.getName();
+        if (name instanceof ICPPASTQualifiedName) {
+            name = name.getLastName();
+        }
+        return name instanceof ICPPASTOperatorName;
+    }
 
-   public static boolean isFunctor(IASTFunctionDeclarator functionDeclarator) {
-      IASTName name = functionDeclarator.getName();
-      if (name instanceof ICPPASTQualifiedName) {
-         name = name.getLastName();
-      }
-      return name instanceof ICPPASTOperatorName;
-   }
+    public static ITranslationUnit getTranslationUnitFromIndexName(final IIndexName indexName) throws CoreException {
+        final ICProject cProject = findProject(indexName);
+        return CoreModelUtil.findTranslationUnitForLocation(indexName.getFile().getLocation(), cProject);
+    }
 
-   public static ITranslationUnit getTranslationUnitFromIndexName(final IIndexName indexName) throws CoreException {
-      final ICProject cProject = findProject(indexName);
-      return CoreModelUtil.findTranslationUnitForLocation(indexName.getFile().getLocation(), cProject);
-   }
-
-   public static ICProject findProject(final IIndexName indexName) throws CoreException {
-      final IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
-      final IPath path = new Path(indexName.getFile().getLocation().toString());
-      final IFile file = workspace.getFile(path);
-      if (file == null || !file.exists()) { return null; // TODO: sensible message
-      }
-      final IProject project = file.getProject();
-      if (project == null) { return null; }
-      return CoreModel.getDefault().create(project);
-   }
+    public static ICProject findProject(final IIndexName indexName) throws CoreException {
+        final IWorkspaceRoot workspace = ResourcesPlugin.getWorkspace().getRoot();
+        final IPath path = new Path(indexName.getFile().getLocation().toString());
+        final IFile file = workspace.getFile(path);
+        if (file == null || !file.exists()) {
+            return null; // TODO: sensible message
+        }
+        final IProject project = file.getProject();
+        if (project == null) {
+            return null;
+        }
+        return CoreModel.getDefault().create(project);
+    }
 }

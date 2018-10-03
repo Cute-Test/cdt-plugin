@@ -27,63 +27,65 @@ import ch.hsr.ifs.cute.mockator.incompleteclass.StaticPolyMissingMemFun;
 @SuppressWarnings("restriction")
 abstract class MissingMemFunVisitor extends ASTVisitor {
 
-   protected final ICPPASTTemplateDeclaration  sut;
-   protected final IType                       templateParamType;
-   private final ICPPASTCompositeTypeSpecifier testDouble;
+    protected final ICPPASTTemplateDeclaration  sut;
+    protected final IType                       templateParamType;
+    private final ICPPASTCompositeTypeSpecifier testDouble;
 
-   public MissingMemFunVisitor(final ICPPASTCompositeTypeSpecifier testDouble, final ICPPASTTemplateParameter templateParam,
-                               final ICPPASTTemplateDeclaration sut) {
-      this.testDouble = testDouble;
-      this.sut = sut;
-      templateParamType = getType(templateParam);
-   }
+    public MissingMemFunVisitor(final ICPPASTCompositeTypeSpecifier testDouble, final ICPPASTTemplateParameter templateParam,
+                                final ICPPASTTemplateDeclaration sut) {
+        this.testDouble = testDouble;
+        this.sut = sut;
+        templateParamType = getType(templateParam);
+    }
 
-   private static IType getType(final ICPPASTTemplateParameter param) {
-      final IASTName name = ((ICPPASTSimpleTypeTemplateParameter) param).getName();
-      return (IType) name.resolveBinding();
-   }
+    private static IType getType(final ICPPASTTemplateParameter param) {
+        final IASTName name = ((ICPPASTSimpleTypeTemplateParameter) param).getName();
+        return (IType) name.resolveBinding();
+    }
 
-   protected String getTemplateParamName() {
-      return ((ICPPTemplateParameter) templateParamType).getName();
-   }
+    protected String getTemplateParamName() {
+        return ((ICPPTemplateParameter) templateParamType).getName();
+    }
 
-   protected String getTestDoubleName() {
-      return testDouble.getName().toString();
-   }
+    protected String getTestDoubleName() {
+        return testDouble.getName().toString();
+    }
 
-   protected boolean resolvesToTemplateParam(final IType type) {
-      final IType resolvedType = CxxAstUtils.unwindTypedef(type);
-      IType unwoundType = ASTUtil.unwindPointerOrRefType(resolvedType);
+    protected boolean resolvesToTemplateParam(final IType type) {
+        final IType resolvedType = CxxAstUtils.unwindTypedef(type);
+        IType unwoundType = ASTUtil.unwindPointerOrRefType(resolvedType);
 
-      if (unwoundType == null) { return false; }
+        if (unwoundType == null) {
+            return false;
+        }
 
-      if (unwoundType instanceof TypeOfDependentExpression) {
-         final ICPPEvaluation evaluation = ((TypeOfDependentExpression) unwoundType).getEvaluation();
-         if (evaluation instanceof EvalTypeId) {
-            unwoundType = ((EvalTypeId) evaluation).getInputType();
-         }
-      }
+        if (unwoundType instanceof TypeOfDependentExpression) {
+            final ICPPEvaluation evaluation = ((TypeOfDependentExpression) unwoundType).getEvaluation();
+            if (evaluation instanceof EvalTypeId) {
+                unwoundType = ((EvalTypeId) evaluation).getInputType();
+            }
+        }
 
-      return ASTUtil.isSameType(unwoundType, templateParamType);
-   }
+        return ASTUtil.isSameType(unwoundType, templateParamType);
+    }
 
-   protected IType resolveTypeOfDependentExpression(final TypeOfDependentExpression type) {
-      IType evalType = type.getEvaluation().getType();
-      final ICPPEvaluation evaluation = ((TypeOfDependentExpression) evalType).getEvaluation();
+    protected IType resolveTypeOfDependentExpression(final TypeOfDependentExpression type) {
+        IType evalType = type.getEvaluation().getType();
+        final ICPPEvaluation evaluation = ((TypeOfDependentExpression) evalType).getEvaluation();
 
-      if (evaluation instanceof EvalMemberAccess) {
-         final IBinding binding = ((EvalMemberAccess) evaluation).getMember();
+        if (evaluation instanceof EvalMemberAccess) {
+            final IBinding binding = ((EvalMemberAccess) evaluation).getMember();
 
-         if (binding instanceof CPPField) {
-            evalType = ((CPPField) binding).getType();
-         }
-      } else if (evaluation instanceof EvalUnary) {
-         final ICPPEvaluation argument = ((EvalUnary) evaluation).getArgument();
-         evalType = argument.getType();
-      }
+            if (binding instanceof CPPField) {
+                evalType = ((CPPField) binding).getType();
+            }
+        } else if (evaluation instanceof EvalUnary) {
+            final ICPPEvaluation argument = ((EvalUnary) evaluation).getArgument();
+            evalType = argument.getType();
+        }
 
-      return evalType;
-   }
+        return evalType;
+    }
 
-   public abstract Collection<? extends StaticPolyMissingMemFun> getMissingMemberFunctions();
+    public abstract Collection<? extends StaticPolyMissingMemFun> getMissingMemberFunctions();
 }

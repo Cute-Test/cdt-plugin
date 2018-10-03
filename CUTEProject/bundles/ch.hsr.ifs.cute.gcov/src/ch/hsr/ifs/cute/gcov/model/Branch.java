@@ -14,35 +14,37 @@ package ch.hsr.ifs.cute.gcov.model;
  */
 public class Branch {
 
-   private CoverageStatus status = CoverageStatus.Uncovered;
-   private final int      taken;
+    private CoverageStatus status = CoverageStatus.Uncovered;
+    private final int      taken;
 
-   public Branch(int taken) {
-      super();
-      if (taken < 0 || taken > 100) { throw new IllegalArgumentException("Coverage must be between 0 and 100%"); }
-      this.taken = taken;
-      switch (taken) {
-      case 0:
-         status = CoverageStatus.Uncovered;
-         break;
-      case 100:
-         status = CoverageStatus.Covered;
-         break;
-      default:
-         status = CoverageStatus.PartiallyCovered;
-      }
-   }
+    public Branch(int taken) {
+        super();
+        if (taken < 0 || taken > 100) {
+            throw new IllegalArgumentException("Coverage must be between 0 and 100%");
+        }
+        this.taken = taken;
+        switch (taken) {
+        case 0:
+            status = CoverageStatus.Uncovered;
+            break;
+        case 100:
+            status = CoverageStatus.Covered;
+            break;
+        default:
+            status = CoverageStatus.PartiallyCovered;
+        }
+    }
 
-   public CoverageStatus getStatus() {
-      return status;
-   }
+    public CoverageStatus getStatus() {
+        return status;
+    }
 
-   public int getCovered() {
-      return taken;
-   }
+    public int getCovered() {
+        return taken;
+    }
 
-   @Override
-   public String toString() {
-      return "Branch taken: " + taken + " " + status;
-   }
+    @Override
+    public String toString() {
+        return "Branch taken: " + taken + " " + status;
+    }
 }

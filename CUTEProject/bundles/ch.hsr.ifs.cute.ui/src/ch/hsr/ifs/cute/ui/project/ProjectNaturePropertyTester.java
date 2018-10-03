@@ -23,45 +23,45 @@ import org.eclipse.ui.part.FileEditorInput;
  */
 public class ProjectNaturePropertyTester extends PropertyTester {
 
-   public ProjectNaturePropertyTester() {}
+    public ProjectNaturePropertyTester() {}
 
-   @Override
-   public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-      if (property.equals("projectNature1")) {
-         try {
-            if (receiver instanceof FileEditorInput) {
-               FileEditorInput fei = (FileEditorInput) receiver;
-               receiver = fei.getFile(); // The IResource part will take care of the rest.
-            }
-            if (receiver instanceof IResource) {
-               IResource res = (IResource) receiver;
-               IProject proj = res.getProject();
-               return isCuteProject(expectedValue, proj);
-            }
-            if (receiver instanceof IBinary) {
-               IBinary bin = (IBinary) receiver;
-               IProject proj = bin.getCProject().getProject();
-               return isCuteProject(expectedValue, proj);
-            }
-            if (receiver instanceof ICProject) {
-               ICProject res = (ICProject) receiver;
-               IProject proj = res.getProject();
-               return isCuteProject(expectedValue, proj);
-            }
+    @Override
+    public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+        if (property.equals("projectNature1")) {
+            try {
+                if (receiver instanceof FileEditorInput) {
+                    FileEditorInput fei = (FileEditorInput) receiver;
+                    receiver = fei.getFile(); // The IResource part will take care of the rest.
+                }
+                if (receiver instanceof IResource) {
+                    IResource res = (IResource) receiver;
+                    IProject proj = res.getProject();
+                    return isCuteProject(expectedValue, proj);
+                }
+                if (receiver instanceof IBinary) {
+                    IBinary bin = (IBinary) receiver;
+                    IProject proj = bin.getCProject().getProject();
+                    return isCuteProject(expectedValue, proj);
+                }
+                if (receiver instanceof ICProject) {
+                    ICProject res = (ICProject) receiver;
+                    IProject proj = res.getProject();
+                    return isCuteProject(expectedValue, proj);
+                }
 
-         } catch (CoreException e) {
-            return false;
-         }
-      }
-      return false;
-   }
+            } catch (CoreException e) {
+                return false;
+            }
+        }
+        return false;
+    }
 
-   public boolean isCuteProject(Object expectedValue, IProject proj) throws CoreException {
-      return proj != null && proj.isAccessible() && proj.hasNature(toString(expectedValue));
-   }
+    public boolean isCuteProject(Object expectedValue, IProject proj) throws CoreException {
+        return proj != null && proj.isAccessible() && proj.hasNature(toString(expectedValue));
+    }
 
-   protected String toString(Object expectedValue) {
-      return expectedValue == null ? "" : expectedValue.toString();
-   }
+    protected String toString(Object expectedValue) {
+        return expectedValue == null ? "" : expectedValue.toString();
+    }
 
 }

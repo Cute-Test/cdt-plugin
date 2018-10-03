@@ -11,18 +11,18 @@ import org.eclipse.core.resources.IProject;
 
 public class IncludeFileHandler extends IncludeHandler {
 
-   public IncludeFileHandler(final IProject project) {
-      super(project);
-   }
+    public IncludeFileHandler(final IProject project) {
+        super(project);
+    }
 
-   @Override
-   protected int getOptionType() {
-      return IOption.INCLUDE_FILES;
-   }
+    @Override
+    protected int getOptionType() {
+        return IOption.INCLUDE_FILES;
+    }
 
-   @Override
-   protected Set<String> getOptionValues(final IOption option) throws BuildException {
-      final String[] includes = option.getBasicStringListValue();
-      return orderPreservingSet(includes);
-   }
+    @Override
+    protected Set<String> getOptionValues(final IOption option) throws BuildException {
+        final String[] includes = option.getBasicStringListValue();
+        return orderPreservingSet(includes);
+    }
 }

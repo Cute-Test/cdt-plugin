@@ -7,11 +7,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface MockFunctionCommunication {
 
-   void setSuiteName(String suiteName);
+    void setSuiteName(String suiteName);
 
-   void setDestinationFolder(IPath destinationPath);
+    void setDestinationFolder(IPath destinationPath);
 
-   void execute(IProgressMonitor pm);
+    void execute(IProgressMonitor pm);
 
-   IFile getNewFile();
+    IFile getNewFile();
 }

@@ -30,47 +30,47 @@ import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.base.CDTTestingU
 
 public class TestBugFixes extends CDTTestingUITest {
 
-   @Test
-   public void testNewTestFunctionhighlight() throws Exception {
-      final IEditorPart editor = EditorTestHelper.openInEditor(getPrimaryIFileFromCurrentProject(), true);
-      assertTrue(editor instanceof ICEditor);
+    @Test
+    public void testNewTestFunctionhighlight() throws Exception {
+        final IEditorPart editor = EditorTestHelper.openInEditor(getPrimaryIFileFromCurrentProject(), true);
+        assertTrue(editor instanceof ICEditor);
 
-      final ISelectionProvider selectionProvider = ((ICEditor) editor).getSelectionProvider();
-      selectionProvider.setSelection(new TextSelection(212, 0));
+        final ISelectionProvider selectionProvider = ((ICEditor) editor).getSelectionProvider();
+        selectionProvider.setSelection(new TextSelection(212, 0));
 
-      final NewTestFunctionActionDelegate ntfad = new NewTestFunctionActionDelegate();
-      ntfad.run(null);
+        final NewTestFunctionActionDelegate ntfad = new NewTestFunctionActionDelegate();
+        ntfad.run(null);
 
-      // set cursor location to be at the newly created newTest^Function
-      selectionProvider.setSelection(new TextSelection(261, 0));
-      ntfad.run(null);
+        // set cursor location to be at the newly created newTest^Function
+        selectionProvider.setSelection(new TextSelection(261, 0));
+        ntfad.run(null);
 
-      final LinkedModeUI linked2ndCopy = ntfad.testOnlyGetLinkedMode();
-      linked2ndCopy.getSelectedRegion();
+        final LinkedModeUI linked2ndCopy = ntfad.testOnlyGetLinkedMode();
+        linked2ndCopy.getSelectedRegion();
 
-      callLeave(linked2ndCopy);
+        callLeave(linked2ndCopy);
 
-      final String results = currentProjectHolder.getDocument(getPrimaryIFileFromCurrentProject()).get();
+        final String results = currentProjectHolder.getDocument(getPrimaryIFileFromCurrentProject()).get();
 
-      final TextSelection selection = (TextSelection) selectionProvider.getSelection();
-      final String actual = results.substring(selection.getOffset(), selection.getOffset() + selection.getLength());
+        final TextSelection selection = (TextSelection) selectionProvider.getSelection();
+        final String actual = results.substring(selection.getOffset(), selection.getOffset() + selection.getLength());
 
-      assertEquals("ASSERTM(\"start writing tests\", false);", actual);
-   }
+        assertEquals("ASSERTM(\"start writing tests\", false);", actual);
+    }
 
-   private void callLeave(final LinkedModeUI linked2ndCopy) throws IllegalAccessException, InvocationTargetException {
-      // default access, so need reflection
-      boolean flag = true;
-      final java.lang.reflect.Method[] methods = LinkedModeUI.class.getDeclaredMethods();
-      for (final Method method : methods) {
-         if (method.getName().equals("leave")) {
-            final Object params[] = { ILinkedModeListener.UPDATE_CARET };
-            method.setAccessible(true);
-            method.invoke(linked2ndCopy, params);
-            flag = false;
-         }
-      }
-      assertFalse(flag);
-   }
+    private void callLeave(final LinkedModeUI linked2ndCopy) throws IllegalAccessException, InvocationTargetException {
+        // default access, so need reflection
+        boolean flag = true;
+        final java.lang.reflect.Method[] methods = LinkedModeUI.class.getDeclaredMethods();
+        for (final Method method : methods) {
+            if (method.getName().equals("leave")) {
+                final Object params[] = { ILinkedModeListener.UPDATE_CARET };
+                method.setAccessible(true);
+                method.invoke(linked2ndCopy, params);
+                flag = false;
+            }
+        }
+        assertFalse(flag);
+    }
 
 }

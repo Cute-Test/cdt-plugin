@@ -21,42 +21,43 @@ import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorRefactoring;
 
 public class DeleteWrappedFunctionQuickFix extends MockatorQfWithRefactoringSupport {
 
-   @Override
-   public String getLabel() {
-      return I18N.WrapFunctionDelete;
-   }
+    @Override
+    public String getLabel() {
+        return I18N.WrapFunctionDelete;
+    }
 
-   @Override
-   protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> sel, final MarkerInfo<?> info) {
-      final IDocument doc = UiUtil.getCurrentDocument().get();
-      return new DeleteWrappedFunctionRefactoring(cElement, sel, getCProject(), doc);
-   }
+    @Override
+    protected MockatorRefactoring getRefactoring(final ICElement cElement, final Optional<ITextSelection> sel, final MarkerInfo<?> info) {
+        final IDocument doc = UiUtil.getCurrentDocument().get();
+        return new DeleteWrappedFunctionRefactoring(cElement, sel, getCProject(), doc);
+    }
 
-   @Override
-   public void apply(final IMarker marker, final IDocument doc) {
-      super.apply(marker, doc);
-      final WrappedFunctionQuickFixSupport support = new WrappedFunctionQuickFixSupport(getCProject().getProject());
-      final String wrappedFunName = getWrappedFunName(marker);
-      support.removeWrapLinkerOption(wrappedFunName);
-      support.removeWrapMacro(wrappedFunName);
-   }
+    @Override
+    public void apply(final IMarker marker, final IDocument doc) {
+        super.apply(marker, doc);
+        final WrappedFunctionQuickFixSupport support = new WrappedFunctionQuickFixSupport(getCProject().getProject());
+        final String wrappedFunName = getWrappedFunName(marker);
+        support.removeWrapLinkerOption(wrappedFunName);
+        support.removeWrapMacro(wrappedFunName);
+    }
 
-   private String getWrappedFunName(final IMarker marker) {
-      return getProblemArgument(marker, 0);
-   }
+    private String getWrappedFunName(final IMarker marker) {
+        return getProblemArgument(marker, 0);
+    }
 
-   @Override
-   public String getDescription() {
-      return getLabel();
-   }
+    @Override
+    public String getDescription() {
+        return getLabel();
+    }
 
-   @Override
-   public Image getImage() {
-      return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION);
-   }
+    @Override
+    public Image getImage() {
+        return CDTSharedImages.getImage(CDTSharedImages.IMG_OBJS_FUNCTION);
+    }
 
-   @Override
-   protected Optional<LinkedModeInfoCreater> getLinkedModeCreator(final ChangeEdit edit, final IDocument doc, final MockatorRefactoring refactoring) {
-      return Optional.empty();
-   }
+    @Override
+    protected Optional<LinkedModeInfoCreater> getLinkedModeCreator(final ChangeEdit edit, final IDocument doc,
+            final MockatorRefactoring refactoring) {
+        return Optional.empty();
+    }
 }

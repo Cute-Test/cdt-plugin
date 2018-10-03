@@ -8,10 +8,10 @@ package ch.hsr.ifs.cute.mockator.tests.extractinterface;
 
 public class ExtractInterfaceExternalProjectTest extends ExtractInterfaceRefactoringTest {
 
-   @Override
-   protected void initReferencedProjects() throws Exception {
-      stageReferencedProjectForBothProjects("SUTProject", "SUTProject.rts");
-      super.initReferencedProjects();
-   }
+    @Override
+    protected void initReferencedProjects() throws Exception {
+        stageReferencedProjectForBothProjects("SUTProject", "SUTProject.rts");
+        super.initReferencedProjects();
+    }
 
 }

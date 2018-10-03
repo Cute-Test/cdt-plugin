@@ -8,5 +8,5 @@ import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 
 interface LdPreloadFunBodyStrategy {
 
-   IASTCompoundStatement getPreloadFunBody(CppStandard cppStd, ICPPASTFunctionDeclarator function);
+    IASTCompoundStatement getPreloadFunBody(CppStandard cppStd, ICPPASTFunctionDeclarator function);
 }

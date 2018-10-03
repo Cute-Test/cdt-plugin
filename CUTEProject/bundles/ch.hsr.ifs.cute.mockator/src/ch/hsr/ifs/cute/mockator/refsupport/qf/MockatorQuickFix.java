@@ -16,35 +16,35 @@ import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 @SuppressWarnings("restriction")
 public abstract class MockatorQuickFix extends AbstractCodanCMarkerResolution implements IMarkerResolution2 {
 
-   protected MarkerInfo<?> info;
-   protected IMarker       marker;
-   protected boolean       shouldRunInCurrentThread;
-   private CEditor         cEditor;
+    protected MarkerInfo<?> info;
+    protected IMarker       marker;
+    protected boolean       shouldRunInCurrentThread;
+    private CEditor         cEditor;
 
-   @Override
-   public boolean isApplicable(final IMarker marker) {
-      info = getMarkerInfo(marker);
-      this.marker = marker;
-      return super.isApplicable(marker);
-   }
+    @Override
+    public boolean isApplicable(final IMarker marker) {
+        info = getMarkerInfo(marker);
+        this.marker = marker;
+        return super.isApplicable(marker);
+    }
 
-   protected MarkerInfo<?> getMarkerInfo(final IMarker marker) {
-      return null;
-   }
+    protected MarkerInfo<?> getMarkerInfo(final IMarker marker) {
+        return null;
+    }
 
-   protected ICProject getCProject() {
-      return getCElement().getCProject();
-   }
+    protected ICProject getCProject() {
+        return getCElement().getCProject();
+    }
 
-   protected CppStandard getCppStandard() {
-      return CppStandard.fromCompilerFlags(getCProject().getProject());
-   }
+    protected CppStandard getCppStandard() {
+        return CppStandard.fromCompilerFlags(getCProject().getProject());
+    }
 
-   protected ICElement getCElement() {
-      return UiUtil.getActiveCEditor().map(editor -> (cEditor = editor).getInputCElement()).orElse(cEditor.getInputCElement());
-   }
+    protected ICElement getCElement() {
+        return UiUtil.getActiveCEditor().map(editor -> (cEditor = editor).getInputCElement()).orElse(cEditor.getInputCElement());
+    }
 
-   public void setRunInCurrentThread(final boolean runInCurrentThread) {
-      shouldRunInCurrentThread = runInCurrentThread;
-   }
+    public void setRunInCurrentThread(final boolean runInCurrentThread) {
+        shouldRunInCurrentThread = runInCurrentThread;
+    }
 }

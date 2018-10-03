@@ -25,49 +25,49 @@ import junit.framework.TestCase;
  */
 public class DeleteMarkersTest extends TestCase {
 
-   private static final String TEST_FILE_NAME = "testFile.cpp";
-   private static final String PROJECT_NAME   = "project";
+    private static final String TEST_FILE_NAME = "testFile.cpp";
+    private static final String PROJECT_NAME   = "project";
 
-   @Override
-   protected void tearDown() throws Exception {
-      super.tearDown();
-      GcovPlugin.getDefault().getcModel().clearModel();
-   }
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        GcovPlugin.getDefault().getcModel().clearModel();
+    }
 
-   public void testDeleteJob() {
-      IFile testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME), "");
-      try {
-         testFile.createMarker(GcovPlugin.PARTIALLY_MARKER_TYPE);
-      } catch (CoreException e1) {
-         fail(e1.getMessage());
-      }
-      DeleteMarkerJob job = new DeleteMarkerJob(testFile);
-      job.schedule();
-      try {
-         job.join();
-      } catch (InterruptedException e) {
-         fail(e.getMessage());
-      }
-      IStatus result = job.getResult();
-      assertEquals(result.getMessage(), IStatus.OK, result.getCode());
-   }
+    public void testDeleteJob() {
+        IFile testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME), "");
+        try {
+            testFile.createMarker(GcovPlugin.PARTIALLY_MARKER_TYPE);
+        } catch (CoreException e1) {
+            fail(e1.getMessage());
+        }
+        DeleteMarkerJob job = new DeleteMarkerJob(testFile);
+        job.schedule();
+        try {
+            job.join();
+        } catch (InterruptedException e) {
+            fail(e.getMessage());
+        }
+        IStatus result = job.getResult();
+        assertEquals(result.getMessage(), IStatus.OK, result.getCode());
+    }
 
-   public void testDeleteJobResourceDoesNotExist() {
-      IFile testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME), false, "");
-      try {
-         testFile.createMarker(GcovPlugin.PARTIALLY_MARKER_TYPE);
-      } catch (CoreException e1) {
-         fail(e1.getMessage());
-      }
-      DeleteMarkerJob job = new DeleteMarkerJob(testFile);
-      job.schedule();
-      try {
-         job.join();
-      } catch (InterruptedException e) {
-         fail(e.getMessage());
-      }
-      IStatus result = job.getResult();
-      assertEquals(result.getMessage(), IStatus.OK, result.getSeverity());
-   }
+    public void testDeleteJobResourceDoesNotExist() {
+        IFile testFile = new MockFile(new Path(PROJECT_NAME + "/" + TEST_FILE_NAME), false, "");
+        try {
+            testFile.createMarker(GcovPlugin.PARTIALLY_MARKER_TYPE);
+        } catch (CoreException e1) {
+            fail(e1.getMessage());
+        }
+        DeleteMarkerJob job = new DeleteMarkerJob(testFile);
+        job.schedule();
+        try {
+            job.join();
+        } catch (InterruptedException e) {
+            fail(e.getMessage());
+        }
+        IStatus result = job.getResult();
+        assertEquals(result.getMessage(), IStatus.OK, result.getSeverity());
+    }
 
 }

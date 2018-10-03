@@ -20,59 +20,59 @@ import ch.hsr.ifs.cute.mockator.incompleteclass.checker.AbstractMissingMemFunChe
 
 public class StaticPolymorphismChecker extends AbstractMissingMemFunChecker {
 
-   @Override
-   protected OnEachClass createVisitor() {
-      return new OnEachClass();
-   }
+    @Override
+    protected OnEachClass createVisitor() {
+        return new OnEachClass();
+    }
 
-   private class OnEachClass extends SimpleVisitor<ProblemId, Void> {
+    private class OnEachClass extends SimpleVisitor<ProblemId, Void> {
 
-      public OnEachClass() {
-         super(StaticPolymorphismChecker.this);
-      }
+        public OnEachClass() {
+            super(StaticPolymorphismChecker.this);
+        }
 
-      {
-         shouldVisitDeclSpecifiers = true;
-      }
+        {
+            shouldVisitDeclSpecifiers = true;
+        }
 
-      @Override
-      public int visit(final IASTDeclSpecifier specifier) {
-         if (!ASTUtil.isClass(specifier)) {
+        @Override
+        public int visit(final IASTDeclSpecifier specifier) {
+            if (!ASTUtil.isClass(specifier)) {
+                return PROCESS_CONTINUE;
+            }
+
+            final ICPPASTCompositeTypeSpecifier clazz = (ICPPASTCompositeTypeSpecifier) specifier;
+
+            if (isNonTemplateClass(clazz)) {
+                markIfHasMissingMemFuns(new VisitorReport<>(getProblemId(), clazz));
+            }
+
             return PROCESS_CONTINUE;
-         }
+        }
 
-         final ICPPASTCompositeTypeSpecifier clazz = (ICPPASTCompositeTypeSpecifier) specifier;
+        @Override
+        public Set<ProblemId> getProblemIds() {
+            return EnumSet.of(ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL);
+        }
 
-         if (isNonTemplateClass(clazz)) {
-            markIfHasMissingMemFuns(new VisitorReport<>(getProblemId(), clazz));
-         }
+    }
 
-         return PROCESS_CONTINUE;
-      }
+    private static boolean isNonTemplateClass(final ICPPASTCompositeTypeSpecifier clazz) {
+        return CPPVisitor.findAncestorWithType(clazz, ICPPASTTemplateDeclaration.class).orElse(null) == null;
+    }
 
-      @Override
-      public Set<ProblemId> getProblemIds() {
-         return EnumSet.of(ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL);
-      }
+    @Override
+    protected StaticPolyMissingMemFunFinder getMissingMemFunsFinder() {
+        return new StaticPolyMissingMemFunFinder(getCProject(), getIndex());
+    }
 
-   }
+    @Override
+    protected ProblemId getProblemId() {
+        return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
+    }
 
-   private static boolean isNonTemplateClass(final ICPPASTCompositeTypeSpecifier clazz) {
-      return CPPVisitor.findAncestorWithType(clazz, ICPPASTTemplateDeclaration.class).orElse(null) == null;
-   }
-
-   @Override
-   protected StaticPolyMissingMemFunFinder getMissingMemFunsFinder() {
-      return new StaticPolyMissingMemFunFinder(getCProject(), getIndex());
-   }
-
-   @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.STATIC_POLY_MISSING_MEMFUNS_IMPL;
-   }
-
-   @Override
-   protected Optional<IASTName> getNameToMark(final ICPPASTCompositeTypeSpecifier clazz) {
-      return Optional.of(clazz.getName());
-   }
+    @Override
+    protected Optional<IASTName> getNameToMark(final ICPPASTCompositeTypeSpecifier clazz) {
+        return Optional.of(clazz.getName());
+    }
 }
