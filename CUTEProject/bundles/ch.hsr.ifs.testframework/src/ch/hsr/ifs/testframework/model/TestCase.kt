@@ -17,7 +17,7 @@ import org.eclipse.core.resources.IFile
  */
 class TestCase(private val name: String): TestElement() {
 
-   private lateinit var status: TestStatus
+   private var status: TestStatus = TestStatus.error
 
    private var file: IFile? = null
 
@@ -29,9 +29,9 @@ class TestCase(private val name: String): TestElement() {
 
    override fun getName() = name
 
-	override fun getStatus() = status
-	
-	fun getLineNumber() = lineNumber
+   override fun getStatus() = status
+
+   fun getLineNumber() = lineNumber
 
    fun getMessage() = 
          if(this::result.isInitialized) {
