@@ -40,7 +40,7 @@ int foo(A const& a, int * ip, char c) {
 //=
 class A {
 };
-__attribute__((weak)) int foo(const A& a, int* ip, char c) {
+int __attribute__((weak)) foo(const A& a, int* ip, char c) {
 }
  
 //@A.cpp
@@ -79,7 +79,7 @@ class Foo {
 class Bar;
 
 class Foo {
-    __attribute__((weak)) int foo(const Bar& boo) const;
+    int __attribute__((weak)) foo(const Bar& boo) const;
 };
 
 //@Foo.cpp
@@ -125,7 +125,7 @@ class A {
 //=
 namespace Ns {
 class A {
-  __attribute__((weak)) void foo(int) const;
+  void __attribute__((weak)) foo(int) const;
 };
 }
 
@@ -156,7 +156,7 @@ needsManagedCProject=true
 bool foo(char c) {
 }
 //=
-__attribute__((weak)) bool foo(char c) {
+bool __attribute__((weak)) foo(char c) {
 }
  
 //@A.cpp

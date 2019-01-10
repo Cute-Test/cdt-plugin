@@ -46,7 +46,7 @@ namespace Ns {
 }
 //=
 namespace Ns {
-    __attribute__((weak)) void foo();
+    void __attribute__((weak)) foo();
 }
 
 //@sut.h
@@ -107,7 +107,7 @@ struct Foo {
 };
 //=
 struct Foo {
-  __attribute__((weak)) int bar(int i);
+  int __attribute__((weak)) bar(int i);
 };
 
 //@sut.h
@@ -172,7 +172,7 @@ struct Foo {
 };
 //=
 struct Foo {
-    __attribute__((weak)) void bar(double, char);
+    void __attribute__((weak)) bar(double, char);
 };
 
 //@sut.h
