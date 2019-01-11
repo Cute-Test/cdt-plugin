@@ -18,5 +18,5 @@
 		<module>releng</module>
 		<module>tests</module>
 	</modules>
-<version>5.5.3-SNAPSHOT</version>
+<version>5.5.4-SNAPSHOT</version>
 </project>
