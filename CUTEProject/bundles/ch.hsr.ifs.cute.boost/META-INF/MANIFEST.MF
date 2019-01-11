@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: CUTE Boost Plug-in
 Bundle-SymbolicName: ch.hsr.ifs.cute.boost;singleton:=true
-Bundle-Version: 5.5.3.qualifier
+Bundle-Version: 5.5.4.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.boost.Activator
 Bundle-Vendor: IFS Institute for Software
 Require-Bundle: org.eclipse.core.resources;bundle-version="3.6.0",
