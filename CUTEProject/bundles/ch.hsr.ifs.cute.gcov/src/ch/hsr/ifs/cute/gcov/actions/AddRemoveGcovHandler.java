@@ -38,83 +38,83 @@ import ch.hsr.ifs.cute.gcov.util.ProjectUtil;
  */
 public class AddRemoveGcovHandler extends AbstractHandler {
 
-   @Override
-   public Object execute(ExecutionEvent event) throws ExecutionException {
-      ISelection selection = HandlerUtil.getCurrentSelection(event);
-      IProject project = ProjectUtil.getSelectedProject(selection);
-      String action = event.getParameter("ch.hsr.ifs.cute.gcov.handleGcovNatrueParameter");
-      switch (action) {
-      case "add":
-         addNatureToProject(project);
-         break;
-      case "remove":
-         removeNatureFromProject(project);
-         break;
-      }
-      return null;
-   }
+    @Override
+    public Object execute(ExecutionEvent event) throws ExecutionException {
+        ISelection selection = HandlerUtil.getCurrentSelection(event);
+        IProject project = ProjectUtil.getSelectedProject(selection);
+        String action = event.getParameter("ch.hsr.ifs.cute.gcov.handleGcovNatrueParameter");
+        switch (action) {
+        case "add":
+            addNatureToProject(project);
+            break;
+        case "remove":
+            removeNatureFromProject(project);
+            break;
+        }
+        return null;
+    }
 
-   private void addNatureToProject(IProject project) {
-      if (project != null) {
-         try {
-            GcovNature.addGcovNature(project, new NullProgressMonitor());
-            GcovAdditionHandler gcovAdditionHandler = new GcovAdditionHandler();
-            gcovAdditionHandler.addGcovConfig(project);
-            for (IProject referencedProject : project.getReferencedProjects()) {
-               GcovNature.addGcovNature(referencedProject, new NullProgressMonitor());
-               gcovAdditionHandler.addGcovConfig(referencedProject);
-               gcovAdditionHandler.adaptLibraryPath(project, referencedProject);
+    private void addNatureToProject(IProject project) {
+        if (project != null) {
+            try {
+                GcovNature.addGcovNature(project, new NullProgressMonitor());
+                GcovAdditionHandler gcovAdditionHandler = new GcovAdditionHandler();
+                gcovAdditionHandler.addGcovConfig(project);
+                for (IProject referencedProject : project.getReferencedProjects()) {
+                    GcovNature.addGcovNature(referencedProject, new NullProgressMonitor());
+                    gcovAdditionHandler.addGcovConfig(referencedProject);
+                    gcovAdditionHandler.adaptLibraryPath(project, referencedProject);
+                }
+                notifyUserSuccedd("Gcov Coverage Analysis successfull added to project.");
+            } catch (CoreException e) {
+                GcovPlugin.log(e);
             }
-            notifyUserSuccedd("Gcov Coverage Analysis successfull added to project.");
-         } catch (CoreException e) {
-            GcovPlugin.log(e);
-         }
-      } else {
-         notifyUserInvalidSelection();
-      }
-   }
+        } else {
+            notifyUserInvalidSelection();
+        }
+    }
 
-   private void notifyUserInvalidSelection() {
-      IWorkbenchWindow activeWindow = getActiveWorkbenchWindow();
-      if (activeWindow != null) {
-         MessageDialog.openError(activeWindow.getShell(), "Invalid Selection",
-               "Adding/removing Gcov Coverage failed due to invalid selection. Please select a C/C++ project.");
-      }
-   }
+    private void notifyUserInvalidSelection() {
+        IWorkbenchWindow activeWindow = getActiveWorkbenchWindow();
+        if (activeWindow != null) {
+            MessageDialog.openError(activeWindow.getShell(), "Invalid Selection",
+                    "Adding/removing Gcov Coverage failed due to invalid selection. Please select a C/C++ project.");
+        }
+    }
 
-   private IWorkbenchWindow getActiveWorkbenchWindow() {
-      return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-   }
+    private IWorkbenchWindow getActiveWorkbenchWindow() {
+        return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+    }
 
-   private void removeNatureFromProject(IProject project) {
-      if (project != null) {
-         try {
-            GcovNature.removeCuteNature(project, new NullProgressMonitor());
-            IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-            IConfiguration[] configs = info.getManagedProject().getConfigurations();
-            if (getConfiguration(project).getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)) {
-               for (IConfiguration config : configs) {
-                  if (config.getParent().getId().contains("debug") && !config.getName().contains("Gcov")) {
-                     ManagedBuildManager.setDefaultConfiguration(project, config);
-                     ManagedBuildManager.setSelectedConfiguration(project, config);
-                  }
-               }
+    private void removeNatureFromProject(IProject project) {
+        if (project != null) {
+            try {
+                GcovNature.removeCuteNature(project, new NullProgressMonitor());
+                IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+                IConfiguration[] configs = info.getManagedProject().getConfigurations();
+                if (getConfiguration(project).getId().equals(GcovAdditionHandler.GCOV_CONFG_ID)) {
+                    for (IConfiguration config : configs) {
+                        if (config.getParent().getId().contains("debug") && !config.getName().contains("Gcov")) {
+                            ManagedBuildManager.setDefaultConfiguration(project, config);
+                            ManagedBuildManager.setSelectedConfiguration(project, config);
+                        }
+                    }
+                }
+                info.getManagedProject().removeConfiguration(GcovAdditionHandler.GCOV_CONFG_ID);
+                ManagedBuildManager.updateCoreSettings(project);
+                notifyUserSuccedd("Gcov Coverage Analysis successfull removed from project.");
+            } catch (CoreException e) {
+                GcovPlugin.log(e);
             }
-            info.getManagedProject().removeConfiguration(GcovAdditionHandler.GCOV_CONFG_ID);
-            ManagedBuildManager.updateCoreSettings(project);
-            notifyUserSuccedd("Gcov Coverage Analysis successfull removed from project.");
-         } catch (CoreException e) {
-            GcovPlugin.log(e);
-         }
-      } else {
-         notifyUserInvalidSelection();
-      }
-   }
+        } else {
+            notifyUserInvalidSelection();
+        }
+    }
 
-   private void notifyUserSuccedd(String message) {
-      IWorkbenchWindow activeWindow = getActiveWorkbenchWindow();
-      if (activeWindow != null) {
-         MessageDialog.openInformation(activeWindow.getShell(), "Success", message);
-      }
-   }
+    private void notifyUserSuccedd(String message) {
+        IWorkbenchWindow activeWindow = getActiveWorkbenchWindow();
+        if (activeWindow != null) {
+            MessageDialog.openInformation(activeWindow.getShell(), "Success", message);
+        }
+    }
 }

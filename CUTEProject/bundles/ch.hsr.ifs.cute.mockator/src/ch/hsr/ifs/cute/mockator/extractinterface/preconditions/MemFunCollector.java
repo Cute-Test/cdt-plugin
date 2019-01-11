@@ -36,170 +36,175 @@ import ch.hsr.ifs.cute.mockator.refsupport.lookup.NodeLookup;
 
 public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
 
-   @Override
-   public void accept(final ExtractInterfaceContext context) {
-      final Collection<IASTDeclaration> publicMemFuns = getPublicMemFuns(context.getChosenClass());
-      context.setAvailablePubMemFuns(publicMemFuns);
-      context.setUsedPublicMemFuns(getUsedMemFuns(context, publicMemFuns));
-   }
+    @Override
+    public void accept(final ExtractInterfaceContext context) {
+        final Collection<IASTDeclaration> publicMemFuns = getPublicMemFuns(context.getChosenClass());
+        context.setAvailablePubMemFuns(publicMemFuns);
+        context.setUsedPublicMemFuns(getUsedMemFuns(context, publicMemFuns));
+    }
 
-   private static Collection<IASTDeclaration> getPublicMemFuns(final ICPPASTCompositeTypeSpecifier clazz) {
-      final EnumSet<Types> onlyInstanceMemFuns = EnumSet.noneOf(PublicMemFunFinder.Types.class);
-      final PublicMemFunFinder finder = new PublicMemFunFinder(clazz, onlyInstanceMemFuns);
-      return finder.getPublicMemFuns();
-   }
+    private static Collection<IASTDeclaration> getPublicMemFuns(final ICPPASTCompositeTypeSpecifier clazz) {
+        final EnumSet<Types> onlyInstanceMemFuns = EnumSet.noneOf(PublicMemFunFinder.Types.class);
+        final PublicMemFunFinder finder = new PublicMemFunFinder(clazz, onlyInstanceMemFuns);
+        return finder.getPublicMemFuns();
+    }
 
-   private static Collection<IASTDeclaration> getUsedMemFuns(final ExtractInterfaceContext context, final Collection<IASTDeclaration> publicMemFuns) {
-      if (!considerOnlyReferencedMemFuns(context)) { return publicMemFuns; }
+    private static Collection<IASTDeclaration> getUsedMemFuns(final ExtractInterfaceContext context,
+            final Collection<IASTDeclaration> publicMemFuns) {
+        if (!considerOnlyReferencedMemFuns(context)) {
+            return publicMemFuns;
+        }
 
-      final Collection<ICPPASTFunctionDefinition> functionsToAnalyse = getFunctionsToAnalyse(context);
-      final IType dependencyType = getTypeOfDependency(context.getSelectedName());
-      final Collection<ICPPASTFunctionCallExpression> funCalls = getFunCallsOnDependency(functionsToAnalyse, dependencyType);
-      return filterUsed(funCalls, publicMemFuns, dependencyType);
-   }
+        final Collection<ICPPASTFunctionDefinition> functionsToAnalyse = getFunctionsToAnalyse(context);
+        final IType dependencyType = getTypeOfDependency(context.getSelectedName());
+        final Collection<ICPPASTFunctionCallExpression> funCalls = getFunCallsOnDependency(functionsToAnalyse, dependencyType);
+        return filterUsed(funCalls, publicMemFuns, dependencyType);
+    }
 
-   private static Collection<ICPPASTFunctionDefinition> getFunctionsToAnalyse(final ExtractInterfaceContext context) {
-      final Set<ICPPASTFunctionDefinition> functions = new LinkedHashSet<>();
+    private static Collection<ICPPASTFunctionDefinition> getFunctionsToAnalyse(final ExtractInterfaceContext context) {
+        final Set<ICPPASTFunctionDefinition> functions = new LinkedHashSet<>();
 
-      for (final ICPPASTFunctionDeclarator funDecl : getAllMemberFunctions(context.getSutClass())) {
-         if (isDeclarationDefinition(funDecl)) {
-            final ICPPASTFunctionDefinition fun = (ICPPASTFunctionDefinition) funDecl.getParent();
-            if (fun != null) {
-               functions.add(fun);
+        for (final ICPPASTFunctionDeclarator funDecl : getAllMemberFunctions(context.getSutClass())) {
+            if (isDeclarationDefinition(funDecl)) {
+                final ICPPASTFunctionDefinition fun = (ICPPASTFunctionDefinition) funDecl.getParent();
+                if (fun != null) {
+                    functions.add(fun);
+                }
+            } else {
+                lookupDefinition(context, funDecl).ifPresent((function) -> functions.add(function));
             }
-         } else {
-            lookupDefinition(context, funDecl).ifPresent((function) -> functions.add(function));
-         }
-      }
+        }
 
-      return functions;
-   }
+        return functions;
+    }
 
-   private static Collection<ICPPASTFunctionCallExpression> getFunCallsOnDependency(final Collection<ICPPASTFunctionDefinition> functionsToAnalyze,
-         final IType typeOfSelection) {
-      final MemFunCallFinder memFunCallFinder = new MemFunCallFinder(typeOfSelection);
+    private static Collection<ICPPASTFunctionCallExpression> getFunCallsOnDependency(final Collection<ICPPASTFunctionDefinition> functionsToAnalyze,
+            final IType typeOfSelection) {
+        final MemFunCallFinder memFunCallFinder = new MemFunCallFinder(typeOfSelection);
 
-      for (final ICPPASTFunctionDefinition fun : functionsToAnalyze) {
-         fun.accept(memFunCallFinder);
-      }
+        for (final ICPPASTFunctionDefinition fun : functionsToAnalyze) {
+            fun.accept(memFunCallFinder);
+        }
 
-      final Set<ICPPASTFunctionCallExpression> funCalls = new LinkedHashSet<>();
-      funCalls.addAll(memFunCallFinder.getReferencedCalls());
-      return funCalls;
-   }
+        final Set<ICPPASTFunctionCallExpression> funCalls = new LinkedHashSet<>();
+        funCalls.addAll(memFunCallFinder.getReferencedCalls());
+        return funCalls;
+    }
 
-   private static IType getTypeOfDependency(final IASTNode dependency) {
-      final IASTSimpleDeclaration decl = CPPVisitor.findAncestorWithType(dependency, IASTSimpleDeclaration.class).orElse(null);
-      return CPPVisitor.createType(decl.getDeclSpecifier());
-   }
+    private static IType getTypeOfDependency(final IASTNode dependency) {
+        final IASTSimpleDeclaration decl = CPPVisitor.findAncestorWithType(dependency, IASTSimpleDeclaration.class).orElse(null);
+        return CPPVisitor.createType(decl.getDeclSpecifier());
+    }
 
-   private static boolean considerOnlyReferencedMemFuns(final ExtractInterfaceContext context) {
-      return context.getSutClass() != null;
-   }
+    private static boolean considerOnlyReferencedMemFuns(final ExtractInterfaceContext context) {
+        return context.getSutClass() != null;
+    }
 
-   private static Optional<ICPPASTFunctionDefinition> lookupDefinition(final ExtractInterfaceContext context,
-         final ICPPASTFunctionDeclarator funDecl) {
-      final NodeLookup lookup = new NodeLookup(context.getCProject(), context.getProgressMonitor());
-      return lookup.findFunctionDefinition(funDecl.getName(), context.getCRefContext());
-   }
+    private static Optional<ICPPASTFunctionDefinition> lookupDefinition(final ExtractInterfaceContext context,
+            final ICPPASTFunctionDeclarator funDecl) {
+        final NodeLookup lookup = new NodeLookup(context.getCProject(), context.getProgressMonitor());
+        return lookup.findFunctionDefinition(funDecl.getName(), context.getCRefContext());
+    }
 
-   private static boolean isDeclarationDefinition(final ICPPASTFunctionDeclarator funDecl) {
-      return funDecl.getParent() instanceof ICPPASTFunctionDefinition;
-   }
+    private static boolean isDeclarationDefinition(final ICPPASTFunctionDeclarator funDecl) {
+        return funDecl.getParent() instanceof ICPPASTFunctionDefinition;
+    }
 
-   private static Collection<IASTDeclaration> filterUsed(final Collection<ICPPASTFunctionCallExpression> funCalls,
-         final Collection<IASTDeclaration> availableFunctions, final IType typeOfSelection) {
-      final List<IASTDeclaration> usedFuns = new ArrayList<>();
-      final FunctionEquivalenceVerifier.ConstStrategy strategy = getConstStrategy(typeOfSelection);
+    private static Collection<IASTDeclaration> filterUsed(final Collection<ICPPASTFunctionCallExpression> funCalls,
+            final Collection<IASTDeclaration> availableFunctions, final IType typeOfSelection) {
+        final List<IASTDeclaration> usedFuns = new ArrayList<>();
+        final FunctionEquivalenceVerifier.ConstStrategy strategy = getConstStrategy(typeOfSelection);
 
-      for (final IASTDeclaration fun : availableFunctions) {
-         final FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier(getDeclarator(fun));
+        for (final IASTDeclaration fun : availableFunctions) {
+            final FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier(getDeclarator(fun));
 
-         for (final ICPPASTFunctionCallExpression call : funCalls) {
-            if (checker.isEquivalent(call, strategy)) {
-               usedFuns.add(fun);
-               break;
+            for (final ICPPASTFunctionCallExpression call : funCalls) {
+                if (checker.isEquivalent(call, strategy)) {
+                    usedFuns.add(fun);
+                    break;
+                }
             }
-         }
-      }
+        }
 
-      return usedFuns;
-   }
+        return usedFuns;
+    }
 
-   private static FunctionEquivalenceVerifier.ConstStrategy getConstStrategy(final IType typeOfSelection) {
-      return ASTUtil.hasConstPart(typeOfSelection) ? ConsiderConst : IgnoreConst;
-   }
+    private static FunctionEquivalenceVerifier.ConstStrategy getConstStrategy(final IType typeOfSelection) {
+        return ASTUtil.hasConstPart(typeOfSelection) ? ConsiderConst : IgnoreConst;
+    }
 
-   private static ICPPASTFunctionDeclarator getDeclarator(final IASTDeclaration function) {
-      return CPPVisitor.findChildWithType(function, ICPPASTFunctionDeclarator.class).orElse(null);
-   }
+    private static ICPPASTFunctionDeclarator getDeclarator(final IASTDeclaration function) {
+        return CPPVisitor.findChildWithType(function, ICPPASTFunctionDeclarator.class).orElse(null);
+    }
 
-   private static Collection<ICPPASTFunctionDeclarator> getAllMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
-      final List<ICPPASTFunctionDeclarator> allMemFuns = new ArrayList<>();
-      clazz.accept(new ASTVisitor() {
+    private static Collection<ICPPASTFunctionDeclarator> getAllMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
+        final List<ICPPASTFunctionDeclarator> allMemFuns = new ArrayList<>();
+        clazz.accept(new ASTVisitor() {
 
-         {
-            shouldVisitDeclarations = true;
-         }
+            {
+                shouldVisitDeclarations = true;
+            }
 
-         @Override
-         public int visit(final IASTDeclaration decl) {
-            final ICPPASTFunctionDeclarator candidate = CPPVisitor.findChildWithType(decl, ICPPASTFunctionDeclarator.class).orElse(null);
+            @Override
+            public int visit(final IASTDeclaration decl) {
+                final ICPPASTFunctionDeclarator candidate = CPPVisitor.findChildWithType(decl, ICPPASTFunctionDeclarator.class).orElse(null);
 
-            if (candidate != null) {
-               allMemFuns.add(candidate);
+                if (candidate != null) {
+                    allMemFuns.add(candidate);
+                }
+
+                return PROCESS_CONTINUE;
+            }
+        });
+        return allMemFuns;
+    }
+
+    private static class MemFunCallFinder extends ASTVisitor {
+
+        private final Set<ICPPASTFunctionCallExpression> funCalls;
+        private final IType                              typeOfSelection;
+
+        {
+            shouldVisitExpressions = true;
+        }
+
+        public MemFunCallFinder(final IType typeOfSelection) {
+            funCalls = new LinkedHashSet<>();
+            this.typeOfSelection = typeOfSelection;
+        }
+
+        public Collection<ICPPASTFunctionCallExpression> getReferencedCalls() {
+            return funCalls;
+        }
+
+        @Override
+        public int visit(final IASTExpression expression) {
+            if (!(expression instanceof ICPPASTFunctionCallExpression)) {
+                return PROCESS_CONTINUE;
+            }
+
+            final ICPPASTFunctionCallExpression funCall = (ICPPASTFunctionCallExpression) expression;
+            final IASTExpression nameExpr = funCall.getFunctionNameExpression();
+
+            if (nameExpr instanceof ICPPASTFieldReference) {
+                final ICPPASTFieldReference reference = (ICPPASTFieldReference) nameExpr;
+                processFieldReference(funCall, reference);
             }
 
             return PROCESS_CONTINUE;
-         }
-      });
-      return allMemFuns;
-   }
+        }
 
-   private static class MemFunCallFinder extends ASTVisitor {
+        private void processFieldReference(final ICPPASTFunctionCallExpression funCall, final ICPPASTFieldReference field) {
+            final IASTExpression owner = field.getFieldOwner();
+            final IType typeOfInstance = ASTUtil.unwindPointerOrRefType(owner.getExpressionType());
 
-      private final Set<ICPPASTFunctionCallExpression> funCalls;
-      private final IType                              typeOfSelection;
+            if (hasSameTypeAsSelection(typeOfInstance)) {
+                funCalls.add(funCall);
+            }
+        }
 
-      {
-         shouldVisitExpressions = true;
-      }
-
-      public MemFunCallFinder(final IType typeOfSelection) {
-         funCalls = new LinkedHashSet<>();
-         this.typeOfSelection = typeOfSelection;
-      }
-
-      public Collection<ICPPASTFunctionCallExpression> getReferencedCalls() {
-         return funCalls;
-      }
-
-      @Override
-      public int visit(final IASTExpression expression) {
-         if (!(expression instanceof ICPPASTFunctionCallExpression)) { return PROCESS_CONTINUE; }
-
-         final ICPPASTFunctionCallExpression funCall = (ICPPASTFunctionCallExpression) expression;
-         final IASTExpression nameExpr = funCall.getFunctionNameExpression();
-
-         if (nameExpr instanceof ICPPASTFieldReference) {
-            final ICPPASTFieldReference reference = (ICPPASTFieldReference) nameExpr;
-            processFieldReference(funCall, reference);
-         }
-
-         return PROCESS_CONTINUE;
-      }
-
-      private void processFieldReference(final ICPPASTFunctionCallExpression funCall, final ICPPASTFieldReference field) {
-         final IASTExpression owner = field.getFieldOwner();
-         final IType typeOfInstance = ASTUtil.unwindPointerOrRefType(owner.getExpressionType());
-
-         if (hasSameTypeAsSelection(typeOfInstance)) {
-            funCalls.add(funCall);
-         }
-      }
-
-      private boolean hasSameTypeAsSelection(final IType typeOfInstance) {
-         return ASTUtil.isSameType(typeOfInstance, typeOfSelection);
-      }
-   }
+        private boolean hasSameTypeAsSelection(final IType typeOfInstance) {
+            return ASTUtil.isSameType(typeOfInstance, typeOfSelection);
+        }
+    }
 }

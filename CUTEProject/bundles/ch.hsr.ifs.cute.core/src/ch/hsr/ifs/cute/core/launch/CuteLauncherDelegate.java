@@ -20,14 +20,14 @@ import ch.hsr.ifs.testframework.launch.TestLauncherDelegate;
  */
 public class CuteLauncherDelegate extends TestLauncherDelegate {
 
-   @Override
-   protected String getPluginID() {
-      return CuteCorePlugin.getUniqueIdentifier();
-   }
+    @Override
+    protected String getPluginID() {
+        return CuteCorePlugin.getUniqueIdentifier();
+    }
 
-   @Override
-   protected ConsoleEventParser getConsoleEventParser() {
-      return new CuteConsoleEventParser();
-   }
+    @Override
+    protected ConsoleEventParser getConsoleEventParser() {
+        return new CuteConsoleEventParser();
+    }
 
 }

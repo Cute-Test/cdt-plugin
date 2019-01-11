@@ -27,47 +27,47 @@ import ch.hsr.ifs.cute.mockator.testdouble.entities.TestDouble;
 
 public abstract class AbstractTestDoubleRefactoring extends MockatorRefactoring {
 
-   protected CppStandard cppStd;
-   protected TestDouble  testDouble;
+    protected CppStandard cppStd;
+    protected TestDouble  testDouble;
 
-   public AbstractTestDoubleRefactoring(final CppStandard cppStd, final ICElement cElement, final Optional<ITextSelection> selection,
-                                        final ICProject project) {
-      super(cElement, selection, project);
-      this.cppStd = cppStd;
-   }
+    public AbstractTestDoubleRefactoring(final CppStandard cppStd, final ICElement cElement, final Optional<ITextSelection> selection,
+                                         final ICProject project) {
+        super(cElement, selection);
+        this.cppStd = cppStd;
+    }
 
-   @Override
-   public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
-      final RefactoringStatus status = super.checkInitialConditions(pm);
-      final Optional<ICPPASTCompositeTypeSpecifier> classInSelection = findFirstEnclosingClass(selection);
+    @Override
+    public RefactoringStatus checkInitialConditions(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
+        final RefactoringStatus status = super.checkInitialConditions(pm);
+        final Optional<ICPPASTCompositeTypeSpecifier> classInSelection = findFirstEnclosingClass(selection);
 
-      if (!classInSelection.isPresent()) {
-         status.addFatalError("Could not find a class in the current selection");
-      } else {
-         testDouble = createTestDouble(classInSelection.get());
-      }
+        if (!classInSelection.isPresent()) {
+            status.addFatalError("Could not find a class in the current selection");
+        } else {
+            testDouble = createTestDouble(classInSelection.get());
+        }
 
-      return status;
-   }
+        return status;
+    }
 
-   protected ClassPublicVisibilityInserter getPublicVisibilityInserter(final ASTRewrite rewriter) {
-      return new ClassPublicVisibilityInserter(testDouble.getKlass(), rewriter);
-   }
+    protected ClassPublicVisibilityInserter getPublicVisibilityInserter(final ASTRewrite rewriter) {
+        return new ClassPublicVisibilityInserter(testDouble.getKlass(), rewriter);
+    }
 
-   protected abstract TestDouble createTestDouble(ICPPASTCompositeTypeSpecifier selectedClass);
+    protected abstract TestDouble createTestDouble(ICPPASTCompositeTypeSpecifier selectedClass);
 
-   protected Collection<? extends MissingMemberFunction> collectMissingMemFuns(final IProgressMonitor pm) {
-      return testDouble.collectMissingMemFuns(getMissingMemFunFinder(pm), cppStd);
-   }
+    protected Collection<? extends MissingMemberFunction> collectMissingMemFuns(final IProgressMonitor pm) {
+        return testDouble.collectMissingMemFuns(getMissingMemFunFinder(pm), cppStd);
+    }
 
-   private MissingMemFunFinder getMissingMemFunFinder(final IProgressMonitor pm) {
-      switch (testDouble.getPolymorphismKind()) {
-      case StaticPoly:
-         return new StaticPolyMissingMemFunFinder(getProject(), getIndex());
-      case SubTypePoly:
-         return new SubtypeMissingMemFunFinder(getProject(), getIndex(), pm);
-      default:
-         throw new ILTISException("Unsupported polymorphism kind").rethrowUnchecked();
-      }
-   }
+    private MissingMemFunFinder getMissingMemFunFinder(final IProgressMonitor pm) {
+        switch (testDouble.getPolymorphismKind()) {
+        case StaticPoly:
+            return new StaticPolyMissingMemFunFinder(getProject(), getIndex());
+        case SubTypePoly:
+            return new SubtypeMissingMemFunFinder(getProject(), getIndex(), pm);
+        default:
+            throw new ILTISException("Unsupported polymorphism kind").rethrowUnchecked();
+        }
+    }
 }

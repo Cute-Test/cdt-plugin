@@ -28,49 +28,49 @@ import ch.hsr.ifs.cute.ui.CuteUIPlugin;
  */
 public class NewTestFunctionAction extends AbstractFunctionAction {
 
-   // TODO create Strategy or new Superclass
+    // TODO create Strategy or new Superclass
 
-   protected static final String TEST_STMT                    = "\tASSERTM(\"start writing tests\", false);";
-   int                           problemMarkerErrorLineNumber = 0;
+    protected static final String TEST_STMT                    = "\tASSERTM(\"start writing tests\", false);";
+    int                           problemMarkerErrorLineNumber = 0;
 
-   private final String funcName;
+    private final String funcName;
 
-   public NewTestFunctionAction(String funcName) {
-      this.funcName = funcName;
-   }
+    public NewTestFunctionAction(String funcName) {
+        this.funcName = funcName;
+    }
 
-   @Override
-   public MultiTextEdit createEdit(IFile file, IDocument doc, ISelection sel) throws CoreException {
-      IAddStrategy strategy = new NullStrategy(doc);
-      if (sel != null && sel instanceof TextSelection) {
-         TextSelection selection = (TextSelection) sel;
+    @Override
+    public MultiTextEdit createEdit(IFile file, IDocument doc, ISelection sel) throws CoreException {
+        IAddStrategy strategy = new NullStrategy(doc);
+        if (sel != null && sel instanceof TextSelection) {
+            TextSelection selection = (TextSelection) sel;
 
-         IASTTranslationUnit astTu = getASTTranslationUnit(file);
-         IIndex index = astTu.getIndex();
-         try {
-            index.acquireReadLock();
-            SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
-            astTu.accept(suitPushBackFinder);
-            final AddNewTestStrategy newTestStrategy = new AddNewTestStrategy(doc, file, astTu, funcName, suitPushBackFinder, selection);
+            IASTTranslationUnit astTu = getASTTranslationUnit(file);
+            IIndex index = astTu.getIndex();
+            try {
+                index.acquireReadLock();
+                SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
+                astTu.accept(suitPushBackFinder);
+                final AddNewTestStrategy newTestStrategy = new AddNewTestStrategy(doc, file, astTu, funcName, suitPushBackFinder, selection);
 
-            if (suitPushBackFinder.getSuiteNode() == null) {
-               int insertOffset = newTestStrategy.getInsertOffset(astTu, selection, doc);
-               final AddSuiteStrategy newSuiteStrategy = new AddSuiteStrategy(newTestStrategy, insertOffset);
-               final MultiTextEdit compositeEdit = new MultiTextEdit();
-               compositeEdit.addChild(newTestStrategy.createInsertTestFunctionEdit(insertOffset, doc, funcName));
-               TextEdit[] suiteChildren = newSuiteStrategy.getEdit().removeChildren();
-               compositeEdit.addChildren(suiteChildren);
-               return compositeEdit;
-            } else {
-               return newTestStrategy.getEdit();
+                if (suitPushBackFinder.getSuiteNode() == null) {
+                    int insertOffset = newTestStrategy.getInsertOffset(astTu, selection, doc);
+                    final AddSuiteStrategy newSuiteStrategy = new AddSuiteStrategy(newTestStrategy, insertOffset);
+                    final MultiTextEdit compositeEdit = new MultiTextEdit();
+                    compositeEdit.addChild(newTestStrategy.createInsertTestFunctionEdit(insertOffset, doc, funcName));
+                    TextEdit[] suiteChildren = newSuiteStrategy.getEdit().removeChildren();
+                    compositeEdit.addChildren(suiteChildren);
+                    return compositeEdit;
+                } else {
+                    return newTestStrategy.getEdit();
+                }
+            } catch (InterruptedException e) {
+                CuteUIPlugin.log(e);
+            } finally {
+                index.releaseReadLock();
             }
-         } catch (InterruptedException e) {
-            CuteUIPlugin.log(e);
-         } finally {
-            index.releaseReadLock();
-         }
-      }
-      return strategy.getEdit();
-   }
+        }
+        return strategy.getEdit();
+    }
 
 }

@@ -25,28 +25,30 @@ import org.eclipse.core.runtime.jobs.Job;
  */
 public class DeleteMarkerJob extends Job {
 
-   private final IFile file;
+    private final IFile file;
 
-   public DeleteMarkerJob(IFile file) {
-      super(Messages.DeleteMarkerJob_deleteMarker + file.toString());
-      this.file = file;
-   }
+    public DeleteMarkerJob(IFile file) {
+        super(Messages.DeleteMarkerJob_deleteMarker + file.toString());
+        this.file = file;
+    }
 
-   @Override
-   protected IStatus run(IProgressMonitor monitor) {
-      try {
-         file.deleteMarkers(GcovPlugin.COVER_MARKER_TYPE, true, IResource.DEPTH_ZERO);
-         file.deleteMarkers(GcovPlugin.UNCOVER_MARKER_TYPE, true, IResource.DEPTH_ZERO);
-         file.deleteMarkers(GcovPlugin.PARTIALLY_MARKER_TYPE, true, IResource.DEPTH_ZERO);
-      } catch (CoreException e) {
-         IStatus s = e.getStatus();
-         if (s instanceof IResourceStatus) {
-            IResourceStatus resStatus = (IResourceStatus) s;
-            if (resStatus.getCode() == IResourceStatus.RESOURCE_NOT_FOUND) { return Status.OK_STATUS; }
-         }
-         GcovPlugin.log(e);
-         return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getLocalizedMessage());
-      }
-      return Status.OK_STATUS;
-   }
+    @Override
+    protected IStatus run(IProgressMonitor monitor) {
+        try {
+            file.deleteMarkers(GcovPlugin.COVER_MARKER_TYPE, true, IResource.DEPTH_ZERO);
+            file.deleteMarkers(GcovPlugin.UNCOVER_MARKER_TYPE, true, IResource.DEPTH_ZERO);
+            file.deleteMarkers(GcovPlugin.PARTIALLY_MARKER_TYPE, true, IResource.DEPTH_ZERO);
+        } catch (CoreException e) {
+            IStatus s = e.getStatus();
+            if (s instanceof IResourceStatus) {
+                IResourceStatus resStatus = (IResourceStatus) s;
+                if (resStatus.getCode() == IResourceStatus.RESOURCE_NOT_FOUND) {
+                    return Status.OK_STATUS;
+                }
+            }
+            GcovPlugin.log(e);
+            return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, e.getLocalizedMessage());
+        }
+        return Status.OK_STATUS;
+    }
 }

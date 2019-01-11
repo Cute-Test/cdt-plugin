@@ -16,38 +16,38 @@ import ch.hsr.ifs.cute.mockator.refsupport.includes.AstIncludeNode;
 
 class CAssertEqualsInserter extends AbstractAssertEqualsInserter {
 
-   public CAssertEqualsInserter(final ICPPASTFunctionDefinition testFunction, final MockSupportContext context) {
-      super(testFunction, context);
-   }
+    public CAssertEqualsInserter(final ICPPASTFunctionDefinition testFunction, final MockSupportContext context) {
+        super(testFunction, context);
+    }
 
-   @Override
-   protected void insertWith(final ASTRewrite rewriter) {
-      insertCAssertInclude(rewriter);
-      final IASTExpressionStatement cAssert = createAssertEqualStmt();
-      insertAssertEqual(rewriter, cAssert);
-   }
+    @Override
+    protected void insertWith(final ASTRewrite rewriter) {
+        insertCAssertInclude(rewriter);
+        final IASTExpressionStatement cAssert = createAssertEqualStmt();
+        insertAssertEqual(rewriter, cAssert);
+    }
 
-   private void insertCAssertInclude(final ASTRewrite rewriter) {
-      final AstIncludeNode cAssert = new AstIncludeNode(MockatorConstants.C_ASSERT_INCLUDE, true);
-      cAssert.insertInTu(testFunction.getTranslationUnit(), rewriter);
-   }
+    private void insertCAssertInclude(final ASTRewrite rewriter) {
+        final AstIncludeNode cAssert = new AstIncludeNode(MockatorConstants.C_ASSERT_INCLUDE, true);
+        cAssert.insertInTu(testFunction.getTranslationUnit(), rewriter);
+    }
 
-   private IASTExpressionStatement createAssertEqualStmt() {
-      final IASTFunctionCallExpression assertEqual = nodeFactory.newFunctionCallExpression(createCAssert(), getAssertEqualParams());
-      return nodeFactory.newExpressionStatement(assertEqual);
-   }
+    private IASTExpressionStatement createAssertEqualStmt() {
+        final IASTFunctionCallExpression assertEqual = nodeFactory.newFunctionCallExpression(createCAssert(), getAssertEqualParams());
+        return nodeFactory.newExpressionStatement(assertEqual);
+    }
 
-   private IASTInitializerClause[] getAssertEqualParams() {
-      final ICPPASTBinaryExpression binOp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_equals, createExpectations(), createActual());
-      return new IASTInitializerClause[] { binOp };
-   }
+    private IASTInitializerClause[] getAssertEqualParams() {
+        final ICPPASTBinaryExpression binOp = nodeFactory.newBinaryExpression(IASTBinaryExpression.op_equals, createExpectations(), createActual());
+        return new IASTInitializerClause[] { binOp };
+    }
 
-   private IASTIdExpression createCAssert() {
-      return nodeFactory.newIdExpression(nodeFactory.newName(getNameOfAssert().toCharArray()));
-   }
+    private IASTIdExpression createCAssert() {
+        return nodeFactory.newIdExpression(nodeFactory.newName(getNameOfAssert().toCharArray()));
+    }
 
-   @Override
-   protected String getNameOfAssert() {
-      return MockatorConstants.C_ASSERT_EQUAL;
-   }
+    @Override
+    protected String getNameOfAssert() {
+        return MockatorConstants.C_ASSERT_EQUAL;
+    }
 }

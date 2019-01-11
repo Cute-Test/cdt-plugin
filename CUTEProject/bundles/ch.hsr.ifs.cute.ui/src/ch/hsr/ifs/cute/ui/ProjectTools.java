@@ -50,123 +50,124 @@ import ch.hsr.ifs.cute.core.CuteCorePlugin;
  */
 public class ProjectTools {
 
-   public static IFolder createFolder(IProject project, String relPath, boolean addToInclude) throws CoreException {
-      IFolder folder = project.getProject().getFolder(relPath);
-      if (!folder.exists()) {
-         ProjectTools.createFolder(folder, true, true, new NullProgressMonitor());
-      }
+    public static IFolder createFolder(IProject project, String relPath, boolean addToInclude) throws CoreException {
+        IFolder folder = project.getProject().getFolder(relPath);
+        if (!folder.exists()) {
+            ProjectTools.createFolder(folder, true, true, new NullProgressMonitor());
+        }
 
-      if (addToInclude && CCorePlugin.getDefault().isNewStyleProject(project.getProject())) {
-         ICSourceEntry newEntry = new CSourceEntry(folder, null, 0);
-         ICProjectDescription des = CCorePlugin.getDefault().getProjectDescription(project.getProject(), true);
-         ProjectTools.addEntryToAllCfgs(des, newEntry, false);
-         CCorePlugin.getDefault().setProjectDescription(project.getProject(), des, false, new NullProgressMonitor());
-      }
-      return folder;
-   }
+        if (addToInclude && CCorePlugin.getDefault().isNewStyleProject(project.getProject())) {
+            ICSourceEntry newEntry = new CSourceEntry(folder, null, 0);
+            ICProjectDescription des = CCorePlugin.getDefault().getProjectDescription(project.getProject(), true);
+            ProjectTools.addEntryToAllCfgs(des, newEntry, false);
+            CCorePlugin.getDefault().setProjectDescription(project.getProject(), des, false, new NullProgressMonitor());
+        }
+        return folder;
+    }
 
-   public static void createFolder(IFolder folder, boolean force, boolean local, IProgressMonitor monitor) throws CoreException {
-      if (!folder.exists()) {
-         IContainer parent = folder.getParent();
-         if (parent instanceof IFolder) {
-            createFolder((IFolder) parent, force, local, null);
-         }
-         folder.create(force, local, monitor);
-      }
-   }
-
-   public static void addEntryToAllCfgs(ICProjectDescription des, ICSourceEntry entry, boolean removeProj) throws WriteAccessException,
-         CoreException {
-      ICConfigurationDescription cfgs[] = des.getConfigurations();
-      for (ICConfigurationDescription cfg : cfgs) {
-         ICSourceEntry[] entries = cfg.getSourceEntries();
-         entries = addEntry(entries, entry, removeProj);
-         cfg.setSourceEntries(entries);
-      }
-   }
-
-   public static ICSourceEntry[] addEntry(ICSourceEntry[] entries, ICSourceEntry newEntry, boolean removeProj) {
-      Set<ICSourceEntry> set = new HashSet<>();
-      for (ICSourceEntry entry : entries) {
-         if (removeProj && new Path(entry.getValue()).segmentCount() == 1) continue;
-
-         set.add(entry);
-      }
-      set.add(newEntry);
-      return set.toArray(new ICSourceEntry[set.size()]);
-   }
-
-   public static void changeOptionInConfig(IConfiguration config, IOption[] options, IHoldsOptions optionHolder, int optionType,
-         IIncludeStrategyProvider inStratProv, Function<String[], String[]> changeOperation) throws BuildException {
-      for (IOption option : options) {
-         if (option.getValueType() == optionType) {
-            ManagedBuildManager.setOption(config, optionHolder, option, changeOperation.apply(inStratProv.getStrategy(optionType).getValues(option)));
-         }
-      }
-   }
-
-   public static void setOptionInConfig(String value, IConfiguration config, IOption[] options, IHoldsOptions optionHolder, int optionType,
-         IIncludeStrategyProvider inStratProv) throws BuildException {
-      changeOptionInConfig(config, options, optionHolder, optionType, inStratProv, values -> ArrayUtil.append(values, value));
-   }
-
-   public static void removeOptionInConfig(String value, IConfiguration config, IOption[] options, IHoldsOptions optionHolder, int optionType,
-         IIncludeStrategyProvider inStratProv) throws BuildException {
-      changeOptionInConfig(config, options, optionHolder, optionType, inStratProv, values -> ArrayUtil.removeAndTrim(values, value));
-   }
-
-   public static void changeOptionInAllConfigs(IProject project, int optionType, IIncludeStrategyProvider inclStratProv,
-         Function<String[], String[]> changeOperation) throws CoreException {
-      IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-      IConfiguration[] configs = info.getManagedProject().getConfigurations();
-      try {
-         for (IConfiguration conf : configs) {
-            IToolChain toolChain = conf.getToolChain();
-            changeOptionInConfig(conf, toolChain.getOptions(), toolChain, optionType, inclStratProv, changeOperation);
-
-            ITool[] tools = conf.getTools();
-            for (ITool tool : tools) {
-               changeOptionInConfig(conf, tool.getOptions(), tool, optionType, inclStratProv, changeOperation);
+    public static void createFolder(IFolder folder, boolean force, boolean local, IProgressMonitor monitor) throws CoreException {
+        if (!folder.exists()) {
+            IContainer parent = folder.getParent();
+            if (parent instanceof IFolder) {
+                createFolder((IFolder) parent, force, local, null);
             }
-         }
-      } catch (BuildException be) {
-         throw new CoreException(new Status(IStatus.ERROR, CuteCorePlugin.PLUGIN_ID, 42, be.getMessage(), be));
-      }
-   }
+            folder.create(force, local, monitor);
+        }
+    }
 
-   public static void setOptionInAllConfigs(IProject project, String value, int optionType, IIncludeStrategyProvider inclStratProv)
-         throws CoreException {
-      changeOptionInAllConfigs(project, optionType, inclStratProv, values -> ArrayUtil.append(values, value));
-   }
+    public static void addEntryToAllCfgs(ICProjectDescription des, ICSourceEntry entry, boolean removeProj) throws WriteAccessException,
+            CoreException {
+        ICConfigurationDescription cfgs[] = des.getConfigurations();
+        for (ICConfigurationDescription cfg : cfgs) {
+            ICSourceEntry[] entries = cfg.getSourceEntries();
+            entries = addEntry(entries, entry, removeProj);
+            cfg.setSourceEntries(entries);
+        }
+    }
 
-   public static void removeOptionInAllConfigs(IProject project, String value, int optionType, IIncludeStrategyProvider inclStratProv)
-         throws CoreException {
-      changeOptionInAllConfigs(project, optionType, inclStratProv, values -> ArrayUtil.removeAndTrim(values, value));
-   }
+    public static ICSourceEntry[] addEntry(ICSourceEntry[] entries, ICSourceEntry newEntry, boolean removeProj) {
+        Set<ICSourceEntry> set = new HashSet<>();
+        for (ICSourceEntry entry : entries) {
+            if (removeProj && new Path(entry.getValue()).segmentCount() == 1) continue;
 
-   public static void setIncludePaths(IPath cuteFolder, IProject project, IIncludeStrategyProvider inclStratProv) throws CoreException {
-      String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\"";
-      setOptionInAllConfigs(project, path, IOption.INCLUDE_PATH, inclStratProv);
-   }
+            set.add(entry);
+        }
+        set.add(newEntry);
+        return set.toArray(new ICSourceEntry[set.size()]);
+    }
 
-   public static void removeIncludePaths(IPath cuteFolder, IProject project, IIncludeStrategyProvider inclStratProv) throws CoreException {
-      String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\"";
-      removeOptionInAllConfigs(project, path, IOption.INCLUDE_PATH, inclStratProv);
-   }
+    public static void changeOptionInConfig(IConfiguration config, IOption[] options, IHoldsOptions optionHolder, int optionType,
+            IIncludeStrategyProvider inStratProv, Function<String[], String[]> changeOperation) throws BuildException {
+        for (IOption option : options) {
+            if (option.getValueType() == optionType) {
+                ManagedBuildManager.setOption(config, optionHolder, option, changeOperation.apply(inStratProv.getStrategy(optionType).getValues(
+                        option)));
+            }
+        }
+    }
 
-   public static boolean isLibraryProject(IProject project) {
-      boolean isLibraryProject = false;
-      IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-      if (info != null) {
-         IConfiguration[] configs = info.getManagedProject().getConfigurations();
-         IBuildProperty artifactType = configs[0].getBuildProperties().getProperty(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_ID);
-         if (artifactType != null) {
-            String artifactTypeName = artifactType.getValue().getId();
-            boolean isSharedLibProj = artifactTypeName.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_SHAREDLIB);
-            boolean isStaticLibProj = artifactTypeName.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_STATICLIB);
-            isLibraryProject = isSharedLibProj || isStaticLibProj;
-         }
-      }
-      return isLibraryProject;
-   }
+    public static void setOptionInConfig(String value, IConfiguration config, IOption[] options, IHoldsOptions optionHolder, int optionType,
+            IIncludeStrategyProvider inStratProv) throws BuildException {
+        changeOptionInConfig(config, options, optionHolder, optionType, inStratProv, values -> ArrayUtil.append(values, value));
+    }
+
+    public static void removeOptionInConfig(String value, IConfiguration config, IOption[] options, IHoldsOptions optionHolder, int optionType,
+            IIncludeStrategyProvider inStratProv) throws BuildException {
+        changeOptionInConfig(config, options, optionHolder, optionType, inStratProv, values -> ArrayUtil.removeAndTrim(values, value));
+    }
+
+    public static void changeOptionInAllConfigs(IProject project, int optionType, IIncludeStrategyProvider inclStratProv,
+            Function<String[], String[]> changeOperation) throws CoreException {
+        IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+        IConfiguration[] configs = info.getManagedProject().getConfigurations();
+        try {
+            for (IConfiguration conf : configs) {
+                IToolChain toolChain = conf.getToolChain();
+                changeOptionInConfig(conf, toolChain.getOptions(), toolChain, optionType, inclStratProv, changeOperation);
+
+                ITool[] tools = conf.getTools();
+                for (ITool tool : tools) {
+                    changeOptionInConfig(conf, tool.getOptions(), tool, optionType, inclStratProv, changeOperation);
+                }
+            }
+        } catch (BuildException be) {
+            throw new CoreException(new Status(IStatus.ERROR, CuteCorePlugin.PLUGIN_ID, 42, be.getMessage(), be));
+        }
+    }
+
+    public static void setOptionInAllConfigs(IProject project, String value, int optionType, IIncludeStrategyProvider inclStratProv)
+            throws CoreException {
+        changeOptionInAllConfigs(project, optionType, inclStratProv, values -> ArrayUtil.append(values, value));
+    }
+
+    public static void removeOptionInAllConfigs(IProject project, String value, int optionType, IIncludeStrategyProvider inclStratProv)
+            throws CoreException {
+        changeOptionInAllConfigs(project, optionType, inclStratProv, values -> ArrayUtil.removeAndTrim(values, value));
+    }
+
+    public static void setIncludePaths(IPath cuteFolder, IProject project, IIncludeStrategyProvider inclStratProv) throws CoreException {
+        String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\"";
+        setOptionInAllConfigs(project, path, IOption.INCLUDE_PATH, inclStratProv);
+    }
+
+    public static void removeIncludePaths(IPath cuteFolder, IProject project, IIncludeStrategyProvider inclStratProv) throws CoreException {
+        String path = "\"${workspace_loc:" + cuteFolder.toPortableString() + "}\"";
+        removeOptionInAllConfigs(project, path, IOption.INCLUDE_PATH, inclStratProv);
+    }
+
+    public static boolean isLibraryProject(IProject project) {
+        boolean isLibraryProject = false;
+        IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+        if (info != null) {
+            IConfiguration[] configs = info.getManagedProject().getConfigurations();
+            IBuildProperty artifactType = configs[0].getBuildProperties().getProperty(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_ID);
+            if (artifactType != null) {
+                String artifactTypeName = artifactType.getValue().getId();
+                boolean isSharedLibProj = artifactTypeName.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_SHAREDLIB);
+                boolean isStaticLibProj = artifactTypeName.equals(ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_STATICLIB);
+                isLibraryProject = isSharedLibProj || isStaticLibProj;
+            }
+        }
+        return isLibraryProject;
+    }
 }

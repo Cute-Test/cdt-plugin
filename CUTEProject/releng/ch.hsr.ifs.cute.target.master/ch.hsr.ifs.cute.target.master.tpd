@@ -1,19 +1,19 @@
-target "Cute for Photon" with requirements
+target "Cute" with requirements
 
-location "http://download.eclipse.org/releases/photon" {
+location "http://download.eclipse.org/releases/2018-12" {
 	org.eclipse.swtbot.eclipse.feature.group lazy
 	org.apache.log4j lazy
-	org.eclipse.platform.sdk [4.8.0,4.9.0)
-	org.eclipse.sdk.ide [4.8.0,5.0.0)
+	org.eclipse.platform.sdk 4.10.0
+	org.eclipse.sdk.ide 4.10.0
 }
 
-location "http://download.eclipse.org/tools/cdt/releases/9.5" {
-	org.eclipse.cdt.sdk.feature.group 9.5.2
+location "http://download.eclipse.org/tools/cdt/releases/9.6" {
+	org.eclipse.cdt.sdk.feature.group 9.6.0
 }
 
 location "https://www.cevelop.com/iltis" {
-	ch.hsr.ifs.iltis.core.core.feature.feature.group 1.1.2
-	ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group 1.1.2
-	ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group 1.1.2
-	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group 1.1.1
+	ch.hsr.ifs.iltis.core.core.feature.feature.group 2.0.0
+	ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group 2.0.0
+	ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group 2.0.0
+	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group 2.0.0
 }

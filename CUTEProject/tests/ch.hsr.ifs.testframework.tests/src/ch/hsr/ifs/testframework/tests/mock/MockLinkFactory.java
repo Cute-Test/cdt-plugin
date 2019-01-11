@@ -20,9 +20,9 @@ import ch.hsr.ifs.testframework.ui.ILinkFactory;
  */
 public class MockLinkFactory implements ILinkFactory {
 
-   @Override
-   public IHyperlink createLink(IFile file, int lineNumber, String editorId, int fileLength, int fileOffset) {
-      return new HyperlinkMock(file, lineNumber, editorId, fileLength, fileOffset);
-   }
+    @Override
+    public IHyperlink createLink(IFile file, int lineNumber, String editorId, int fileLength, int fileOffset) {
+        return new HyperlinkMock(file, lineNumber, editorId, fileLength, fileOffset);
+    }
 
 }

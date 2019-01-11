@@ -14,26 +14,26 @@ import ch.hsr.ifs.cute.mockator.testdouble.entities.AbstractTestDouble;
 
 public class FakeObject extends AbstractTestDouble {
 
-   public FakeObject(final ICPPASTCompositeTypeSpecifier clazz) {
-      super(clazz);
-   }
+    public FakeObject(final ICPPASTCompositeTypeSpecifier clazz) {
+        super(clazz);
+    }
 
-   @Override
-   public void addAdditionalCtorSupport(final ICPPASTFunctionDefinition defaultCtor, final CppStandard cppStd) {}
+    @Override
+    public void addAdditionalCtorSupport(final ICPPASTFunctionDefinition defaultCtor, final CppStandard cppStd) {}
 
-   @Override
-   public DefaultCtorProvider getDefaultCtorProvider(final CppStandard cppStd) {
-      return new FakeObjectDefaultCtorProvider(getKlass());
-   }
+    @Override
+    public DefaultCtorProvider getDefaultCtorProvider(final CppStandard cppStd) {
+        return new FakeObjectDefaultCtorProvider(getKlass());
+    }
 
-   @Override
-   protected TestDoubleMemFunImplStrategy getImplStrategy(final CppStandard cppStd) {
-      return new FakeObjectMemFunImplStrategy();
-   }
+    @Override
+    protected TestDoubleMemFunImplStrategy getImplStrategy(final CppStandard cppStd) {
+        return new FakeObjectMemFunImplStrategy();
+    }
 
-   @Override
-   public void addToNamespace(final ICPPASTNamespaceDefinition parentNs, final IASTSimpleDeclaration testDouble,
-         final ICPPASTCompositeTypeSpecifier testDoubleToMove, final CppStandard cppStd, final ASTRewrite rewriter) {
-      parentNs.addDeclaration(testDouble);
-   }
+    @Override
+    public void addToNamespace(final ICPPASTNamespaceDefinition parentNs, final IASTSimpleDeclaration testDouble,
+            final ICPPASTCompositeTypeSpecifier testDoubleToMove, final CppStandard cppStd, final ASTRewrite rewriter) {
+        parentNs.addDeclaration(testDouble);
+    }
 }

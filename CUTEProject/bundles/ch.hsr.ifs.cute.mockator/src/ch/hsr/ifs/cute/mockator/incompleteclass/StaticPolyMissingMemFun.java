@@ -7,7 +7,7 @@ import ch.hsr.ifs.cute.mockator.refsupport.functions.FunctionEquivalenceVerifier
 
 public interface StaticPolyMissingMemFun extends MissingMemberFunction {
 
-   ICPPASTFunctionDefinition getContainingFunction();
+    ICPPASTFunctionDefinition getContainingFunction();
 
-   boolean isCallEquivalent(ICPPASTFunctionDefinition function, ConstStrategy strategy);
+    boolean isCallEquivalent(ICPPASTFunctionDefinition function, ConstStrategy strategy);
 }

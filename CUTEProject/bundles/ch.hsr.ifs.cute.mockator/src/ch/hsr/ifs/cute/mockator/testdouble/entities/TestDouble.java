@@ -25,32 +25,32 @@ import ch.hsr.ifs.cute.mockator.testdouble.PolymorphismKind;
 
 public interface TestDouble {
 
-   PolymorphismKind getPolymorphismKind();
+    PolymorphismKind getPolymorphismKind();
 
-   IASTName getName();
+    IASTName getName();
 
-   ICPPASTCompositeTypeSpecifier getKlass();
+    ICPPASTCompositeTypeSpecifier getKlass();
 
-   Collection<ExistingTestDoubleMemFun> getPublicMemFuns();
+    Collection<ExistingTestDoubleMemFun> getPublicMemFuns();
 
-   Collection<ICPPASTFunctionDefinition> getReferencingTestFunctions(CRefactoringContext c, ICProject p, IProgressMonitor pm);
+    Collection<ICPPASTFunctionDefinition> getReferencingTestFunctions(CRefactoringContext c, ICProject p, IProgressMonitor pm);
 
-   boolean hasOnlyStaticFunctions(Collection<? extends MissingMemberFunction> missingMemFuns);
+    boolean hasOnlyStaticFunctions(Collection<? extends MissingMemberFunction> missingMemFuns);
 
-   Collection<? extends MissingMemberFunction> collectMissingMemFuns(MissingMemFunFinder finder, CppStandard cppStd);
+    Collection<? extends MissingMemberFunction> collectMissingMemFuns(MissingMemFunFinder finder, CppStandard cppStd);
 
-   DefaultCtorProvider getDefaultCtorProvider(CppStandard cppStd);
+    DefaultCtorProvider getDefaultCtorProvider(CppStandard cppStd);
 
-   void addMissingMemFuns(Collection<? extends MissingMemberFunction> missingMemFuns, ClassPublicVisibilityInserter inserter, CppStandard cppStd);
+    void addMissingMemFuns(Collection<? extends MissingMemberFunction> missingMemFuns, ClassPublicVisibilityInserter inserter, CppStandard cppStd);
 
-   void addAdditionalCtorSupport(ICPPASTFunctionDefinition defaultCtor, CppStandard cppStd);
+    void addAdditionalCtorSupport(ICPPASTFunctionDefinition defaultCtor, CppStandard cppStd);
 
-   ICPPClassType getClassType();
+    ICPPClassType getClassType();
 
-   boolean hasPublicCtor();
+    boolean hasPublicCtor();
 
-   IASTNode getParent();
+    IASTNode getParent();
 
-   void addToNamespace(ICPPASTNamespaceDefinition parentNs, IASTSimpleDeclaration testDouble, ICPPASTCompositeTypeSpecifier toMove,
-         CppStandard cppStd, ASTRewrite rewriter);
+    void addToNamespace(ICPPASTNamespaceDefinition parentNs, IASTSimpleDeclaration testDouble, ICPPASTCompositeTypeSpecifier toMove,
+            CppStandard cppStd, ASTRewrite rewriter);
 }

@@ -23,41 +23,41 @@ import ch.hsr.ifs.cute.ui.checkers.RegisteredTestFunctionFinderVisitor;
 
 public class SuitePushBackFinder extends ASTVisitor {
 
-   private IASTName suiteDeclName = null;
-   private IASTNode suiteLocation = null;
+    private IASTName suiteDeclName = null;
+    private IASTNode suiteLocation = null;
 
-   {
-      shouldVisitStatements = true;
-   }
+    {
+        shouldVisitStatements = true;
+    }
 
-   //save the name of the last AST element containing "cute::suite"
-   //unable to handle multi-suite in a file
-   @Override
-   public int leave(IASTStatement statement) {
-      if (statement instanceof IASTDeclarationStatement) {
-         IASTDeclarationStatement declStmt = (IASTDeclarationStatement) statement;
-         IASTDeclaration decl = declStmt.getDeclaration();
-         if (decl instanceof IASTSimpleDeclaration) {
-            IASTSimpleDeclaration sDecl = (IASTSimpleDeclaration) decl;
-            IASTDeclSpecifier declSpec = sDecl.getDeclSpecifier();
-            if (declSpec instanceof ICPPASTNamedTypeSpecifier) {
-               ICPPASTNamedTypeSpecifier nDeclSpec = (ICPPASTNamedTypeSpecifier) declSpec;
-               if (RegisteredTestFunctionFinderVisitor.isCuteSuite(nDeclSpec)) { // PS: Hack, should check if suite is in namespace cute!
-                  suiteDeclName = sDecl.getDeclarators()[0].getName();
-                  suiteLocation = nDeclSpec;
-               }
+    //save the name of the last AST element containing "cute::suite"
+    //unable to handle multi-suite in a file
+    @Override
+    public int leave(IASTStatement statement) {
+        if (statement instanceof IASTDeclarationStatement) {
+            IASTDeclarationStatement declStmt = (IASTDeclarationStatement) statement;
+            IASTDeclaration decl = declStmt.getDeclaration();
+            if (decl instanceof IASTSimpleDeclaration) {
+                IASTSimpleDeclaration sDecl = (IASTSimpleDeclaration) decl;
+                IASTDeclSpecifier declSpec = sDecl.getDeclSpecifier();
+                if (declSpec instanceof ICPPASTNamedTypeSpecifier) {
+                    ICPPASTNamedTypeSpecifier nDeclSpec = (ICPPASTNamedTypeSpecifier) declSpec;
+                    if (RegisteredTestFunctionFinderVisitor.isCuteSuite(nDeclSpec)) { // PS: Hack, should check if suite is in namespace cute!
+                        suiteDeclName = sDecl.getDeclarators()[0].getName();
+                        suiteLocation = nDeclSpec;
+                    }
 
+                }
             }
-         }
-      }
-      return super.leave(statement);
-   }
+        }
+        return super.leave(statement);
+    }
 
-   public IASTName getSuiteDeclName() {
-      return suiteDeclName;
-   }
+    public IASTName getSuiteDeclName() {
+        return suiteDeclName;
+    }
 
-   public IASTNode getSuiteNode() {
-      return suiteLocation;
-   }
+    public IASTNode getSuiteNode() {
+        return suiteLocation;
+    }
 }

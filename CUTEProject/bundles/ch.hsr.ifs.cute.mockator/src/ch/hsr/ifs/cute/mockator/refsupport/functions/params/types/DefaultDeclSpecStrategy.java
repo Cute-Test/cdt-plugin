@@ -8,11 +8,11 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleDeclSpecifier;
 
 class DefaultDeclSpecStrategy implements DeclSpecGeneratorStrategy {
 
-   @Override
-   public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
-      final ICPPASTSimpleDeclSpecifier spec = nodeFactory.newSimpleDeclSpecifier();
-      spec.setType(IASTSimpleDeclSpecifier.t_int);
-      spec.setConst(true);
-      return spec;
-   }
+    @Override
+    public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
+        final ICPPASTSimpleDeclSpecifier spec = nodeFactory.newSimpleDeclSpecifier();
+        spec.setType(IASTSimpleDeclSpecifier.t_int);
+        spec.setConst(true);
+        return spec;
+    }
 }

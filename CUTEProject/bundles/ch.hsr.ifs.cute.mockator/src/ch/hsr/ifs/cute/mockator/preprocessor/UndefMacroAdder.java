@@ -14,22 +14,22 @@ import ch.hsr.ifs.iltis.cpp.core.util.constants.CommonCPPConstants;
 @SuppressWarnings("restriction")
 class UndefMacroAdder {
 
-   private final ASTRewrite          rewriter;
-   private final IASTTranslationUnit ast;
-   private final IASTNode            insertionPoint;
+    private final ASTRewrite          rewriter;
+    private final IASTTranslationUnit ast;
+    private final IASTNode            insertionPoint;
 
-   public UndefMacroAdder(final IASTTranslationUnit tu, final ASTRewrite rewriter, final IASTNode insertionPoint) {
-      ast = tu;
-      this.rewriter = rewriter;
-      this.insertionPoint = insertionPoint;
-   }
+    public UndefMacroAdder(final IASTTranslationUnit tu, final ASTRewrite rewriter, final IASTNode insertionPoint) {
+        ast = tu;
+        this.rewriter = rewriter;
+        this.insertionPoint = insertionPoint;
+    }
 
-   public void addUndefMacro(final String funName) {
-      rewriter.insertBefore(ast, insertionPoint, getUndefMacro(funName), null);
-   }
+    public void addUndefMacro(final String funName) {
+        rewriter.insertBefore(ast, insertionPoint, getUndefMacro(funName), null);
+    }
 
-   private static ASTLiteralNode getUndefMacro(final String funName) {
-      final String undef = CommonCPPConstants.UNDEF_DIRECTIVE + SPACE + funName + SYSTEM_NEW_LINE;
-      return new ASTLiteralNode(undef);
-   }
+    private static ASTLiteralNode getUndefMacro(final String funName) {
+        final String undef = CommonCPPConstants.UNDEF_DIRECTIVE + SPACE + funName + SYSTEM_NEW_LINE;
+        return new ASTLiteralNode(undef);
+    }
 }

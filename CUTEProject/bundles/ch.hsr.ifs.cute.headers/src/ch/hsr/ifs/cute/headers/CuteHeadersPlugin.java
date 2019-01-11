@@ -16,42 +16,42 @@ import org.osgi.framework.BundleContext;
 
 public class CuteHeadersPlugin extends AbstractUIPlugin {
 
-   public static final String PLUGIN_ID = "ch.hsr.ifs.cute.headers";
+    public static final String PLUGIN_ID = "ch.hsr.ifs.cute.headers";
 
-   private static CuteHeadersPlugin plugin;
+    private static CuteHeadersPlugin plugin;
 
-   public CuteHeadersPlugin() {}
+    public CuteHeadersPlugin() {}
 
-   @Override
-   public void start(BundleContext context) throws Exception {
-      super.start(context);
-      plugin = this;
-   }
+    @Override
+    public void start(BundleContext context) throws Exception {
+        super.start(context);
+        plugin = this;
+    }
 
-   @Override
-   public void stop(BundleContext context) throws Exception {
-      plugin = null;
-      super.stop(context);
-   }
+    @Override
+    public void stop(BundleContext context) throws Exception {
+        plugin = null;
+        super.stop(context);
+    }
 
-   public static CuteHeadersPlugin getDefault() {
-      return plugin;
-   }
+    public static CuteHeadersPlugin getDefault() {
+        return plugin;
+    }
 
-   public static void log(IStatus status) {
-      getDefault().getLog().log(status);
-   }
+    public static void log(IStatus status) {
+        getDefault().getLog().log(status);
+    }
 
-   public static void log(String msg) {
-      log(new Status(IStatus.ERROR, PLUGIN_ID, msg));
-   }
+    public static void log(String msg) {
+        log(new Status(IStatus.ERROR, PLUGIN_ID, msg));
+    }
 
-   public static void log(String msg, Throwable e) {
-      log(new Status(IStatus.ERROR, PLUGIN_ID, 1, msg, e));
-   }
+    public static void log(String msg, Throwable e) {
+        log(new Status(IStatus.ERROR, PLUGIN_ID, 1, msg, e));
+    }
 
-   public static void log(Throwable e) {
-      log("Internal Error", e);
-   }
+    public static void log(Throwable e) {
+        log("Internal Error", e);
+    }
 
 }

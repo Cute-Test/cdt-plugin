@@ -10,32 +10,34 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 
 public class AllCallsVectorFinderVisitor extends ASTVisitor {
 
-   private IASTName registrationVector = null;
+    private IASTName registrationVector = null;
 
-   {
-      shouldVisitExpressions = true;
-   }
+    {
+        shouldVisitExpressions = true;
+    }
 
-   @Override
-   public int visit(final IASTExpression expression) {
-      if (!(expression instanceof IASTIdExpression)) { return PROCESS_CONTINUE; }
+    @Override
+    public int visit(final IASTExpression expression) {
+        if (!(expression instanceof IASTIdExpression)) {
+            return PROCESS_CONTINUE;
+        }
 
-      final IASTIdExpression idExpr = (IASTIdExpression) expression;
+        final IASTIdExpression idExpr = (IASTIdExpression) expression;
 
-      if (hasCallsVectorType(idExpr)) {
-         registrationVector = idExpr.getName();
-         return PROCESS_ABORT;
-      }
+        if (hasCallsVectorType(idExpr)) {
+            registrationVector = idExpr.getName();
+            return PROCESS_ABORT;
+        }
 
-      return PROCESS_CONTINUE;
-   }
+        return PROCESS_CONTINUE;
+    }
 
-   private static boolean hasCallsVectorType(final IASTIdExpression idExpr) {
-      final CallsVectorTypeVerifier verifier = new CallsVectorTypeVerifier(idExpr);
-      return verifier.isVectorOfCallsVector();
-   }
+    private static boolean hasCallsVectorType(final IASTIdExpression idExpr) {
+        final CallsVectorTypeVerifier verifier = new CallsVectorTypeVerifier(idExpr);
+        return verifier.isVectorOfCallsVector();
+    }
 
-   public Optional<IASTName> getFoundCallsVector() {
-      return Optional.ofNullable(registrationVector);
-   }
+    public Optional<IASTName> getFoundCallsVector() {
+        return Optional.ofNullable(registrationVector);
+    }
 }

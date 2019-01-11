@@ -20,21 +20,21 @@ import ch.hsr.ifs.cute.mockator.testdouble.creation.AbstractCreateTestDoubleRefa
 
 class TestDoubleCpp11Refactoring extends AbstractCreateTestDoubleRefactoring {
 
-   public TestDoubleCpp11Refactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject cProject) {
-      super(cElement, selection, cProject);
-   }
+    public TestDoubleCpp11Refactoring(final ICElement cElement, final Optional<ITextSelection> selection, final ICProject cProject) {
+        super(cElement, selection, cProject);
+    }
 
-   @Override
-   protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
-         OperationCanceledException {
-      final IASTTranslationUnit ast = getAST(tu, pm);
-      final ASTRewrite rewriter = collector.rewriterForTranslationUnit(ast);
-      insertBeforeCurrentStmt(createNewClassDefinition(ast), ast, rewriter);
-   }
+    @Override
+    protected void collectModifications(final IProgressMonitor pm, final ModificationCollector collector) throws CoreException,
+            OperationCanceledException {
+        final IASTTranslationUnit ast = getAST(tu, pm);
+        final ASTRewrite rewriter = collector.rewriterForTranslationUnit(ast);
+        insertBeforeCurrentStmt(createNewClassDefinition(ast), ast, rewriter);
+    }
 
-   private IASTDeclarationStatement createNewClassDefinition(final IASTTranslationUnit ast) {
-      final String newClassName = getSelectedName(ast).get().toString();
-      final ICPPASTCompositeTypeSpecifier testDouble = createNewTestDoubleClass(newClassName);
-      return nodeFactory.newDeclarationStatement(nodeFactory.newSimpleDeclaration(testDouble));
-   }
+    private IASTDeclarationStatement createNewClassDefinition(final IASTTranslationUnit ast) {
+        final String newClassName = getSelectedName(ast).get().toString();
+        final ICPPASTCompositeTypeSpecifier testDouble = createNewTestDoubleClass(newClassName);
+        return nodeFactory.newDeclarationStatement(nodeFactory.newSimpleDeclaration(testDouble));
+    }
 }

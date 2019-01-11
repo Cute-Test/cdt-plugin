@@ -11,17 +11,17 @@ import org.eclipse.core.resources.IProject;
 
 public class IncludePathHandler extends IncludeHandler {
 
-   public IncludePathHandler(final IProject project) {
-      super(project);
-   }
+    public IncludePathHandler(final IProject project) {
+        super(project);
+    }
 
-   @Override
-   protected int getOptionType() {
-      return IOption.INCLUDE_PATH;
-   }
+    @Override
+    protected int getOptionType() {
+        return IOption.INCLUDE_PATH;
+    }
 
-   @Override
-   protected Set<String> getOptionValues(final IOption option) throws BuildException {
-      return orderPreservingSet(option.getIncludePaths());
-   }
+    @Override
+    protected Set<String> getOptionValues(final IOption option) throws BuildException {
+        return orderPreservingSet(option.getIncludePaths());
+    }
 }

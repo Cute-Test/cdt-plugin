@@ -14,39 +14,39 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 abstract class WithSelectedProjectAction extends AbstractHandler implements IWorkbenchWindowActionDelegate {
 
-   private IProject project;
+    private IProject project;
 
-   public void withProject(final Consumer<IProject> f) {
-      if (project != null) {
-         f.accept(project);
-         project = null;
-      }
-   }
+    public void withProject(final Consumer<IProject> f) {
+        if (project != null) {
+            f.accept(project);
+            project = null;
+        }
+    }
 
-   @Override
-   public void selectionChanged(final IAction action, final ISelection selection) {
-      if (selection instanceof TreeSelection) {
-         final TreeSelection treeSel = (TreeSelection) selection;
-         updateProjectFromSelection(treeSel);
-      } else {
-         project = null;
-      }
-   }
+    @Override
+    public void selectionChanged(final IAction action, final ISelection selection) {
+        if (selection instanceof TreeSelection) {
+            final TreeSelection treeSel = (TreeSelection) selection;
+            updateProjectFromSelection(treeSel);
+        } else {
+            project = null;
+        }
+    }
 
-   protected void updateProjectFromSelection(final TreeSelection treeSel) {
-      final Object firstElement = treeSel.getFirstElement();
+    protected void updateProjectFromSelection(final TreeSelection treeSel) {
+        final Object firstElement = treeSel.getFirstElement();
 
-      if (firstElement instanceof IProject) {
-         project = (IProject) firstElement;
-         return;
-      } else if (firstElement instanceof ICElement) {
-         project = ((ICElement) firstElement).getCProject().getProject();
-      }
-   }
+        if (firstElement instanceof IProject) {
+            project = (IProject) firstElement;
+            return;
+        } else if (firstElement instanceof ICElement) {
+            project = ((ICElement) firstElement).getCProject().getProject();
+        }
+    }
 
-   @Override
-   public void dispose() {}
+    @Override
+    public void dispose() {}
 
-   @Override
-   public void init(final IWorkbenchWindow window) {}
+    @Override
+    public void init(final IWorkbenchWindow window) {}
 }

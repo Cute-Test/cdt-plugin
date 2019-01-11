@@ -18,36 +18,36 @@ import ch.hsr.ifs.cute.mockator.refsupport.utils.ClassPublicVisibilityInserter;
 // };
 class MockIdFieldInserter {
 
-   private static final ICPPNodeFactory        nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final ClassPublicVisibilityInserter inserter;
+    private static final ICPPNodeFactory        nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+    private final ClassPublicVisibilityInserter inserter;
 
-   public MockIdFieldInserter(final ClassPublicVisibilityInserter inserter) {
-      this.inserter = inserter;
-   }
+    public MockIdFieldInserter(final ClassPublicVisibilityInserter inserter) {
+        this.inserter = inserter;
+    }
 
-   public void insert(final boolean hasMockIdField, final boolean hasOnlyStaticMemFuns) {
-      if (!hasMockIdField && !hasOnlyStaticMemFuns) {
-         final IASTSimpleDeclaration mockIdField = createMockIdField();
-         insertMockIdField(mockIdField);
-      }
-   }
+    public void insert(final boolean hasMockIdField, final boolean hasOnlyStaticMemFuns) {
+        if (!hasMockIdField && !hasOnlyStaticMemFuns) {
+            final IASTSimpleDeclaration mockIdField = createMockIdField();
+            insertMockIdField(mockIdField);
+        }
+    }
 
-   private static IASTSimpleDeclaration createMockIdField() {
-      final ICPPASTNamedTypeSpecifier constIntSpecifier = createConstSizeTSpecifier();
-      final IASTSimpleDeclaration simpleDecl = nodeFactory.newSimpleDeclaration(constIntSpecifier);
-      final IASTName mockIdName = nodeFactory.newName(MOCK_ID.toCharArray());
-      simpleDecl.addDeclarator(nodeFactory.newDeclarator(mockIdName));
-      return simpleDecl;
-   }
+    private static IASTSimpleDeclaration createMockIdField() {
+        final ICPPASTNamedTypeSpecifier constIntSpecifier = createConstSizeTSpecifier();
+        final IASTSimpleDeclaration simpleDecl = nodeFactory.newSimpleDeclaration(constIntSpecifier);
+        final IASTName mockIdName = nodeFactory.newName(MOCK_ID.toCharArray());
+        simpleDecl.addDeclarator(nodeFactory.newDeclarator(mockIdName));
+        return simpleDecl;
+    }
 
-   private static ICPPASTNamedTypeSpecifier createConstSizeTSpecifier() {
-      final IASTName name = nodeFactory.newName(SIZE_T.toCharArray());
-      final ICPPASTNamedTypeSpecifier sizeT = nodeFactory.newTypedefNameSpecifier(name);
-      sizeT.setConst(true);
-      return sizeT;
-   }
+    private static ICPPASTNamedTypeSpecifier createConstSizeTSpecifier() {
+        final IASTName name = nodeFactory.newName(SIZE_T.toCharArray());
+        final ICPPASTNamedTypeSpecifier sizeT = nodeFactory.newTypedefNameSpecifier(name);
+        sizeT.setConst(true);
+        return sizeT;
+    }
 
-   private void insertMockIdField(final IASTSimpleDeclaration mockIdField) {
-      inserter.insert(mockIdField);
-   }
+    private void insertMockIdField(final IASTSimpleDeclaration mockIdField) {
+        inserter.insert(mockIdField);
+    }
 }

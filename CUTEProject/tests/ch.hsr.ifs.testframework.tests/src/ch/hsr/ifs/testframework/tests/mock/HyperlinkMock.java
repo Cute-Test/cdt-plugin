@@ -18,48 +18,48 @@ import org.eclipse.ui.console.IHyperlink;
  */
 public class HyperlinkMock implements IHyperlink {
 
-   private final int    offset;
-   private final IFile  file;
-   private final String editorId;
-   private final int    fileLength;
-   private final int    lineNmber;
+    private final int    offset;
+    private final IFile  file;
+    private final String editorId;
+    private final int    fileLength;
+    private final int    lineNmber;
 
-   public HyperlinkMock(IFile file, int lineNumber, String editorId, int fileLength, int fileOffset) {
-      super();
-      this.file = file;
-      this.lineNmber = lineNumber;
-      this.editorId = editorId;
-      this.fileLength = fileLength;
-      this.offset = fileOffset;
-   }
+    public HyperlinkMock(IFile file, int lineNumber, String editorId, int fileLength, int fileOffset) {
+        super();
+        this.file = file;
+        this.lineNmber = lineNumber;
+        this.editorId = editorId;
+        this.fileLength = fileLength;
+        this.offset = fileOffset;
+    }
 
-   public int getOffset() {
-      return offset;
-   }
+    public int getOffset() {
+        return offset;
+    }
 
-   public IFile getFile() {
-      return file;
-   }
+    public IFile getFile() {
+        return file;
+    }
 
-   public String getEditorId() {
-      return editorId;
-   }
+    public String getEditorId() {
+        return editorId;
+    }
 
-   public int getFileLength() {
-      return fileLength;
-   }
+    public int getFileLength() {
+        return fileLength;
+    }
 
-   public int getLineNmber() {
-      return lineNmber;
-   }
+    public int getLineNmber() {
+        return lineNmber;
+    }
 
-   @Override
-   public void linkEntered() {}
+    @Override
+    public void linkEntered() {}
 
-   @Override
-   public void linkExited() {}
+    @Override
+    public void linkExited() {}
 
-   @Override
-   public void linkActivated() {}
+    @Override
+    public void linkActivated() {}
 
 }

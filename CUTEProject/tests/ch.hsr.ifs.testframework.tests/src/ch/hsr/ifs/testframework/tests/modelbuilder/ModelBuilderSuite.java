@@ -18,21 +18,21 @@ import junit.framework.TestSuite;
  */
 public class ModelBuilderSuite {
 
-   public static Test suite() {
-      TestSuite suite = new TestSuite("Test for ch.hsr.ifs.cutelauncher.test.modelBuilderTests");
-      suite.addTest(ModelBuilderTest.suite("sessionTest.txt"));
-      suite.addTest(ModelBuilderTest.suite("suiteTest.txt"));
-      suite.addTest(ModelBuilderTest.suite("suiteTest2.txt"));
-      suite.addTest(ModelBuilderTest.suite("suiteTest3.txt"));
-      suite.addTest(ModelBuilderTest.suite("suiteTest4.txt"));
-      suite.addTest(ModelBuilderTest.suite("suiteTest5.txt"));
-      suite.addTest(ModelBuilderTest.suite("suiteTest6.txt"));
-      suite.addTest(ModelBuilderTest.suite("failedTest.txt"));
-      suite.addTest(ModelBuilderTest.suite("failedEqualsTest.txt"));
-      suite.addTest(ModelBuilderTest.suite("errorTest.txt"));
-      suite.addTest(ModelBuilderTest.suite("successTest.txt"));
-      suite.addTest(ModelBuilderTest.suite("outputInTest.txt"));
-      return suite;
-   }
+    public static Test suite() {
+        TestSuite suite = new TestSuite("Test for ch.hsr.ifs.cutelauncher.test.modelBuilderTests");
+        suite.addTest(ModelBuilderTest.suite("sessionTest.txt"));
+        suite.addTest(ModelBuilderTest.suite("suiteTest.txt"));
+        suite.addTest(ModelBuilderTest.suite("suiteTest2.txt"));
+        suite.addTest(ModelBuilderTest.suite("suiteTest3.txt"));
+        suite.addTest(ModelBuilderTest.suite("suiteTest4.txt"));
+        suite.addTest(ModelBuilderTest.suite("suiteTest5.txt"));
+        suite.addTest(ModelBuilderTest.suite("suiteTest6.txt"));
+        suite.addTest(ModelBuilderTest.suite("failedTest.txt"));
+        suite.addTest(ModelBuilderTest.suite("failedEqualsTest.txt"));
+        suite.addTest(ModelBuilderTest.suite("errorTest.txt"));
+        suite.addTest(ModelBuilderTest.suite("successTest.txt"));
+        suite.addTest(ModelBuilderTest.suite("outputInTest.txt"));
+        return suite;
+    }
 
 }

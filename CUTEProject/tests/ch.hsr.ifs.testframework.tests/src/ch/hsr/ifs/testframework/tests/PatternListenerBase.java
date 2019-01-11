@@ -14,10 +14,10 @@ package ch.hsr.ifs.testframework.tests;
  */
 public abstract class PatternListenerBase extends ConsoleTest {
 
-   @Override
-   protected String getInputFilePath() {
-      return "patternListenerTests/" + getInputFileName();
-   }
+    @Override
+    protected String getInputFilePath() {
+        return "patternListenerTests/" + getInputFileName();
+    }
 
-   protected abstract String getInputFileName();
+    protected abstract String getInputFileName();
 }

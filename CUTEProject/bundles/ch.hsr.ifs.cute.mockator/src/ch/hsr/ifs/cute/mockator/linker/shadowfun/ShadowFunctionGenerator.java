@@ -19,33 +19,33 @@ import ch.hsr.ifs.cute.mockator.refsupport.utils.QualifiedNameCreator;
 
 public class ShadowFunctionGenerator {
 
-   private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final CppStandard            cppStd;
+    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+    private final CppStandard            cppStd;
 
-   public ShadowFunctionGenerator(final CppStandard cppStd) {
-      this.cppStd = cppStd;
-   }
+    public ShadowFunctionGenerator(final CppStandard cppStd) {
+        this.cppStd = cppStd;
+    }
 
-   public ICPPASTFunctionDefinition createShadowedFunction(final ICPPASTFunctionDeclarator funDecl, final IASTCompoundStatement newBody) {
-      final ICPPASTDeclSpecifier newDeclSpec = ASTUtil.getDeclSpec(funDecl).copy();
-      ASTUtil.removeExternalStorageIfSet(newDeclSpec);
-      final ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
-      adjustParamNamesIfNecessary(newFunDecl);
-      newFunDecl.setName(createFullyQualifiedName(funDecl));
-      final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd);
-      newBody.addStatement(creator.createReturnStatement(funDecl, newDeclSpec));
-      return nodeFactory.newFunctionDefinition(newDeclSpec, newFunDecl, newBody);
-   }
+    public ICPPASTFunctionDefinition createShadowedFunction(final ICPPASTFunctionDeclarator funDecl, final IASTCompoundStatement newBody) {
+        final ICPPASTDeclSpecifier newDeclSpec = ASTUtil.getDeclSpec(funDecl).copy();
+        ASTUtil.removeExternalStorageIfSet(newDeclSpec);
+        final ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
+        adjustParamNamesIfNecessary(newFunDecl);
+        newFunDecl.setName(createFullyQualifiedName(funDecl));
+        final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd);
+        newBody.addStatement(creator.createReturnStatement(funDecl, newDeclSpec));
+        return nodeFactory.newFunctionDefinition(newDeclSpec, newFunDecl, newBody);
+    }
 
-   private static IASTName createFullyQualifiedName(final ICPPASTFunctionDeclarator funDecl) {
-      final QualifiedNameCreator resolver = new QualifiedNameCreator(funDecl.getName());
-      final ICPPASTQualifiedName qualifiedName = resolver.createQualifiedName();
-      qualifiedName.addName(funDecl.getName().copy());
-      return qualifiedName;
-   }
+    private static IASTName createFullyQualifiedName(final ICPPASTFunctionDeclarator funDecl) {
+        final QualifiedNameCreator resolver = new QualifiedNameCreator(funDecl.getName());
+        final ICPPASTQualifiedName qualifiedName = resolver.createQualifiedName();
+        qualifiedName.addName(funDecl.getName().copy());
+        return qualifiedName;
+    }
 
-   private static void adjustParamNamesIfNecessary(final ICPPASTFunctionDeclarator newFunDecl) {
-      final ParameterNameFunDecorator funDecorator = new ParameterNameFunDecorator(newFunDecl);
-      funDecorator.adjustParamNamesIfNecessary();
-   }
+    private static void adjustParamNamesIfNecessary(final ICPPASTFunctionDeclarator newFunDecl) {
+        final ParameterNameFunDecorator funDecorator = new ParameterNameFunDecorator(newFunDecl);
+        funDecorator.adjustParamNamesIfNecessary();
+    }
 }

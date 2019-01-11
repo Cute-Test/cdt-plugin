@@ -62,220 +62,224 @@ import ch.hsr.ifs.cute.ui.project.CuteNature;
  */
 public class CuteWizardHandler extends MBSWizardHandler implements IIncludeStrategyProvider {
 
-   private NewCuteProjectWizardPage cuteWizardPage;
+    private NewCuteProjectWizardPage cuteWizardPage;
 
-   public CuteWizardHandler(Composite p, IWizard w) {
-      super(new CuteBuildPropertyValue(), p, w);
-      cuteWizardPage = initPage();
-      cuteWizardPage.setWizard(w);
+    public CuteWizardHandler(Composite p, IWizard w) {
+        super(new CuteBuildPropertyValue(), p, w);
+        cuteWizardPage = initPage();
+        cuteWizardPage.setWizard(w);
 
-      MBSCustomPageManager.init();
-      MBSCustomPageManager.addStockPage(cuteWizardPage, cuteWizardPage.getPageID());
-   }
+        MBSCustomPageManager.init();
+        MBSCustomPageManager.addStockPage(cuteWizardPage, cuteWizardPage.getPageID());
+    }
 
-   protected NewCuteProjectWizardPage initPage() {
-      return new NewCuteProjectWizardPage(getConfigPage(), getNewProjectCreationPage(), getWizardContainer(getWizard()));
-   }
+    protected NewCuteProjectWizardPage initPage() {
+        return new NewCuteProjectWizardPage(getConfigPage(), getNewProjectCreationPage(), getWizardContainer(getWizard()));
+    }
 
-   protected IWizardContainer getWizardContainer(IWizard w) {
-      return w == null ? null : w.getContainer();
-   }
+    protected IWizardContainer getWizardContainer(IWizard w) {
+        return w == null ? null : w.getContainer();
+    }
 
-   @Override
-   public IWizardPage getSpecificPage() {
-      return cuteWizardPage;
-   }
+    @Override
+    public IWizardPage getSpecificPage() {
+        return cuteWizardPage;
+    }
 
-   @Override
-   public void postProcess(IProject newProject, boolean created) {
-      if (created) {
-         doTemplatesPostProcess(newProject);
-         doCustom(newProject);
-      }
-   }
+    @Override
+    public void postProcess(IProject newProject, boolean created) {
+        if (created) {
+            doTemplatesPostProcess(newProject);
+            doCustom(newProject);
+        }
+    }
 
-   @Override
-   protected void doCustom(final IProject newProject) {
-      super.doCustom(newProject);
-      IRunnableWithProgress op = monitor -> createCuteProjectSettings(newProject, monitor);
-      try {
-         getWizard().getContainer().run(false, true, op);
-      } catch (InvocationTargetException e) {
-         CuteUIPlugin.log(e);
-      } catch (InterruptedException e) {
-         CuteUIPlugin.log(e);
-      }
-   }
+    @Override
+    protected void doCustom(final IProject newProject) {
+        super.doCustom(newProject);
+        IRunnableWithProgress op = monitor -> createCuteProjectSettings(newProject, monitor);
+        try {
+            getWizard().getContainer().run(false, true, op);
+        } catch (InvocationTargetException e) {
+            CuteUIPlugin.log(e);
+        } catch (InterruptedException e) {
+            CuteUIPlugin.log(e);
+        }
+    }
 
-   protected void createCuteProjectSettings(IProject newProject, IProgressMonitor pm) {
-      try {
-         createCuteProject(newProject, pm);
-         if (cuteWizardPage.isLibrarySelectionActive) {
-            createLibSettings(newProject);
-         }
-      } catch (CoreException e) {
-         CuteUIPlugin.log("Exception while creating cute project settings for project " + newProject.getName(), e);
-      }
-   }
-
-   protected void createCuteProject(IProject project, IProgressMonitor pm) throws CoreException {
-      CuteNature.addCuteNature(project, new NullProgressMonitor());
-      ICuteHeaders.setForProject(project, getCuteVersion());
-      createCuteProjectFolders(project);
-      callAdditionalHandlers(project, pm);
-      ManagedBuildManager.saveBuildInfo(project, true);
-   }
-
-   private void callAdditionalHandlers(IProject project, IProgressMonitor pm) throws CoreException {
-      List<ICuteWizardAddition> adds = getAdditions();
-      SubMonitor mon = SubMonitor.convert(pm, adds.size());
-      for (ICuteWizardAddition addition : adds) {
-         addition.getHandler().configureProject(project, mon);
-         mon.worked(1);
-      }
-      mon.done();
-   }
-
-   protected List<ICuteWizardAddition> getAdditions() {
-      return cuteWizardPage.getAdditions();
-   }
-
-   private void createCuteProjectFolders(IProject project) throws CoreException {
-      ICuteHeaders cuteVersion = getCuteVersion();
-      IFolder srcFolder = ProjectTools.createFolder(project, "src", false);
-      copyExampleTestFiles(srcFolder, cuteVersion);
-      IFile srcFile = project.getFile("src/Test.cpp");
-      IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), srcFile, true);
-   }
-
-   protected void copyExampleTestFiles(IFolder srcFolder, ICuteHeaders cuteVersion) throws CoreException {
-      cuteVersion.copyExampleTestFiles(srcFolder, new NullProgressMonitor());
-   }
-
-   private void createLibSettings(IProject project) throws CoreException {
-      List<IProject> projects = cuteWizardPage.getCheckedProjects();
-      for (IProject libProject : projects) {
-         for (ICuteWizardAddition addition : getAdditions()) {
-            addition.getHandler().configureLibProject(libProject);
-         }
-         setToolChainIncludePath(project, libProject);
-      }
-      ManagedBuildManager.saveBuildInfo(project, true);
-      setProjectReference(project, projects);
-   }
-
-   private void setProjectReference(IProject project, List<IProject> projects) throws CoreException {
-      if (!projects.isEmpty()) {
-         ICProjectDescription des = CCorePlugin.getDefault().getProjectDescription(project, true);
-         ICConfigurationDescription cfgs[] = des.getConfigurations();
-         for (ICConfigurationDescription config : cfgs) {
-            Map<String, String> refMap = config.getReferenceInfo();
-            for (IProject refProject : projects) {
-               refMap.put(refProject.getName(), "");
+    protected void createCuteProjectSettings(IProject newProject, IProgressMonitor pm) {
+        try {
+            createCuteProject(newProject, pm);
+            if (cuteWizardPage.isLibrarySelectionActive) {
+                createLibSettings(newProject);
             }
-            config.setReferenceInfo(refMap);
-         }
-         CCorePlugin.getDefault().setProjectDescription(project, des);
-      }
-   }
+        } catch (CoreException e) {
+            CuteUIPlugin.log("Exception while creating cute project settings for project " + newProject.getName(), e);
+        }
+    }
 
-   private void setToolChainIncludePath(IProject project, IProject libProject) throws CoreException {
-      IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(libProject);
-      IConfiguration config = info.getDefaultConfiguration();
-      IConfiguration[] configs = info.getManagedProject().getConfigurations();
-      ICSourceEntry[] sources = config.getSourceEntries();
-      for (ICSourceEntry sourceEntry : sources) {
-         IPath location = sourceEntry.getFullPath();
-         if (location.segmentCount() == 0) {
-            ProjectTools.setIncludePaths(libProject.getFullPath(), project, this);
-         } else {
-            ProjectTools.setIncludePaths(libProject.getFolder(location).getFullPath(), project, this);
-         }
-      }
-      for (IConfiguration configuration : configs) {
-         ICOutputEntry[] dirs = configuration.getBuildData().getOutputDirectories();
-         for (ICOutputEntry outputEntry : dirs) {
-            IPath location = outputEntry.getFullPath();
+    protected void createCuteProject(IProject project, IProgressMonitor pm) throws CoreException {
+        CuteNature.addCuteNature(project, new NullProgressMonitor());
+        ICuteHeaders.setForProject(project, getCuteVersion());
+        createCuteProjectFolders(project);
+        callAdditionalHandlers(project, pm);
+        ManagedBuildManager.saveBuildInfo(project, true);
+    }
+
+    private void callAdditionalHandlers(IProject project, IProgressMonitor pm) throws CoreException {
+        List<ICuteWizardAddition> adds = getAdditions();
+        SubMonitor mon = SubMonitor.convert(pm, adds.size());
+        for (ICuteWizardAddition addition : adds) {
+            addition.getHandler().configureProject(project, mon);
+            mon.worked(1);
+        }
+        mon.done();
+    }
+
+    protected List<ICuteWizardAddition> getAdditions() {
+        return cuteWizardPage.getAdditions();
+    }
+
+    private void createCuteProjectFolders(IProject project) throws CoreException {
+        ICuteHeaders cuteVersion = getCuteVersion();
+        IFolder srcFolder = ProjectTools.createFolder(project, "src", false);
+        copyExampleTestFiles(srcFolder, cuteVersion);
+        IFile srcFile = project.getFile("src/Test.cpp");
+        IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), srcFile, true);
+    }
+
+    protected void copyExampleTestFiles(IFolder srcFolder, ICuteHeaders cuteVersion) throws CoreException {
+        cuteVersion.copyExampleTestFiles(srcFolder, new NullProgressMonitor());
+    }
+
+    private void createLibSettings(IProject project) throws CoreException {
+        List<IProject> projects = cuteWizardPage.getCheckedProjects();
+        for (IProject libProject : projects) {
+            for (ICuteWizardAddition addition : getAdditions()) {
+                addition.getHandler().configureLibProject(libProject);
+            }
+            setToolChainIncludePath(project, libProject);
+        }
+        ManagedBuildManager.saveBuildInfo(project, true);
+        setProjectReference(project, projects);
+    }
+
+    private void setProjectReference(IProject project, List<IProject> projects) throws CoreException {
+        if (!projects.isEmpty()) {
+            ICProjectDescription des = CCorePlugin.getDefault().getProjectDescription(project, true);
+            ICConfigurationDescription cfgs[] = des.getConfigurations();
+            for (ICConfigurationDescription config : cfgs) {
+                Map<String, String> refMap = config.getReferenceInfo();
+                for (IProject refProject : projects) {
+                    refMap.put(refProject.getName(), "");
+                }
+                config.setReferenceInfo(refMap);
+            }
+            CCorePlugin.getDefault().setProjectDescription(project, des);
+        }
+    }
+
+    private void setToolChainIncludePath(IProject project, IProject libProject) throws CoreException {
+        IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(libProject);
+        IConfiguration config = info.getDefaultConfiguration();
+        IConfiguration[] configs = info.getManagedProject().getConfigurations();
+        ICSourceEntry[] sources = config.getSourceEntries();
+        for (ICSourceEntry sourceEntry : sources) {
+            IPath location = sourceEntry.getFullPath();
             if (location.segmentCount() == 0) {
-               setLibraryPaths(libProject.getFullPath(), project, configuration);
+                ProjectTools.setIncludePaths(libProject.getFullPath(), project, this);
             } else {
-               setLibraryPaths(libProject.getFolder(location).getFullPath(), project, configuration);
+                ProjectTools.setIncludePaths(libProject.getFolder(location).getFullPath(), project, this);
             }
-         }
-      }
-      String artifactName = config.getArtifactName();
-      if (artifactName.equalsIgnoreCase("${ProjName}")) {
-         setLibName(libProject.getName(), project);
-      } else {
-         setLibName(artifactName, project);
-      }
-   }
+        }
+        for (IConfiguration configuration : configs) {
+            ICOutputEntry[] dirs = configuration.getBuildData().getOutputDirectories();
+            for (ICOutputEntry outputEntry : dirs) {
+                IPath location = outputEntry.getFullPath();
+                if (location.segmentCount() == 0) {
+                    setLibraryPaths(libProject.getFullPath(), project, configuration);
+                } else {
+                    setLibraryPaths(libProject.getFolder(location).getFullPath(), project, configuration);
+                }
+            }
+        }
+        String artifactName = config.getArtifactName();
+        if (artifactName.equalsIgnoreCase("${ProjName}")) {
+            setLibName(libProject.getName(), project);
+        } else {
+            setLibName(artifactName, project);
+        }
+    }
 
-   protected void setLibraryPaths(IPath libFolder, IProject project, IConfiguration configuration) throws CoreException {
-      String path = "\"${workspace_loc:" + libFolder.toPortableString() + "}\"";
-      IConfiguration targetConfig = findSameConfig(configuration, project);
-      try {
-         IToolChain toolChain = targetConfig.getToolChain();
-         ProjectTools.setOptionInConfig(path, targetConfig, toolChain.getOptions(), toolChain, IOption.LIBRARY_PATHS, this);
-         ITool[] tools = targetConfig.getTools();
-         for (ITool tool : tools) {
-            ProjectTools.setOptionInConfig(path, targetConfig, tool.getOptions(), tool, IOption.LIBRARY_PATHS, this);
-         }
-      } catch (BuildException be) {
-         throw new CoreException(new Status(IStatus.ERROR, CuteCorePlugin.PLUGIN_ID, 42, be.getMessage(), be));
-      }
-   }
+    protected void setLibraryPaths(IPath libFolder, IProject project, IConfiguration configuration) throws CoreException {
+        String path = "\"${workspace_loc:" + libFolder.toPortableString() + "}\"";
+        IConfiguration targetConfig = findSameConfig(configuration, project);
+        try {
+            IToolChain toolChain = targetConfig.getToolChain();
+            ProjectTools.setOptionInConfig(path, targetConfig, toolChain.getOptions(), toolChain, IOption.LIBRARY_PATHS, this);
+            ITool[] tools = targetConfig.getTools();
+            for (ITool tool : tools) {
+                ProjectTools.setOptionInConfig(path, targetConfig, tool.getOptions(), tool, IOption.LIBRARY_PATHS, this);
+            }
+        } catch (BuildException be) {
+            throw new CoreException(new Status(IStatus.ERROR, CuteCorePlugin.PLUGIN_ID, 42, be.getMessage(), be));
+        }
+    }
 
-   private IConfiguration findSameConfig(IConfiguration configuration, IResource project) {
-      IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-      IConfiguration[] configs = info.getManagedProject().getConfigurations();
-      for (IConfiguration iConfiguration : configs) {
-         if (iConfiguration.getName().equals(configuration.getName())) { return iConfiguration; }
-      }
-      return info.getDefaultConfiguration();
-   }
+    private IConfiguration findSameConfig(IConfiguration configuration, IResource project) {
+        IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+        IConfiguration[] configs = info.getManagedProject().getConfigurations();
+        for (IConfiguration iConfiguration : configs) {
+            if (iConfiguration.getName().equals(configuration.getName())) {
+                return iConfiguration;
+            }
+        }
+        return info.getDefaultConfiguration();
+    }
 
-   protected void setLibName(String libName, IProject project) throws CoreException {
-      ProjectTools.setOptionInAllConfigs(project, libName, IOption.LIBRARIES, this);
-   }
+    protected void setLibName(String libName, IProject project) throws CoreException {
+        ProjectTools.setOptionInAllConfigs(project, libName, IOption.LIBRARIES, this);
+    }
 
-   @Override
-   public GetOptionsStrategy getStrategy(int optionType) {
-      switch (optionType) {
-      case IOption.LIBRARY_PATHS:
-         return new LibraryPathsStrategy();
-      case IOption.LIBRARIES:
-         return new LibrariesStrategy();
-      case IOption.INCLUDE_PATH:
-         return new IncludePathStrategy();
-      default:
-         throw new IllegalArgumentException("Illegal Argument: " + optionType);
-      }
-   }
+    @Override
+    public GetOptionsStrategy getStrategy(int optionType) {
+        switch (optionType) {
+        case IOption.LIBRARY_PATHS:
+            return new LibraryPathsStrategy();
+        case IOption.LIBRARIES:
+            return new LibrariesStrategy();
+        case IOption.INCLUDE_PATH:
+            return new IncludePathStrategy();
+        default:
+            throw new IllegalArgumentException("Illegal Argument: " + optionType);
+        }
+    }
 
-   @Override
-   public boolean canFinish() {
-      if (cuteWizardPage.isLibrarySelectionActive && cuteWizardPage.getCheckedProjects().isEmpty()) { return false; }
-      return cuteWizardPage.isCustomPageComplete();
-   }
+    @Override
+    public boolean canFinish() {
+        if (cuteWizardPage.isLibrarySelectionActive && cuteWizardPage.getCheckedProjects().isEmpty()) {
+            return false;
+        }
+        return cuteWizardPage.isCustomPageComplete();
+    }
 
-   private static class LibraryPathsStrategy implements GetOptionsStrategy {
+    private static class LibraryPathsStrategy implements GetOptionsStrategy {
 
-      @Override
-      public String[] getValues(IOption option) throws BuildException {
-         return option.getBasicStringListValue();
-      }
-   }
+        @Override
+        public String[] getValues(IOption option) throws BuildException {
+            return option.getBasicStringListValue();
+        }
+    }
 
-   private static class LibrariesStrategy implements GetOptionsStrategy {
+    private static class LibrariesStrategy implements GetOptionsStrategy {
 
-      @Override
-      public String[] getValues(IOption option) throws BuildException {
-         return option.getLibraries();
-      }
-   }
+        @Override
+        public String[] getValues(IOption option) throws BuildException {
+            return option.getLibraries();
+        }
+    }
 
-   private ICuteHeaders getCuteVersion() {
-      return ICuteHeaders.loadHeadersForVersionNumber(cuteWizardPage.getCuteVersionString());
-   }
+    private ICuteHeaders getCuteVersion() {
+        return ICuteHeaders.loadHeadersForVersionNumber(cuteWizardPage.getCuteVersionString());
+    }
 }

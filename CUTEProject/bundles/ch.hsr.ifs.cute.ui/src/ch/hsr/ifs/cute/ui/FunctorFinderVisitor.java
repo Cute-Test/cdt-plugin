@@ -8,33 +8,33 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTOperatorName;
 
 public class FunctorFinderVisitor extends ASTVisitor {
 
-   private IASTDeclaration functor;
+    private IASTDeclaration functor;
 
-   public FunctorFinderVisitor() {
-      functor = null;
-   }
+    public FunctorFinderVisitor() {
+        functor = null;
+    }
 
-   {
-      shouldVisitDeclarations = true;
-   }
+    {
+        shouldVisitDeclarations = true;
+    }
 
-   public IASTDeclaration getFunctor() {
-      return functor;
-   }
+    public IASTDeclaration getFunctor() {
+        return functor;
+    }
 
-   @Override
-   public int visit(IASTDeclaration declaration) {
-      if (declaration instanceof IASTFunctionDefinition) {
-         IASTFunctionDefinition functionDefinition = (IASTFunctionDefinition) declaration;
-         if (functionDefinition.getDeclarator().getName() instanceof ICPPASTOperatorName) {
-            ICPPASTOperatorName operatorName = (ICPPASTOperatorName) functionDefinition.getDeclarator().getName();
-            if (operatorName.toString().equals("operator ()")) {
-               functor = declaration;
-               return ASTVisitor.PROCESS_ABORT;
+    @Override
+    public int visit(IASTDeclaration declaration) {
+        if (declaration instanceof IASTFunctionDefinition) {
+            IASTFunctionDefinition functionDefinition = (IASTFunctionDefinition) declaration;
+            if (functionDefinition.getDeclarator().getName() instanceof ICPPASTOperatorName) {
+                ICPPASTOperatorName operatorName = (ICPPASTOperatorName) functionDefinition.getDeclarator().getName();
+                if (operatorName.toString().equals("operator ()")) {
+                    functor = declaration;
+                    return ASTVisitor.PROCESS_ABORT;
+                }
             }
-         }
-      }
-      return ASTVisitor.PROCESS_CONTINUE;
-   }
+        }
+        return ASTVisitor.PROCESS_CONTINUE;
+    }
 
 }

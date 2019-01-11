@@ -16,37 +16,37 @@ import ch.hsr.ifs.cute.mockator.base.i18n.I18N;
 
 public abstract class ExceptionUtil {
 
-   public static Optional<Throwable> getRootCause(final Throwable t) {
-      final List<Throwable> causes = getCausesOf(t);
-      return causes.size() < 2 ? Optional.empty() : last(causes);
-   }
+    public static Optional<Throwable> getRootCause(final Throwable t) {
+        final List<Throwable> causes = getCausesOf(t);
+        return causes.size() < 2 ? Optional.empty() : last(causes);
+    }
 
-   private static List<Throwable> getCausesOf(Throwable t) {
-      final List<Throwable> causes = new ArrayList<>();
+    private static List<Throwable> getCausesOf(Throwable t) {
+        final List<Throwable> causes = new ArrayList<>();
 
-      while (t != null && !causes.contains(t)) {
-         causes.add(t);
-         t = t.getCause();
-      }
-      return causes;
-   }
+        while (t != null && !causes.contains(t)) {
+            causes.add(t);
+            t = t.getCause();
+        }
+        return causes;
+    }
 
-   public static void showException(final Exception exToShow) {
-      UiUtil.runInDisplayThread(ExceptionUtil::showExceptionInThread, exToShow);
-   }
+    public static void showException(final Exception exToShow) {
+        UiUtil.runInDisplayThread(ExceptionUtil::showExceptionInThread, exToShow);
+    }
 
-   private static void showExceptionInThread(final Exception e) {
-      showExceptionInThread(I18N.ExceptionCaughtTitle, I18N.ExceptionCaughtMessage, e);
-   }
+    private static void showExceptionInThread(final Exception e) {
+        showExceptionInThread(I18N.ExceptionCaughtTitle, I18N.ExceptionCaughtMessage, e);
+    }
 
-   public static void showException(final String title, final String message, final Throwable t) {
-      UiUtil.runInDisplayThread((ignored) -> showExceptionInThread(title, message, t), null);
-   }
+    public static void showException(final String title, final String message, final Throwable t) {
+        UiUtil.runInDisplayThread((ignored) -> showExceptionInThread(title, message, t), null);
+    }
 
-   private static void showExceptionInThread(final String title, final String message, final Throwable t) {
-      final IStatus status = new Status(IStatus.ERROR, MockatorPlugin.PLUGIN_ID, IStatus.OK, t.getMessage() == null ? t.getClass().getName() : t
-            .getMessage(), t);
-      MockatorPlugin.getDefault().getLog().log(status);
-      ErrorDialog.openError(UiUtil.getWindowShell(), title, message, status);
-   }
+    private static void showExceptionInThread(final String title, final String message, final Throwable t) {
+        final IStatus status = new Status(IStatus.ERROR, MockatorPlugin.PLUGIN_ID, IStatus.OK, t.getMessage() == null ? t.getClass().getName() : t
+                .getMessage(), t);
+        MockatorPlugin.getDefault().getLog().log(status);
+        ErrorDialog.openError(UiUtil.getWindowShell(), title, message, status);
+    }
 }

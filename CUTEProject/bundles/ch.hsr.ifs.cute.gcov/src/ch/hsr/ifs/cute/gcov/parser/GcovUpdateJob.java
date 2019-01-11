@@ -37,72 +37,72 @@ import ch.hsr.ifs.cute.gcov.util.ProjectUtil;
  */
 public class GcovUpdateJob extends Job {
 
-   private final IProject project;
+    private final IProject project;
 
-   GcovUpdateJob(String name, IProject project) {
-      super(name);
-      this.project = project;
-   }
+    GcovUpdateJob(String name, IProject project) {
+        super(name);
+        this.project = project;
+    }
 
-   @Override
-   protected IStatus run(IProgressMonitor monitor) {
-      try {
-         if (project.hasNature(GcovNature.NATURE_ID)) {
-            Collection<ch.hsr.ifs.cute.gcov.model.File> files = GcovPlugin.getDefault().getcModel().getMarkedFiles();
-            for (ch.hsr.ifs.cute.gcov.model.File file : files) {
-               ProjectUtil.deleteMarkers(file.getFile());
+    @Override
+    protected IStatus run(IProgressMonitor monitor) {
+        try {
+            if (project.hasNature(GcovNature.NATURE_ID)) {
+                Collection<ch.hsr.ifs.cute.gcov.model.File> files = GcovPlugin.getDefault().getcModel().getMarkedFiles();
+                for (ch.hsr.ifs.cute.gcov.model.File file : files) {
+                    ProjectUtil.deleteMarkers(file.getFile());
+                }
+                GcovPlugin.getDefault().getcModel().clearModel();
+                updateGcov(project);
+                for (IProject refProj : project.getReferencedProjects()) {
+                    updateGcov(refProj);
+                }
+                files = GcovPlugin.getDefault().getcModel().getMarkedFiles();
+                for (ch.hsr.ifs.cute.gcov.model.File file : files) {
+                    markFile(file);
+                }
             }
-            GcovPlugin.getDefault().getcModel().clearModel();
-            updateGcov(project);
-            for (IProject refProj : project.getReferencedProjects()) {
-               updateGcov(refProj);
-            }
-            files = GcovPlugin.getDefault().getcModel().getMarkedFiles();
-            for (ch.hsr.ifs.cute.gcov.model.File file : files) {
-               markFile(file);
-            }
-         }
-      } catch (CoreException e) {
-         return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, "Error");
-      }
-      return new Status(IStatus.OK, GcovPlugin.PLUGIN_ID, "OK");
-   }
+        } catch (CoreException e) {
+            return new Status(IStatus.ERROR, GcovPlugin.PLUGIN_ID, "Error");
+        }
+        return new Status(IStatus.OK, GcovPlugin.PLUGIN_ID, "OK");
+    }
 
-   private void markFile(ch.hsr.ifs.cute.gcov.model.File file) throws CoreException {
-      IFile cppFile = file.getFile();
-      for (Function f : file.getFunctions()) {
-         for (Line l : f.getLines()) {
-            switch (l.getStatus()) {
-            case Covered:
-               createMarker(cppFile, l.getNr(), "covered", GcovPlugin.COVER_MARKER_TYPE);
-               break;
-            case PartiallyCovered:
-               createMarker(cppFile, l.getNr(), "partially covered", GcovPlugin.PARTIALLY_MARKER_TYPE);
-               break;
-            case Uncovered:
-               createMarker(cppFile, l.getNr(), "uncovered", GcovPlugin.UNCOVER_MARKER_TYPE);
-               break;
-            default:
-               break;
+    private void markFile(ch.hsr.ifs.cute.gcov.model.File file) throws CoreException {
+        IFile cppFile = file.getFile();
+        for (Function f : file.getFunctions()) {
+            for (Line l : f.getLines()) {
+                switch (l.getStatus()) {
+                case Covered:
+                    createMarker(cppFile, l.getNr(), "covered", GcovPlugin.COVER_MARKER_TYPE);
+                    break;
+                case PartiallyCovered:
+                    createMarker(cppFile, l.getNr(), "partially covered", GcovPlugin.PARTIALLY_MARKER_TYPE);
+                    break;
+                case Uncovered:
+                    createMarker(cppFile, l.getNr(), "uncovered", GcovPlugin.UNCOVER_MARKER_TYPE);
+                    break;
+                default:
+                    break;
+                }
             }
-         }
-      }
-   }
+        }
+    }
 
-   private void updateGcov(IProject iProject) {
-      ICProjectDescription desc = CCorePlugin.getDefault().getProjectDescription(iProject);
-      IPath outputDirectory = desc.getActiveConfiguration().getBuildSetting().getOutputDirectories()[0].getLocation();
-      try {
-         iProject.accept(new GcnoFileVisitor(outputDirectory));
-      } catch (CoreException e) {
-         GcovPlugin.log(e);
-      }
-   }
+    private void updateGcov(IProject iProject) {
+        ICProjectDescription desc = CCorePlugin.getDefault().getProjectDescription(iProject);
+        IPath outputDirectory = desc.getActiveConfiguration().getBuildSetting().getOutputDirectories()[0].getLocation();
+        try {
+            iProject.accept(new GcnoFileVisitor(outputDirectory));
+        } catch (CoreException e) {
+            GcovPlugin.log(e);
+        }
+    }
 
-   private void createMarker(IFile cppFile, int lineNum, String message, String type) throws CoreException {
-      Map<String, Object> attributes = new HashMap<>();
-      MarkerUtilities.setMessage(attributes, message);
-      MarkerUtilities.setLineNumber(attributes, lineNum);
-      MarkerUtilities.createMarker(cppFile, attributes, type);
-   }
+    private void createMarker(IFile cppFile, int lineNum, String message, String type) throws CoreException {
+        Map<String, Object> attributes = new HashMap<>();
+        MarkerUtilities.setMessage(attributes, message);
+        MarkerUtilities.setLineNumber(attributes, lineNum);
+        MarkerUtilities.createMarker(cppFile, attributes, type);
+    }
 }

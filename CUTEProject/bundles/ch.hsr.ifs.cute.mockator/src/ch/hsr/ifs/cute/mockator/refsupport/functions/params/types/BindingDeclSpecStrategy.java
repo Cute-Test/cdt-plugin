@@ -14,20 +14,20 @@ import ch.hsr.ifs.cute.mockator.refsupport.utils.TypedefHelper;
 
 class BindingDeclSpecStrategy implements DeclSpecGeneratorStrategy {
 
-   private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
 
-   @Override
-   public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
-      final String shortestType = getShortestType(type);
-      final IASTName newName = nodeFactory.newName(shortestType.toCharArray());
-      return nodeFactory.newTypedefNameSpecifier(newName);
-   }
+    @Override
+    public ICPPASTDeclSpecifier createDeclSpec(final IType type) {
+        final String shortestType = getShortestType(type);
+        final IASTName newName = nodeFactory.newName(shortestType.toCharArray());
+        return nodeFactory.newTypedefNameSpecifier(newName);
+    }
 
-   private static String getShortestType(final IType type) {
-      try {
-         return new TypedefHelper(type).findShortestType();
-      } catch (final CoreException e) {
-         throw new ILTISException(e).rethrowUnchecked();
-      }
-   }
+    private static String getShortestType(final IType type) {
+        try {
+            return new TypedefHelper(type).findShortestType();
+        } catch (final CoreException e) {
+            throw new ILTISException(e).rethrowUnchecked();
+        }
+    }
 }

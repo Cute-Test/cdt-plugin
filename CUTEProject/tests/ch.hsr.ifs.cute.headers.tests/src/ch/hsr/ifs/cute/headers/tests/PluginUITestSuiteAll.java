@@ -19,12 +19,12 @@ import junit.framework.TestSuite;
  */
 public class PluginUITestSuiteAll extends TestSuite {
 
-   public PluginUITestSuiteAll() {
-      super("All Header Tests");
-      addTestSuite(CopyHeaders2_2Test.class);
-   }
+    public PluginUITestSuiteAll() {
+        super("All Header Tests");
+        addTestSuite(CopyHeaders2_2Test.class);
+    }
 
-   public static Test suite() {
-      return new PluginUITestSuiteAll();
-   }
+    public static Test suite() {
+        return new PluginUITestSuiteAll();
+    }
 }

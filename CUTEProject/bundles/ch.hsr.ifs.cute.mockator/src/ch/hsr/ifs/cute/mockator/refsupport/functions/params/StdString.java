@@ -13,22 +13,24 @@ import ch.hsr.ifs.iltis.cpp.core.util.constants.CommonCPPConstants;
 
 public class StdString {
 
-   private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+    private static final ICPPNodeFactory nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
 
-   public boolean isStdString(final IASTInitializerClause param) {
-      if (param instanceof IASTLiteralExpression) { return isStringLiteral((IASTLiteralExpression) param); }
+    public boolean isStdString(final IASTInitializerClause param) {
+        if (param instanceof IASTLiteralExpression) {
+            return isStringLiteral((IASTLiteralExpression) param);
+        }
 
-      return false;
-   }
+        return false;
+    }
 
-   private static boolean isStringLiteral(final IASTLiteralExpression literal) {
-      return literal.getKind() == IASTLiteralExpression.lk_string_literal;
-   }
+    private static boolean isStringLiteral(final IASTLiteralExpression literal) {
+        return literal.getKind() == IASTLiteralExpression.lk_string_literal;
+    }
 
-   public ICPPASTDeclSpecifier createStdStringDecl() {
-      final IASTName stdString = nodeFactory.newName(CommonCPPConstants.STD_STRING.toCharArray());
-      final ICPPASTNamedTypeSpecifier declspec = nodeFactory.newTypedefNameSpecifier(stdString);
-      declspec.setConst(true);
-      return declspec;
-   }
+    public ICPPASTDeclSpecifier createStdStringDecl() {
+        final IASTName stdString = nodeFactory.newName(CommonCPPConstants.STD_STRING.toCharArray());
+        final ICPPASTNamedTypeSpecifier declspec = nodeFactory.newTypedefNameSpecifier(stdString);
+        declspec.setConst(true);
+        return declspec;
+    }
 }

@@ -7,7 +7,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
 public interface TestDoubleMemFunImplStrategy {
 
-   void addCallVectorRegistration(IASTCompoundStatement body, ICPPASTFunctionDeclarator fun, boolean isStatic);
+    void addCallVectorRegistration(IASTCompoundStatement body, ICPPASTFunctionDeclarator fun, boolean isStatic);
 
-   void addCtorInitializer(ICPPASTFunctionDefinition ctor);
+    void addCtorInitializer(ICPPASTFunctionDefinition ctor);
 }

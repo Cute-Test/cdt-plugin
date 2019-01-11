@@ -5,19 +5,19 @@ import java.util.Optional;
 
 public class NodeContainer<T> {
 
-   private T node;
+    private T node;
 
-   public NodeContainer(final T node) {
-      this.node = node;
-   }
+    public NodeContainer(final T node) {
+        this.node = node;
+    }
 
-   public NodeContainer() {}
+    public NodeContainer() {}
 
-   public Optional<T> getNode() {
-      return Optional.ofNullable(node);
-   }
+    public Optional<T> getNode() {
+        return Optional.ofNullable(node);
+    }
 
-   public void setNode(final T node) {
-      this.node = node;
-   }
+    public void setNode(final T node) {
+        this.node = node;
+    }
 }

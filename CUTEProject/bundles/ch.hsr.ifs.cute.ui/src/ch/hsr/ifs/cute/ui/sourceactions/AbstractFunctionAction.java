@@ -33,72 +33,72 @@ import org.eclipse.text.edits.MultiTextEdit;
 
 public abstract class AbstractFunctionAction extends CRefactoring {
 
-   public AbstractFunctionAction(ICElement element, ISelection selection, ICProject project) {
-      super(element, selection, project);
-   }
+    public AbstractFunctionAction(ICElement element, ISelection selection, ICProject project) {
+        super(element, selection, project);
+    }
 
-   public AbstractFunctionAction() {
-      this(null, null, null);
-   }
+    public AbstractFunctionAction() {
+        this(null, null, null);
+    }
 
-   /**
-    * @since 4.0
-    */
-   public abstract MultiTextEdit createEdit(IFile file, IDocument doc, ISelection selection) throws CoreException;
+    /**
+     * @since 4.0
+     */
+    public abstract MultiTextEdit createEdit(IFile file, IDocument doc, ISelection selection) throws CoreException;
 
-   protected IASTTranslationUnit acquireAST(IFile editorFile) throws CoreException, InterruptedException {
-      ITranslationUnit tu = CoreModelUtil.findTranslationUnit(editorFile);
-      IASTTranslationUnit ast = refactoringContext.getAST(tu, new NullProgressMonitor());
-      return ast;
-   }
+    protected IASTTranslationUnit acquireAST(IFile editorFile) throws CoreException, InterruptedException {
+        ITranslationUnit tu = CoreModelUtil.findTranslationUnit(editorFile);
+        IASTTranslationUnit ast = refactoringContext.getAST(tu, new NullProgressMonitor());
+        return ast;
+    }
 
-   protected void initContext() {
-      new CRefactoringContext(this);
-   }
+    protected void initContext() {
+        new CRefactoringContext(this);
+    }
 
-   protected void disposeContext() {
-      refactoringContext.dispose();
-   }
+    protected void disposeContext() {
+        refactoringContext.dispose();
+    }
 
-   protected IASTTranslationUnit getASTTranslationUnit(IFile editorFile) throws CoreException {
-      final ASTCache astCache = new ASTCache();
-      ITranslationUnit tu = CoreModelUtil.findTranslationUnit(editorFile);
-      IIndex index = CCorePlugin.getIndexManager().getIndex(tu.getCProject());
-      try {
-         index.acquireReadLock();
-         return astCache.acquireSharedAST(tu, index, true, new NullProgressMonitor());
-      } catch (InterruptedException e) {
-         return null;
-      } finally {
-         astCache.disposeAST();
-         index.releaseReadLock();
-      }
-   }
+    protected IASTTranslationUnit getASTTranslationUnit(IFile editorFile) throws CoreException {
+        final ASTCache astCache = new ASTCache();
+        ITranslationUnit tu = CoreModelUtil.findTranslationUnit(editorFile);
+        IIndex index = CCorePlugin.getIndexManager().getIndex(tu.getCProject());
+        try {
+            index.acquireReadLock();
+            return astCache.acquireSharedAST(tu, index, true, new NullProgressMonitor());
+        } catch (InterruptedException e) {
+            return null;
+        } finally {
+            astCache.disposeAST();
+            index.releaseReadLock();
+        }
+    }
 
-   public void createProblemMarker(IFile file, String message, int lineNo) {
+    public void createProblemMarker(IFile file, String message, int lineNo) {
 
-      try {
-         IMarker marker = file.createMarker("org.eclipse.cdt.core.problem");
-         marker.setAttribute(IMarker.MESSAGE, "cute:" + message);
-         marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
-         marker.setAttribute(IMarker.TRANSIENT, true);
-         if (lineNo != 0) {
-            marker.setAttribute(IMarker.LINE_NUMBER, lineNo);
-         }
-         marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-      } catch (CoreException e) {
-         // You need to handle the cases where attribute value is rejected
-      }
-   }
+        try {
+            IMarker marker = file.createMarker("org.eclipse.cdt.core.problem");
+            marker.setAttribute(IMarker.MESSAGE, "cute:" + message);
+            marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+            marker.setAttribute(IMarker.TRANSIENT, true);
+            if (lineNo != 0) {
+                marker.setAttribute(IMarker.LINE_NUMBER, lineNo);
+            }
+            marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+        } catch (CoreException e) {
+            // You need to handle the cases where attribute value is rejected
+        }
+    }
 
-   @Override
-   protected RefactoringDescriptor getRefactoringDescriptor() {
-      return null;
-   }
+    @Override
+    protected RefactoringDescriptor getRefactoringDescriptor() {
+        return null;
+    }
 
-   @Override
-   protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
+    @Override
+    protected void collectModifications(IProgressMonitor pm, ModificationCollector collector) throws CoreException, OperationCanceledException {
 
-   }
+    }
 
 }

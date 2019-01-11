@@ -9,21 +9,21 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 
 public class ParameterToFunctionAdder {
 
-   private final ICPPASTFunctionDeclarator funDecl;
+    private final ICPPASTFunctionDeclarator funDecl;
 
-   public ParameterToFunctionAdder(final ICPPASTFunctionDeclarator funDecl) {
-      this.funDecl = funDecl;
-   }
+    public ParameterToFunctionAdder(final ICPPASTFunctionDeclarator funDecl) {
+        this.funDecl = funDecl;
+    }
 
-   public void addParametersFromFunCall(final ICPPASTFunctionCallExpression funCall) {
-      final FunctionCallParameterCollector ex = new FunctionCallParameterCollector(funCall);
-      final List<ICPPASTParameterDeclaration> parameters = ex.getFunctionParameters();
-      addParametersToDeclarator(parameters);
-   }
+    public void addParametersFromFunCall(final ICPPASTFunctionCallExpression funCall) {
+        final FunctionCallParameterCollector ex = new FunctionCallParameterCollector(funCall);
+        final List<ICPPASTParameterDeclaration> parameters = ex.getFunctionParameters();
+        addParametersToDeclarator(parameters);
+    }
 
-   private void addParametersToDeclarator(final List<ICPPASTParameterDeclaration> parameters) {
-      for (final ICPPASTParameterDeclaration each : parameters) {
-         funDecl.addParameterDeclaration(each);
-      }
-   }
+    private void addParametersToDeclarator(final List<ICPPASTParameterDeclaration> parameters) {
+        for (final ICPPASTParameterDeclaration each : parameters) {
+            funDecl.addParameterDeclaration(each);
+        }
+    }
 }

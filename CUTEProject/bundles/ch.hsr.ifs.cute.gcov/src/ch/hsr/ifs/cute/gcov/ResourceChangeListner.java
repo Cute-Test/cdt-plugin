@@ -25,30 +25,30 @@ import ch.hsr.ifs.cute.gcov.model.File;
  */
 public class ResourceChangeListner implements IResourceChangeListener {
 
-   @Override
-   public void resourceChanged(IResourceChangeEvent event) {
-      IResourceDelta delta = event.getDelta();
-      IResourceDelta[] deltas = new IResourceDelta[] { delta };
-      processDeltas(deltas);
-   }
+    @Override
+    public void resourceChanged(IResourceChangeEvent event) {
+        IResourceDelta delta = event.getDelta();
+        IResourceDelta[] deltas = new IResourceDelta[] { delta };
+        processDeltas(deltas);
+    }
 
-   protected void processDeltas(IResourceDelta[] deltas) {
-      if (deltas.length == 0) return;
-      for (IResourceDelta iResourceDelta : deltas) {
-         try {
-            IPath path = iResourceDelta.getFullPath();
-            IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-            CoverageModel CovModel = GcovPlugin.getDefault().getcModel();
-            File mF = CovModel.getModelForFile(file);
-            int flags = iResourceDelta.getFlags();
-            if ((flags & IResourceDelta.CONTENT) != 0 || (flags & IResourceDelta.REPLACED) != 0) {
-               if (mF != null) {
-                  CovModel.removeFileFromModel(file);
-               }
-               new DeleteMarkerJob(file).schedule();
-            }
-         } catch (Exception e) {}
-         processDeltas(iResourceDelta.getAffectedChildren());
-      }
-   }
+    protected void processDeltas(IResourceDelta[] deltas) {
+        if (deltas.length == 0) return;
+        for (IResourceDelta iResourceDelta : deltas) {
+            try {
+                IPath path = iResourceDelta.getFullPath();
+                IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+                CoverageModel CovModel = GcovPlugin.getDefault().getcModel();
+                File mF = CovModel.getModelForFile(file);
+                int flags = iResourceDelta.getFlags();
+                if ((flags & IResourceDelta.CONTENT) != 0 || (flags & IResourceDelta.REPLACED) != 0) {
+                    if (mF != null) {
+                        CovModel.removeFileFromModel(file);
+                    }
+                    new DeleteMarkerJob(file).schedule();
+                }
+            } catch (Exception e) {}
+            processDeltas(iResourceDelta.getAffectedChildren());
+        }
+    }
 }

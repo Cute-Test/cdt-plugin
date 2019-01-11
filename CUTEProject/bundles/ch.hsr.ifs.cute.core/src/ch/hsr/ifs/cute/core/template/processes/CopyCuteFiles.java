@@ -36,61 +36,63 @@ import org.eclipse.core.runtime.IStatus;
  */
 public class CopyCuteFiles extends ProcessRunner {
 
-   @Override
-   public void process(TemplateCore template, ProcessArgument[] args, String processId, IProgressMonitor monitor) throws ProcessFailureException {
+    @Override
+    public void process(TemplateCore template, ProcessArgument[] args, String processId, IProgressMonitor monitor) throws ProcessFailureException {
 
-      String projectName = args[0].getSimpleValue();
-      IProject projectHandle = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-      String sourceDir = args[1].getSimpleValue();
-      String targetDir = args[2].getSimpleValue();
+        String projectName = args[0].getSimpleValue();
+        IProject projectHandle = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+        String sourceDir = args[1].getSimpleValue();
+        String targetDir = args[2].getSimpleValue();
 
-      URL path;
-      try {
-         path = TemplateEngineHelper.getTemplateResourceURLRelativeToTemplate(template, sourceDir);
-         if (path == null) { throw new ProcessFailureException(getProcessMessage(processId, IStatus.ERROR,
-               "Copy CUTE files failure: template source not found:" + sourceDir)); }
-      } catch (IOException e1) {
-         throw new ProcessFailureException("Copy CUTE files failure: template source not found: " + sourceDir);
-      }
+        URL path;
+        try {
+            path = TemplateEngineHelper.getTemplateResourceURLRelativeToTemplate(template, sourceDir);
+            if (path == null) {
+                throw new ProcessFailureException(getProcessMessage(processId, IStatus.ERROR, "Copy CUTE files failure: template source not found:" +
+                                                                                              sourceDir));
+            }
+        } catch (IOException e1) {
+            throw new ProcessFailureException("Copy CUTE files failure: template source not found: " + sourceDir);
+        }
 
-      File[] filenames = getFiles(path);
+        File[] filenames = getFiles(path);
 
-      for (File file : filenames) {
+        for (File file : filenames) {
 
-         InputStream contents = null;
-         try {
-            contents = new FileInputStream(file);
-            copyFile(projectHandle, targetDir, file, contents);
-            projectHandle.refreshLocal(IResource.DEPTH_INFINITE, null);
-         } catch (IOException e) {
-            throw new ProcessFailureException(getProcessMessage(processId, IStatus.ERROR, "Could not open File: " + file.getAbsolutePath()));
-         } catch (CoreException e) {
-            throw new ProcessFailureException("Could not write File: " + e.getMessage(), e);
-         }
-      }
+            InputStream contents = null;
+            try {
+                contents = new FileInputStream(file);
+                copyFile(projectHandle, targetDir, file, contents);
+                projectHandle.refreshLocal(IResource.DEPTH_INFINITE, null);
+            } catch (IOException e) {
+                throw new ProcessFailureException(getProcessMessage(processId, IStatus.ERROR, "Could not open File: " + file.getAbsolutePath()));
+            } catch (CoreException e) {
+                throw new ProcessFailureException("Could not write File: " + e.getMessage(), e);
+            }
+        }
 
-   }
+    }
 
-   private void copyFile(IProject projectHandle, String targetDir, File file, InputStream contents) throws CoreException {
-      IFile iFile = projectHandle.getFile(targetDir + "/" + file.getName());
-      if (!iFile.getParent().exists()) {
-         ProcessHelper.mkdirs(projectHandle, projectHandle.getFolder(iFile.getParent().getProjectRelativePath()));
-      }
+    private void copyFile(IProject projectHandle, String targetDir, File file, InputStream contents) throws CoreException {
+        IFile iFile = projectHandle.getFile(targetDir + "/" + file.getName());
+        if (!iFile.getParent().exists()) {
+            ProcessHelper.mkdirs(projectHandle, projectHandle.getFolder(iFile.getParent().getProjectRelativePath()));
+        }
 
-      if (iFile.exists()) {
-         iFile.setContents(contents, true, true, null);
-      } else {
-         iFile.create(contents, true, null);
-         iFile.refreshLocal(IResource.DEPTH_ONE, null);
-      }
-   }
+        if (iFile.exists()) {
+            iFile.setContents(contents, true, true, null);
+        } else {
+            iFile.create(contents, true, null);
+            iFile.refreshLocal(IResource.DEPTH_ONE, null);
+        }
+    }
 
-   private File[] getFiles(URL path) throws ProcessFailureException {
-      File file = new File(path.getFile());
-      if (file.isDirectory()) {
-         return file.listFiles((FilenameFilter) (dir, name) -> name.endsWith(".h"));
-      } else {
-         throw new ProcessFailureException("Source is not a Direcotry");
-      }
-   }
+    private File[] getFiles(URL path) throws ProcessFailureException {
+        File file = new File(path.getFile());
+        if (file.isDirectory()) {
+            return file.listFiles((FilenameFilter) (dir, name) -> name.endsWith(".h"));
+        } else {
+            throw new ProcessFailureException("Source is not a Direcotry");
+        }
+    }
 }

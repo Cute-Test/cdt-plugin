@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.feature"
       label="%featureName"
-      version="5.5.3.qualifier"
+      version="5.5.4.qualifier"
       provider-name="%providerName"
       plugin="ch.hsr.ifs.cute.ui"
       image="eclipse_update_120.jpg">
@@ -43,6 +43,7 @@
       <import plugin="org.eclipse.cdt.dsf.gdb.ui"/>
       <import plugin="org.eclipse.cdt.ui" version="5.3.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.managedbuilder.core" version="7.0.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.iltis.cpp.versionator"/>
       <import plugin="ch.hsr.ifs.testframework"/>
       <import plugin="org.eclipse.core.expressions" version="3.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ltk.core.refactoring" version="3.5.100" match="greaterOrEqual"/>
@@ -55,55 +56,52 @@
       <import plugin="org.eclipse.cdt.codan.ui" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.cdt.codan.ui.cxx" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="ch.hsr.ifs.cute.headers"/>
-      <import plugin="org.eclipse.ui.intro"/>
-      <import plugin="org.eclipse.ui.intro.universal"/>
-      <import plugin="org.eclipse.help"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="ch.hsr.ifs.cute.core"/>
-      <import plugin="org.eclipse.cdt.managedbuilder.ui" version="8.2.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.e4.core.di"/>
-      <import plugin="ch.hsr.ifs.iltis.cpp.versionator"/>
+      <import plugin="ch.hsr.ifs.iltis.core.kotlin"/>
+      <import plugin="ch.hsr.ifs.iltis.core.core"/>
    </requires>
 
    <plugin
          id="ch.hsr.ifs.testframework"
          download-size="0"
          install-size="0"
-         version="5.5.3.qualifier"
+         version="5.5.4.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.core"
          download-size="0"
          install-size="0"
-         version="5.5.3.qualifier"
+         version="5.5.4.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.ui"
          download-size="0"
          install-size="0"
-         version="5.5.3.qualifier"
+         version="5.5.4.qualifier"
          unpack="false"/>
-
-   <plugin
-         id="ch.hsr.ifs.cute.help"
-         download-size="0"
-         install-size="0"
-         version="5.5.3.qualifier"/>
 
    <plugin
          id="ch.hsr.ifs.cute.headers"
          download-size="0"
          install-size="0"
-         version="5.5.3.qualifier"
+         version="5.5.4.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.framework.extension"
          download-size="0"
          install-size="0"
-         version="5.5.3.qualifier"
+         version="5.5.4.qualifier"
          fragment="true"/>
+
+   <plugin
+         id="ch.hsr.ifs.cute.help"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>

@@ -36,139 +36,146 @@ import org.eclipse.text.edits.TextEdit;
  */
 public class AddNewTestStrategy extends AddFunctionStrategy {
 
-   protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);";
+    protected static final String TEST_STMT = "\tASSERTM(\"start writing tests\", false);";
 
-   protected int insertFileOffset = -1;
-   protected int pushbackLength   = -1;
+    protected int insertFileOffset = -1;
+    protected int pushbackLength   = -1;
 
-   int                         problemMarkerErrorLineNumber = 0;
-   private final IDocument     document;
-   private final TextSelection selection;
+    int                         problemMarkerErrorLineNumber = 0;
+    private final IDocument     document;
+    private final TextSelection selection;
 
-   public AddNewTestStrategy(IDocument document, IFile file, IASTTranslationUnit tu, String iastName, SuitePushBackFinder finder,
-                             TextSelection selection) {
-      super(document, file, tu, iastName, finder);
-      this.document = document;
-      this.selection = selection;
-   }
+    public AddNewTestStrategy(IDocument document, IFile file, IASTTranslationUnit tu, String iastName, SuitePushBackFinder finder,
+                              TextSelection selection) {
+        super(document, file, tu, iastName, finder);
+        this.document = document;
+        this.selection = selection;
+    }
 
-   @Override
-   public MultiTextEdit getEdit() {
-      IIndex index = astTu.getIndex();
-      try {
-         index.acquireReadLock();
-         MultiTextEdit mEdit = new MultiTextEdit();
-         if (selection != null) {
+    @Override
+    public MultiTextEdit getEdit() {
+        IIndex index = astTu.getIndex();
+        try {
+            index.acquireReadLock();
+            MultiTextEdit mEdit = new MultiTextEdit();
+            if (selection != null) {
 
-            insertFileOffset = getInsertOffset(astTu, selection, document);
+                insertFileOffset = getInsertOffset(astTu, selection, document);
 
-            SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
-            astTu.accept(suitPushBackFinder);
+                SuitePushBackFinder suitPushBackFinder = new SuitePushBackFinder();
+                astTu.accept(suitPushBackFinder);
 
-            mEdit.addChild(createInsertTestFunctionEdit(getInsertOffset(suitPushBackFinder, astTu), document, testName.toString()));
+                mEdit.addChild(createInsertTestFunctionEdit(getInsertOffset(suitPushBackFinder, astTu), document, testName.toString()));
 
-            if (!checkPushback(astTu, testName.toString(), suitPushBackFinder)) mEdit.addChild(createPushBackEdit(file, astTu, suitPushBackFinder));
-            else {
-               createProblemMarker(file, Messages.getString("NewTestFunctionAction.DuplicatedPushback"), problemMarkerErrorLineNumber);
+                if (!checkPushback(astTu, testName.toString(), suitPushBackFinder))
+                    mEdit.addChild(createPushBackEdit(file, astTu, suitPushBackFinder));
+                else {
+                    createProblemMarker(file, Messages.getString("NewTestFunctionAction.DuplicatedPushback"), problemMarkerErrorLineNumber);
+                }
+
+            }
+            return mEdit;
+        } catch (InterruptedException e) {
+            return null;
+        } finally {
+            index.releaseReadLock();
+        }
+    }
+
+    @Override
+    protected TextEdit createPushBackEdit(IFile editorFile, IASTTranslationUnit astTu, SuitePushBackFinder suitPushBackFinder, String insertion) {
+        pushbackLength = insertion.length();
+        return super.createPushBackEdit(editorFile, astTu, suitPushBackFinder, insertion);
+    }
+
+    protected TextEdit createInsertTestFunctionEdit(int insertTestFuncFileOffset, IDocument doc, String funcName) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("void ");
+        builder.append(funcName);
+        builder.append("(){");
+        builder.append(newLine);
+        builder.append(TEST_STMT);
+        builder.append(newLine);
+        builder.append("}");
+        builder.append(newLine);
+        builder.append(newLine);
+        TextEdit iedit = new InsertEdit(insertTestFuncFileOffset, builder.toString());
+        return iedit;
+    }
+
+    protected int getInsertOffset(SuitePushBackFinder suitePushBackFinder, IASTTranslationUnit astTu) {
+        IASTName name = suitePushBackFinder.getSuiteDeclName();
+        if (name != null) {
+            IBinding binding = name.resolveBinding();
+            IASTName[] refs = astTu.getReferences(binding);
+            IASTStatement lastPushBackStmt = getLastPushBack(refs);
+            if (lastPushBackStmt != null) {
+                IASTFunctionDefinition funDef = getFunctionDefinition(lastPushBackStmt);
+                int offset = funDef.getFileLocation().getNodeOffset();
+                return insertFileOffset < offset ? insertFileOffset : offset;
+            }
+        }
+        return insertFileOffset;
+    }
+
+    private IASTFunctionDefinition getFunctionDefinition(IASTStatement lastPushBackStmt) {
+        IASTNode node = lastPushBackStmt;
+        while (!(node instanceof IASTFunctionDefinition)) {
+            node = node.getParent();
+        }
+        return (IASTFunctionDefinition) node;
+    }
+
+    // shift the insertion point out syntactical block, relative to user(selection point/current cursor)location
+    protected int getInsertOffset(IASTTranslationUnit astTu, TextSelection selection, IDocument doc) {
+        int selOffset = selection.getOffset();
+        IASTDeclaration[] decls = astTu.getDeclarations();
+        for (IASTDeclaration declaration : decls) {
+            int nodeOffset = declaration.getFileLocation().getNodeOffset();
+            int nodeLength = declaration.getFileLocation().asFileLocation().getNodeLength();
+            if (selOffset > nodeOffset && selOffset < (nodeOffset + nodeLength)) {
+                return (nodeOffset);
+            }
+        }
+
+        // Shift out of preprocessor statements
+        // >#include "cute.h<"
+        IASTPreprocessorStatement[] listPreprocessor = astTu.getAllPreprocessorStatements();
+        for (IASTPreprocessorStatement element : listPreprocessor) {
+            int nodeOffset = element.getFileLocation().getNodeOffset();
+            int nodeLength = element.getFileLocation().asFileLocation().getNodeLength();
+            if (selOffset > nodeOffset && selOffset < (nodeOffset + nodeLength)) {
+                return nodeOffset;
+            }
+        }
+
+        try {
+            int selectedLineNo = selection.getStartLine();
+            IRegion iregion = doc.getLineInformation(selectedLineNo);
+            String text = doc.get(iregion.getOffset(), iregion.getLength());
+            if (text.startsWith("#include")) {
+                return iregion.getOffset();
             }
 
-         }
-         return mEdit;
-      } catch (InterruptedException e) {
-         return null;
-      } finally {
-         index.releaseReadLock();
-      }
-   }
+        } catch (org.eclipse.jface.text.BadLocationException be) {}
 
-   @Override
-   protected TextEdit createPushBackEdit(IFile editorFile, IASTTranslationUnit astTu, SuitePushBackFinder suitPushBackFinder, String insertion) {
-      pushbackLength = insertion.length();
-      return super.createPushBackEdit(editorFile, astTu, suitPushBackFinder, insertion);
-   }
+        // just use the user selection if no match, it could possibly mean that the cursor at the
+        // very end of the source file
+        return selOffset;
+    }
 
-   protected TextEdit createInsertTestFunctionEdit(int insertTestFuncFileOffset, IDocument doc, String funcName) {
-      StringBuilder builder = new StringBuilder();
-      builder.append("void ");
-      builder.append(funcName);
-      builder.append("(){");
-      builder.append(newLine);
-      builder.append(TEST_STMT);
-      builder.append(newLine);
-      builder.append("}");
-      builder.append(newLine);
-      builder.append(newLine);
-      TextEdit iedit = new InsertEdit(insertTestFuncFileOffset, builder.toString());
-      return iedit;
-   }
-
-   protected int getInsertOffset(SuitePushBackFinder suitePushBackFinder, IASTTranslationUnit astTu) {
-      IASTName name = suitePushBackFinder.getSuiteDeclName();
-      if (name != null) {
-         IBinding binding = name.resolveBinding();
-         IASTName[] refs = astTu.getReferences(binding);
-         IASTStatement lastPushBackStmt = getLastPushBack(refs);
-         if (lastPushBackStmt != null) {
-            IASTFunctionDefinition funDef = getFunctionDefinition(lastPushBackStmt);
-            int offset = funDef.getFileLocation().getNodeOffset();
-            return insertFileOffset < offset ? insertFileOffset : offset;
-         }
-      }
-      return insertFileOffset;
-   }
-
-   private IASTFunctionDefinition getFunctionDefinition(IASTStatement lastPushBackStmt) {
-      IASTNode node = lastPushBackStmt;
-      while (!(node instanceof IASTFunctionDefinition)) {
-         node = node.getParent();
-      }
-      return (IASTFunctionDefinition) node;
-   }
-
-   // shift the insertion point out syntactical block, relative to user(selection point/current cursor)location
-   protected int getInsertOffset(IASTTranslationUnit astTu, TextSelection selection, IDocument doc) {
-      int selOffset = selection.getOffset();
-      IASTDeclaration[] decls = astTu.getDeclarations();
-      for (IASTDeclaration declaration : decls) {
-         int nodeOffset = declaration.getFileLocation().getNodeOffset();
-         int nodeLength = declaration.getFileLocation().asFileLocation().getNodeLength();
-         if (selOffset > nodeOffset && selOffset < (nodeOffset + nodeLength)) { return (nodeOffset); }
-      }
-
-      // Shift out of preprocessor statements
-      // >#include "cute.h<"
-      IASTPreprocessorStatement[] listPreprocessor = astTu.getAllPreprocessorStatements();
-      for (IASTPreprocessorStatement element : listPreprocessor) {
-         int nodeOffset = element.getFileLocation().getNodeOffset();
-         int nodeLength = element.getFileLocation().asFileLocation().getNodeLength();
-         if (selOffset > nodeOffset && selOffset < (nodeOffset + nodeLength)) { return nodeOffset; }
-      }
-
-      try {
-         int selectedLineNo = selection.getStartLine();
-         IRegion iregion = doc.getLineInformation(selectedLineNo);
-         String text = doc.get(iregion.getOffset(), iregion.getLength());
-         if (text.startsWith("#include")) { return iregion.getOffset(); }
-
-      } catch (org.eclipse.jface.text.BadLocationException be) {}
-
-      // just use the user selection if no match, it could possibly mean that the cursor at the
-      // very end of the source file
-      return selOffset;
-   }
-
-   public void createProblemMarker(IFile file, String message, int lineNo) {
-      try {
-         IMarker marker = file.createMarker("org.eclipse.cdt.core.problem");
-         marker.setAttribute(IMarker.MESSAGE, "cute:" + message);
-         marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
-         marker.setAttribute(IMarker.TRANSIENT, true);
-         if (lineNo != 0) {
-            marker.setAttribute(IMarker.LINE_NUMBER, lineNo);
-         }
-         marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-      } catch (CoreException e) {
-         // You need to handle the cases where attribute value is rejected
-      }
-   }
+    public void createProblemMarker(IFile file, String message, int lineNo) {
+        try {
+            IMarker marker = file.createMarker("org.eclipse.cdt.core.problem");
+            marker.setAttribute(IMarker.MESSAGE, "cute:" + message);
+            marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+            marker.setAttribute(IMarker.TRANSIENT, true);
+            if (lineNo != 0) {
+                marker.setAttribute(IMarker.LINE_NUMBER, lineNo);
+            }
+            marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+        } catch (CoreException e) {
+            // You need to handle the cases where attribute value is rejected
+        }
+    }
 }

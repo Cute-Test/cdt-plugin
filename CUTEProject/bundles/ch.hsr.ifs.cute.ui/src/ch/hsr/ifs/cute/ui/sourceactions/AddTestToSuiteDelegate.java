@@ -36,67 +36,67 @@ import ch.hsr.ifs.cute.core.CuteCorePlugin;
  */
 public class AddTestToSuiteDelegate implements IEditorActionDelegate, IWorkbenchWindowActionDelegate {
 
-   private IEditorPart                  editor;
-   private final AbstractFunctionAction functionAction;
+    private IEditorPart                  editor;
+    private final AbstractFunctionAction functionAction;
 
-   public AddTestToSuiteDelegate() {
-      functionAction = new AddTestToSuite();
-   }
+    public AddTestToSuiteDelegate() {
+        functionAction = new AddTestToSuite();
+    }
 
-   @Override
-   public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-      editor = targetEditor;
-   }
+    @Override
+    public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+        editor = targetEditor;
+    }
 
-   @Override
-   public void dispose() {
-      editor = null;
-   }
+    @Override
+    public void dispose() {
+        editor = null;
+    }
 
-   @Override
-   public void init(IWorkbenchWindow window) {}
+    @Override
+    public void init(IWorkbenchWindow window) {}
 
-   @Override
-   public void selectionChanged(IAction action, ISelection selection) {}
+    @Override
+    public void selectionChanged(IAction action, ISelection selection) {}
 
-   @Override
-   public void run(IAction action) {
+    @Override
+    public void run(IAction action) {
 
-      try {
-         IEditorPart editor = getEditor();
+        try {
+            IEditorPart editor = getEditor();
 
-         if (editor == null) return;
+            if (editor == null) return;
 
-         TextEditor ceditor = (TextEditor) editor;
-         IEditorInput editorInput = ceditor.getEditorInput();
-         IDocumentProvider prov = ceditor.getDocumentProvider();
-         IDocument doc = prov.getDocument(editorInput);
+            TextEditor ceditor = (TextEditor) editor;
+            IEditorInput editorInput = ceditor.getEditorInput();
+            IDocumentProvider prov = ceditor.getDocumentProvider();
+            IDocument doc = prov.getDocument(editorInput);
 
-         MultiTextEdit mEdit;
-         ISelection sel = ceditor.getSelectionProvider().getSelection();
-         IFileEditorInput fei = editorInput.getAdapter(IFileEditorInput.class);
-         if (fei != null) {
-            mEdit = functionAction.createEdit(fei.getFile(), doc, sel);
-            RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
-            processor.performEdits();
-            this.editor = null;
-         }
-      } catch (CoreException e) {
-         CuteCorePlugin.log(e);
-      } catch (MalformedTreeException e) {
-         CuteCorePlugin.log(e);
-      } catch (BadLocationException e) {
-         CuteCorePlugin.log(e);
-      }
-   }
+            MultiTextEdit mEdit;
+            ISelection sel = ceditor.getSelectionProvider().getSelection();
+            IFileEditorInput fei = editorInput.getAdapter(IFileEditorInput.class);
+            if (fei != null) {
+                mEdit = functionAction.createEdit(fei.getFile(), doc, sel);
+                RewriteSessionEditProcessor processor = new RewriteSessionEditProcessor(doc, mEdit, TextEdit.CREATE_UNDO);
+                processor.performEdits();
+                this.editor = null;
+            }
+        } catch (CoreException e) {
+            CuteCorePlugin.log(e);
+        } catch (MalformedTreeException e) {
+            CuteCorePlugin.log(e);
+        } catch (BadLocationException e) {
+            CuteCorePlugin.log(e);
+        }
+    }
 
-   private IEditorPart getEditor() {
-      if (editor == null) {
-         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-         if (page.isEditorAreaVisible() && page.getActiveEditor() != null && page.getActiveEditor() instanceof TextEditor) {
-            editor = page.getActiveEditor();
-         }
-      }
-      return editor;
-   }
+    private IEditorPart getEditor() {
+        if (editor == null) {
+            IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+            if (page.isEditorAreaVisible() && page.getActiveEditor() != null && page.getActiveEditor() instanceof TextEditor) {
+                editor = page.getActiveEditor();
+            }
+        }
+        return editor;
+    }
 }

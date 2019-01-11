@@ -21,64 +21,66 @@ import ch.hsr.ifs.cute.it.tests.annotations.TestProjectType;
  */
 public class AutomatedUITestRunner extends SWTBotJunit4ClassRunner {
 
-   private Class<AutomatedUITest> fAutomatedUITestClass;
+    private Class<AutomatedUITest> fAutomatedUITestClass;
 
-   public AutomatedUITestRunner(Class<?> testClass) throws Exception {
-      super(testClass);
-      fAutomatedUITestClass = findAutomatedUITest(testClass);
-      handleAnnotation("fTestClassName", getTestClass().getName());
-      handleProjectCategory(testClass);
-   }
+    public AutomatedUITestRunner(Class<?> testClass) throws Exception {
+        super(testClass);
+        fAutomatedUITestClass = findAutomatedUITest(testClass);
+        handleAnnotation("fTestClassName", getTestClass().getName());
+        handleProjectCategory(testClass);
+    }
 
-   @Override
-   protected void runChild(FrameworkMethod method, RunNotifier notifier) {
-      handleProjectType(method);
-      handleProjectName(method);
-      super.runChild(method, notifier);
-   }
+    @Override
+    protected void runChild(FrameworkMethod method, RunNotifier notifier) {
+        handleProjectType(method);
+        handleProjectName(method);
+        super.runChild(method, notifier);
+    }
 
-   private void handleProjectCategory(Class<?> cls) {
-      TestProjectCategory type = cls.getAnnotation(TestProjectCategory.class);
-      if (type != null) {
-         handleAnnotation("fProjectCategory", type.value());
-      } else {
-         fail("Test is missing project category annotation!");
-      }
-   }
+    private void handleProjectCategory(Class<?> cls) {
+        TestProjectCategory type = cls.getAnnotation(TestProjectCategory.class);
+        if (type != null) {
+            handleAnnotation("fProjectCategory", type.value());
+        } else {
+            fail("Test is missing project category annotation!");
+        }
+    }
 
-   private void handleProjectType(FrameworkMethod method) {
-      TestProjectType type = method.getAnnotation(TestProjectType.class);
-      if (type != null) {
-         handleAnnotation("fProjectType", type.value());
-      } else {
-         fail("Test is missing project type annotation!");
-      }
-   }
+    private void handleProjectType(FrameworkMethod method) {
+        TestProjectType type = method.getAnnotation(TestProjectType.class);
+        if (type != null) {
+            handleAnnotation("fProjectType", type.value());
+        } else {
+            fail("Test is missing project type annotation!");
+        }
+    }
 
-   private void handleProjectName(FrameworkMethod method) {
-      TestProjectName name = method.getAnnotation(TestProjectName.class);
-      handleAnnotation("fProjectName", name != null ? name.value() : method.getName());
-   }
+    private void handleProjectName(FrameworkMethod method) {
+        TestProjectName name = method.getAnnotation(TestProjectName.class);
+        handleAnnotation("fProjectName", name != null ? name.value() : method.getName());
+    }
 
-   private void handleAnnotation(String fieldName, String annotationValue) {
-      try {
-         Field projectTypeField = fAutomatedUITestClass.getDeclaredField(fieldName);
-         projectTypeField.setAccessible(true);
-         projectTypeField.set(null, annotationValue);
-      } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-         fail("Failed to initialze project properties!");
-      }
-   }
+    private void handleAnnotation(String fieldName, String annotationValue) {
+        try {
+            Field projectTypeField = fAutomatedUITestClass.getDeclaredField(fieldName);
+            projectTypeField.setAccessible(true);
+            projectTypeField.set(null, annotationValue);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            fail("Failed to initialze project properties!");
+        }
+    }
 
-   @SuppressWarnings("unchecked")
-   private Class<AutomatedUITest> findAutomatedUITest(Class<?> cls) throws Exception {
-      while (cls != null && cls != AutomatedUITest.class) {
-         cls = cls.getSuperclass();
-      }
+    @SuppressWarnings("unchecked")
+    private Class<AutomatedUITest> findAutomatedUITest(Class<?> cls) throws Exception {
+        while (cls != null && cls != AutomatedUITest.class) {
+            cls = cls.getSuperclass();
+        }
 
-      if (cls == null) { throw new InvalidClassException("Expected AutomatedUITest to be part of the class hierarchy"); }
+        if (cls == null) {
+            throw new InvalidClassException("Expected AutomatedUITest to be part of the class hierarchy");
+        }
 
-      return (Class<AutomatedUITest>) cls;
-   }
+        return (Class<AutomatedUITest>) cls;
+    }
 
 }

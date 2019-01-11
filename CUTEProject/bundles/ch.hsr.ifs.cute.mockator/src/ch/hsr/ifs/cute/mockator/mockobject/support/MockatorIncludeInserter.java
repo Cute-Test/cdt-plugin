@@ -11,14 +11,14 @@ import ch.hsr.ifs.cute.mockator.refsupport.includes.AstIncludeNode;
 // #include "mockator.h"
 public class MockatorIncludeInserter {
 
-   private final IASTTranslationUnit ast;
+    private final IASTTranslationUnit ast;
 
-   public MockatorIncludeInserter(final IASTTranslationUnit ast) {
-      this.ast = ast;
-   }
+    public MockatorIncludeInserter(final IASTTranslationUnit ast) {
+        this.ast = ast;
+    }
 
-   public void insertWith(final ASTRewrite rewriter) {
-      final AstIncludeNode include = new AstIncludeNode(MockatorConstants.MOCKATOR_HEADER);
-      include.insertInTu(ast, rewriter);
-   }
+    public void insertWith(final ASTRewrite rewriter) {
+        final AstIncludeNode include = new AstIncludeNode(MockatorConstants.MOCKATOR_HEADER);
+        include.insertInTu(ast, rewriter);
+    }
 }

@@ -9,5 +9,5 @@ import ch.hsr.ifs.cute.mockator.testdouble.support.MemFunSignature;
 
 public interface CallRegistrationFinder {
 
-   Optional<? extends MemFunSignature> findRegisteredCall(ICPPASTFunctionDefinition function);
+    Optional<? extends MemFunSignature> findRegisteredCall(ICPPASTFunctionDefinition function);
 }

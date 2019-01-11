@@ -19,18 +19,18 @@ import org.eclipse.text.edits.MultiTextEdit;
  */
 public class NullStrategy extends AddPushbackStatementStrategy {
 
-   public NullStrategy(IDocument doc) {
-      super(doc, null, null);
-   }
+    public NullStrategy(IDocument doc) {
+        super(doc, null, null);
+    }
 
-   @Override
-   public MultiTextEdit getEdit() {
-      return new MultiTextEdit();
-   }
+    @Override
+    public MultiTextEdit getEdit() {
+        return new MultiTextEdit();
+    }
 
-   @Override
-   public String createPushBackContent() {
-      return "";
-   }
+    @Override
+    public String createPushBackContent() {
+        return "";
+    }
 
 }

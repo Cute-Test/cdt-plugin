@@ -22,50 +22,60 @@ import org.eclipse.ui.dialogs.ISelectionStatusValidator;
  */
 public class TypedElementSelectionValidator implements ISelectionStatusValidator {
 
-   private final IStatus fgErrorStatus = new StatusInfo(IStatus.ERROR, "");
-   private final IStatus fgOKStatus    = new StatusInfo();
+    private final IStatus fgErrorStatus = new StatusInfo(IStatus.ERROR, "");
+    private final IStatus fgOKStatus    = new StatusInfo();
 
-   private final Class<?>[]    fAcceptedTypes;
-   private final boolean       fAllowMultipleSelection;
-   private final Collection<?> fRejectedElements;
+    private final Class<?>[]    fAcceptedTypes;
+    private final boolean       fAllowMultipleSelection;
+    private final Collection<?> fRejectedElements;
 
-   public TypedElementSelectionValidator(Class<?>[] acceptedTypes, boolean allowMultipleSelection) {
-      this(acceptedTypes, allowMultipleSelection, null);
-   }
+    public TypedElementSelectionValidator(Class<?>[] acceptedTypes, boolean allowMultipleSelection) {
+        this(acceptedTypes, allowMultipleSelection, null);
+    }
 
-   public TypedElementSelectionValidator(Class<?>[] acceptedTypes, boolean allowMultipleSelection, Collection<Object> rejectedElements) {
-      Assert.isNotNull(acceptedTypes);
-      fAcceptedTypes = acceptedTypes;
-      fAllowMultipleSelection = allowMultipleSelection;
-      fRejectedElements = rejectedElements;
-   }
+    public TypedElementSelectionValidator(Class<?>[] acceptedTypes, boolean allowMultipleSelection, Collection<Object> rejectedElements) {
+        Assert.isNotNull(acceptedTypes);
+        fAcceptedTypes = acceptedTypes;
+        fAllowMultipleSelection = allowMultipleSelection;
+        fRejectedElements = rejectedElements;
+    }
 
-   @Override
-   public IStatus validate(Object[] elements) {
-      if (isValid(elements)) { return fgOKStatus; }
-      return fgErrorStatus;
-   }
+    @Override
+    public IStatus validate(Object[] elements) {
+        if (isValid(elements)) {
+            return fgOKStatus;
+        }
+        return fgErrorStatus;
+    }
 
-   private boolean isOfAcceptedType(Object o) {
-      for (Class<?> fAcceptedType : fAcceptedTypes) {
-         if (fAcceptedType.isInstance(o)) { return true; }
-      }
-      return false;
-   }
+    private boolean isOfAcceptedType(Object o) {
+        for (Class<?> fAcceptedType : fAcceptedTypes) {
+            if (fAcceptedType.isInstance(o)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-   private boolean isRejectedElement(Object elem) {
-      return (fRejectedElements != null) && fRejectedElements.contains(elem);
-   }
+    private boolean isRejectedElement(Object elem) {
+        return (fRejectedElements != null) && fRejectedElements.contains(elem);
+    }
 
-   private boolean isValid(Object[] selection) {
-      if (selection.length == 0) { return false; }
+    private boolean isValid(Object[] selection) {
+        if (selection.length == 0) {
+            return false;
+        }
 
-      if (!fAllowMultipleSelection && selection.length != 1) { return false; }
+        if (!fAllowMultipleSelection && selection.length != 1) {
+            return false;
+        }
 
-      for (Object element : selection) {
-         Object o = element;
-         if (!isOfAcceptedType(o) || isRejectedElement(o)) { return false; }
-      }
-      return true;
-   }
+        for (Object element : selection) {
+            Object o = element;
+            if (!isOfAcceptedType(o) || isRejectedElement(o)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

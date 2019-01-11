@@ -13,62 +13,64 @@ import ch.hsr.ifs.iltis.core.core.functional.functions.Function2;
 
 public class CompilerFlagHandler extends AbstractOptionsHandler {
 
-   public CompilerFlagHandler(final IProject project) {
-      super(project);
-   }
+    public CompilerFlagHandler(final IProject project) {
+        super(project);
+    }
 
-   public void addCompilerFlag(final String flag) {
-      toggleCompilerFlag(new CompilerFlagAdder(), flag);
-   }
+    public void addCompilerFlag(final String flag) {
+        toggleCompilerFlag(new CompilerFlagAdder(), flag);
+    }
 
-   public void removeCompilerFlag(final String flag) {
-      toggleCompilerFlag(new CompilerFlagRemover(), flag);
-   }
+    public void removeCompilerFlag(final String flag) {
+        toggleCompilerFlag(new CompilerFlagRemover(), flag);
+    }
 
-   public String getCompilerFlags() {
-      return getToolToAnanalyze().map(tool -> {
-         try {
-            return tool.getToolCommandFlagsString(null, null);
-         } catch (final BuildException e) {
+    public String getCompilerFlags() {
+        return getToolToAnanalyze().map(tool -> {
+            try {
+                return tool.getToolCommandFlagsString(null, null);
+            } catch (final BuildException e) {
+                return null;
+            }
+        }).orElse(null);
+    }
+
+    private void toggleCompilerFlag(final Function2<String, String, String> compilerFlagOp, final String flag) {
+        withEveryTool((tool, config) -> {
+            try {
+                final IOption flagsOption = tool.getOptionBySuperClassId(projectVariables.getCppCompilerOtherFlagsId());
+                final String flags = flagsOption.getStringValue();
+                final String newFlags = compilerFlagOp.apply(flag, flags);
+                setAndSaveOption(config, tool, flagsOption, newFlags);
+            } catch (final BuildException e) {
+                throw new ILTISException(e).rethrowUnchecked();
+            }
+
             return null;
-         }
-      }).orElse(null);
-   }
+        });
+    }
 
-   private void toggleCompilerFlag(final Function2<String, String, String> compilerFlagOp, final String flag) {
-      withEveryTool((tool, config) -> {
-         try {
-            final IOption flagsOption = tool.getOptionBySuperClassId(projectVariables.getCppCompilerOtherFlagsId());
-            final String flags = flagsOption.getStringValue();
-            final String newFlags = compilerFlagOp.apply(flag, flags);
-            setAndSaveOption(config, tool, flagsOption, newFlags);
-         } catch (final BuildException e) {
-            throw new ILTISException(e).rethrowUnchecked();
-         }
+    private static class CompilerFlagRemover implements Function2<String, String, String> {
 
-         return null;
-      });
-   }
+        @Override
+        public String apply(final String flagToRemove, final String flags) {
+            return flags.replaceAll(Pattern.quote(flagToRemove), "");
+        }
+    }
 
-   private static class CompilerFlagRemover implements Function2<String, String, String> {
+    private static class CompilerFlagAdder implements Function2<String, String, String> {
 
-      @Override
-      public String apply(final String flagToRemove, final String flags) {
-         return flags.replaceAll(Pattern.quote(flagToRemove), "");
-      }
-   }
+        @Override
+        public String apply(final String flagToAdd, final String flags) {
+            if (!flags.contains(flagToAdd)) {
+                return flags + " " + flagToAdd;
+            }
+            return flags;
+        }
+    }
 
-   private static class CompilerFlagAdder implements Function2<String, String, String> {
-
-      @Override
-      public String apply(final String flagToAdd, final String flags) {
-         if (!flags.contains(flagToAdd)) { return flags + " " + flagToAdd; }
-         return flags;
-      }
-   }
-
-   @Override
-   protected boolean isRequestedTool(final ITool tool) {
-      return isCppCompiler(tool);
-   }
+    @Override
+    protected boolean isRequestedTool(final ITool tool) {
+        return isCppCompiler(tool);
+    }
 }

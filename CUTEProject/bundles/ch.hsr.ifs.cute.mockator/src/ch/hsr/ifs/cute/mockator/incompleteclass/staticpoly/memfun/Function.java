@@ -24,63 +24,63 @@ import ch.hsr.ifs.cute.mockator.refsupport.functions.returntypes.ReturnTypeDeduc
 
 class Function extends AbstractStaticPolyMissingMemFun {
 
-   private final ICPPASTFunctionCallExpression funCall;
-   private final boolean                       isStatic;
-   private final IType                         injectedType;
-   private final String                        memberClassName;
+    private final ICPPASTFunctionCallExpression funCall;
+    private final boolean                       isStatic;
+    private final IType                         injectedType;
+    private final String                        memberClassName;
 
-   public Function(final ICPPASTFunctionCallExpression funCall, final boolean isStatic, final IType injectedType, final String memberClassName) {
-      this.funCall = funCall;
-      this.isStatic = isStatic;
-      this.injectedType = injectedType;
-      this.memberClassName = memberClassName;
-   }
+    public Function(final ICPPASTFunctionCallExpression funCall, final boolean isStatic, final IType injectedType, final String memberClassName) {
+        this.funCall = funCall;
+        this.isStatic = isStatic;
+        this.injectedType = injectedType;
+        this.memberClassName = memberClassName;
+    }
 
-   @Override
-   protected ICPPASTFunctionDeclarator createFunDecl() {
-      final IASTName funName = nodeFactory.newName(ASTUtil.getName(funCall).toCharArray());
-      final ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(funName);
-      funDecl.setConst(!isStatic);
-      new ParameterToFunctionAdder(funDecl).addParametersFromFunCall(funCall);
-      return funDecl;
-   }
+    @Override
+    protected ICPPASTFunctionDeclarator createFunDecl() {
+        final IASTName funName = nodeFactory.newName(ASTUtil.getName(funCall).toCharArray());
+        final ICPPASTFunctionDeclarator funDecl = nodeFactory.newFunctionDeclarator(funName);
+        funDecl.setConst(!isStatic);
+        new ParameterToFunctionAdder(funDecl).addParametersFromFunCall(funCall);
+        return funDecl;
+    }
 
-   @Override
-   protected ICPPASTDeclSpecifier createReturnType(final ICPPASTFunctionDeclarator funDecl) {
-      final ReturnTypeDeducer deducer = new ReturnTypeDeducer(funDecl, injectedType, memberClassName);
-      final ICPPASTDeclSpecifier returnType = deducer.determineReturnType(funCall);
+    @Override
+    protected ICPPASTDeclSpecifier createReturnType(final ICPPASTFunctionDeclarator funDecl) {
+        final ReturnTypeDeducer deducer = new ReturnTypeDeducer(funDecl, injectedType, memberClassName);
+        final ICPPASTDeclSpecifier returnType = deducer.determineReturnType(funCall);
 
-      if (isStatic) {
-         returnType.setStorageClass(IASTDeclSpecifier.sc_static);
-      }
+        if (isStatic) {
+            returnType.setStorageClass(IASTDeclSpecifier.sc_static);
+        }
 
-      return returnType;
-   }
+        return returnType;
+    }
 
-   @Override
-   protected IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final ICPPASTFunctionDeclarator funDecl,
-         final ICPPASTDeclSpecifier specifier, final CppStandard cppStd) {
-      final IASTCompoundStatement newFunBody = createEmptyFunBody();
-      strategy.addCallVectorRegistration(newFunBody, funDecl, isStatic);
-      final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, memberClassName);
-      final IASTReturnStatement returnStatement = creator.createReturnStatement(funDecl, specifier);
-      newFunBody.addStatement(returnStatement);
-      return newFunBody;
-   }
+    @Override
+    protected IASTCompoundStatement createFunBody(final TestDoubleMemFunImplStrategy strategy, final ICPPASTFunctionDeclarator funDecl,
+            final ICPPASTDeclSpecifier specifier, final CppStandard cppStd) {
+        final IASTCompoundStatement newFunBody = createEmptyFunBody();
+        strategy.addCallVectorRegistration(newFunBody, funDecl, isStatic);
+        final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd, memberClassName);
+        final IASTReturnStatement returnStatement = creator.createReturnStatement(funDecl, specifier);
+        newFunBody.addStatement(returnStatement);
+        return newFunBody;
+    }
 
-   @Override
-   protected IASTExpression getUnderlyingExpression() {
-      return funCall;
-   }
+    @Override
+    protected IASTExpression getUnderlyingExpression() {
+        return funCall;
+    }
 
-   @Override
-   public boolean isCallEquivalent(final ICPPASTFunctionDefinition function, final ConstStrategy strategy) {
-      final FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) function.getDeclarator());
-      return checker.isEquivalent(funCall, strategy);
-   }
+    @Override
+    public boolean isCallEquivalent(final ICPPASTFunctionDefinition function, final ConstStrategy strategy) {
+        final FunctionEquivalenceVerifier checker = new FunctionEquivalenceVerifier((ICPPASTFunctionDeclarator) function.getDeclarator());
+        return checker.isEquivalent(funCall, strategy);
+    }
 
-   @Override
-   public boolean isStatic() {
-      return isStatic;
-   }
+    @Override
+    public boolean isStatic() {
+        return isStatic;
+    }
 }

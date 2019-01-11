@@ -14,25 +14,25 @@ import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 
 public class FreeFunCallRegistrationAdder extends AbstractFunCallRegistrationAdder {
 
-   private final String callsVectorName;
+    private final String callsVectorName;
 
-   public FreeFunCallRegistrationAdder(final ICPPASTFunctionDeclarator fun, final CppStandard cppStd, final String name) {
-      super(fun, cppStd);
-      callsVectorName = name;
-   }
+    public FreeFunCallRegistrationAdder(final ICPPASTFunctionDeclarator fun, final CppStandard cppStd, final String name) {
+        super(fun, cppStd);
+        callsVectorName = name;
+    }
 
-   @Override
-   protected String getNameForCallsVector() {
-      return callsVectorName;
-   }
+    @Override
+    protected String getNameForCallsVector() {
+        return callsVectorName;
+    }
 
-   @Override
-   protected IASTExpression getPushBackOwner() {
-      return createCallSequence();
-   }
+    @Override
+    protected IASTExpression getPushBackOwner() {
+        return createCallSequence();
+    }
 
-   @Override
-   protected String getNameForCall() {
-      return ASTUtil.getQfName(array(MOCKATOR_NS, CALL));
-   }
+    @Override
+    protected String getNameForCall() {
+        return ASTUtil.getQfName(array(MOCKATOR_NS, CALL));
+    }
 }

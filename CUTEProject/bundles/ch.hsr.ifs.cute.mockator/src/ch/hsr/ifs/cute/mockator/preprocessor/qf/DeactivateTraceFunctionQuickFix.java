@@ -9,23 +9,23 @@ import ch.hsr.ifs.cute.mockator.project.cdt.options.IncludeFileHandler;
 
 public class DeactivateTraceFunctionQuickFix extends TraceFunctionQuickFix {
 
-   @Override
-   public String getLabel() {
-      return I18N.TraceFunctionDeactivate;
-   }
+    @Override
+    public String getLabel() {
+        return I18N.TraceFunctionDeactivate;
+    }
 
-   @Override
-   public boolean isApplicable(final IMarker marker) {
-      return super.isApplicable(marker) && isTraceFunctionActive(marker);
-   }
+    @Override
+    public boolean isApplicable(final IMarker marker) {
+        return super.isApplicable(marker) && isTraceFunctionActive(marker);
+    }
 
-   @Override
-   public void apply(final IMarker marker, final IDocument document) {
-      removeIncludeFile(marker);
-   }
+    @Override
+    public void apply(final IMarker marker, final IDocument document) {
+        removeIncludeFile(marker);
+    }
 
-   private void removeIncludeFile(final IMarker marker) {
-      final IncludeFileHandler handler = new IncludeFileHandler(getCProject().getProject());
-      handler.removeInclude(getPathOfSiblingHeaderFile(marker));
-   }
+    private void removeIncludeFile(final IMarker marker) {
+        final IncludeFileHandler handler = new IncludeFileHandler(getCProject().getProject());
+        handler.removeInclude(getPathOfSiblingHeaderFile(marker));
+    }
 }

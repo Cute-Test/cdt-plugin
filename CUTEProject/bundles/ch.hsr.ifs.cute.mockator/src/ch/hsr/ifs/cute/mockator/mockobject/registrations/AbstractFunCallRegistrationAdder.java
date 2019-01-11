@@ -37,56 +37,56 @@ import ch.hsr.ifs.cute.mockator.refsupport.functions.FunctionSignatureFormatter;
 // Note: If it is a static function, index 0 is used in the subscript.
 abstract class AbstractFunCallRegistrationAdder {
 
-   protected static final ICPPNodeFactory      nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
-   private final String                        signature;
-   private final ICPPASTParameterDeclaration[] funParameters;
-   private final CppStandard                   cppStd;
+    protected static final ICPPNodeFactory      nodeFactory = ASTNodeFactoryFactory.getDefaultCPPNodeFactory();
+    private final String                        signature;
+    private final ICPPASTParameterDeclaration[] funParameters;
+    private final CppStandard                   cppStd;
 
-   public AbstractFunCallRegistrationAdder(final ICPPASTFunctionDeclarator function, final CppStandard cppStd) {
-      this.cppStd = cppStd;
-      funParameters = function.getParameters();
-      signature = new FunctionSignatureFormatter(function).getFunctionSignature();
-   }
+    public AbstractFunCallRegistrationAdder(final ICPPASTFunctionDeclarator function, final CppStandard cppStd) {
+        this.cppStd = cppStd;
+        funParameters = function.getParameters();
+        signature = new FunctionSignatureFormatter(function).getFunctionSignature();
+    }
 
-   public void addRegistrationTo(final IASTCompoundStatement functionBody) {
-      functionBody.addStatement(createFunCallRegistration());
-   }
+    public void addRegistrationTo(final IASTCompoundStatement functionBody) {
+        functionBody.addStatement(createFunCallRegistration());
+    }
 
-   protected IASTExpressionStatement createFunCallRegistration() {
-      final IASTName pushBack = nodeFactory.newName(PUSH_BACK.toCharArray());
-      final ICPPASTFieldReference fieldRef = nodeFactory.newFieldReference(pushBack, getPushBackOwner());
-      final Collection<IASTInitializerClause> args = createRegistrationArgs();
-      final IASTInitializerClause[] callParam = new IASTInitializerClause[] { cppStd.getCtorCall(getNameForCall(), args) };
-      final IASTFunctionCallExpression funExpr = nodeFactory.newFunctionCallExpression(fieldRef, callParam);
-      return nodeFactory.newExpressionStatement(funExpr);
-   }
+    protected IASTExpressionStatement createFunCallRegistration() {
+        final IASTName pushBack = nodeFactory.newName(PUSH_BACK.toCharArray());
+        final ICPPASTFieldReference fieldRef = nodeFactory.newFieldReference(pushBack, getPushBackOwner());
+        final Collection<IASTInitializerClause> args = createRegistrationArgs();
+        final IASTInitializerClause[] callParam = new IASTInitializerClause[] { cppStd.getCtorCall(getNameForCall(), args) };
+        final IASTFunctionCallExpression funExpr = nodeFactory.newFunctionCallExpression(fieldRef, callParam);
+        return nodeFactory.newExpressionStatement(funExpr);
+    }
 
-   protected abstract String getNameForCall();
+    protected abstract String getNameForCall();
 
-   protected abstract String getNameForCallsVector();
+    protected abstract String getNameForCallsVector();
 
-   protected abstract IASTExpression getPushBackOwner();
+    protected abstract IASTExpression getPushBackOwner();
 
-   protected IASTIdExpression createCallSequence() {
-      return nodeFactory.newIdExpression(nodeFactory.newName(getNameForCallsVector().toCharArray()));
-   }
+    protected IASTIdExpression createCallSequence() {
+        return nodeFactory.newIdExpression(nodeFactory.newName(getNameForCallsVector().toCharArray()));
+    }
 
-   protected Collection<IASTInitializerClause> createRegistrationArgs() {
-      final List<IASTInitializerClause> params = new ArrayList<>();
-      params.add(createArgument(StringUtil.quote(signature)));
+    protected Collection<IASTInitializerClause> createRegistrationArgs() {
+        final List<IASTInitializerClause> params = new ArrayList<>();
+        params.add(createArgument(StringUtil.quote(signature)));
 
-      for (final ICPPASTParameterDeclaration param : funParameters) {
-         final IASTName funParamName = param.getDeclarator().getName();
-         // e.g. operator ++(int)
-         if (funParamName.toString().isEmpty()) {
-            continue;
-         }
-         params.add(createArgument(funParamName.toString()));
-      }
-      return params;
-   }
+        for (final ICPPASTParameterDeclaration param : funParameters) {
+            final IASTName funParamName = param.getDeclarator().getName();
+            // e.g. operator ++(int)
+            if (funParamName.toString().isEmpty()) {
+                continue;
+            }
+            params.add(createArgument(funParamName.toString()));
+        }
+        return params;
+    }
 
-   private static IASTIdExpression createArgument(final String arg) {
-      return nodeFactory.newIdExpression(nodeFactory.newName(arg.toCharArray()));
-   }
+    private static IASTIdExpression createArgument(final String arg) {
+        return nodeFactory.newIdExpression(nodeFactory.newName(arg.toCharArray()));
+    }
 }

@@ -25,42 +25,42 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  */
 public class GcnoFileVisitor implements IResourceVisitor {
 
-   private final IPath executableLocation;
+    private final IPath executableLocation;
 
-   public GcnoFileVisitor(IPath executableLocation) {
-      this.executableLocation = executableLocation;
-   }
+    public GcnoFileVisitor(IPath executableLocation) {
+        this.executableLocation = executableLocation;
+    }
 
-   @Override
-   public boolean visit(IResource resource) throws CoreException {
-      if (resource instanceof IFile) {
-         IFile file = (IFile) resource;
-         if (file.getName().endsWith(".gcno")) {
-            handleGcnoFile(file);
-         }
-      }
-      return true;
-   }
-
-   private void handleGcnoFile(IFile file) throws CoreException {
-      final IPath location = file.getLocation();
-      final IPath directory = location.removeLastSegments(1);
-      final File workingDirectory = new File(directory.toPortableString());
-      if (workingDirectory.isDirectory()) {
-         IProject project = file.getProject();
-         GcovRunner.runGcov(file.getName(), workingDirectory, project);
-         project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-         project.accept(resource -> {
-            if (resource instanceof IFile) {
-               IFile memberFile = (IFile) resource;
-               if ("gcov".equals(memberFile.getFileExtension())) {
-                  GcovFileParser gcovFileParser = new GcovFileParser(memberFile, executableLocation);
-                  gcovFileParser.parse();
-                  memberFile.delete(false, new NullProgressMonitor());
-               }
+    @Override
+    public boolean visit(IResource resource) throws CoreException {
+        if (resource instanceof IFile) {
+            IFile file = (IFile) resource;
+            if (file.getName().endsWith(".gcno")) {
+                handleGcnoFile(file);
             }
-            return true;
-         });
-      }
-   }
+        }
+        return true;
+    }
+
+    private void handleGcnoFile(IFile file) throws CoreException {
+        final IPath location = file.getLocation();
+        final IPath directory = location.removeLastSegments(1);
+        final File workingDirectory = new File(directory.toPortableString());
+        if (workingDirectory.isDirectory()) {
+            IProject project = file.getProject();
+            GcovRunner.runGcov(file.getName(), workingDirectory, project);
+            project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+            project.accept(resource -> {
+                if (resource instanceof IFile) {
+                    IFile memberFile = (IFile) resource;
+                    if ("gcov".equals(memberFile.getFileExtension())) {
+                        GcovFileParser gcovFileParser = new GcovFileParser(memberFile, executableLocation);
+                        gcovFileParser.parse();
+                        memberFile.delete(false, new NullProgressMonitor());
+                    }
+                }
+                return true;
+            });
+        }
+    }
 }

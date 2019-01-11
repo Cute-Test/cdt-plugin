@@ -18,48 +18,48 @@ import org.eclipse.core.runtime.CoreException;
 // Inspired by ClassTypeHelper.getSubClasses method
 public class SubClassFinder {
 
-   private final IIndex index;
+    private final IIndex index;
 
-   public SubClassFinder(final IIndex index) {
-      this.index = index;
-   }
+    public SubClassFinder(final IIndex index) {
+        this.index = index;
+    }
 
-   public Collection<ICPPClassType> getSubClasses(final ICPPClassType clazz) throws CoreException {
-      final List<ICPPClassType> subClasses = new ArrayList<>();
-      final Set<String> alreadyHandled = new HashSet<>();
-      collectSubClasses(clazz, subClasses, alreadyHandled);
-      subClasses.remove(0);
-      return subClasses;
-   }
+    public Collection<ICPPClassType> getSubClasses(final ICPPClassType clazz) throws CoreException {
+        final List<ICPPClassType> subClasses = new ArrayList<>();
+        final Set<String> alreadyHandled = new HashSet<>();
+        collectSubClasses(clazz, subClasses, alreadyHandled);
+        subClasses.remove(0);
+        return subClasses;
+    }
 
-   private void collectSubClasses(final ICPPClassType clazz, final List<ICPPClassType> subClasses, final Set<String> alreadyHandled)
-         throws CoreException {
-      final String type = ASTTypeUtil.getType(clazz, true);
+    private void collectSubClasses(final ICPPClassType clazz, final List<ICPPClassType> subClasses, final Set<String> alreadyHandled)
+            throws CoreException {
+        final String type = ASTTypeUtil.getType(clazz, true);
 
-      if (!alreadyHandled.add(type)) return;
+        if (!alreadyHandled.add(type)) return;
 
-      subClasses.add(clazz);
+        subClasses.add(clazz);
 
-      for (final IIndexName i : findRefsAndDefs(clazz)) {
-         if (!i.isBaseSpecifier()) {
-            continue;
-         }
+        for (final IIndexName i : findRefsAndDefs(clazz)) {
+            if (!i.isBaseSpecifier()) {
+                continue;
+            }
 
-         final IIndexName subClassDef = i.getEnclosingDefinition();
+            final IIndexName subClassDef = i.getEnclosingDefinition();
 
-         if (subClassDef == null) {
-            continue;
-         }
+            if (subClassDef == null) {
+                continue;
+            }
 
-         final IBinding subClass = index.findBinding(subClassDef);
+            final IBinding subClass = index.findBinding(subClassDef);
 
-         if (subClass instanceof ICPPClassType) {
-            collectSubClasses((ICPPClassType) subClass, subClasses, alreadyHandled);
-         }
-      }
-   }
+            if (subClass instanceof ICPPClassType) {
+                collectSubClasses((ICPPClassType) subClass, subClasses, alreadyHandled);
+            }
+        }
+    }
 
-   private IIndexName[] findRefsAndDefs(final ICPPBinding clazz) throws CoreException {
-      return index.findNames(clazz, IIndex.FIND_REFERENCES | IIndex.FIND_DEFINITIONS);
-   }
+    private IIndexName[] findRefsAndDefs(final ICPPBinding clazz) throws CoreException {
+        return index.findNames(clazz, IIndex.FIND_REFERENCES | IIndex.FIND_DEFINITIONS);
+    }
 }

@@ -17,26 +17,26 @@ import org.eclipse.ui.console.IHyperlink;
  */
 public class HyperlinkLocation {
 
-   private final IHyperlink link;
-   private final int        offset;
-   private final int        length;
+    private final IHyperlink link;
+    private final int        offset;
+    private final int        length;
 
-   public HyperlinkLocation(IHyperlink hyperlink, int offset, int length) {
-      this.link = hyperlink;
-      this.offset = offset;
-      this.length = length;
-   }
+    public HyperlinkLocation(IHyperlink hyperlink, int offset, int length) {
+        this.link = hyperlink;
+        this.offset = offset;
+        this.length = length;
+    }
 
-   public IHyperlink getLink() {
-      return link;
-   }
+    public IHyperlink getLink() {
+        return link;
+    }
 
-   public int getOffset() {
-      return offset;
-   }
+    public int getOffset() {
+        return offset;
+    }
 
-   public int getLength() {
-      return length;
-   }
+    public int getLength() {
+        return length;
+    }
 
 }

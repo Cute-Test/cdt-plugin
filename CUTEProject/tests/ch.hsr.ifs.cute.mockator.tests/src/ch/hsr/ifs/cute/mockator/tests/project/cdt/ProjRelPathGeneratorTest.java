@@ -18,25 +18,25 @@ import ch.hsr.ifs.cute.mockator.project.cdt.options.ProjRelPathGenerator;
 
 public class ProjRelPathGeneratorTest {
 
-   private IProject project;
+    private IProject project;
 
-   @Before
-   public void setUp() {
-      final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-      project = root.getProject("Test");
-   }
+    @Before
+    public void setUp() {
+        final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+        project = root.getProject("Test");
+    }
 
-   @Test
-   public void retrieveProjectRelFile() {
-      final IFile file = project.getFile(new Path("mockator/mockator.h"));
-      final String expected = String.format("${workspace_loc:%s${ProjName}%smockator/mockator.h}", File.separator, File.separator);
-      assertEquals(expected, ProjRelPathGenerator.getProjectRelativePath(file));
-   }
+    @Test
+    public void retrieveProjectRelFile() {
+        final IFile file = project.getFile(new Path("mockator/mockator.h"));
+        final String expected = String.format("${workspace_loc:%s${ProjName}%smockator/mockator.h}", File.separator, File.separator);
+        assertEquals(expected, ProjRelPathGenerator.getProjectRelativePath(file));
+    }
 
-   @Test
-   public void retrieveProjectRelFolder() {
-      final IFolder folder = project.getFolder(new Path("mockator"));
-      final String expected = String.format("${workspace_loc:%s${ProjName}%smockator}", File.separator, File.separator);
-      assertEquals(expected, ProjRelPathGenerator.getProjectRelativePath(folder));
-   }
+    @Test
+    public void retrieveProjectRelFolder() {
+        final IFolder folder = project.getFolder(new Path("mockator"));
+        final String expected = String.format("${workspace_loc:%s${ProjName}%smockator}", File.separator, File.separator);
+        assertEquals(expected, ProjRelPathGenerator.getProjectRelativePath(folder));
+    }
 }

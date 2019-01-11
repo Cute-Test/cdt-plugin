@@ -11,7 +11,7 @@ import ch.hsr.ifs.cute.mockator.extractinterface.context.ExtractInterfaceContext
 
 public class TransformationsRegistry extends DefaultCtorClassRegistry<Consumer<ExtractInterfaceContext>> {
 
-   private static final Set<Class<? extends Consumer<ExtractInterfaceContext>>> TRANSFORMATIONS = orderPreservingSet(
+    private static final Set<Class<? extends Consumer<ExtractInterfaceContext>>> TRANSFORMATIONS = orderPreservingSet(
    //@formatter:off
          ExistingReferencesReplacer.class,
          PublicInheritanceAdder.class,
@@ -21,9 +21,9 @@ public class TransformationsRegistry extends DefaultCtorClassRegistry<Consumer<E
          ForwardDeclsRemover.class,
          TypeDefsRemover.class
          //@formatter:on
-   );
+    );
 
-   public TransformationsRegistry() {
-      super(TRANSFORMATIONS);
-   }
+    public TransformationsRegistry() {
+        super(TRANSFORMATIONS);
+    }
 }

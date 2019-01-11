@@ -18,49 +18,49 @@ import org.eclipse.swt.widgets.Label;
 // Copied and adapted from CUTE
 class Separator extends DialogField {
 
-   private Label     fSeparator;
-   private final int fStyle;
+    private Label     fSeparator;
+    private final int fStyle;
 
-   public Separator() {
-      this(SWT.NONE);
-   }
+    public Separator() {
+        this(SWT.NONE);
+    }
 
-   public Separator(final int style) {
-      super();
-      fStyle = style;
-   }
+    public Separator(final int style) {
+        super();
+        fStyle = style;
+    }
 
-   Control[] doFillIntoGrid(final Composite parent, final int nColumns, final int height) {
-      assertEnoughColumns(nColumns);
-      final Control separator = getSeparator(parent);
-      separator.setLayoutData(gridDataForSeperator(nColumns, height));
-      return new Control[] { separator };
-   }
+    Control[] doFillIntoGrid(final Composite parent, final int nColumns, final int height) {
+        assertEnoughColumns(nColumns);
+        final Control separator = getSeparator(parent);
+        separator.setLayoutData(gridDataForSeperator(nColumns, height));
+        return new Control[] { separator };
+    }
 
-   @Override
-   public Control[] doFillIntoGrid(final Composite parent, final int nColumns) {
-      return doFillIntoGrid(parent, nColumns, 4);
-   }
+    @Override
+    public Control[] doFillIntoGrid(final Composite parent, final int nColumns) {
+        return doFillIntoGrid(parent, nColumns, 4);
+    }
 
-   @Override
-   public int getNumberOfControls() {
-      return 1;
-   }
+    @Override
+    public int getNumberOfControls() {
+        return 1;
+    }
 
-   private static GridData gridDataForSeperator(final int span, final int height) {
-      final GridData gd = new GridData();
-      gd.horizontalAlignment = GridData.FILL;
-      gd.verticalAlignment = GridData.BEGINNING;
-      gd.heightHint = height;
-      gd.horizontalSpan = span;
-      return gd;
-   }
+    private static GridData gridDataForSeperator(final int span, final int height) {
+        final GridData gd = new GridData();
+        gd.horizontalAlignment = GridData.FILL;
+        gd.verticalAlignment = GridData.BEGINNING;
+        gd.heightHint = height;
+        gd.horizontalSpan = span;
+        return gd;
+    }
 
-   private Control getSeparator(final Composite parent) {
-      if (fSeparator == null) {
-         assertCompositeNotNull(parent);
-         fSeparator = new Label(parent, fStyle);
-      }
-      return fSeparator;
-   }
+    private Control getSeparator(final Composite parent) {
+        if (fSeparator == null) {
+            assertCompositeNotNull(parent);
+            fSeparator = new Label(parent, fStyle);
+        }
+        return fSeparator;
+    }
 }

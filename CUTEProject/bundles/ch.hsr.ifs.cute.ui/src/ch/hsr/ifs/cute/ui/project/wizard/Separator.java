@@ -22,56 +22,56 @@ import org.eclipse.swt.widgets.Label;
  */
 public class Separator extends DialogField {
 
-   private Label     fSeparator;
-   private final int fStyle;
+    private Label     fSeparator;
+    private final int fStyle;
 
-   public Separator() {
-      this(SWT.NONE);
-   }
+    public Separator() {
+        this(SWT.NONE);
+    }
 
-   public Separator(int style) {
-      super();
-      fStyle = style;
-   }
+    public Separator(int style) {
+        super();
+        fStyle = style;
+    }
 
-   // ------- layout helpers
+    // ------- layout helpers
 
-   public Control[] doFillIntoGrid(Composite parent, int nColumns, int height) {
-      assertEnoughColumns(nColumns);
+    public Control[] doFillIntoGrid(Composite parent, int nColumns, int height) {
+        assertEnoughColumns(nColumns);
 
-      Control separator = getSeparator(parent);
-      separator.setLayoutData(gridDataForSeperator(nColumns, height));
+        Control separator = getSeparator(parent);
+        separator.setLayoutData(gridDataForSeperator(nColumns, height));
 
-      return new Control[] { separator };
-   }
+        return new Control[] { separator };
+    }
 
-   @Override
-   public Control[] doFillIntoGrid(Composite parent, int nColumns) {
-      return doFillIntoGrid(parent, nColumns, 4);
-   }
+    @Override
+    public Control[] doFillIntoGrid(Composite parent, int nColumns) {
+        return doFillIntoGrid(parent, nColumns, 4);
+    }
 
-   @Override
-   public int getNumberOfControls() {
-      return 1;
-   }
+    @Override
+    public int getNumberOfControls() {
+        return 1;
+    }
 
-   protected static GridData gridDataForSeperator(int span, int height) {
-      GridData gd = new GridData();
-      gd.horizontalAlignment = GridData.FILL;
-      gd.verticalAlignment = GridData.BEGINNING;
-      gd.heightHint = height;
-      gd.horizontalSpan = span;
-      return gd;
-   }
+    protected static GridData gridDataForSeperator(int span, int height) {
+        GridData gd = new GridData();
+        gd.horizontalAlignment = GridData.FILL;
+        gd.verticalAlignment = GridData.BEGINNING;
+        gd.heightHint = height;
+        gd.horizontalSpan = span;
+        return gd;
+    }
 
-   // ------- ui creation
+    // ------- ui creation
 
-   public Control getSeparator(Composite parent) {
-      if (fSeparator == null) {
-         assertCompositeNotNull(parent);
-         fSeparator = new Label(parent, fStyle);
-      }
-      return fSeparator;
-   }
+    public Control getSeparator(Composite parent) {
+        if (fSeparator == null) {
+            assertCompositeNotNull(parent);
+            fSeparator = new Label(parent, fStyle);
+        }
+        return fSeparator;
+    }
 
 }

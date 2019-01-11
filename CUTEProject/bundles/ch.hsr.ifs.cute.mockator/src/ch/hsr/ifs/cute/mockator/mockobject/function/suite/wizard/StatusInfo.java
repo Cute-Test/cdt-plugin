@@ -15,91 +15,91 @@ import org.eclipse.core.runtime.IStatus;
 // Copied and adapted from CUTE
 class StatusInfo implements IStatus {
 
-   private String fStatusMessage;
-   private int    fSeverity;
+    private String fStatusMessage;
+    private int    fSeverity;
 
-   public StatusInfo() {
-      this(OK, null);
-   }
+    public StatusInfo() {
+        this(OK, null);
+    }
 
-   public StatusInfo(final int severity, final String message) {
-      fStatusMessage = message;
-      fSeverity = severity;
-   }
+    public StatusInfo(final int severity, final String message) {
+        fStatusMessage = message;
+        fSeverity = severity;
+    }
 
-   @Override
-   public IStatus[] getChildren() {
-      return new IStatus[0];
-   }
+    @Override
+    public IStatus[] getChildren() {
+        return new IStatus[0];
+    }
 
-   @Override
-   public int getCode() {
-      return fSeverity;
-   }
+    @Override
+    public int getCode() {
+        return fSeverity;
+    }
 
-   @Override
-   public Throwable getException() {
-      return null;
-   }
+    @Override
+    public Throwable getException() {
+        return null;
+    }
 
-   @Override
-   public String getMessage() {
-      return fStatusMessage;
-   }
+    @Override
+    public String getMessage() {
+        return fStatusMessage;
+    }
 
-   @Override
-   public String getPlugin() {
-      return CUIPlugin.PLUGIN_ID;
-   }
+    @Override
+    public String getPlugin() {
+        return CUIPlugin.PLUGIN_ID;
+    }
 
-   @Override
-   public int getSeverity() {
-      return fSeverity;
-   }
+    @Override
+    public int getSeverity() {
+        return fSeverity;
+    }
 
-   @Override
-   public boolean isMultiStatus() {
-      return false;
-   }
+    @Override
+    public boolean isMultiStatus() {
+        return false;
+    }
 
-   @Override
-   public boolean isOK() {
-      return fSeverity == IStatus.OK;
-   }
+    @Override
+    public boolean isOK() {
+        return fSeverity == IStatus.OK;
+    }
 
-   @Override
-   public boolean matches(final int severityMask) {
-      return (fSeverity & severityMask) != 0;
-   }
+    @Override
+    public boolean matches(final int severityMask) {
+        return (fSeverity & severityMask) != 0;
+    }
 
-   public void setError(final String errorMessage) {
-      fStatusMessage = errorMessage;
-      fSeverity = IStatus.ERROR;
-   }
+    public void setError(final String errorMessage) {
+        fStatusMessage = errorMessage;
+        fSeverity = IStatus.ERROR;
+    }
 
-   public void setWarning(final String warningMessage) {
-      fStatusMessage = warningMessage;
-      fSeverity = IStatus.WARNING;
-   }
+    public void setWarning(final String warningMessage) {
+        fStatusMessage = warningMessage;
+        fSeverity = IStatus.WARNING;
+    }
 
-   @Override
-   public String toString() {
-      final StringBuffer buf = new StringBuffer();
-      buf.append("StatusInfo ");
-      if (fSeverity == OK) {
-         buf.append("OK");
-      } else if (fSeverity == ERROR) {
-         buf.append("ERROR");
-      } else if (fSeverity == WARNING) {
-         buf.append("WARNING");
-      } else if (fSeverity == INFO) {
-         buf.append("INFO");
-      } else {
-         buf.append("severity=");
-         buf.append(fSeverity);
-      }
-      buf.append(": ");
-      buf.append(fStatusMessage);
-      return buf.toString();
-   }
+    @Override
+    public String toString() {
+        final StringBuffer buf = new StringBuffer();
+        buf.append("StatusInfo ");
+        if (fSeverity == OK) {
+            buf.append("OK");
+        } else if (fSeverity == ERROR) {
+            buf.append("ERROR");
+        } else if (fSeverity == WARNING) {
+            buf.append("WARNING");
+        } else if (fSeverity == INFO) {
+            buf.append("INFO");
+        } else {
+            buf.append("severity=");
+            buf.append(fSeverity);
+        }
+        buf.append(": ");
+        buf.append(fStatusMessage);
+        return buf.toString();
+    }
 }

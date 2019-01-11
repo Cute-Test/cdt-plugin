@@ -11,11 +11,11 @@ import ch.hsr.ifs.cute.mockator.refsupport.includes.AstIncludeNode;
 
 public class InterfaceIncludeInserter implements Consumer<ExtractInterfaceContext> {
 
-   @Override
-   public void accept(final ExtractInterfaceContext context) {
-      final IASTTranslationUnit tuOfChosenClass = context.getTuOfChosenClass();
-      final ASTRewrite rewriter = context.getRewriterFor(tuOfChosenClass);
-      final AstIncludeNode include = new AstIncludeNode(context.getInterfaceFilePath().toString());
-      include.insertInTu(tuOfChosenClass, rewriter);
-   }
+    @Override
+    public void accept(final ExtractInterfaceContext context) {
+        final IASTTranslationUnit tuOfChosenClass = context.getTuOfChosenClass();
+        final ASTRewrite rewriter = context.getRewriterFor(tuOfChosenClass);
+        final AstIncludeNode include = new AstIncludeNode(context.getInterfaceFilePath().toString());
+        include.insertInTu(tuOfChosenClass, rewriter);
+    }
 }

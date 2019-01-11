@@ -14,14 +14,14 @@ import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 
 public class CuteBuildPropertyValue implements IBuildPropertyValue {
 
-   @Override
-   public String getId() {
-      return ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_EXE;
-   }
+    @Override
+    public String getId() {
+        return ManagedBuildManager.BUILD_ARTEFACT_TYPE_PROPERTY_EXE;
+    }
 
-   @Override
-   public String getName() {
-      return "CUTE Project";
-   }
+    @Override
+    public String getName() {
+        return "CUTE Project";
+    }
 
 }

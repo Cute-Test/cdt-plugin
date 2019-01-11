@@ -24,27 +24,27 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  */
 public class GcovBuilder extends IncrementalProjectBuilder {
 
-   public static final String BUILDER_ID = GcovPlugin.PLUGIN_ID + ".gcovBuilder";
+    public static final String BUILDER_ID = GcovPlugin.PLUGIN_ID + ".gcovBuilder";
 
-   public GcovBuilder() {}
+    public GcovBuilder() {}
 
-   @Override
-   protected IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor) throws CoreException {
-      return null;
-   }
+    @Override
+    protected IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor) throws CoreException {
+        return null;
+    }
 
-   @Override
-   protected void clean(IProgressMonitor monitor) throws CoreException {
-      IProject project = getProject();
-      project.accept(resource -> {
-         if (resource instanceof IFile) {
-            IFile file = (IFile) resource;
-            String fileExt = file.getFileExtension();
-            if (fileExt != null && (fileExt.equals("gcno") || fileExt.equals("gcda") || fileExt.equals("gcov"))) {
-               file.delete(true, new NullProgressMonitor());
+    @Override
+    protected void clean(IProgressMonitor monitor) throws CoreException {
+        IProject project = getProject();
+        project.accept(resource -> {
+            if (resource instanceof IFile) {
+                IFile file = (IFile) resource;
+                String fileExt = file.getFileExtension();
+                if (fileExt != null && (fileExt.equals("gcno") || fileExt.equals("gcda") || fileExt.equals("gcov"))) {
+                    file.delete(true, new NullProgressMonitor());
+                }
             }
-         }
-         return true;
-      });
-   }
+            return true;
+        });
+    }
 }

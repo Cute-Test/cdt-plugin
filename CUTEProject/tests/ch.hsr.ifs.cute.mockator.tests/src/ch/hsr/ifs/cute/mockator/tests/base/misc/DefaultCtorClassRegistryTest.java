@@ -17,63 +17,63 @@ import ch.hsr.ifs.cute.mockator.base.misc.DefaultCtorClassRegistry;
 
 public class DefaultCtorClassRegistryTest {
 
-   @Test
-   public void classesWithAllDefaultCtors() {
-      final Set<Class<? extends Vehicle>> clazzes = orderPreservingSet(Car.class, Plane.class);
-      assertEquals(CollectionUtil.list(new Car(), new Plane()), new DefaultCtorClassRegistry<>(clazzes).createInstances());
-   }
+    @Test
+    public void classesWithAllDefaultCtors() {
+        final Set<Class<? extends Vehicle>> clazzes = orderPreservingSet(Car.class, Plane.class);
+        assertEquals(CollectionUtil.list(new Car(), new Plane()), new DefaultCtorClassRegistry<>(clazzes).createInstances());
+    }
 
-   @Rule
-   public ExpectedException thrown = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
-   @Test
-   public void oneNonDefaultCtorYieldsException() {
-      thrown.expect(ILTISException.class);
-      thrown.expectMessage("Class has no default constructor: Bicycle");
-      final Set<Class<? extends Vehicle>> clazzes = orderPreservingSet(Car.class, Plane.class, Bicycle.class);
-      new DefaultCtorClassRegistry<>(clazzes).createInstances();
-   }
+    @Test
+    public void oneNonDefaultCtorYieldsException() {
+        thrown.expect(ILTISException.class);
+        thrown.expectMessage("Class has no default constructor: Bicycle");
+        final Set<Class<? extends Vehicle>> clazzes = orderPreservingSet(Car.class, Plane.class, Bicycle.class);
+        new DefaultCtorClassRegistry<>(clazzes).createInstances();
+    }
 
-   @Test
-   public void oneNotAccessibleClassYieldsException() {
-      thrown.expect(ILTISException.class);
-      thrown.expectMessage("No access to class Bike");
-      final Set<Class<? extends Vehicle>> clazzes = orderPreservingSet(Car.class, Plane.class, Bike.class);
-      new DefaultCtorClassRegistry<>(clazzes).createInstances();
-   }
+    @Test
+    public void oneNotAccessibleClassYieldsException() {
+        thrown.expect(ILTISException.class);
+        thrown.expectMessage("No access to class Bike");
+        final Set<Class<? extends Vehicle>> clazzes = orderPreservingSet(Car.class, Plane.class, Bike.class);
+        new DefaultCtorClassRegistry<>(clazzes).createInstances();
+    }
 
-   public static class Vehicle {}
+    public static class Vehicle {}
 
-   public static class Car extends Vehicle {
+    public static class Car extends Vehicle {
 
-      @Override
-      public boolean equals(final Object o) {
-         return true;
-      }
+        @Override
+        public boolean equals(final Object o) {
+            return true;
+        }
 
-      @Override
-      public int hashCode() {
-         return 3;
-      }
-   }
+        @Override
+        public int hashCode() {
+            return 3;
+        }
+    }
 
-   public static class Plane extends Vehicle {
+    public static class Plane extends Vehicle {
 
-      @Override
-      public boolean equals(final Object o) {
-         return true;
-      }
+        @Override
+        public boolean equals(final Object o) {
+            return true;
+        }
 
-      @Override
-      public int hashCode() {
-         return 5;
-      }
-   }
+        @Override
+        public int hashCode() {
+            return 5;
+        }
+    }
 
-   public static class Bicycle extends Vehicle {
+    public static class Bicycle extends Vehicle {
 
-      public Bicycle(final int i) {}
-   }
+        public Bicycle(final int i) {}
+    }
 
-   private static class Bike extends Vehicle {}
+    private static class Bike extends Vehicle {}
 }

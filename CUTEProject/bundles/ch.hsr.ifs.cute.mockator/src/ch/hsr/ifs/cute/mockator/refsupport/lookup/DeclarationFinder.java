@@ -12,20 +12,20 @@ import ch.hsr.ifs.cute.mockator.refsupport.tu.TranslationUnitLoader;
 
 class DeclarationFinder extends AbstractNodeFinder {
 
-   public DeclarationFinder(final ICProject projectOrigin, final IIndex index, final TranslationUnitLoader tuLoader) {
-      super(projectOrigin, index, tuLoader);
-   }
+    public DeclarationFinder(final ICProject projectOrigin, final IIndex index, final TranslationUnitLoader tuLoader) {
+        super(projectOrigin, index, tuLoader);
+    }
 
-   public Collection<IASTName> findDeclarations(final IASTName name) {
-      return collectMatchingNames(name);
-   }
+    public Collection<IASTName> findDeclarations(final IASTName name) {
+        return collectMatchingNames(name);
+    }
 
-   public Collection<IASTName> findDeclarations(final IBinding binding) {
-      return collectMatchingNames(binding);
-   }
+    public Collection<IASTName> findDeclarations(final IBinding binding) {
+        return collectMatchingNames(binding);
+    }
 
-   @Override
-   protected int getLookupFlags() {
-      return IIndex.FIND_DECLARATIONS_DEFINITIONS;
-   }
+    @Override
+    protected int getLookupFlags() {
+        return IIndex.FIND_DECLARATIONS_DEFINITIONS;
+    }
 }

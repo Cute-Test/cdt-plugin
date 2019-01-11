@@ -21,37 +21,37 @@ import ch.hsr.ifs.testframework.tests.mock.DummyTestEventHandler;
  */
 public class PatternListenerSessionStartEndTest extends PatternListenerBase {
 
-   boolean sessionStarted = false;
-   boolean sessionEnded   = false;
+    boolean sessionStarted = false;
+    boolean sessionEnded   = false;
 
-   final class SessionStartEndHandler extends DummyTestEventHandler {
+    final class SessionStartEndHandler extends DummyTestEventHandler {
 
-      @Override
-      public void handleSessionEnd() {
-         sessionEnded = true;
+        @Override
+        public void handleSessionEnd() {
+            sessionEnded = true;
 
-      }
+        }
 
-      @Override
-      public void handleSessionStart() {
-         sessionStarted = true;
-         tc.removePatternMatchListener(cpl);
-      }
-   }
+        @Override
+        public void handleSessionStart() {
+            sessionStarted = true;
+            tc.removePatternMatchListener(cpl);
+        }
+    }
 
-   public void testListenerEvents() throws IOException, InterruptedException {
-      emulateTestRun();
-      assertTrue("No session Start", sessionStarted);
-      assertTrue("No session End", sessionEnded);
-   }
+    public void testListenerEvents() throws IOException, InterruptedException {
+        emulateTestRun();
+        assertTrue("No session Start", sessionStarted);
+        assertTrue("No session End", sessionEnded);
+    }
 
-   @Override
-   protected void addTestEventHandler(ConsolePatternListener lis) {
-      lis.addHandler(new SessionStartEndHandler());
-   }
+    @Override
+    protected void addTestEventHandler(ConsolePatternListener lis) {
+        lis.addHandler(new SessionStartEndHandler());
+    }
 
-   @Override
-   protected String getInputFileName() {
-      return "sessionTest.txt";
-   }
+    @Override
+    protected String getInputFileName() {
+        return "sessionTest.txt";
+    }
 }

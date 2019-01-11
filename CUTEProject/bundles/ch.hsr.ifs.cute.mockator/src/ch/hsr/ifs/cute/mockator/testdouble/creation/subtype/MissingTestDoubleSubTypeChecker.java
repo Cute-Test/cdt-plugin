@@ -16,7 +16,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamedTypeSpecifier;
 import ch.hsr.ifs.iltis.cpp.core.ast.checker.VisitorReport;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
-import ch.hsr.ifs.cute.mockator.base.misc.IdHelper.ProblemId;
+import ch.hsr.ifs.cute.mockator.ids.IdHelper.ProblemId;
+import ch.hsr.ifs.cute.mockator.infos.CreateTestDoubleSubTypeInfo;
 import ch.hsr.ifs.cute.mockator.refsupport.includes.CppIncludeResolver;
 import ch.hsr.ifs.cute.mockator.refsupport.utils.BindingTypeVerifier;
 import ch.hsr.ifs.cute.mockator.refsupport.utils.QualifiedNameCreator;
@@ -26,82 +27,89 @@ import ch.hsr.ifs.cute.mockator.testdouble.support.TestFunctionChecker;
 
 public class MissingTestDoubleSubTypeChecker extends TestFunctionChecker {
 
-   @Override
-   protected void processTestFunction(final VisitorReport<ProblemId> result) {
-      final IASTFunctionDefinition function = (IASTFunctionDefinition) result.getNode();
-      final InjectionInfoCollectorFactory factory = new InjectionInfoCollectorFactory(getIndex(), getCProject());
-      function.accept(new ASTVisitor() {
+    @Override
+    protected void processTestFunction(final VisitorReport<ProblemId> result) {
+        final IASTFunctionDefinition function = (IASTFunctionDefinition) result.getNode();
+        final InjectionInfoCollectorFactory factory = new InjectionInfoCollectorFactory(getIndex(), getCProject());
+        function.accept(new ASTVisitor() {
 
-         {
-            shouldVisitNames = true;
-         }
-
-         @Override
-         public int visit(final IASTName name) {
-            if (isUnknownArgumentType(name)) {
-               final DepInjectInfoCollector infoCollector = factory.getInfoCollectorStrategy(name);
-               infoCollector.collectDependencyInfos(name).ifPresent((result) -> markMissingInjectedTestDouble(name, result));
+            {
+                shouldVisitNames = true;
             }
-            return PROCESS_SKIP;
-         }
-      });
-   }
 
-   private static boolean isUnknownArgumentType(final IASTName name) {
-      final IBinding binding = name.resolveBinding();
+            @Override
+            public int visit(final IASTName name) {
+                if (isUnknownArgumentType(name)) {
+                    final DepInjectInfoCollector infoCollector = factory.getInfoCollectorStrategy(name);
+                    infoCollector.collectDependencyInfos(name).ifPresent((result) -> markMissingInjectedTestDouble(name, result));
+                }
+                return PROCESS_SKIP;
+            }
+        });
+    }
 
-      if (!isProblemBinding(binding)) { return false; }
+    private static boolean isUnknownArgumentType(final IASTName name) {
+        final IBinding binding = name.resolveBinding();
 
-      final IASTNode parent = name.getParent();
+        if (!isProblemBinding(binding)) {
+            return false;
+        }
 
-      if (!(parent instanceof IASTIdExpression || parent instanceof ICPPASTNamedTypeSpecifier)) { return false; }
+        final IASTNode parent = name.getParent();
 
-      return isPartOfCtorCall(name) || isPartOfFunCall(name);
-   }
+        if (!(parent instanceof IASTIdExpression || parent instanceof ICPPASTNamedTypeSpecifier)) {
+            return false;
+        }
 
-   private static boolean isPartOfCtorCall(final IASTNode node) {
-      return CPPVisitor.findAncestorWithType(node, ICPPASTConstructorInitializer.class).orElse(null) != null || CPPVisitor.findAncestorWithType(node,
-            ICPPASTInitializerList.class).orElse(null) != null;
-   }
+        return isPartOfCtorCall(name) || isPartOfFunCall(name);
+    }
 
-   private static boolean isPartOfFunCall(final IASTNode node) {
-      return CPPVisitor.findAncestorWithType(node, ICPPASTFunctionCallExpression.class).orElse(null) != null;
-   }
+    private static boolean isPartOfCtorCall(final IASTNode node) {
+        return CPPVisitor.findAncestorWithType(node, ICPPASTConstructorInitializer.class).orElse(null) != null || CPPVisitor.findAncestorWithType(
+                node, ICPPASTInitializerList.class).orElse(null) != null;
+    }
 
-   private void markMissingInjectedTestDouble(final IASTName name, final DependencyInfo optResult) {
-      final CreateTestDoubleSubTypeCodanArgs codanArgs = getCodanArgs(name, optResult);
-      addNodeForReporting(new VisitorReport<>(ProblemId.MISSING_TEST_DOUBLE_SUBTYPE, name), codanArgs.toArray());
-   }
+    private static boolean isPartOfFunCall(final IASTNode node) {
+        return CPPVisitor.findAncestorWithType(node, ICPPASTFunctionCallExpression.class).orElse(null) != null;
+    }
 
-   private CreateTestDoubleSubTypeCodanArgs getCodanArgs(final IASTName name, final DependencyInfo targetNameAndType) {
-      final IASTTranslationUnit ast = targetNameAndType.getName().getTranslationUnit();
-      final String parentClassName = getQualifiedNameFor(targetNameAndType.getName());
-      final String passByStrategy = ArgumentPassByStrategy.getStrategy(targetNameAndType.getType()).toString();
-      return new CreateTestDoubleSubTypeCodanArgs(name.toString(), parentClassName, getInclude(ast), passByStrategy);
-   }
+    private void markMissingInjectedTestDouble(final IASTName name, final DependencyInfo optResult) {
+        addNodeForReporting(new VisitorReport<>(ProblemId.MISSING_TEST_DOUBLE_SUBTYPE, name), getInfo(name, optResult));
+    }
 
-   private String getInclude(final IASTTranslationUnit targetTypeAst) {
-      final IASTTranslationUnit thisAst = getAst();
-      if (isInSameTu(targetTypeAst, thisAst)) { return ""; }
-      final CppIncludeResolver resolver = new CppIncludeResolver(thisAst, getCProject(), getIndex());
-      return resolver.resolveIncludePath(targetTypeAst.getFilePath());
-   }
+    private CreateTestDoubleSubTypeInfo getInfo(final IASTName name, final DependencyInfo targetNameAndType) {
+        return new CreateTestDoubleSubTypeInfo().also(i -> {
+            i.nameOfMissingInstance = name.toString();
+            i.parentClassName = getQualifiedNameFor(targetNameAndType.getName());
+            i.targetIncludePath = getInclude(targetNameAndType.getName().getTranslationUnit());
+            i.passByStrategy = ArgumentPassByStrategy.getStrategy(targetNameAndType.getType());
+        });
+    }
 
-   private static boolean isInSameTu(final IASTTranslationUnit targetTypeAst, final IASTTranslationUnit thisAst) {
-      return thisAst.getFileLocation().getFileName().equals(targetTypeAst.getFileLocation().getFileName());
-   }
+    private String getInclude(final IASTTranslationUnit targetTypeAst) {
+        final IASTTranslationUnit thisAst = getAst();
+        if (isInSameTu(targetTypeAst, thisAst)) {
+            return "";
+        }
+        final CppIncludeResolver resolver = new CppIncludeResolver(thisAst, getCProject(), getIndex());
+        return resolver.resolveIncludePath(targetTypeAst.getFilePath());
+    }
 
-   private static String getQualifiedNameFor(final IASTName targetClassName) {
-      final QualifiedNameCreator creator = new QualifiedNameCreator(targetClassName);
-      return creator.createQualifiedName().toString();
-   }
+    private static boolean isInSameTu(final IASTTranslationUnit targetTypeAst, final IASTTranslationUnit thisAst) {
+        return thisAst.getFileLocation().getFileName().equals(targetTypeAst.getFileLocation().getFileName());
+    }
 
-   private static boolean isProblemBinding(final IBinding binding) {
-      return BindingTypeVerifier.isOfType(binding, IProblemBinding.class);
-   }
+    private static String getQualifiedNameFor(final IASTName targetClassName) {
+        final QualifiedNameCreator creator = new QualifiedNameCreator(targetClassName);
+        return creator.createQualifiedName().toString();
+    }
 
-   @Override
-   protected ProblemId getProblemId() {
-      return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE;
-   }
+    private static boolean isProblemBinding(final IBinding binding) {
+        return BindingTypeVerifier.isOfType(binding, IProblemBinding.class);
+    }
+
+    @Override
+    protected ProblemId getProblemId() {
+        return ProblemId.MISSING_TEST_DOUBLE_SUBTYPE;
+    }
 }

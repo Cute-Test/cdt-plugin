@@ -1,235 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension
-         point="org.eclipse.debug.core.launchConfigurationTypes">
-      <launchConfigurationType
+    <extension point="org.eclipse.debug.core.launchConfigurationTypes">
+        <launchConfigurationType id="ch.hsr.ifs.cutelauncher.launchConfig"
             delegate="ch.hsr.ifs.cute.core.launch.CuteLauncherDelegate"
-            id="ch.hsr.ifs.cutelauncher.launchConfig"
             modes="run"
             name="%launchConfigurationType.name.0"/>
-      <launchConfigurationType
+        <launchConfigurationType id="ch.hsr.ifs.cutelauncher.launchConfig.debug"
             delegate="ch.hsr.ifs.cute.core.launch.CuteDebugLauncherDelegate"
-            id="ch.hsr.ifs.cutelauncher.launchConfig.debug"
             modes="debug"
             name="%launchDebugConfigurationType.name"
             sourceLocatorId="org.eclipse.cdt.debug.core.sourceLocator"
-            sourcePathComputerId="org.eclipse.cdt.debug.core.sourcePathComputer">
-      </launchConfigurationType>
-   </extension>
-   <extension
-         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
-      <launchConfigurationTypeImage
+            sourcePathComputerId="org.eclipse.cdt.debug.core.sourcePathComputer"/>
+    </extension>
+    <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+        <launchConfigurationTypeImage id="ch.hsr.ifs.cutelauncher.LaunchConfigImage"
             icon="icons/obj16/cute_app.png"
-            configTypeID="ch.hsr.ifs.cutelauncher.launchConfig"
-            id="ch.hsr.ifs.cutelauncher.LaunchConfigImage">
-      </launchConfigurationTypeImage>
-      <launchConfigurationTypeImage
+            configTypeID="ch.hsr.ifs.cutelauncher.launchConfig"/>
+        <launchConfigurationTypeImage id="ch.hsr.ifs.cutelauncher.LaunchConfigImage"
             configTypeID="ch.hsr.ifs.cutelauncher.launchConfig.debug"
-            icon="icons/obj16/cute_app.png"
-            id="ch.hsr.ifs.cutelauncher.LaunchConfigImage">
-      </launchConfigurationTypeImage>
-  </extension>
-  <extension
-         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
-      <launchConfigurationTabGroup
+            icon="icons/obj16/cute_app.png"/>
+    </extension>
+    <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+        <launchConfigurationTabGroup id="ch.hsr.ifs.cutelauncher.launchConfigurationTabGroup"
             class="ch.hsr.ifs.cute.core.CuteRunLaunchConfigTabGroup"
-            id="ch.hsr.ifs.cutelauncher.launchConfigurationTabGroup"
             type="ch.hsr.ifs.cutelauncher.launchConfig"/>
-      <launchConfigurationTabGroup
+        <launchConfigurationTabGroup id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
             class="ch.hsr.ifs.cute.core.EmptyDebugLaunchConfigurationTabGroup"
-            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
-            type="ch.hsr.ifs.cutelauncher.launchConfig.debug">
-      </launchConfigurationTabGroup>
-   </extension>
-<!--   <extension
-         point="org.eclipse.debug.core.launchDelegates">
-      <launchDelegate
+            type="ch.hsr.ifs.cutelauncher.launchConfig.debug"/>
+    </extension>
+    <!--   <extension
+         point="org.eclipse.debug.core.launchDelegates"><launchDelegate
             delegate="ch.hsr.ifs.cute.core.launch.CuteDebugLauncherDelegate"
             id="ch.hsr.ifs.cute.core.launchDelegate.debug"
             modes="debug"
             name="%launchDebugConfigurationType.name"
             sourceLocatorId="org.eclipse.cdt.debug.core.sourceLocator"
             sourcePathComputerId="org.eclipse.cdt.debug.core.sourcePathComputer"
-            type="ch.hsr.ifs.cutelauncher.launchConfig.debug">
-      </launchDelegate>
-   </extension>
--->   <extension
+            type="ch.hsr.ifs.cutelauncher.launchConfig.debug"></launchDelegate></extension>
+-->
+    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
-      <shortcut
+        <shortcut
             label="%shortcut.label.0"
             icon="icons/obj16/cute_app.png"
             modes="run,debug"
             class="ch.hsr.ifs.cute.core.launch.CuteLaunchShortcut"
             id="ch.hsr.ifs.cutelauncher.cuteShortcut">
-          <contextualLaunch>
-           <enablement>
-             <with variable="selection">
-               <count value="1"/>
-               <iterate>
-               <and>
-                     <test
+            <contextualLaunch>
+                <enablement>
+                    <with variable="selection">
+                        <count value="1"/>
+                        <iterate>
+                            <and>
+                                <test
                            forcePluginActivation="true"
                            property="ch.hsr.ifs.projectNature1"
-                           value="ch.hsr.ifs.cute.ui.cutenature">
-                     </test>
-                   <or>
-                     <instanceof value="org.eclipse.cdt.core.model.IBinary"/>
-                     <instanceof value="org.eclipse.cdt.core.model.ICProject"/>
-                     <test
+                           value="ch.hsr.ifs.cute.ui.cutenature"></test>
+                                <or>
+                                    <instanceof value="org.eclipse.cdt.core.model.IBinary"/>
+                                    <instanceof value="org.eclipse.cdt.core.model.ICProject"/>
+                                    <test
                            forcePluginActivation="true"
                            property="org.eclipse.cdt.launch.isExecutable"/>
-                     <test
+                                    <test
                            forcePluginActivation="true"
                            property="org.eclipse.cdt.launch.isCProject"/>
-                     <and>
-                       <instanceof value="org.eclipse.ui.IFileEditorInput"/>
-                       <adapt type="org.eclipse.core.resources.IResource">
-                         <adapt type="org.eclipse.cdt.core.model.ICElement"/>
-                       </adapt>
-                     </and>
-                   </or>
-                   </and>
-               </iterate>
-             </with>
-           </enablement>
- <!--          </contextualLaunch>
-       <contextualLaunch>
-           <enablement>
-             <with variable="selection">
-               <count value="1"/>
-               <iterate>
-               <or>
-                  <and>
-                     <test
+                                    <and>
+                                        <instanceof value="org.eclipse.ui.IFileEditorInput"/>
+                                        <adapt type="org.eclipse.core.resources.IResource">
+                                            <adapt type="org.eclipse.cdt.core.model.ICElement"/></adapt>
+                                    </and>
+                                </or>
+                            </and>
+                        </iterate>
+                    </with>
+                </enablement>
+                <!--          </contextualLaunch><contextualLaunch><enablement><with variable="selection"><count value="1"/><iterate><or><and><test
                            forcePluginActivation="true"
                            property="ch.hsr.ifs.projectNature1"
-                           value="ch.hsr.ifs.cute.ui.cutenature">
-                     </test>
-                     <or>
-                        <test
-                              property="org.eclipse.cdt.launch.isExecutable">
-                        </test>
-                        <instanceof
-                              value="org.eclipse.cdt.core.model.ICProject">
-                        </instanceof>
-                        <instanceof
-                              value="org.eclipse.core.resources.IProject">
-                        </instanceof>
-                     </or>
-                  </and>
-                  <and>
-                    <test
+                           value="ch.hsr.ifs.cute.ui.cutenature"></test><or><test
+                              property="org.eclipse.cdt.launch.isExecutable"></test><instanceof
+                              value="org.eclipse.cdt.core.model.ICProject"></instanceof><instanceof
+                              value="org.eclipse.core.resources.IProject"></instanceof></or></and><and><test
                         forcePluginActivation="true"
                         property="ch.hsr.ifs.projectNature1"
-                        value="ch.hsr.ifs.cute.ui.cutenature">
-                    </test>
-                    <instanceof value="org.eclipse.ui.IFileEditorInput"/>
-                    <adapt type="org.eclipse.core.resources.IResource">
-                        <adapt type="org.eclipse.cdt.core.model.ICElement"/>
-                    </adapt>
-            	</and>
-               </or>
-               </iterate>
-             </with>
-           </enablement>
+                        value="ch.hsr.ifs.cute.ui.cutenature"></test><instanceof value="org.eclipse.ui.IFileEditorInput"/><adapt type="org.eclipse.core.resources.IResource"><adapt type="org.eclipse.cdt.core.model.ICElement"/></adapt></and></or></iterate></with></enablement>
            -->
-           <contextLabel
+                <contextLabel
          	  mode="run"
          	  label="%contextLabel.label.0"/>
-           <contextLabel
+                <contextLabel
          	  mode="debug"
          	  label="%contextLabel.label.0"/>
-  		 </contextualLaunch>
-      </shortcut>
-   </extension>
-   <extension
-         point="org.eclipse.debug.ui.launchConfigurationTabs">
-      <tab
+            </contextualLaunch>
+        </shortcut>
+    </extension>
+    <extension point="org.eclipse.debug.ui.launchConfigurationTabs">
+        <tab id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.mainTab"
             class="org.eclipse.cdt.dsf.gdb.internal.ui.launching.CMainTab"
             group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
-            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.mainTab"
             name="%MainLaunchTab.name">
-         <associatedDelegate
-               delegate="ch.hsr.ifs.cute.core.launchDelegate.debug">
-         </associatedDelegate>
-      </tab>
-      <tab
+            <associatedDelegate delegate="ch.hsr.ifs.cute.core.launchDelegate.debug"/>
+        </tab>
+        <tab id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.argumentsTab"
             class="org.eclipse.cdt.dsf.gdb.internal.ui.launching.CArgumentsTab"
             group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
-            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.argumentsTab"
             name="%ArgumentsLaunchTab.name">
-          <associatedDelegate
-               delegate="ch.hsr.ifs.cute.core.launchDelegate.debug">
-         </associatedDelegate>
-          <placement
-                after="org.eclipse.cdt.dsf.gdb.launch.mainTab">
-          </placement>
-      </tab>
-      <tab
+            <associatedDelegate delegate="ch.hsr.ifs.cute.core.launchDelegate.debug"/>
+            <placement after="org.eclipse.cdt.dsf.gdb.launch.mainTab"/>
+        </tab>
+        <tab id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.environmentTab"
             class="org.eclipse.debug.ui.EnvironmentTab"
             group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
-            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.environmentTab"
             name="%EnvironmentLaunchTab.name">
-          <associatedDelegate
-               delegate="ch.hsr.ifs.cute.core.launchDelegate.debug">
-         </associatedDelegate>
-          <placement
-                after="org.eclipse.cdt.dsf.gdb.launch.argumentsTab">
-          </placement>
-      </tab>
-      <tab
+            <associatedDelegate delegate="ch.hsr.ifs.cute.core.launchDelegate.debug"/>
+            <placement after="org.eclipse.cdt.dsf.gdb.launch.argumentsTab"/>
+        </tab>
+        <tab id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.debuggerTab"
             class="org.eclipse.cdt.launch.ui.ApplicationCDebuggerTab"
             group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
-            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.debuggerTab"
             name="%DebuggerLaunchTab.name">
-          <associatedDelegate
-               delegate="ch.hsr.ifs.cute.core.launchDelegate.debug">
-         </associatedDelegate>
-         <placement
-               after="org.eclipse.debug.ui.environmentTab">
-         </placement>
-      </tab>
-      <tab
+            <associatedDelegate delegate="ch.hsr.ifs.cute.core.launchDelegate.debug"/>
+            <placement after="org.eclipse.debug.ui.environmentTab"/>
+        </tab>
+        <tab id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.sourceLookupTab"
             class="org.eclipse.debug.ui.sourcelookup.SourceLookupTab"
             group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
-            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.sourceLookupTab"
             name="%SourceLookupLaunchTab.name">
-          <associatedDelegate
-               delegate="ch.hsr.ifs.cute.core.launchDelegate.debug">
-         </associatedDelegate>
-         <placement
-               after="org.eclipse.cdt.dsf.gdb.launch.debuggerTab">
-         </placement>
-      </tab>
-      <tab
+            <associatedDelegate delegate="ch.hsr.ifs.cute.core.launchDelegate.debug"/>
+            <placement after="org.eclipse.cdt.dsf.gdb.launch.debuggerTab"/>
+        </tab>
+        <tab id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.commonTab"
             class="org.eclipse.debug.ui.CommonTab"
             group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
-            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.commonTab"
             name="%CommonLaunchTab.name">
-          <associatedDelegate
-               delegate="ch.hsr.ifs.cute.core.launchDelegate.debug">
-         </associatedDelegate>
-         <placement
-               after="org.eclipse.debug.ui.sourceLookupTab">
-         </placement>
-      </tab>
-      <tab
+            <associatedDelegate delegate="ch.hsr.ifs.cute.core.launchDelegate.debug"/>
+            <placement after="org.eclipse.debug.ui.sourceLookupTab"/>
+        </tab>
+        <tab id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.CustomizedLaunchConfigTab"
             class="ch.hsr.ifs.testframework.launch.CustomisedLaunchConfigTab"
             group="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug"
-            id="ch.hsr.ifs.cute.core.launchConfigurationTabGroup.debug.CustomizedLaunchConfigTab"
             name="%CustomisedLaunchConfigTab.LookupPath">
-         <placement
-               after="org.eclipse.debug.ui.CommonTab">
-         </placement>
-      </tab>
-   </extension>
-   <extension
-         point="org.eclipse.debug.core.processFactories">
-      <processFactory
-            class="ch.hsr.ifs.cute.core.launch.TestingProcessFactory"
-            id="ch.hsr.ifs.cute.core.DebugProcessFactory">
-      </processFactory>
-   </extension>
-	   
-   </plugin>
+            <placement after="org.eclipse.debug.ui.CommonTab"/>
+        </tab>
+    </extension>
+    <extension point="org.eclipse.debug.core.processFactories">
+        <processFactory id="ch.hsr.ifs.cute.core.DebugProcessFactory"
+            class="ch.hsr.ifs.cute.core.launch.TestingProcessFactory"/>
+    </extension>
+</plugin>

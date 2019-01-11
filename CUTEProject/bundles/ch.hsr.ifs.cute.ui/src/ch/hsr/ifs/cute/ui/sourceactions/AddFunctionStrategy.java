@@ -25,39 +25,39 @@ import ch.hsr.ifs.cute.ui.CuteUIPlugin;
  */
 public class AddFunctionStrategy extends AddPushbackStatementStrategy {
 
-   protected final String testName;
-   protected final IFile  file;
+    protected final String testName;
+    protected final IFile  file;
 
-   public AddFunctionStrategy(IDocument doc, IFile file, IASTTranslationUnit tu, String testName, SuitePushBackFinder finder) {
-      super(doc, tu, finder);
-      this.file = file;
-      this.testName = testName;
+    public AddFunctionStrategy(IDocument doc, IFile file, IASTTranslationUnit tu, String testName, SuitePushBackFinder finder) {
+        super(doc, tu, finder);
+        this.file = file;
+        this.testName = testName;
 
-   }
+    }
 
-   @Override
-   public MultiTextEdit getEdit() {
-      // TODO do not add the function holding the suite
-      IIndex index = astTu.getIndex();
-      try {
-         index.acquireReadLock();
-         MultiTextEdit mEdit = new MultiTextEdit();
-         if (!checkPushback(astTu, testName, suitPushBackFinder)) {
-            mEdit.addChild(createPushBackEdit(file, astTu, suitPushBackFinder));
-         }
-         return mEdit;
-      } catch (InterruptedException e) {
-         CuteUIPlugin.log(e);
-      } finally {
-         index.releaseReadLock();
-      }
-      return new MultiTextEdit();
-   }
+    @Override
+    public MultiTextEdit getEdit() {
+        // TODO do not add the function holding the suite
+        IIndex index = astTu.getIndex();
+        try {
+            index.acquireReadLock();
+            MultiTextEdit mEdit = new MultiTextEdit();
+            if (!checkPushback(astTu, testName, suitPushBackFinder)) {
+                mEdit.addChild(createPushBackEdit(file, astTu, suitPushBackFinder));
+            }
+            return mEdit;
+        } catch (InterruptedException e) {
+            CuteUIPlugin.log(e);
+        } finally {
+            index.releaseReadLock();
+        }
+        return new MultiTextEdit();
+    }
 
-   @Override
-   public String createPushBackContent() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("CUTE(").append(testName).append(")");
-      return builder.toString();
-   }
+    @Override
+    public String createPushBackContent() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("CUTE(").append(testName).append(")");
+        return builder.toString();
+    }
 }

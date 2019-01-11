@@ -12,23 +12,23 @@ import ch.hsr.ifs.cute.mockator.refsupport.utils.TypeCreator;
 
 public class FunctionParamTypeCollector {
 
-   private final ICPPASTFunctionDeclarator function;
+    private final ICPPASTFunctionDeclarator function;
 
-   public FunctionParamTypeCollector(final ICPPASTFunctionDeclarator function) {
-      this.function = function;
-   }
+    public FunctionParamTypeCollector(final ICPPASTFunctionDeclarator function) {
+        this.function = function;
+    }
 
-   public List<IType> getParameterTypes() {
-      final List<IType> paramTypes = new ArrayList<>();
+    public List<IType> getParameterTypes() {
+        final List<IType> paramTypes = new ArrayList<>();
 
-      for (final ICPPASTParameterDeclaration param : function.getParameters()) {
-         paramTypes.add(getTypeOfParam(param));
-      }
+        for (final ICPPASTParameterDeclaration param : function.getParameters()) {
+            paramTypes.add(getTypeOfParam(param));
+        }
 
-      return paramTypes;
-   }
+        return paramTypes;
+    }
 
-   private static IType getTypeOfParam(final ICPPASTParameterDeclaration param) {
-      return TypeCreator.byDeclarator(param.getDeclarator());
-   }
+    private static IType getTypeOfParam(final ICPPASTParameterDeclaration param) {
+        return TypeCreator.byDeclarator(param.getDeclarator());
+    }
 }

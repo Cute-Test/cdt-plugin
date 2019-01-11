@@ -8,23 +8,23 @@ import ch.hsr.ifs.cute.mockator.MockatorConstants;
 
 class NsNameGenerator {
 
-   public String getNsNameFor(final ICPPASTFunctionDefinition testFunction) {
-      return withNsSuffix(getFunctionName(testFunction));
-   }
+    public String getNsNameFor(final ICPPASTFunctionDefinition testFunction) {
+        return withNsSuffix(getFunctionName(testFunction));
+    }
 
-   public String getNsNameFor(final ICPPASTCompositeTypeSpecifier testDouble) {
-      return withNsSuffix(getTestDoubleName(testDouble));
-   }
+    public String getNsNameFor(final ICPPASTCompositeTypeSpecifier testDouble) {
+        return withNsSuffix(getTestDoubleName(testDouble));
+    }
 
-   private static String getTestDoubleName(final ICPPASTCompositeTypeSpecifier testDouble) {
-      return testDouble.getName().toString().toLowerCase();
-   }
+    private static String getTestDoubleName(final ICPPASTCompositeTypeSpecifier testDouble) {
+        return testDouble.getName().toString().toLowerCase();
+    }
 
-   private static String getFunctionName(final ICPPASTFunctionDefinition testFunction) {
-      return testFunction.getDeclarator().getName().toString();
-   }
+    private static String getFunctionName(final ICPPASTFunctionDefinition testFunction) {
+        return testFunction.getDeclarator().getName().toString();
+    }
 
-   private static String withNsSuffix(final String nsName) {
-      return nsName + MockatorConstants.NS_SUFFIX;
-   }
+    private static String withNsSuffix(final String nsName) {
+        return nsName + MockatorConstants.NS_SUFFIX;
+    }
 }

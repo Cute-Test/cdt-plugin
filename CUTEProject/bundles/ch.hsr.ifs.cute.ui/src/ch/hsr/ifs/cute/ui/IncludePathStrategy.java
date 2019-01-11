@@ -17,9 +17,9 @@ import org.eclipse.cdt.managedbuilder.core.IOption;
  */
 public class IncludePathStrategy implements GetOptionsStrategy {
 
-   @Override
-   public String[] getValues(IOption option) throws BuildException {
-      return option.getIncludePaths();
-   }
+    @Override
+    public String[] getValues(IOption option) throws BuildException {
+        return option.getIncludePaths();
+    }
 
 }

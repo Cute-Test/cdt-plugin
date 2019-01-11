@@ -8,13 +8,13 @@ import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 class LdPreloadFunBodyFactory {
 
-   public LdPreloadFunBodyStrategy getFunBodyStrategy(final ICPPASTFunctionDeclarator funDecl) {
-      if (isFreeFunction(funDecl)) return new FreeFunBodyStrategy();
+    public LdPreloadFunBodyStrategy getFunBodyStrategy(final ICPPASTFunctionDeclarator funDecl) {
+        if (isFreeFunction(funDecl)) return new FreeFunBodyStrategy();
 
-      return new MemFunBodyStrategy();
-   }
+        return new MemFunBodyStrategy();
+    }
 
-   private static boolean isFreeFunction(final ICPPASTFunctionDeclarator funDecl) {
-      return CPPVisitor.findAncestorWithType(funDecl, ICPPASTCompositeTypeSpecifier.class).orElse(null) == null;
-   }
+    private static boolean isFreeFunction(final ICPPASTFunctionDeclarator funDecl) {
+        return CPPVisitor.findAncestorWithType(funDecl, ICPPASTCompositeTypeSpecifier.class).orElse(null) == null;
+    }
 }

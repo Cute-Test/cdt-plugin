@@ -23,72 +23,74 @@ import ch.hsr.ifs.cute.ui.FileFinderVisitor;
  */
 public class GcovFile {
 
-   private final IFile                  file;
-   private final String                 suffix;
-   private static final String          SUFFIX_DELIMITER = ".";
-   private static final String          GCOV_SUFFIX      = SUFFIX_DELIMITER + "gcov";
-   private static final String          GCNO_SUFFIX      = SUFFIX_DELIMITER + "gcno";
-   private static final HashSet<String> knownSuffixes    = new HashSet<>();
+    private final IFile                  file;
+    private final String                 suffix;
+    private static final String          SUFFIX_DELIMITER = ".";
+    private static final String          GCOV_SUFFIX      = SUFFIX_DELIMITER + "gcov";
+    private static final String          GCNO_SUFFIX      = SUFFIX_DELIMITER + "gcno";
+    private static final HashSet<String> knownSuffixes    = new HashSet<>();
 
-   static {
-      knownSuffixes.add(".cpp");
-      knownSuffixes.add(".c");
-   }
+    static {
+        knownSuffixes.add(".cpp");
+        knownSuffixes.add(".c");
+    }
 
-   protected GcovFile(IFile file, String suffix) {
-      this.file = file;
-      this.suffix = suffix;
-   }
+    protected GcovFile(IFile file, String suffix) {
+        this.file = file;
+        this.suffix = suffix;
+    }
 
-   public IFile getGcnoFile() {
-      return findFile(file.getProject(), getGcnoFilename());
-   }
+    public IFile getGcnoFile() {
+        return findFile(file.getProject(), getGcnoFilename());
+    }
 
-   public IFile getGcovFile() {
-      return findFile(file.getProject(), getGcovFilename());
-   }
+    public IFile getGcovFile() {
+        return findFile(file.getProject(), getGcovFilename());
+    }
 
-   public static GcovFile create(IFile file) {
-      if (file != null) {
-         String suffix = getLowercaseSuffix(file);
-         if (knownSuffixes.contains(suffix)) { return new GcovFile(file, suffix); }
-      }
-      return null;
-   }
+    public static GcovFile create(IFile file) {
+        if (file != null) {
+            String suffix = getLowercaseSuffix(file);
+            if (knownSuffixes.contains(suffix)) {
+                return new GcovFile(file, suffix);
+            }
+        }
+        return null;
+    }
 
-   private static String getLowercaseSuffix(IFile file) {
-      String suffix = SUFFIX_DELIMITER + file.getFileExtension();
-      return suffix.toLowerCase();
-   }
+    private static String getLowercaseSuffix(IFile file) {
+        String suffix = SUFFIX_DELIMITER + file.getFileExtension();
+        return suffix.toLowerCase();
+    }
 
-   public String getFileName() {
-      return file.getName();
-   }
+    public String getFileName() {
+        return file.getName();
+    }
 
-   public IFile getFile() {
-      return file;
-   }
+    public IFile getFile() {
+        return file;
+    }
 
-   public String getGcnoFilename() {
-      return getFileName().replace(suffix, GCNO_SUFFIX);
-   }
+    public String getGcnoFilename() {
+        return getFileName().replace(suffix, GCNO_SUFFIX);
+    }
 
-   public String getGcovFilename() {
-      return getFileName().concat(GCOV_SUFFIX);
-   }
+    public String getGcovFilename() {
+        return getFileName().concat(GCOV_SUFFIX);
+    }
 
-   private IFile findFile(IProject project, String fileName) {
-      FileFinderVisitor visitor = new FileFinderVisitor(fileName);
-      try {
-         project.accept(visitor);
-         return visitor.getFile();
-      } catch (CoreException e) {
-         return null;
-      }
-   }
+    private IFile findFile(IProject project, String fileName) {
+        FileFinderVisitor visitor = new FileFinderVisitor(fileName);
+        try {
+            project.accept(visitor);
+            return visitor.getFile();
+        } catch (CoreException e) {
+            return null;
+        }
+    }
 
-   @Override
-   public String toString() {
-      return file.toString();
-   }
+    @Override
+    public String toString() {
+        return file.toString();
+    }
 }

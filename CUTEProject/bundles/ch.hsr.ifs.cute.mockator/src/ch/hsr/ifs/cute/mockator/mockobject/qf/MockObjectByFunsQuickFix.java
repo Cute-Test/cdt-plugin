@@ -6,13 +6,13 @@ import ch.hsr.ifs.cute.mockator.project.properties.LinkedEditModeStrategy;
 
 public class MockObjectByFunsQuickFix extends MockObjectQuickFix {
 
-   @Override
-   protected LinkedEditModeStrategy getLinkedEditStrategy() {
-      return LinkedEditModeStrategy.ChooseFunctions;
-   }
+    @Override
+    protected LinkedEditModeStrategy getLinkedEditStrategy() {
+        return LinkedEditModeStrategy.ChooseFunctions;
+    }
 
-   @Override
-   protected String getResolutionLabelHeader() {
-      return I18N.RecordMemFunsByChoosingFunSignaturesQuickfix;
-   }
+    @Override
+    protected String getResolutionLabelHeader() {
+        return I18N.RecordMemFunsByChoosingFunSignaturesQuickfix;
+    }
 }

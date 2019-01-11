@@ -7,59 +7,59 @@
           point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
       <resolution
             class="ch.hsr.ifs.cute.mockator.testdouble.creation.staticpoly.CreateTestDoubleStaticPolyQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.MissingTestDoublStaticPolyProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.MissingTestDoubleStaticPolyProblem">
       </resolution>
       <resolution
             class="ch.hsr.ifs.cute.mockator.testdouble.creation.subtype.CreateTestDoubleSubTypeQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.MissingTestDoubleSubTypeProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.MissingTestDoubleSubTypeProblem">
       </resolution>
       <resolution
             class="ch.hsr.ifs.cute.mockator.fakeobject.FakeObjectQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.StaticPolyMissingMemFunsProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.StaticPolyMissingMemFunsProblem">
       </resolution>
       <resolution
             class="ch.hsr.ifs.cute.mockator.fakeobject.FakeObjectQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.SubtypeMissingMemFunsProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.SubtypeMissingMemFunsProblem">
       </resolution>
       <resolution
             class="ch.hsr.ifs.cute.mockator.mockobject.qf.MockObjectByFunArgsQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.StaticPolyMissingMemFunsProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.StaticPolyMissingMemFunsProblem">
       </resolution>
       <resolution
             class="ch.hsr.ifs.cute.mockator.mockobject.qf.MockObjectByFunsQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.StaticPolyMissingMemFunsProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.StaticPolyMissingMemFunsProblem">
       </resolution>
       <resolution
             class="ch.hsr.ifs.cute.mockator.mockobject.qf.MockObjectByFunArgsQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.SubtypeMissingMemFunsProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.SubtypeMissingMemFunsProblem">
       </resolution>
       <resolution
             class="ch.hsr.ifs.cute.mockator.mockobject.qf.MockObjectByFunsQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.SubtypeMissingMemFunsProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.SubtypeMissingMemFunsProblem">
       </resolution>      
       <resolution
             class="ch.hsr.ifs.cute.mockator.linker.wrapfun.gnuoption.qf.DeleteWrappedFunctionQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.WrapFunctionProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.WrapFunctionProblem">
       </resolution>
       <resolution
             class="ch.hsr.ifs.cute.mockator.linker.wrapfun.gnuoption.qf.ActivateWrappedFunctionQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.WrapFunctionProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.WrapFunctionProblem">
       </resolution>
       <resolution
             class="ch.hsr.ifs.cute.mockator.linker.wrapfun.gnuoption.qf.DeactivateWrappedFunctionQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.WrapFunctionProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.WrapFunctionProblem">
       </resolution>
       <resolution
             class="ch.hsr.ifs.cute.mockator.preprocessor.qf.ActivateTraceFunctionQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.TraceFunctionProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.TraceFunctionProblem">
       </resolution>
       <resolution
             class="ch.hsr.ifs.cute.mockator.preprocessor.qf.DeactivateTraceFunctionQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.TraceFunctionProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.TraceFunctionProblem">
       </resolution>
       <resolution
             class="ch.hsr.ifs.cute.mockator.mockobject.expectations.qf.ConsistentExpectationsQuickFix"
-            problemId="ch.hsr.ifs.cute.mockator.InconsistentExpectationsProblem">
+            problemId="ch.hsr.ifs.cute.mockator.problems.InconsistentExpectationsProblem">
       </resolution>
    </extension>
    <extension
@@ -73,7 +73,7 @@
             category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
             defaultEnabled="false"
             defaultSeverity="Error"
-            id="ch.hsr.ifs.cute.mockator.StaticPolyMissingMemFunsProblem"
+            id="ch.hsr.ifs.cute.mockator.problems.StaticPolyMissingMemFunsProblem"
             messagePattern="%NeccesaryMemberFunctionsMissingMsg"
             name="%MissingMemberFunctionsInCompileSeamProblemName">
       </problem>
@@ -94,7 +94,7 @@
             category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
             defaultEnabled="false"
             defaultSeverity="Error"
-            id="ch.hsr.ifs.cute.mockator.SubtypeMissingMemFunsProblem"
+            id="ch.hsr.ifs.cute.mockator.problems.SubtypeMissingMemFunsProblem"
             messagePattern="%NeccesaryMemberFunctionsMissingMsg"
             name="%MissingMemberFunctionsInObjectSeamProblemName">
       </problem>
@@ -111,7 +111,7 @@
             category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
             defaultEnabled="false"
             defaultSeverity="Error"
-            id="ch.hsr.ifs.cute.mockator.MissingTestDoublStaticPolyProblem"
+            id="ch.hsr.ifs.cute.mockator.problems.MissingTestDoubleStaticPolyProblem"
             messagePattern="%StaticPolyTestDoubleMissingMsg"
             name="%StaticPolyMissingTestDoubleProblemName">
       </problem>
@@ -128,7 +128,7 @@
             category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
             defaultEnabled="false"
             defaultSeverity="Error"
-            id="ch.hsr.ifs.cute.mockator.MissingTestDoubleSubTypeProblem"
+            id="ch.hsr.ifs.cute.mockator.problems.MissingTestDoubleSubTypeProblem"
             messagePattern="%SubTypeTestDoubleMissingMsg"
             name="%SubTypeMissingTestDoubleProblemName">
       </problem>
@@ -145,7 +145,7 @@
             category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
             defaultEnabled="false"
             defaultSeverity="Info"
-            id="ch.hsr.ifs.cute.mockator.InconsistentExpectationsProblem"
+            id="ch.hsr.ifs.cute.mockator.problems.InconsistentExpectationsProblem"
             messagePattern="%InconsistentExpectationsProblemMsg"
             name="%InconsistentExpectationsProblemName">
       </problem>
@@ -162,7 +162,7 @@
             category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
             defaultEnabled="false"
             defaultSeverity="Info"
-            id="ch.hsr.ifs.cute.mockator.WrapFunctionProblem"
+            id="ch.hsr.ifs.cute.mockator.problems.WrapFunctionProblem"
             messagePattern="%WrapFunctionProblemMsg"
             name="%WrapFunctionProblemName">
       </problem>
@@ -179,7 +179,7 @@
             category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
             defaultEnabled="false"
             defaultSeverity="Warning"
-            id="ch.hsr.ifs.cute.mockator.TraceFunctionProblem"
+            id="ch.hsr.ifs.cute.mockator.problems.TraceFunctionProblem"
             messagePattern="%TraceFunctionProblemMsg"
             name="%TraceFunctionProblemName">
       </problem>

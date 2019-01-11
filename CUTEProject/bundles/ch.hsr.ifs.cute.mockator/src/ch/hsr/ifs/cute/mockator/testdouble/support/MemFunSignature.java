@@ -7,54 +7,64 @@ import ch.hsr.ifs.iltis.core.core.resources.StringUtil;
 
 public abstract class MemFunSignature implements Comparable<MemFunSignature> {
 
-   private static final String REGEX_PREFIX = "^";
-   private final String        funSignature;
+    private static final String REGEX_PREFIX = "^";
+    private String              funSignature;
 
-   public MemFunSignature(final String funSignature) {
-      this.funSignature = StringUtil.unquote(funSignature);
-   }
+    /**
+     * Default constructor for IStringifyable
+     */
+    public MemFunSignature() {}
 
-   public String getMemFunSignature() {
-      return funSignature;
-   }
+    public MemFunSignature(final String funSignature) {
+        setFunSignature(funSignature);
+    }
 
-   @Override
-   public String toString() {
-      return funSignature;
-   }
+    protected void setFunSignature(final String funSignature) {
+        this.funSignature = StringUtil.unquote(funSignature);
+    }
 
-   @Override
-   public int hashCode() {
-      return funSignature.hashCode();
-   }
+    public String getMemFunSignature() {
+        return funSignature;
+    }
 
-   @Override
-   public boolean equals(final Object obj) {
-      if (obj == this) return true;
+    @Override
+    public String toString() {
+        return funSignature;
+    }
 
-      if (!(obj instanceof MemFunSignature)) return false;
+    @Override
+    public int hashCode() {
+        return funSignature.hashCode();
+    }
 
-      final MemFunSignature other = (MemFunSignature) obj;
-      return funSignature.equals(other.funSignature);
-   }
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj == this) return true;
 
-   @Override
-   public int compareTo(final MemFunSignature o) {
-      return funSignature.compareTo(o.funSignature);
-   }
+        if (!(obj instanceof MemFunSignature)) return false;
 
-   public boolean isCovered(final Collection<? extends MemFunSignature> signatures) {
-      if (signatures.contains(this)) return true;
+        final MemFunSignature other = (MemFunSignature) obj;
+        return funSignature.equals(other.funSignature);
+    }
 
-      // we cannot match by using regular expressions because they are
-      // dependent on the function arguments; therefore we just use the rule that
-      // everything matches as soon as the user has an expectation with a regex
-      if (funSignature.startsWith(REGEX_PREFIX)) return true;
+    @Override
+    public int compareTo(final MemFunSignature o) {
+        return funSignature.compareTo(o.funSignature);
+    }
 
-      for (final MemFunSignature sig : signatures) {
-         if (sig.funSignature.startsWith(REGEX_PREFIX)) return true;
-      }
+    public boolean isCovered(final Collection<? extends MemFunSignature> signatures) {
+        if (signatures.contains(this)) return true;
 
-      return false;
-   }
+        // we cannot match by using regular expressions because they are
+        // dependent on the function arguments; therefore we just use the rule that
+        // everything matches as soon as the user has an expectation with a regex
+        if (funSignature.startsWith(REGEX_PREFIX)) return true;
+
+        for (final MemFunSignature sig : signatures) {
+            if (sig.funSignature.startsWith(REGEX_PREFIX)) return true;
+        }
+
+        return false;
+    }
+
 }

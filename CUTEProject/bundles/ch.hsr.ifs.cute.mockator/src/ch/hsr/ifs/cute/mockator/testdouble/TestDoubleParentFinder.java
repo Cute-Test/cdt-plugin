@@ -8,23 +8,23 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTNamespaceDefinition;
 
 public class TestDoubleParentFinder {
 
-   private final ICPPASTCompositeTypeSpecifier testDouble;
+    private final ICPPASTCompositeTypeSpecifier testDouble;
 
-   public TestDoubleParentFinder(final ICPPASTCompositeTypeSpecifier testDouble) {
-      this.testDouble = testDouble;
-   }
+    public TestDoubleParentFinder(final ICPPASTCompositeTypeSpecifier testDouble) {
+        this.testDouble = testDouble;
+    }
 
-   public IASTNode getParentOfTestDouble() {
-      IASTNode currentNode = testDouble;
+    public IASTNode getParentOfTestDouble() {
+        IASTNode currentNode = testDouble;
 
-      while (currentNode != null) {
-         if (currentNode instanceof ICPPASTFunctionDefinition) return ((ICPPASTFunctionDefinition) currentNode).getBody();
+        while (currentNode != null) {
+            if (currentNode instanceof ICPPASTFunctionDefinition) return ((ICPPASTFunctionDefinition) currentNode).getBody();
 
-         if (currentNode instanceof ICPPASTNamespaceDefinition) return currentNode;
+            if (currentNode instanceof ICPPASTNamespaceDefinition) return currentNode;
 
-         currentNode = currentNode.getParent();
-      }
+            currentNode = currentNode.getParent();
+        }
 
-      return null;
-   }
+        return null;
+    }
 }

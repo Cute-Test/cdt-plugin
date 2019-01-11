@@ -7,5 +7,5 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTCompositeTypeSpecifier;
 
 public interface MissingMemFunFinder {
 
-   Collection<? extends MissingMemberFunction> findMissingMemberFunctions(ICPPASTCompositeTypeSpecifier clazz);
+    Collection<? extends MissingMemberFunction> findMissingMemberFunctions(ICPPASTCompositeTypeSpecifier clazz);
 }

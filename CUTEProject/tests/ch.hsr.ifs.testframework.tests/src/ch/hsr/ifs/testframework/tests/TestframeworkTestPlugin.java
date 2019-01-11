@@ -18,26 +18,26 @@ import org.osgi.framework.BundleContext;
  */
 public class TestframeworkTestPlugin extends Plugin {
 
-   public static final String             PLUGIN_ID = "ch.hsr.ifs.cute.core.test";
-   private static TestframeworkTestPlugin plugin;
+    public static final String             PLUGIN_ID = "ch.hsr.ifs.cute.core.test";
+    private static TestframeworkTestPlugin plugin;
 
-   public TestframeworkTestPlugin() {
-      plugin = this;
-   }
+    public TestframeworkTestPlugin() {
+        plugin = this;
+    }
 
-   @Override
-   public void start(BundleContext bundleContext) throws Exception {
-      plugin = this;
-      super.start(bundleContext);
-   }
+    @Override
+    public void start(BundleContext bundleContext) throws Exception {
+        plugin = this;
+        super.start(bundleContext);
+    }
 
-   @Override
-   public void stop(BundleContext bundleContext) throws Exception {
-      super.stop(bundleContext);
-      TestframeworkTestPlugin.plugin = null;
-   }
+    @Override
+    public void stop(BundleContext bundleContext) throws Exception {
+        super.stop(bundleContext);
+        TestframeworkTestPlugin.plugin = null;
+    }
 
-   public static TestframeworkTestPlugin getDefault() {
-      return plugin;
-   }
+    public static TestframeworkTestPlugin getDefault() {
+        return plugin;
+    }
 }

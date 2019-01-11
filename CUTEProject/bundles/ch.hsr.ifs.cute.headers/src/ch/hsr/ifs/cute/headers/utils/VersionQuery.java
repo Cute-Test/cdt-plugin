@@ -15,15 +15,16 @@ import org.eclipse.core.resources.IProject;
 
 import ch.hsr.ifs.iltis.cpp.versionator.definition.CPPVersion;
 
+
 /**
  * @author Hansruedi Patzen IFS
  * @since 5.3
- * 
+ *
  */
 public class VersionQuery {
 
-	public static boolean isCPPVersionAboveOrEqualEleven(IProject project) {
-		Optional<CPPVersion> cppVersion = Optional.ofNullable(CPPVersion.getForProject(project));
-		return cppVersion.map(version -> version.ordinal() >= CPPVersion.CPP_11.ordinal()).orElse(true);
-	}
+    public static boolean isCPPVersionAboveOrEqualEleven(IProject project) {
+        Optional<CPPVersion> cppVersion = Optional.ofNullable(CPPVersion.getForProject(project));
+        return cppVersion.map(version -> version.ordinal() >= CPPVersion.CPP_11.ordinal()).orElse(true);
+    }
 }

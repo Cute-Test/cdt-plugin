@@ -13,6 +13,6 @@ import ch.hsr.ifs.cute.mockator.project.properties.LinkedEditModeStrategy;
 
 public interface ExpectationsCppStdStrategy {
 
-   Collection<IASTStatement> createExpectationsVector(Collection<? extends TestDoubleMemFun> memFuns, String vectorName,
-         ICPPASTFunctionDefinition testFun, Optional<IASTName> expectationsVector, LinkedEditModeStrategy strategy);
+    Collection<IASTStatement> createExpectationsVector(Collection<? extends TestDoubleMemFun> memFuns, String vectorName,
+            ICPPASTFunctionDefinition testFun, Optional<IASTName> expectationsVector, LinkedEditModeStrategy strategy);
 }

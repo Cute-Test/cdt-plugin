@@ -14,29 +14,29 @@ import ch.hsr.ifs.cute.mockator.project.nature.NatureHandler;
 
 public class ReferencingExecutableFinder {
 
-   private final IProject project;
+    private final IProject project;
 
-   public ReferencingExecutableFinder(final IProject project) {
-      this.project = project;
-   }
+    public ReferencingExecutableFinder(final IProject project) {
+        this.project = project;
+    }
 
-   public Collection<IProject> findReferencingExecutables() {
-      return getReferencingProjectsWithProperty((proj) -> isExecutableArtifactType(proj));
-   }
+    public Collection<IProject> findReferencingExecutables() {
+        return getReferencingProjectsWithProperty((proj) -> isExecutableArtifactType(proj));
+    }
 
-   public Collection<IProject> findReferencingMockatorExecutables() {
-      return getReferencingProjectsWithProperty((proj) -> isExecutableArtifactType(proj) && isMockatorProject(proj));
-   }
+    public Collection<IProject> findReferencingMockatorExecutables() {
+        return getReferencingProjectsWithProperty((proj) -> isExecutableArtifactType(proj) && isMockatorProject(proj));
+    }
 
-   private Collection<IProject> getReferencingProjectsWithProperty(final Predicate<IProject> criteria) {
-      return Arrays.asList(project.getReferencingProjects()).stream().filter(criteria).collect(Collectors.toList());
-   }
+    private Collection<IProject> getReferencingProjectsWithProperty(final Predicate<IProject> criteria) {
+        return Arrays.asList(project.getReferencingProjects()).stream().filter(criteria).collect(Collectors.toList());
+    }
 
-   private static boolean isMockatorProject(final IProject project) {
-      return new NatureHandler(project).hasNature(MockatorNature.NATURE_ID);
-   }
+    private static boolean isMockatorProject(final IProject project) {
+        return new NatureHandler(project).hasNature(MockatorNature.NATURE_ID);
+    }
 
-   private static boolean isExecutableArtifactType(final IProject project) {
-      return CdtManagedProjectType.fromProject(project) == CdtManagedProjectType.Executable;
-   }
+    private static boolean isExecutableArtifactType(final IProject project) {
+        return CdtManagedProjectType.fromProject(project) == CdtManagedProjectType.Executable;
+    }
 }

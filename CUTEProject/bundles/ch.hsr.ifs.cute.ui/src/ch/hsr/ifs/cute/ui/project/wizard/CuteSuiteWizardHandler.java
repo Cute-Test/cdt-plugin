@@ -21,41 +21,41 @@ import ch.hsr.ifs.cute.headers.ICuteHeaders;
 
 public class CuteSuiteWizardHandler extends CuteWizardHandler {
 
-   private NewCuteSuiteProjectWizardPage suitewizPage;
-   String                                suitename;
+    private NewCuteSuiteProjectWizardPage suitewizPage;
+    String                                suitename;
 
-   public CuteSuiteWizardHandler(String suitename) {
-      this(null, null);
-      this.suitename = suitename;
-   }
+    public CuteSuiteWizardHandler(String suitename) {
+        this(null, null);
+        this.suitename = suitename;
+    }
 
-   public CuteSuiteWizardHandler(Composite p, IWizard w) {
-      super(p, w);
-      suitewizPage.setPreviousPage(getNewProjectCreationPage());
-      suitewizPage.setWizard(getWizard());
-      MBSCustomPageManager.init();
-      MBSCustomPageManager.addStockPage(suitewizPage, suitewizPage.getPageID());
-   }
+    public CuteSuiteWizardHandler(Composite p, IWizard w) {
+        super(p, w);
+        suitewizPage.setPreviousPage(getNewProjectCreationPage());
+        suitewizPage.setWizard(getWizard());
+        MBSCustomPageManager.init();
+        MBSCustomPageManager.addStockPage(suitewizPage, suitewizPage.getPageID());
+    }
 
-   @Override
-   protected NewCuteProjectWizardPage initPage() {
-      suitewizPage = new NewCuteSuiteProjectWizardPage(getConfigPage(), getNewProjectCreationPage(), getWizardContainer(getWizard()));
-      return suitewizPage;
-   }
+    @Override
+    protected NewCuteProjectWizardPage initPage() {
+        suitewizPage = new NewCuteSuiteProjectWizardPage(getConfigPage(), getNewProjectCreationPage(), getWizardContainer(getWizard()));
+        return suitewizPage;
+    }
 
-   @Override
-   public IWizardPage getSpecificPage() {
-      return suitewizPage;
-   }
+    @Override
+    public IWizardPage getSpecificPage() {
+        return suitewizPage;
+    }
 
-   @Override
-   public void copyExampleTestFiles(IFolder srcFolder, ICuteHeaders cuteVersion) throws CoreException {
-      suitename = suitewizPage.getSuiteName();
-      cuteVersion.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename, true);
-   }
+    @Override
+    public void copyExampleTestFiles(IFolder srcFolder, ICuteHeaders cuteVersion) throws CoreException {
+        suitename = suitewizPage.getSuiteName();
+        cuteVersion.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename, true);
+    }
 
-   @Override
-   public boolean canFinish() {
-      return suitewizPage.isCustomPageComplete();
-   }
+    @Override
+    public boolean canFinish() {
+        return suitewizPage.isCustomPageComplete();
+    }
 }

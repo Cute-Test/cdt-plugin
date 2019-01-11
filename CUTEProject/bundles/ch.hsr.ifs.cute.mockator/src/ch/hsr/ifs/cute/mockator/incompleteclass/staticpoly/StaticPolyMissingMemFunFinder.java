@@ -24,72 +24,72 @@ import ch.hsr.ifs.cute.mockator.refsupport.functions.FunctionEquivalenceVerifier
 
 public class StaticPolyMissingMemFunFinder implements MissingMemFunFinder {
 
-   private final ICProject cProject;
-   private final IIndex    index;
+    private final ICProject cProject;
+    private final IIndex    index;
 
-   public StaticPolyMissingMemFunFinder(final ICProject cProject, final IIndex index) {
-      this.cProject = cProject;
-      this.index = index;
-   }
+    public StaticPolyMissingMemFunFinder(final ICProject cProject, final IIndex index) {
+        this.cProject = cProject;
+        this.index = index;
+    }
 
-   @Override
-   public Collection<StaticPolyMissingMemFun> findMissingMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
-      final StaticPolymorphismUseFinder staticPolyFinder = getStaticPolyUseFinder(clazz);
-      final Set<StaticPolyMissingMemFun> missingMemFuns = new LinkedHashSet<>();
+    @Override
+    public Collection<StaticPolyMissingMemFun> findMissingMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
+        final StaticPolymorphismUseFinder staticPolyFinder = getStaticPolyUseFinder(clazz);
+        final Set<StaticPolyMissingMemFun> missingMemFuns = new LinkedHashSet<>();
 
-      for (final IASTFunctionDefinition testFun : getReferencingTestFunctions(clazz)) {
-         final Collection<StaticPolyMissingMemFun> usedMemFunsInSut = staticPolyFinder.apply(testFun);
-         final Collection<StaticPolyMissingMemFun> onlyMissing = filterAlreadyExisting(usedMemFunsInSut, clazz);
-         missingMemFuns.addAll(onlyMissing);
-      }
+        for (final IASTFunctionDefinition testFun : getReferencingTestFunctions(clazz)) {
+            final Collection<StaticPolyMissingMemFun> usedMemFunsInSut = staticPolyFinder.apply(testFun);
+            final Collection<StaticPolyMissingMemFun> onlyMissing = filterAlreadyExisting(usedMemFunsInSut, clazz);
+            missingMemFuns.addAll(onlyMissing);
+        }
 
-      return missingMemFuns;
-   }
+        return missingMemFuns;
+    }
 
-   private StaticPolymorphismUseFinder getStaticPolyUseFinder(final ICPPASTCompositeTypeSpecifier clazz) {
-      return new StaticPolymorphismUseFinder(clazz, cProject, index);
-   }
+    private StaticPolymorphismUseFinder getStaticPolyUseFinder(final ICPPASTCompositeTypeSpecifier clazz) {
+        return new StaticPolymorphismUseFinder(clazz, cProject, index);
+    }
 
-   private static Collection<StaticPolyMissingMemFun> filterAlreadyExisting(final Collection<StaticPolyMissingMemFun> candidates,
-         final ICPPASTCompositeTypeSpecifier clazz) {
-      final Collection<ICPPASTFunctionDefinition> existingMemFuns = getPublicMemberFunctions(clazz);
-      final List<StaticPolyMissingMemFun> onlyMissing = new ArrayList<>();
+    private static Collection<StaticPolyMissingMemFun> filterAlreadyExisting(final Collection<StaticPolyMissingMemFun> candidates,
+            final ICPPASTCompositeTypeSpecifier clazz) {
+        final Collection<ICPPASTFunctionDefinition> existingMemFuns = getPublicMemberFunctions(clazz);
+        final List<StaticPolyMissingMemFun> onlyMissing = new ArrayList<>();
 
-      for (final StaticPolyMissingMemFun candidate : candidates) {
-         boolean match = false;
+        for (final StaticPolyMissingMemFun candidate : candidates) {
+            boolean match = false;
 
-         for (final ICPPASTFunctionDefinition existing : existingMemFuns) {
-            if (functionAlreadyExists(candidate, existing)) {
-               match = true;
-               break;
+            for (final ICPPASTFunctionDefinition existing : existingMemFuns) {
+                if (functionAlreadyExists(candidate, existing)) {
+                    match = true;
+                    break;
+                }
             }
-         }
 
-         if (!match) {
-            onlyMissing.add(candidate);
-         }
-      }
-      return onlyMissing;
-   }
+            if (!match) {
+                onlyMissing.add(candidate);
+            }
+        }
+        return onlyMissing;
+    }
 
-   private static boolean functionAlreadyExists(final StaticPolyMissingMemFun missingMemFun, final ICPPASTFunctionDefinition function) {
-      return missingMemFun.isCallEquivalent(function, getConstStrategy(function));
-   }
+    private static boolean functionAlreadyExists(final StaticPolyMissingMemFun missingMemFun, final ICPPASTFunctionDefinition function) {
+        return missingMemFun.isCallEquivalent(function, getConstStrategy(function));
+    }
 
-   private static Collection<ICPPASTFunctionDefinition> getPublicMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
-      final PublicMemFunFinder finder = new PublicMemFunFinder(clazz, PublicMemFunFinder.ALL_TYPES);
-      return ASTUtil.getFunctionDefinitions(finder.getPublicMemFuns());
-   }
+    private static Collection<ICPPASTFunctionDefinition> getPublicMemberFunctions(final ICPPASTCompositeTypeSpecifier clazz) {
+        final PublicMemFunFinder finder = new PublicMemFunFinder(clazz, PublicMemFunFinder.ALL_TYPES);
+        return ASTUtil.getFunctionDefinitions(finder.getPublicMemFuns());
+    }
 
-   private Collection<ICPPASTFunctionDefinition> getReferencingTestFunctions(final ICPPASTCompositeTypeSpecifier refClass) {
-      final ReferencingTestFunFinder finder = new ReferencingTestFunFinder(cProject, refClass);
-      return finder.findInAst(refClass.getTranslationUnit());
-   }
+    private Collection<ICPPASTFunctionDefinition> getReferencingTestFunctions(final ICPPASTCompositeTypeSpecifier refClass) {
+        final ReferencingTestFunFinder finder = new ReferencingTestFunFinder(cProject, refClass);
+        return finder.findInAst(refClass.getTranslationUnit());
+    }
 
-   private static ConstStrategy getConstStrategy(final ICPPASTFunctionDefinition function) {
-      if (!ASTUtil.isStatic(function.getDeclSpecifier()) && !ASTUtil.isConstructor(function))
-         return FunctionEquivalenceVerifier.ConstStrategy.ConsiderConst;
+    private static ConstStrategy getConstStrategy(final ICPPASTFunctionDefinition function) {
+        if (!ASTUtil.isStatic(function.getDeclSpecifier()) && !ASTUtil.isConstructor(function))
+            return FunctionEquivalenceVerifier.ConstStrategy.ConsiderConst;
 
-      return FunctionEquivalenceVerifier.ConstStrategy.IgnoreConst;
-   }
+        return FunctionEquivalenceVerifier.ConstStrategy.IgnoreConst;
+    }
 }

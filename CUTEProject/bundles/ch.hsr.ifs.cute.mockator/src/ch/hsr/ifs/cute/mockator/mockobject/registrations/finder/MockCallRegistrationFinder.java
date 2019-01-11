@@ -20,47 +20,49 @@ import ch.hsr.ifs.cute.mockator.testdouble.CallRegistrationFinder;
 
 public class MockCallRegistrationFinder implements CallRegistrationFinder {
 
-   private final CppStandard cppStd;
+    private final CppStandard cppStd;
 
-   public MockCallRegistrationFinder(final CppStandard cppStd) {
-      this.cppStd = cppStd;
-   }
+    public MockCallRegistrationFinder(final CppStandard cppStd) {
+        this.cppStd = cppStd;
+    }
 
-   @Override
-   public Optional<ExistingMemFunCallRegistration> findRegisteredCall(final ICPPASTFunctionDefinition function) {
-      final List<IASTName> usages = getRegistrationVectorUsesIn(function);
-      return head(collectRealRegistrations(usages));
-   }
+    @Override
+    public Optional<ExistingMemFunCallRegistration> findRegisteredCall(final ICPPASTFunctionDefinition function) {
+        final List<IASTName> usages = getRegistrationVectorUsesIn(function);
+        return head(collectRealRegistrations(usages));
+    }
 
-   private Collection<ExistingMemFunCallRegistration> collectRealRegistrations(final List<IASTName> callRegistrations) {
-      return new CallRegistrationCollector(cppStd).getRegistrations(callRegistrations);
-   }
+    private Collection<ExistingMemFunCallRegistration> collectRealRegistrations(final List<IASTName> callRegistrations) {
+        return new CallRegistrationCollector(cppStd).getRegistrations(callRegistrations);
+    }
 
-   private List<IASTName> getRegistrationVectorUsesIn(final ICPPASTFunctionDefinition function) {
-      final List<IASTName> callRegistrations = new ArrayList<>();
-      function.accept(new ASTVisitor() {
+    private List<IASTName> getRegistrationVectorUsesIn(final ICPPASTFunctionDefinition function) {
+        final List<IASTName> callRegistrations = new ArrayList<>();
+        function.accept(new ASTVisitor() {
 
-         {
-            shouldVisitNames = true;
-         }
-
-         @Override
-         public int visit(final IASTName name) {
-            if (hasCallsVectorType(name)) {
-               callRegistrations.add(name);
-               return PROCESS_SKIP;
+            {
+                shouldVisitNames = true;
             }
-            return PROCESS_CONTINUE;
-         }
 
-         private boolean hasCallsVectorType(final IASTName name) {
-            final IASTNode parent = name.getParent();
+            @Override
+            public int visit(final IASTName name) {
+                if (hasCallsVectorType(name)) {
+                    callRegistrations.add(name);
+                    return PROCESS_SKIP;
+                }
+                return PROCESS_CONTINUE;
+            }
 
-            if (!(parent instanceof IASTIdExpression)) { return false; }
+            private boolean hasCallsVectorType(final IASTName name) {
+                final IASTNode parent = name.getParent();
 
-            return new CallsVectorTypeVerifier((IASTIdExpression) parent).isVectorOfCallsVector();
-         }
-      });
-      return callRegistrations;
-   }
+                if (!(parent instanceof IASTIdExpression)) {
+                    return false;
+                }
+
+                return new CallsVectorTypeVerifier((IASTIdExpression) parent).isVectorOfCallsVector();
+            }
+        });
+        return callRegistrations;
+    }
 }

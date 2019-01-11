@@ -14,10 +14,10 @@ package ch.hsr.ifs.cute.gcov.tests.mock;
  */
 public class NotYetImplementedException extends RuntimeException {
 
-   private static final long serialVersionUID = -7113922490648074507L;
+    private static final long serialVersionUID = -7113922490648074507L;
 
-   public NotYetImplementedException() {
-      super("Method not yet implemented");
-   }
+    public NotYetImplementedException() {
+        super("Method not yet implemented");
+    }
 
 }

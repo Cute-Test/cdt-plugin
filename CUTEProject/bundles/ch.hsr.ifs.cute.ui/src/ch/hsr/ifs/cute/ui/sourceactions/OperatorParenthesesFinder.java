@@ -19,28 +19,28 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTOperatorName;
 
 public class OperatorParenthesesFinder extends ASTVisitor {
 
-   ArrayList<IASTName> al = new ArrayList<>();
+    ArrayList<IASTName> al = new ArrayList<>();
 
-   {
-      shouldVisitNames = true;
-   }
+    {
+        shouldVisitNames = true;
+    }
 
-   @Override
-   public int leave(IASTName name) {
-      if (name instanceof ICPPASTOperatorName) {
-         ICPPASTOperatorName opName = (ICPPASTOperatorName) name;
-         if ("operator ()".equals(opName.getLastName().toString())) {
-            if (name.getParent() instanceof ICPPASTFunctionDeclarator) {
-               ICPPASTFunctionDeclarator fdeclarator = (ICPPASTFunctionDeclarator) name.getParent();
-               IASTParameterDeclaration fpara[] = fdeclarator.getParameters();
-               if (!fdeclarator.takesVarArgs() && fpara.length == 0) al.add(name);
+    @Override
+    public int leave(IASTName name) {
+        if (name instanceof ICPPASTOperatorName) {
+            ICPPASTOperatorName opName = (ICPPASTOperatorName) name;
+            if ("operator ()".equals(opName.getLastName().toString())) {
+                if (name.getParent() instanceof ICPPASTFunctionDeclarator) {
+                    ICPPASTFunctionDeclarator fdeclarator = (ICPPASTFunctionDeclarator) name.getParent();
+                    IASTParameterDeclaration fpara[] = fdeclarator.getParameters();
+                    if (!fdeclarator.takesVarArgs() && fpara.length == 0) al.add(name);
+                }
             }
-         }
-      }
-      return super.leave(name);
-   }
+        }
+        return super.leave(name);
+    }
 
-   public ArrayList<IASTName> getAL() {
-      return al;
-   }
+    public ArrayList<IASTName> getAL() {
+        return al;
+    }
 }

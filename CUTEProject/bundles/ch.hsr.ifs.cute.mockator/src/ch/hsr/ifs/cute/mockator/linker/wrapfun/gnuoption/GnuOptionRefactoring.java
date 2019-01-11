@@ -24,12 +24,14 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.cute.mockator.MockatorConstants;
 import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.core.util.constants.CommonCPPConstants;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;
+
+import ch.hsr.ifs.cute.mockator.MockatorConstants;
 import ch.hsr.ifs.cute.mockator.base.i18n.I18N;
 import ch.hsr.ifs.cute.mockator.base.util.PlatformUtil;
 import ch.hsr.ifs.cute.mockator.linker.ItaniumMangledNameGenerator;
@@ -40,149 +42,155 @@ import ch.hsr.ifs.cute.mockator.refsupport.functions.FunctionDelegateCallCreator
 @SuppressWarnings("restriction")
 public class GnuOptionRefactoring extends LinkerRefactoring {
 
-   private static final String REAL_PREFIX = "__real_";
-   private static final String WRAP_PREFIX = "__wrap_";
-   private static final String C_LINKAGE   = "\"C\"";
-   private static String       NEW_LINE    = PlatformUtil.toSystemNewLine("%n");
-   private String              newFunName;
+    private static final String REAL_PREFIX = "__real_";
+    private static final String WRAP_PREFIX = "__wrap_";
+    private static final String C_LINKAGE   = "\"C\"";
+    private static String       NEW_LINE    = PlatformUtil.toSystemNewLine("%n");
+    private String              newFunName;
 
-   public GnuOptionRefactoring(final ICElement element, final Optional<ITextSelection> selection, final ICProject cproject) {
-      super(element, selection, cproject);
-   }
+    public GnuOptionRefactoring(final ICElement element, final Optional<ITextSelection> selection, final ICProject cproject) {
+        super(element, selection, cproject);
+    }
 
-   @Override
-   protected void createLinkerSeamSupport(final ModificationCollector collector, final IASTName funName, final IProgressMonitor pm)
-         throws CoreException {
-      rememberFunName(funName);
-      createWrapperFunction(funName, collector.rewriterForTranslationUnit(getAST(tu, pm)), pm);
-   }
+    @Override
+    protected void createLinkerSeamSupport(final ModificationCollector collector, final IASTName funName, final IProgressMonitor pm)
+            throws CoreException {
+        rememberFunName(funName);
+        createWrapperFunction(funName, collector.rewriterForTranslationUnit(getAST(tu, pm)), pm);
+    }
 
-   private void rememberFunName(final IASTName funName) {
-      final IBinding binding = funName.resolveBinding();
-      ILTISException.Unless.assignableFrom("Function expected", ICPPFunction.class, binding);
-      newFunName = new ItaniumMangledNameGenerator((ICPPFunction) binding).createMangledName();
-   }
+    private void rememberFunName(final IASTName funName) {
+        final IBinding binding = funName.resolveBinding();
+        ILTISException.Unless.assignableFrom("Function expected", ICPPFunction.class, binding);
+        newFunName = new ItaniumMangledNameGenerator((ICPPFunction) binding).createMangledName();
+    }
 
-   private void createWrapperFunction(final IASTName funName, final ASTRewrite rewriter, final IProgressMonitor pm) {
-      findFunDeclaration(funName, pm).ifPresent((funDecl) -> {
-         final IASTDeclSpecifier declSpecifier = ASTUtil.getDeclSpec(funDecl);
-         final IASTSimpleDeclaration realFunDecl = createRealFunDecl(declSpecifier, funDecl);
-         final ICPPASTFunctionDefinition wrapFunDef = createWrappedFun(declSpecifier, funDecl, realFunDecl);
-         final ICPPASTLinkageSpecification cLinkage = wrapFunctionsInCLinkage(realFunDecl, wrapFunDef);
-         insertWrapperFunsInCLinkage(rewriter, cLinkage, funName);
-      });
-   }
+    private void createWrapperFunction(final IASTName funName, final ASTRewrite rewriter, final IProgressMonitor pm) {
+        findFunDeclaration(funName, pm).ifPresent((funDecl) -> {
+            final IASTDeclSpecifier declSpecifier = ASTUtil.getDeclSpec(funDecl);
+            final IASTSimpleDeclaration realFunDecl = createRealFunDecl(declSpecifier, funDecl);
+            final ICPPASTFunctionDefinition wrapFunDef = createWrappedFun(declSpecifier, funDecl, realFunDecl);
+            final ICPPASTLinkageSpecification cLinkage = wrapFunctionsInCLinkage(realFunDecl, wrapFunDef);
+            insertWrapperFunsInCLinkage(rewriter, cLinkage, funName);
+        });
+    }
 
-   private IASTSimpleDeclaration createRealFunDecl(final IASTDeclSpecifier declSpec, final ICPPASTFunctionDeclarator function) {
-      final ICPPASTFunctionDeclarator newFunDecl = function.copy();
-      disableCvQualifiers(newFunDecl);
-      adjustParamNamesIfNecessary(newFunDecl);
-      setRealFunName(newFunDecl);
-      final IASTDeclSpecifier newDeclSpec = getRealDeclSpecBasedOn(declSpec);
-      prepareDeclSpecifier(newDeclSpec);
-      final IASTSimpleDeclaration realFunDecl = nodeFactory.newSimpleDeclaration(newDeclSpec);
-      realFunDecl.addDeclarator(newFunDecl);
-      return realFunDecl;
-   }
+    private IASTSimpleDeclaration createRealFunDecl(final IASTDeclSpecifier declSpec, final ICPPASTFunctionDeclarator function) {
+        final ICPPASTFunctionDeclarator newFunDecl = function.copy();
+        disableCvQualifiers(newFunDecl);
+        adjustParamNamesIfNecessary(newFunDecl);
+        setRealFunName(newFunDecl);
+        final IASTDeclSpecifier newDeclSpec = getRealDeclSpecBasedOn(declSpec);
+        prepareDeclSpecifier(newDeclSpec);
+        final IASTSimpleDeclaration realFunDecl = nodeFactory.newSimpleDeclaration(newDeclSpec);
+        realFunDecl.addDeclarator(newFunDecl);
+        return realFunDecl;
+    }
 
-   private static IASTDeclSpecifier getRealDeclSpecBasedOn(final IASTDeclSpecifier declSpec) {
-      final IASTDeclSpecifier newDeclSpec = declSpec.copy();
-      newDeclSpec.setStorageClass(IASTDeclSpecifier.sc_extern);
-      return newDeclSpec;
-   }
+    private static IASTDeclSpecifier getRealDeclSpecBasedOn(final IASTDeclSpecifier declSpec) {
+        final IASTDeclSpecifier newDeclSpec = declSpec.copy();
+        newDeclSpec.setStorageClass(IASTDeclSpecifier.sc_extern);
+        return newDeclSpec;
+    }
 
-   private void setRealFunName(final ICPPASTFunctionDeclarator newFunDecl) {
-      final IASTName newName = nodeFactory.newName((REAL_PREFIX + newFunName).toCharArray());
-      newFunDecl.setName(newName);
-   }
+    private void setRealFunName(final ICPPASTFunctionDeclarator newFunDecl) {
+        final IASTName newName = nodeFactory.newName((REAL_PREFIX + newFunName).toCharArray());
+        newFunDecl.setName(newName);
+    }
 
-   private static ICPPASTLinkageSpecification createCLinkageSpec() {
-      return nodeFactory.newLinkageSpecification(C_LINKAGE);
-   }
+    private static ICPPASTLinkageSpecification createCLinkageSpec() {
+        return nodeFactory.newLinkageSpecification(C_LINKAGE);
+    }
 
-   private ICPPASTFunctionDefinition createWrappedFun(final IASTDeclSpecifier declSpec, final ICPPASTFunctionDeclarator function,
-         final IASTSimpleDeclaration realFunDecl) {
-      final ICPPASTFunctionDeclarator newFunDecl = function.copy();
-      disableCvQualifiers(newFunDecl);
-      adjustParamNamesIfNecessary(newFunDecl);
-      setWrappedFunName(newFunDecl);
-      final IASTCompoundStatement funBody = createWrappedFunReturnStmt(realFunDecl, newFunDecl);
-      final IASTDeclSpecifier newDeclSpec = declSpec.copy();
-      prepareDeclSpecifier(newDeclSpec);
-      ASTUtil.removeExternalStorageIfSet(newDeclSpec);
-      return nodeFactory.newFunctionDefinition(newDeclSpec, newFunDecl, funBody);
-   }
+    private ICPPASTFunctionDefinition createWrappedFun(final IASTDeclSpecifier declSpec, final ICPPASTFunctionDeclarator function,
+            final IASTSimpleDeclaration realFunDecl) {
+        final ICPPASTFunctionDeclarator newFunDecl = function.copy();
+        disableCvQualifiers(newFunDecl);
+        adjustParamNamesIfNecessary(newFunDecl);
+        setWrappedFunName(newFunDecl);
+        final IASTCompoundStatement funBody = createWrappedFunReturnStmt(realFunDecl, newFunDecl);
+        final IASTDeclSpecifier newDeclSpec = declSpec.copy();
+        prepareDeclSpecifier(newDeclSpec);
+        ASTUtil.removeExternalStorageIfSet(newDeclSpec);
+        return nodeFactory.newFunctionDefinition(newDeclSpec, newFunDecl, funBody);
+    }
 
-   private void setWrappedFunName(final ICPPASTFunctionDeclarator newFunDecl) {
-      newFunDecl.setName(nodeFactory.newName((WRAP_PREFIX + newFunName).toCharArray()));
-   }
+    private void setWrappedFunName(final ICPPASTFunctionDeclarator newFunDecl) {
+        newFunDecl.setName(nodeFactory.newName((WRAP_PREFIX + newFunName).toCharArray()));
+    }
 
-   private static void disableCvQualifiers(final ICPPASTFunctionDeclarator newFunDecl) {
-      newFunDecl.setConst(false);
-      newFunDecl.setVolatile(false);
-   }
+    private static void disableCvQualifiers(final ICPPASTFunctionDeclarator newFunDecl) {
+        newFunDecl.setConst(false);
+        newFunDecl.setVolatile(false);
+    }
 
-   private void insertWrapperFunsInCLinkage(final ASTRewrite rewriter, final ICPPASTLinkageSpecification cLinkageSpec, final IASTName funName) {
-      final IASTNode insertionPoint = getInsertionPoint(funName);
-      rewriter.insertBefore(insertionPoint.getParent(), insertionPoint, createIfDefWrapFun(), null);
-      rewriter.insertBefore(insertionPoint.getParent(), insertionPoint, cLinkageSpec, null);
-      rewriter.insertBefore(insertionPoint.getParent(), insertionPoint, createEndIf(), null);
-   }
+    private void insertWrapperFunsInCLinkage(final ASTRewrite rewriter, final ICPPASTLinkageSpecification cLinkageSpec, final IASTName funName) {
+        final IASTNode insertionPoint = getInsertionPoint(funName);
+        rewriter.insertBefore(insertionPoint.getParent(), insertionPoint, createIfDefWrapFun(), null);
+        rewriter.insertBefore(insertionPoint.getParent(), insertionPoint, cLinkageSpec, null);
+        rewriter.insertBefore(insertionPoint.getParent(), insertionPoint, createEndIf(), null);
+    }
 
-   private static ASTLiteralNode createEndIf() {
-      return new ASTLiteralNode(CommonCPPConstants.END_IF_DIRECTIVE + NEW_LINE);
-   }
+    private static ASTLiteralNode createEndIf() {
+        return new ASTLiteralNode(CommonCPPConstants.END_IF_DIRECTIVE + NEW_LINE);
+    }
 
-   private ASTLiteralNode createIfDefWrapFun() {
-      return new ASTLiteralNode(CommonCPPConstants.IFDEF_DIRECTIVE + MockatorConstants.SPACE + MockatorConstants.WRAP_MACRO_PREFIX + newFunName +
-                                NEW_LINE);
-   }
+    private ASTLiteralNode createIfDefWrapFun() {
+        return new ASTLiteralNode(CommonCPPConstants.IFDEF_DIRECTIVE + MockatorConstants.SPACE + MockatorConstants.WRAP_MACRO_PREFIX + newFunName +
+                                  NEW_LINE);
+    }
 
-   private static ICPPASTLinkageSpecification wrapFunctionsInCLinkage(final IASTSimpleDeclaration realFunDecl,
-         final ICPPASTFunctionDefinition wrapFunDef) {
-      final ICPPASTLinkageSpecification cLinkage = createCLinkageSpec();
-      cLinkage.addDeclaration(realFunDecl);
-      cLinkage.addDeclaration(wrapFunDef);
-      return cLinkage;
-   }
+    private static ICPPASTLinkageSpecification wrapFunctionsInCLinkage(final IASTSimpleDeclaration realFunDecl,
+            final ICPPASTFunctionDefinition wrapFunDef) {
+        final ICPPASTLinkageSpecification cLinkage = createCLinkageSpec();
+        cLinkage.addDeclaration(realFunDecl);
+        cLinkage.addDeclaration(wrapFunDef);
+        return cLinkage;
+    }
 
-   private static IASTNode getInsertionPoint(final IASTName funName) {
-      IASTNode insertionPoint = CPPVisitor.findAncestorWithType(funName, ICPPASTCompositeTypeSpecifier.class).orElse(null);
+    private static IASTNode getInsertionPoint(final IASTName funName) {
+        IASTNode insertionPoint = CPPVisitor.findAncestorWithType(funName, ICPPASTCompositeTypeSpecifier.class).orElse(null);
 
-      if (insertionPoint != null) { return insertionPoint.getParent(); }
+        if (insertionPoint != null) {
+            return insertionPoint.getParent();
+        }
 
-      insertionPoint = CPPVisitor.findAncestorWithType(funName, ICPPASTFunctionDefinition.class).orElse(null);
+        insertionPoint = CPPVisitor.findAncestorWithType(funName, ICPPASTFunctionDefinition.class).orElse(null);
 
-      if (insertionPoint != null) { return insertionPoint; }
+        if (insertionPoint != null) {
+            return insertionPoint;
+        }
 
-      return CPPVisitor.findAncestorWithType(funName, IASTStatement.class).orElse(null);
-   }
+        return CPPVisitor.findAncestorWithType(funName, IASTStatement.class).orElse(null);
+    }
 
-   private static IASTCompoundStatement createWrappedFunReturnStmt(final IASTSimpleDeclaration realFunDecl,
-         final ICPPASTFunctionDeclarator wrapFunDecl) {
-      final FunctionDelegateCallCreator creator = new FunctionDelegateCallCreator(wrapFunDecl);
-      final ICPPASTFunctionDeclarator funDecl = CPPVisitor.findChildWithType(realFunDecl, ICPPASTFunctionDeclarator.class).orElse(null);
-      final IASTStatement delegateToRealFun = creator.createDelegate(funDecl.getName(), realFunDecl.getDeclSpecifier());
-      return ASTUtil.toCompoundStatement(delegateToRealFun);
-   }
+    private static IASTCompoundStatement createWrappedFunReturnStmt(final IASTSimpleDeclaration realFunDecl,
+            final ICPPASTFunctionDeclarator wrapFunDecl) {
+        final FunctionDelegateCallCreator creator = new FunctionDelegateCallCreator(wrapFunDecl);
+        final ICPPASTFunctionDeclarator funDecl = CPPVisitor.findChildWithType(realFunDecl, ICPPASTFunctionDeclarator.class).orElse(null);
+        final IASTStatement delegateToRealFun = creator.createDelegate(funDecl.getName(), realFunDecl.getDeclSpecifier());
+        return ASTUtil.toCompoundStatement(delegateToRealFun);
+    }
 
-   String getNewFunName() {
-      return newFunName;
-   }
+    String getNewFunName() {
+        return newFunName;
+    }
 
-   @Override
-   public String getDescription() {
-      return I18N.GnuOptionRefactoringDesc;
-   }
+    @Override
+    public String getDescription() {
+        return I18N.GnuOptionRefactoringDesc;
+    }
 
-   private static void prepareDeclSpecifier(final IASTDeclSpecifier declSpec) {
-      if (!(declSpec instanceof ICPPASTSimpleDeclSpecifier)) { return; }
+    private static void prepareDeclSpecifier(final IASTDeclSpecifier declSpec) {
+        if (!(declSpec instanceof ICPPASTSimpleDeclSpecifier)) {
+            return;
+        }
 
-      final ICPPASTSimpleDeclSpecifier simpleDeclSpec = (ICPPASTSimpleDeclSpecifier) declSpec;
-      simpleDeclSpec.setExplicit(false);
+        final ICPPASTSimpleDeclSpecifier simpleDeclSpec = (ICPPASTSimpleDeclSpecifier) declSpec;
+        simpleDeclSpec.setExplicit(false);
 
-      if (ASTUtil.isUnspecified(simpleDeclSpec)) {
-         simpleDeclSpec.setType(IASTSimpleDeclSpecifier.t_void);
-      }
-   }
+        if (ASTUtil.isUnspecified(simpleDeclSpec)) {
+            simpleDeclSpec.setType(IASTSimpleDeclSpecifier.t_void);
+        }
+    }
 }

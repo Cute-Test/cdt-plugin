@@ -17,15 +17,15 @@ import ch.hsr.ifs.cute.core.CuteCorePlugin;
 
 public class NewCuteSuiteProjectWizard extends NewCuteProjectCategoryWizard {
 
-   @Override
-   protected EntryDescriptor getEntryDescriptor(CuteWizardHandler handler) {
-      Image proImg = CuteCorePlugin.getImageDescriptor("obj16/cute_app.png").createImage();
-      String name = Messages.getString("NewCuteSuiteWizard.CuteSuiteProject");
-      return new EntryDescriptor("ch.hsr.ifs.cutelauncher.SuiteProjectType", ID, name, false, handler, proImg);
-   }
+    @Override
+    protected EntryDescriptor getEntryDescriptor(CuteWizardHandler handler) {
+        Image proImg = CuteCorePlugin.getImageDescriptor("obj16/cute_app.png").createImage();
+        String name = Messages.getString("NewCuteSuiteWizard.CuteSuiteProject");
+        return new EntryDescriptor("ch.hsr.ifs.cutelauncher.SuiteProjectType", ID, name, false, handler, proImg);
+    }
 
-   @Override
-   protected CuteWizardHandler getHandler(IWizard wizard) {
-      return new CuteSuiteWizardHandler(parent, wizard);
-   }
+    @Override
+    protected CuteWizardHandler getHandler(IWizard wizard) {
+        return new CuteSuiteWizardHandler(parent, wizard);
+    }
 }

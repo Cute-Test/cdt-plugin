@@ -10,9 +10,9 @@ import ch.hsr.ifs.cute.mockator.project.properties.LinkedEditModeStrategy;
 
 public interface TestDoubleMemFun {
 
-   String getFunctionSignature();
+    String getFunctionSignature();
 
-   Collection<IASTInitializerClause> createDefaultArguments(CppStandard cppStd, LinkedEditModeStrategy linkedEdit);
+    Collection<IASTInitializerClause> createDefaultArguments(CppStandard cppStd, LinkedEditModeStrategy linkedEdit);
 
-   boolean isStatic();
+    boolean isStatic();
 }

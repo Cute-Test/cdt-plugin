@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface TestProjectType {
 
-   String value() default "";
+    String value() default "";
 }

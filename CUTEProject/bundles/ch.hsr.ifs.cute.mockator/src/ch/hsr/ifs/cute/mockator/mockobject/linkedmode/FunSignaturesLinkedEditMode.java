@@ -19,55 +19,55 @@ import ch.hsr.ifs.cute.mockator.refsupport.linkededit.ChangeEdit;
 @SuppressWarnings("restriction")
 class FunSignaturesLinkedEditMode extends MockObjectLinkedModeSupport {
 
-   public FunSignaturesLinkedEditMode(final ChangeEdit edit, final Collection<? extends TestDoubleMemFun> memFuns, final CppStandard cppStd,
-                                      final AssertionOrder assertOrder, final Optional<String> expectationsVectorName) {
-      super(edit, memFuns, cppStd, assertOrder, expectationsVectorName);
-   }
+    public FunSignaturesLinkedEditMode(final ChangeEdit edit, final Collection<? extends TestDoubleMemFun> memFuns, final CppStandard cppStd,
+                                       final AssertionOrder assertOrder, final Optional<String> expectationsVectorName) {
+        super(edit, memFuns, cppStd, assertOrder, expectationsVectorName);
+    }
 
-   @Override
-   protected void addFunSignatureProposals(final Collection<OffsetAndLength> initializerPositions) {
-      final Proposal[] proposals = getMemFunSignatureProposals();
+    @Override
+    protected void addFunSignatureProposals(final Collection<OffsetAndLength> initializerPositions) {
+        final Proposal[] proposals = getMemFunSignatureProposals();
 
-      for (final OffsetAndLength pos : initializerPositions) {
-         linkedMode.addProposal(pos.offset(), proposals);
-      }
-   }
+        for (final OffsetAndLength pos : initializerPositions) {
+            linkedMode.addProposal(pos.offset(), proposals);
+        }
+    }
 
-   private Proposal[] getMemFunSignatureProposals() {
-      final List<Proposal> proposals = new ArrayList<>();
+    private Proposal[] getMemFunSignatureProposals() {
+        final List<Proposal> proposals = new ArrayList<>();
 
-      for (final TestDoubleMemFun memFun : memFuns) {
-         proposals.add(createNewProposal(getFunSignature(memFun)));
-      }
+        for (final TestDoubleMemFun memFun : memFuns) {
+            proposals.add(createNewProposal(getFunSignature(memFun)));
+        }
 
-      return proposals.toArray(new Proposal[proposals.size()]);
-   }
+        return proposals.toArray(new Proposal[proposals.size()]);
+    }
 
-   private static String getFunSignature(final TestDoubleMemFun memFun) {
-      return StringUtil.quote(memFun.getFunctionSignature());
-   }
+    private static String getFunSignature(final TestDoubleMemFun memFun) {
+        return StringUtil.quote(memFun.getFunctionSignature());
+    }
 
-   @Override
-   protected void collectPositionsWithNewVector(final List<OffsetAndLength> offsetsAndLengths, final ExpectationVectorInfo expectationInfo) {
-      collectVectorInsidePositions(offsetsAndLengths, expectationInfo.getEditText(), expectationInfo.getStartPosition());
-   }
+    @Override
+    protected void collectPositionsWithNewVector(final List<OffsetAndLength> offsetsAndLengths, final ExpectationVectorInfo expectationInfo) {
+        collectVectorInsidePositions(offsetsAndLengths, expectationInfo.getEditText(), expectationInfo.getStartPosition());
+    }
 
-   @Override
-   protected void collectVectorInsidePositions(final List<OffsetAndLength> offsetsAndLengths, final String callSpecText, final int posOfCallSpecs) {
-      getChangeEditOffset().ifPresent((editOffset) -> {
-         final Matcher m = getMatcher(callSpecText);
+    @Override
+    protected void collectVectorInsidePositions(final List<OffsetAndLength> offsetsAndLengths, final String callSpecText, final int posOfCallSpecs) {
+        getChangeEditOffset().ifPresent((editOffset) -> {
+            final Matcher m = getMatcher(callSpecText);
 
-         while (m.find()) {
-            final int beginOfCallSpec = m.start(1);
-            final int endOfCallSpec = m.end(1);
-            final int expectationOffset = editOffset + posOfCallSpecs + beginOfCallSpec;
-            final int expectationLength = endOfCallSpec - beginOfCallSpec;
-            offsetsAndLengths.add(new OffsetAndLength(expectationOffset, expectationLength));
-         }
-      });
-   }
+            while (m.find()) {
+                final int beginOfCallSpec = m.start(1);
+                final int endOfCallSpec = m.end(1);
+                final int expectationOffset = editOffset + posOfCallSpecs + beginOfCallSpec;
+                final int expectationLength = endOfCallSpec - beginOfCallSpec;
+                offsetsAndLengths.add(new OffsetAndLength(expectationOffset, expectationLength));
+            }
+        });
+    }
 
-   private Matcher getMatcher(final String callSequenceVectorLine) {
-      return cppStd.getInitializerPattern().matcher(callSequenceVectorLine);
-   }
+    private Matcher getMatcher(final String callSequenceVectorLine) {
+        return cppStd.getInitializerPattern().matcher(callSequenceVectorLine);
+    }
 }

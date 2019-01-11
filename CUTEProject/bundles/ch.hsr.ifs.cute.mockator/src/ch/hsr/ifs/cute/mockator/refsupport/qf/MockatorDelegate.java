@@ -30,84 +30,92 @@ import ch.hsr.ifs.cute.mockator.refsupport.utils.FileEditorOpener;
 @SuppressWarnings("restriction")
 public abstract class MockatorDelegate implements IWorkbenchWindowActionDelegate, IEditorActionDelegate {
 
-   protected IWorkbenchWindow         window;
-   protected ICProject                cProject;
-   protected Optional<ITextSelection> selection;
-   protected ICElement                cElement;
+    protected IWorkbenchWindow         window;
+    protected ICProject                cProject;
+    protected Optional<ITextSelection> selection;
+    protected ICElement                cElement;
 
-   @Override
-   public void init(final IWorkbenchWindow window) {
-      this.window = window;
-   }
+    @Override
+    public void init(final IWorkbenchWindow window) {
+        this.window = window;
+    }
 
-   @Override
-   public void run(final IAction action) {
-      if (!(isCEditorActive() && arePreconditionsSatisfied())) { return; }
+    @Override
+    public void run(final IAction action) {
+        if (!(isCEditorActive() && arePreconditionsSatisfied())) {
+            return;
+        }
 
-      try {
-         execute();
-      } catch (final RuntimeException e) {
-         // pass null as message; e.getMessage() would lead to a message
-         // containing twice the same text for msg and reason
-         ExceptionUtil.showException(I18N.ExceptionErrorTitle, null, e);
-      }
-   }
+        try {
+            execute();
+        } catch (final RuntimeException e) {
+            // pass null as message; e.getMessage() would lead to a message
+            // containing twice the same text for msg and reason
+            ExceptionUtil.showException(I18N.ExceptionErrorTitle, null, e);
+        }
+    }
 
-   protected boolean arePreconditionsSatisfied() {
-      return true;
-   }
+    protected boolean arePreconditionsSatisfied() {
+        return true;
+    }
 
-   @Override
-   public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
-      if (targetEditor != null) {
-         window = targetEditor.getSite().getWorkbenchWindow();
-      }
-   }
+    @Override
+    public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
+        if (targetEditor != null) {
+            window = targetEditor.getSite().getWorkbenchWindow();
+        }
+    }
 
-   private boolean isCEditorActive() {
-      final IWorkbenchPart activePart = window.getActivePage().getActivePart();
+    private boolean isCEditorActive() {
+        final IWorkbenchPart activePart = window.getActivePage().getActivePart();
 
-      if (!(activePart instanceof CEditor)) { return false; }
+        if (!(activePart instanceof CEditor)) {
+            return false;
+        }
 
-      final CEditor activeEditor = (CEditor) activePart;
-      final IWorkingCopy wc = getWorkingCopy(activeEditor.getEditorInput());
+        final CEditor activeEditor = (CEditor) activePart;
+        final IWorkingCopy wc = getWorkingCopy(activeEditor.getEditorInput());
 
-      if (wc == null || !(wc.getResource() instanceof IFile)) { return false; }
+        if (wc == null || !(wc.getResource() instanceof IFile)) {
+            return false;
+        }
 
-      cProject = wc.getCProject();
-      cElement = activeEditor.getInputCElement();
+        cProject = wc.getCProject();
+        cElement = activeEditor.getInputCElement();
 
-      if (cProject == null || cElement == null) { return false; }
+        if (cProject == null || cElement == null) {
+            return false;
+        }
 
-      return true;
-   }
+        return true;
+    }
 
-   protected abstract void execute();
+    protected abstract void execute();
 
-   private static IWorkingCopy getWorkingCopy(final IEditorInput editor) {
-      final IWorkingCopyManager wcManager = CUIPlugin.getDefault().getWorkingCopyManager();
-      return wcManager.getWorkingCopy(editor);
-   }
+    private static IWorkingCopy getWorkingCopy(final IEditorInput editor) {
+        final IWorkingCopyManager wcManager = CUIPlugin.getDefault().getWorkingCopyManager();
+        return wcManager.getWorkingCopy(editor);
+    }
 
-   protected void openInEditor(final IFile file) {
-      final FileEditorOpener opener = new FileEditorOpener(file);
-      opener.openInEditor();
-   }
+    protected void openInEditor(final IFile file) {
+        final FileEditorOpener opener = new FileEditorOpener(file);
+        opener.openInEditor();
+    }
 
-   @Override
-   public void selectionChanged(final IAction action, final ISelection newSelection) {
-      if (newSelection instanceof ITextSelection) {
-         selection = OptionalUtil.of(newSelection).mapAs(ITextSelection.class).get();
-         action.setEnabled(true);
-      } else {
-         action.setEnabled(false);
-      }
-   }
+    @Override
+    public void selectionChanged(final IAction action, final ISelection newSelection) {
+        if (newSelection instanceof ITextSelection) {
+            selection = OptionalUtil.of(newSelection).mapAs(ITextSelection.class).get();
+            action.setEnabled(true);
+        } else {
+            action.setEnabled(false);
+        }
+    }
 
-   protected CppStandard getCppStd() {
-      return CppStandard.fromCompilerFlags(cProject.getProject());
-   }
+    protected CppStandard getCppStd() {
+        return CppStandard.fromCompilerFlags(cProject.getProject());
+    }
 
-   @Override
-   public void dispose() {}
+    @Override
+    public void dispose() {}
 }

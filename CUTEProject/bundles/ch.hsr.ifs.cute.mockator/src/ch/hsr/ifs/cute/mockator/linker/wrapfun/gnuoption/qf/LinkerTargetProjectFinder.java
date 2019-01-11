@@ -11,18 +11,18 @@ import ch.hsr.ifs.cute.mockator.linker.ReferencingExecutableFinder;
 
 public class LinkerTargetProjectFinder {
 
-   private final IProject project;
+    private final IProject project;
 
-   public LinkerTargetProjectFinder(final IProject project) {
-      this.project = project;
-   }
+    public LinkerTargetProjectFinder(final IProject project) {
+        this.project = project;
+    }
 
-   public Collection<IProject> findLinkerTargetProjects() {
-      final ReferencingExecutableFinder finder = new ReferencingExecutableFinder(project);
-      final Collection<IProject> executables = finder.findReferencingExecutables();
+    public Collection<IProject> findLinkerTargetProjects() {
+        final ReferencingExecutableFinder finder = new ReferencingExecutableFinder(project);
+        final Collection<IProject> executables = finder.findReferencingExecutables();
 
-      if (executables.isEmpty()) return list(project);
+        if (executables.isEmpty()) return list(project);
 
-      return executables;
-   }
+        return executables;
+    }
 }

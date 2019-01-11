@@ -5,19 +5,19 @@ package ch.hsr.ifs.cute.it.tests.util;
 @FunctionalInterface
 public interface Action {
 
-   void run();
+    void run();
 
-   default Action andThen(Action after) {
-      return () -> {
-         this.run();
-         after.run();
-      };
-   }
+    default Action andThen(Action after) {
+        return () -> {
+            this.run();
+            after.run();
+        };
+    }
 
-   default Action compose(Action before) {
-      return () -> {
-         before.run();
-         this.run();
-      };
-   }
+    default Action compose(Action before) {
+        return () -> {
+            before.run();
+            this.run();
+        };
+    }
 }

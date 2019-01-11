@@ -24,18 +24,18 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin;
  */
 public class CuteImageProvider extends ImageProvider {
 
-   protected Map<Integer, String> pathMap = new TreeMap<>();
+    protected Map<Integer, String> pathMap = new TreeMap<>();
 
-   public CuteImageProvider() {
-      pathMap.put(ImageProvider.Companion.getAPP_LOGO(), "obj16/cute_app.png");
-   }
+    public CuteImageProvider() {
+        pathMap.put(ImageProvider.Companion.getAPP_LOGO(), "obj16/cute_app.png");
+    }
 
-   @Override
-   public ImageDescriptor getImage(int key) {
-      return TestFrameworkPlugin.Companion.getImageDescriptor(getPath(key));
-   }
+    @Override
+    public ImageDescriptor getImage(int key) {
+        return TestFrameworkPlugin.Companion.getImageDescriptor(getPath(key));
+    }
 
-   protected String getPath(int key) {
-      return pathMap.get(key);
-   }
+    protected String getPath(int key) {
+        return pathMap.get(key);
+    }
 }

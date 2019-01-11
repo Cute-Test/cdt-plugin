@@ -18,10 +18,10 @@ import junit.framework.TestSuite;
  */
 public class HyperlinkSuite {
 
-   public static Test suite() {
-      TestSuite suite = new TestSuite("Hyperlink Suite");
-      suite.addTestSuite(HyperlinkTest.class);
-      return suite;
-   }
+    public static Test suite() {
+        TestSuite suite = new TestSuite("Hyperlink Suite");
+        suite.addTestSuite(HyperlinkTest.class);
+        return suite;
+    }
 
 }

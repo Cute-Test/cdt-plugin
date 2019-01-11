@@ -23,52 +23,52 @@ import org.osgi.framework.BundleContext;
 
 public class CuteUIPlugin extends AbstractUIPlugin {
 
-   public static final String  PLUGIN_ID  = "ch.hsr.ifs.cute.ui";
-   private static CuteUIPlugin plugin;
-   private static final IPath  ICONS_PATH = new Path("$nl$/icons");
+    public static final String  PLUGIN_ID  = "ch.hsr.ifs.cute.ui";
+    private static CuteUIPlugin plugin;
+    private static final IPath  ICONS_PATH = new Path("$nl$/icons");
 
-   public CuteUIPlugin() {}
+    public CuteUIPlugin() {}
 
-   @Override
-   public void start(BundleContext context) throws Exception {
-      super.start(context);
-      plugin = this;
-   }
+    @Override
+    public void start(BundleContext context) throws Exception {
+        super.start(context);
+        plugin = this;
+    }
 
-   @Override
-   public void stop(BundleContext context) throws Exception {
-      plugin = null;
-      super.stop(context);
-   }
+    @Override
+    public void stop(BundleContext context) throws Exception {
+        plugin = null;
+        super.stop(context);
+    }
 
-   public static CuteUIPlugin getDefault() {
-      return plugin;
-   }
+    public static CuteUIPlugin getDefault() {
+        return plugin;
+    }
 
-   public static ImageDescriptor getImageDescriptor(String relativePath) {
-      IPath path = ICONS_PATH.append(relativePath);
-      return createImageDescriptor(getDefault().getBundle(), path);
-   }
+    public static ImageDescriptor getImageDescriptor(String relativePath) {
+        IPath path = ICONS_PATH.append(relativePath);
+        return createImageDescriptor(getDefault().getBundle(), path);
+    }
 
-   public static void log(IStatus status) {
-      getDefault().getLog().log(status);
-   }
+    public static void log(IStatus status) {
+        getDefault().getLog().log(status);
+    }
 
-   public static void log(String msg) {
-      log(new Status(IStatus.ERROR, PLUGIN_ID, msg));
-   }
+    public static void log(String msg) {
+        log(new Status(IStatus.ERROR, PLUGIN_ID, msg));
+    }
 
-   public static void log(String msg, Throwable e) {
-      log(new Status(IStatus.ERROR, PLUGIN_ID, 1, msg, e));
-   }
+    public static void log(String msg, Throwable e) {
+        log(new Status(IStatus.ERROR, PLUGIN_ID, 1, msg, e));
+    }
 
-   public static void log(Throwable e) {
-      log("Internal Error", e);
-   }
+    public static void log(Throwable e) {
+        log("Internal Error", e);
+    }
 
-   private static ImageDescriptor createImageDescriptor(Bundle bundle, IPath path) {
-      URL url = FileLocator.find(bundle, path, null);
-      return ImageDescriptor.createFromURL(url);
-   }
+    private static ImageDescriptor createImageDescriptor(Bundle bundle, IPath path) {
+        URL url = FileLocator.find(bundle, path, null);
+        return ImageDescriptor.createFromURL(url);
+    }
 
 }

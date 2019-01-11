@@ -40,127 +40,129 @@ import ch.hsr.ifs.cute.gcov.model.Line;
  */
 public class GcovFileParser {
 
-   private static final Pattern LINE_PATTERN     = Pattern.compile("(.*)(\\d+|-|#####):(\\s*)(\\d+):(.*)$");
-   private static final Pattern FUNCTION_PATTERN = Pattern.compile(
-         "(function )(\\w*)( called )(\\d+)( returned \\d+\\% blocks executed )(\\d+)(\\%)(.*)$");
-   private static final Pattern BRANCH_PATTERN   = Pattern.compile("(branch\\s+)(\\d+)(\\s+taken\\s+)(\\d+)(\\%)(.*)$");
-   private static final Pattern SOURCE_PATTERN   = Pattern.compile("(.*)(\\d+|-):Source:(.*)$");
+    private static final Pattern LINE_PATTERN     = Pattern.compile("(.*)(\\d+|-|#####):(\\s*)(\\d+):(.*)$");
+    private static final Pattern FUNCTION_PATTERN = Pattern.compile(
+            "(function )(\\w*)( called )(\\d+)( returned \\d+\\% blocks executed )(\\d+)(\\%)(.*)$");
+    private static final Pattern BRANCH_PATTERN   = Pattern.compile("(branch\\s+)(\\d+)(\\s+taken\\s+)(\\d+)(\\%)(.*)$");
+    private static final Pattern SOURCE_PATTERN   = Pattern.compile("(.*)(\\d+|-):Source:(.*)$");
 
-   private File     file;
-   private IFile    gcovFile;
-   private Function currentFunction;
-   private Line     currentLine;
-   private IPath    executableLocation;
+    private File     file;
+    private IFile    gcovFile;
+    private Function currentFunction;
+    private Line     currentLine;
+    private IPath    executableLocation;
 
-   public GcovFileParser(IFile gcovFile, IPath executableLocation) {
-      this.gcovFile = gcovFile;
-      this.executableLocation = executableLocation;
-   }
+    public GcovFileParser(IFile gcovFile, IPath executableLocation) {
+        this.gcovFile = gcovFile;
+        this.executableLocation = executableLocation;
+    }
 
-   public void parse() throws CoreException {
-      InputStream gcovFileContents = gcovFile.getContents();
-      BufferedReader in = new BufferedReader(new InputStreamReader(gcovFileContents));
-      parse(in);
-   }
+    public void parse() throws CoreException {
+        InputStream gcovFileContents = gcovFile.getContents();
+        BufferedReader in = new BufferedReader(new InputStreamReader(gcovFileContents));
+        parse(in);
+    }
 
-   private void parse(BufferedReader in) {
-      String line;
-      try {
-         try {
-            line = in.readLine();
-            if (line != null) {
-               Matcher sourceMatcher = SOURCE_PATTERN.matcher(line);
-               if (sourceMatcher.matches()) {
-                  handleSource(sourceMatcher);
-               }
-               if (file == null) { return; }
-               parseContent(in);
+    private void parse(BufferedReader in) {
+        String line;
+        try {
+            try {
+                line = in.readLine();
+                if (line != null) {
+                    Matcher sourceMatcher = SOURCE_PATTERN.matcher(line);
+                    if (sourceMatcher.matches()) {
+                        handleSource(sourceMatcher);
+                    }
+                    if (file == null) {
+                        return;
+                    }
+                    parseContent(in);
+                }
+            } catch (NumberFormatException e) {
+                GcovPlugin.log(e);
+            } catch (IOException e) {
+                GcovPlugin.log(e);
             }
-         } catch (NumberFormatException e) {
-            GcovPlugin.log(e);
-         } catch (IOException e) {
-            GcovPlugin.log(e);
-         }
-      } finally {
-         tryClose(in);
-      }
-   }
+        } finally {
+            tryClose(in);
+        }
+    }
 
-   private void parseContent(BufferedReader in) throws IOException {
-      String line;
-      while ((line = in.readLine()) != null) {
-         Matcher functionMatcher = FUNCTION_PATTERN.matcher(line);
-         if (functionMatcher.matches()) {
-            handleFunction(functionMatcher);
-            continue;
-         }
-         Matcher lineMatcher = LINE_PATTERN.matcher(line);
-         if (lineMatcher.matches()) {
-            handleLine(lineMatcher);
-            continue;
-         }
-         Matcher branchMatcher = BRANCH_PATTERN.matcher(line);
-         if (branchMatcher.matches() && !line.endsWith("taken 0% (throw)")) {
-            int taken = Integer.parseInt(branchMatcher.group(4));
-            currentLine.addBranch(new Branch(taken));
-            continue;
-         }
-      }
-   }
-
-   private void handleSource(Matcher sourceMatcher) {
-      String fileName = sourceMatcher.group(3);
-      IWorkspace workspace = CCorePlugin.getWorkspace();
-      IPath path = new Path(fileName);
-      if (!path.isAbsolute()) {
-         path = executableLocation.append(path);
-      }
-      IResource gcovTarget = workspace.getRoot().getFileForLocation(path);
-      if (gcovTarget instanceof IFile) {
-         IFile gcovTargetFile = (IFile) gcovTarget;
-         if (gcovTargetFile.exists()) {
-            CoverageModel coverageModel = GcovPlugin.getDefault().getcModel();
-            File modelFile = coverageModel.getModelForFile(gcovTargetFile);
-            if (modelFile == null) {
-               file = coverageModel.addFileToModel(gcovTargetFile);
+    private void parseContent(BufferedReader in) throws IOException {
+        String line;
+        while ((line = in.readLine()) != null) {
+            Matcher functionMatcher = FUNCTION_PATTERN.matcher(line);
+            if (functionMatcher.matches()) {
+                handleFunction(functionMatcher);
+                continue;
             }
-         }
-      }
-   }
-
-   protected void handleFunction(Matcher functionMatcher) {
-      try {
-         String name = functionMatcher.group(2);
-         int called = Integer.parseInt(functionMatcher.group(4));
-         int execBlocks = Integer.parseInt(functionMatcher.group(6));
-         currentFunction = new Function(name, called, execBlocks);
-         file.addFunction(currentFunction);
-      } catch (NumberFormatException e) {}
-   }
-
-   protected void handleLine(Matcher lineMatcher) {
-      try {
-         String count = lineMatcher.group(2);
-         int lineNumber = Integer.parseInt(lineMatcher.group(4));
-         if (count.equalsIgnoreCase("#####")) {
-            currentLine = new Line(lineNumber, CoverageStatus.Uncovered);
-            currentFunction.addLine(currentLine);
-         } else if (count.equalsIgnoreCase("-")) {
-
-         } else {
-            int i = Integer.parseInt(count);
-            if (currentFunction == null) {
-               currentFunction = new Function("unknown function", 0, 0);
-               file.addFunction(currentFunction);
+            Matcher lineMatcher = LINE_PATTERN.matcher(line);
+            if (lineMatcher.matches()) {
+                handleLine(lineMatcher);
+                continue;
             }
-            if (i > 0) {
-               currentLine = new Line(lineNumber, CoverageStatus.Covered);
-               currentFunction.addLine(currentLine);
+            Matcher branchMatcher = BRANCH_PATTERN.matcher(line);
+            if (branchMatcher.matches() && !line.endsWith("taken 0% (throw)")) {
+                int taken = Integer.parseInt(branchMatcher.group(4));
+                currentLine.addBranch(new Branch(taken));
+                continue;
+            }
+        }
+    }
+
+    private void handleSource(Matcher sourceMatcher) {
+        String fileName = sourceMatcher.group(3);
+        IWorkspace workspace = CCorePlugin.getWorkspace();
+        IPath path = new Path(fileName);
+        if (!path.isAbsolute()) {
+            path = executableLocation.append(path);
+        }
+        IResource gcovTarget = workspace.getRoot().getFileForLocation(path);
+        if (gcovTarget instanceof IFile) {
+            IFile gcovTargetFile = (IFile) gcovTarget;
+            if (gcovTargetFile.exists()) {
+                CoverageModel coverageModel = GcovPlugin.getDefault().getcModel();
+                File modelFile = coverageModel.getModelForFile(gcovTargetFile);
+                if (modelFile == null) {
+                    file = coverageModel.addFileToModel(gcovTargetFile);
+                }
+            }
+        }
+    }
+
+    protected void handleFunction(Matcher functionMatcher) {
+        try {
+            String name = functionMatcher.group(2);
+            int called = Integer.parseInt(functionMatcher.group(4));
+            int execBlocks = Integer.parseInt(functionMatcher.group(6));
+            currentFunction = new Function(name, called, execBlocks);
+            file.addFunction(currentFunction);
+        } catch (NumberFormatException e) {}
+    }
+
+    protected void handleLine(Matcher lineMatcher) {
+        try {
+            String count = lineMatcher.group(2);
+            int lineNumber = Integer.parseInt(lineMatcher.group(4));
+            if (count.equalsIgnoreCase("#####")) {
+                currentLine = new Line(lineNumber, CoverageStatus.Uncovered);
+                currentFunction.addLine(currentLine);
+            } else if (count.equalsIgnoreCase("-")) {
+
             } else {
-               currentLine = new Line(lineNumber, CoverageStatus.Uncovered);
-               currentFunction.addLine(currentLine);
+                int i = Integer.parseInt(count);
+                if (currentFunction == null) {
+                    currentFunction = new Function("unknown function", 0, 0);
+                    file.addFunction(currentFunction);
+                }
+                if (i > 0) {
+                    currentLine = new Line(lineNumber, CoverageStatus.Covered);
+                    currentFunction.addLine(currentLine);
+                } else {
+                    currentLine = new Line(lineNumber, CoverageStatus.Uncovered);
+                    currentFunction.addLine(currentLine);
+                }
             }
-         }
-      } catch (NumberFormatException e) {}
-   }
+        } catch (NumberFormatException e) {}
+    }
 }

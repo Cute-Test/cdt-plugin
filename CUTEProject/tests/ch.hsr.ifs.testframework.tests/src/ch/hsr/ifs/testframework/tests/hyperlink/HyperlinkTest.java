@@ -28,44 +28,44 @@ import ch.hsr.ifs.testframework.ui.ConsoleLinkHandler;
  */
 public class HyperlinkTest extends ConsoleTest {
 
-   private TestEventHandler consoleLinkHandler;
-   private int              expectedLinkOffset;
-   private int              expectedLinkLength;
+    private TestEventHandler consoleLinkHandler;
+    private int              expectedLinkOffset;
+    private int              expectedLinkLength;
 
-   @Override
-   protected void addTestEventHandler(ConsolePatternListener lis) {
-      consoleLinkHandler = new ConsoleLinkHandler(new Path(""), tc, new MockLinkFactory());
-      lis.addHandler(consoleLinkHandler);
-   }
+    @Override
+    protected void addTestEventHandler(ConsolePatternListener lis) {
+        consoleLinkHandler = new ConsoleLinkHandler(new Path(""), tc, new MockLinkFactory());
+        lis.addHandler(consoleLinkHandler);
+    }
 
-   @Override
-   protected FileInputTextConsole getConsole() {
-      return new HyperlinkMockConsole(filePathRoot + getInputFilePath());
-   }
+    @Override
+    protected FileInputTextConsole getConsole() {
+        return new HyperlinkMockConsole(filePathRoot + getInputFilePath());
+    }
 
-   public void testLinks() throws Exception {
-      emulateTestRun();
-      if (tc instanceof HyperlinkMockConsole) {
-         HyperlinkMockConsole linkConsole = (HyperlinkMockConsole) tc;
-         List<HyperlinkLocation> links = linkConsole.getLinks();
-         assertEquals(1, links.size());
+    public void testLinks() throws Exception {
+        emulateTestRun();
+        if (tc instanceof HyperlinkMockConsole) {
+            HyperlinkMockConsole linkConsole = (HyperlinkMockConsole) tc;
+            List<HyperlinkLocation> links = linkConsole.getLinks();
+            assertEquals(1, links.size());
 
-         grabExpectedLinkDimensions();
-         HyperlinkLocation link = links.get(0);
-         assertEquals(expectedLinkOffset, link.getOffset());
-         assertEquals(expectedLinkLength, link.getLength());
-      }
-   }
+            grabExpectedLinkDimensions();
+            HyperlinkLocation link = links.get(0);
+            assertEquals(expectedLinkOffset, link.getOffset());
+            assertEquals(expectedLinkLength, link.getLength());
+        }
+    }
 
-   private void grabExpectedLinkDimensions() throws Exception {
-      String[] linkDimensions = firstConsoleLine().split(",");
-      expectedLinkOffset = Integer.parseInt(linkDimensions[0]);
-      expectedLinkLength = Integer.parseInt(linkDimensions[1]);
-   }
+    private void grabExpectedLinkDimensions() throws Exception {
+        String[] linkDimensions = firstConsoleLine().split(",");
+        expectedLinkOffset = Integer.parseInt(linkDimensions[0]);
+        expectedLinkLength = Integer.parseInt(linkDimensions[1]);
+    }
 
-   @Override
-   protected String getInputFilePath() {
-      return "hyperlinkTests/linkTest.txt";
-   }
+    @Override
+    protected String getInputFilePath() {
+        return "hyperlinkTests/linkTest.txt";
+    }
 
 }

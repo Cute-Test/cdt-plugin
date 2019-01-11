@@ -5,5 +5,5 @@ import org.eclipse.text.edits.MultiTextEdit;
 
 public interface IAddStrategy {
 
-   MultiTextEdit getEdit();
+    MultiTextEdit getEdit();
 }

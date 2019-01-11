@@ -14,25 +14,25 @@ import ch.hsr.ifs.cute.mockator.base.util.PathProposalUtil;
 
 class TraceFileNameCreator {
 
-   private final String   funName;
-   private final IProject project;
+    private final String   funName;
+    private final IProject project;
 
-   public TraceFileNameCreator(final String funName, final IProject project) {
-      this.funName = funName;
-      this.project = project;
-   }
+    public TraceFileNameCreator(final String funName, final IProject project) {
+        this.funName = funName;
+        this.project = project;
+    }
 
-   public IPath getSourceFilePath() {
-      return getPathForNewFile(SOURCE_SUFFIX);
-   }
+    public IPath getSourceFilePath() {
+        return getPathForNewFile(SOURCE_SUFFIX);
+    }
 
-   public IPath getHeaderFilePath() {
-      return getPathForNewFile(HEADER_SUFFIX);
-   }
+    public IPath getHeaderFilePath() {
+        return getPathForNewFile(HEADER_SUFFIX);
+    }
 
-   private IPath getPathForNewFile(final String suffix) {
-      final IFolder traceFolder = project.getFolder(TRACE_FOLDER);
-      final PathProposalUtil proposal = new PathProposalUtil(traceFolder.getFullPath());
-      return proposal.getUniquePathForNewFile(MOCKED_TRACE_PREFIX + funName, suffix);
-   }
+    private IPath getPathForNewFile(final String suffix) {
+        final IFolder traceFolder = project.getFolder(TRACE_FOLDER);
+        final PathProposalUtil proposal = new PathProposalUtil(traceFolder.getFullPath());
+        return proposal.getUniquePathForNewFile(MOCKED_TRACE_PREFIX + funName, suffix);
+    }
 }
