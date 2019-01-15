@@ -42,21 +42,28 @@ abstract class TestLauncherDelegate : LaunchConfigurationDelegate() {
 	protected abstract fun getConsoleEventParser(): ConsoleEventParser
 
 	override fun launch(config: ILaunchConfiguration, mode: String, launch: ILaunch, monitor: IProgressMonitor?) {
-		if (mode == ILaunchManager.RUN_MODE || mode == ILaunchManager.DEBUG_MODE) {
-			getPreferredDelegate(config, mode)?.launch(config, mode, launch, monitor)
-			ShowResultView().run {
-				schedule()
-				join()
-			}
+		try {
+			if (mode == ILaunchManager.RUN_MODE || mode == ILaunchManager.DEBUG_MODE) {
+				val project = CDebugUtils.verifyCProject(config)
 
-			launch.processes.firstOrNull { it !is GDBProcess }?.let { process ->
-				val console = DebugUITools.getConsole(process)
-				if (console is TextConsole) {
-					val programPath = CDebugUtils.verifyProgramPath(config)
-					val sourcePath = sourcelookupPath(config, programPath)
-					registerPatternMatchListener(launch, sourcePath, console)
+				getPreferredDelegate(config, mode)?.launch(config, mode, launch, monitor) ?: return
+
+				ShowResultView().run {
+					schedule()
+					join()
+				}
+
+				launch.processes.firstOrNull { it !is GDBProcess }?.let { process ->
+					val console = DebugUITools.getConsole(process)
+					if (console is TextConsole) {
+						val programPath = CDebugUtils.verifyProgramPath(config)
+						val sourcePath = sourcelookupPath(config, programPath)
+						registerPatternMatchListener(launch, sourcePath, console)
+					}
 				}
 			}
+		} catch (e: CoreException) {
+			TestFrameworkPlugin.log(e)
 		}
 	}
 

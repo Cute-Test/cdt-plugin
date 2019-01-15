@@ -145,8 +145,4 @@
             <placement after="org.eclipse.debug.ui.CommonTab"/>
         </tab>
     </extension>
-    <extension point="org.eclipse.debug.core.processFactories">
-        <processFactory id="ch.hsr.ifs.cute.core.DebugProcessFactory"
-            class="ch.hsr.ifs.cute.core.launch.TestingProcessFactory"/>
-    </extension>
 </plugin>
