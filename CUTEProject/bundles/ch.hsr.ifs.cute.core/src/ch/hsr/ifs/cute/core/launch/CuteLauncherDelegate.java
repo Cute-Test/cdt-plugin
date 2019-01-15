@@ -8,7 +8,6 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.core.launch;
 
-import ch.hsr.ifs.cute.core.CuteCorePlugin;
 import ch.hsr.ifs.cute.core.event.CuteConsoleEventParser;
 import ch.hsr.ifs.testframework.event.ConsoleEventParser;
 import ch.hsr.ifs.testframework.launch.TestLauncherDelegate;
@@ -21,8 +20,8 @@ import ch.hsr.ifs.testframework.launch.TestLauncherDelegate;
 public class CuteLauncherDelegate extends TestLauncherDelegate {
 
     @Override
-    protected String getPluginID() {
-        return CuteCorePlugin.getUniqueIdentifier();
+    protected String getPreferredDelegateId() {
+        return "org.eclipse.cdt.cdi.launch.localCLaunch";
     }
 
     @Override
