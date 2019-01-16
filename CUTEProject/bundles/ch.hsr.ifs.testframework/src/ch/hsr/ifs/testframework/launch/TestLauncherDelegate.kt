@@ -31,11 +31,29 @@ import org.eclipse.debug.ui.DebugUITools
 import org.eclipse.ui.console.TextConsole
 import java.util.concurrent.Executors
 import org.eclipse.cdt.dsf.gdb.launching.GDBProcess
+import org.eclipse.core.runtime.InvalidRegistryObjectException
+import org.eclipse.debug.core.DebugEvent
 
 /**
  * @since 3.0
  */
 abstract class TestLauncherDelegate : LaunchConfigurationDelegate() {
+
+	private val fLaunchObservers: List<ILaunchObserver> by lazy {
+		val registry = Platform.getExtensionRegistry()
+		registry.getExtensionPoint(TestFrameworkPlugin.PLUGIN_ID, "launchObserver")?.run {
+			try {
+				extensions.map {
+					it.configurationElements[0].createExecutableExtension("class") as? ILaunchObserver
+				}.filterNotNull().toList()
+			} catch (e: Throwable) {
+				TestFrameworkPlugin.log(e)
+				emptyList<ILaunchObserver>()
+			}
+		} ?: emptyList<ILaunchObserver>()
+	}
+
+	private val fTerminationRunner = Executors.newSingleThreadExecutor()
 
 	protected abstract fun getPreferredDelegateId(): String
 
@@ -46,9 +64,11 @@ abstract class TestLauncherDelegate : LaunchConfigurationDelegate() {
 			if (mode == ILaunchManager.RUN_MODE || mode == ILaunchManager.DEBUG_MODE) {
 				val project = CDebugUtils.verifyCProject(config)
 
+				fLaunchObservers.forEach { it.notifyBeforeLaunch(project.project) }
 				getPreferredDelegate(config, mode)?.launch(config, mode, launch, monitor) ?: return
+				fLaunchObservers.forEach { it.notifyAfterLaunch(project.project) }
 
-				ShowResultView().run {
+				ShowResultView().apply {
 					schedule()
 					join()
 				}
@@ -59,6 +79,13 @@ abstract class TestLauncherDelegate : LaunchConfigurationDelegate() {
 						val programPath = CDebugUtils.verifyProgramPath(config)
 						val sourcePath = sourcelookupPath(config, programPath)
 						registerPatternMatchListener(launch, sourcePath, console)
+					}
+					DebugPlugin.getDefault().addDebugEventListener { events ->
+						events.filter {
+							it.kind == DebugEvent.TERMINATE && it.source == process
+						}.forEach {
+							fLaunchObservers.forEach { it.notifyTermination(project.project) }
+						}
 					}
 				}
 			}
