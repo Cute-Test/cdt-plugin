@@ -167,8 +167,10 @@
              name="%category.name"/>
     </extension>
     <extension point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
-        <resolution class="ch.hsr.ifs.cute.ui.checkers.UnregisteredTestResolution"
-             problemId="ch.hsr.ifs.cute.problems.unregisteredTestMarker"/>
+        <resolution
+              class="ch.hsr.ifs.cute.ui.checkers.UnregisteredTestResolution"
+              messagePattern="%problem.messagePattern"
+              problemId="ch.hsr.ifs.cute.ui.problems.unregisteredTestMarker"/>
     </extension>
     <extension
           point="org.eclipse.ui.editors.markerAnnotationSpecification">
