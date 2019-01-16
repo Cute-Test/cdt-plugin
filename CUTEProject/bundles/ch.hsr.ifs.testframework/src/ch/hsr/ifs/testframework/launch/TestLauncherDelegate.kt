@@ -15,29 +15,51 @@ import ch.hsr.ifs.testframework.ui.ConsoleLinkHandler
 import ch.hsr.ifs.testframework.ui.ShowResultView
 import org.eclipse.cdt.debug.core.CDebugUtils
 import org.eclipse.cdt.debug.core.ICDTLaunchConfigurationConstants
-import org.eclipse.cdt.launch.LaunchUtils
+import org.eclipse.cdt.dsf.gdb.launching.GDBProcess
 import org.eclipse.core.runtime.CoreException
 import org.eclipse.core.runtime.IPath
 import org.eclipse.core.runtime.IProgressMonitor
 import org.eclipse.core.runtime.Path
 import org.eclipse.core.runtime.Platform
+import org.eclipse.debug.core.DebugEvent
 import org.eclipse.debug.core.DebugPlugin
 import org.eclipse.debug.core.ILaunch
 import org.eclipse.debug.core.ILaunchConfiguration
 import org.eclipse.debug.core.ILaunchManager
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate2
+import org.eclipse.debug.core.model.IProcess
 import org.eclipse.debug.core.model.LaunchConfigurationDelegate
-import org.eclipse.debug.ui.DebugUITools
+import org.eclipse.debug.internal.ui.views.console.ProcessConsole
+import org.eclipse.ui.console.ConsolePlugin
+import org.eclipse.ui.console.IConsole
+import org.eclipse.ui.console.IConsoleListener
 import org.eclipse.ui.console.TextConsole
-import java.util.concurrent.Executors
-import org.eclipse.cdt.dsf.gdb.launching.GDBProcess
-import org.eclipse.core.runtime.InvalidRegistryObjectException
-import org.eclipse.debug.core.DebugEvent
 
 /**
  * @since 3.0
  */
 abstract class TestLauncherDelegate : LaunchConfigurationDelegate() {
+
+	private inner class ProcessConsoleListener(
+		private val fProcess: IProcess,
+		private val fLaunch: ILaunch,
+		private val fSourcePath: IPath
+	) : IConsoleListener {
+
+		override fun consolesAdded(consoles: Array<out IConsole>?) {
+			consoles?.map { it as? ProcessConsole }
+				?.filterNotNull()
+				?.filter { it.process == fProcess }
+				?.firstOrNull()
+				?.run {
+					ShowResultView().apply { schedule() }
+					registerPatternMatchListener(fLaunch, fSourcePath, this)
+				}
+		}
+
+		override fun consolesRemoved(consoles: Array<out IConsole>?) = Unit
+
+	}
 
 	private val fLaunchObservers: List<ILaunchObserver> by lazy {
 		val registry = Platform.getExtensionRegistry()
@@ -53,8 +75,6 @@ abstract class TestLauncherDelegate : LaunchConfigurationDelegate() {
 		} ?: emptyList<ILaunchObserver>()
 	}
 
-	private val fTerminationRunner = Executors.newSingleThreadExecutor()
-
 	protected abstract fun getPreferredDelegateId(): String
 
 	protected abstract fun getConsoleEventParser(): ConsoleEventParser
@@ -68,23 +88,17 @@ abstract class TestLauncherDelegate : LaunchConfigurationDelegate() {
 				getPreferredDelegate(config, mode)?.launch(config, mode, launch, monitor) ?: return
 				fLaunchObservers.forEach { it.notifyAfterLaunch(project.project) }
 
-				ShowResultView().apply {
-					schedule()
-					join()
-				}
-
 				launch.processes.firstOrNull { it !is GDBProcess }?.let { process ->
-					val console = DebugUITools.getConsole(process)
-					if (console is TextConsole) {
-						val programPath = CDebugUtils.verifyProgramPath(config)
-						val sourcePath = sourcelookupPath(config, programPath)
-						registerPatternMatchListener(launch, sourcePath, console)
-					}
+					val programPath = CDebugUtils.verifyProgramPath(config)
+					val sourcePath = sourcelookupPath(config, programPath)
+					val consoleListener = ProcessConsoleListener(process, launch, sourcePath)
+					ConsolePlugin.getDefault().consoleManager.addConsoleListener(consoleListener)
 					DebugPlugin.getDefault().addDebugEventListener { events ->
 						events.filter {
 							it.kind == DebugEvent.TERMINATE && it.source == process
 						}.forEach {
 							fLaunchObservers.forEach { it.notifyTermination(project.project) }
+							ConsolePlugin.getDefault().consoleManager.removeConsoleListener(consoleListener)
 						}
 					}
 				}
