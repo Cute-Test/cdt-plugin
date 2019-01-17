@@ -41,19 +41,18 @@ import org.eclipse.ui.console.TextConsole
 abstract class TestLauncherDelegate : LaunchConfigurationDelegate() {
 
 	private inner class ProcessConsoleListener(
-		private val fProcess: IProcess,
 		private val fLaunch: ILaunch,
 		private val fSourcePath: IPath
 	) : IConsoleListener {
 
-		override fun consolesAdded(consoles: Array<out IConsole>?) {
-			consoles?.map { it as? ProcessConsole }
-				?.filterNotNull()
-				?.filter { it.process == fProcess }
-				?.firstOrNull()
-				?.run {
+		override fun consolesAdded(consoles: Array<out IConsole>) {
+			consoles.filter { it is ProcessConsole }
+				.map { it as ProcessConsole }
+				.filter { it.process !is GDBProcess }
+				.filter { fLaunch.processes.contains(it.process) }
+				.forEach {
 					ShowResultView().apply { schedule() }
-					registerPatternMatchListener(fLaunch, fSourcePath, this)
+					registerPatternMatchListener(fLaunch, fSourcePath, it)
 				}
 		}
 
@@ -83,25 +82,24 @@ abstract class TestLauncherDelegate : LaunchConfigurationDelegate() {
 		try {
 			if (mode == ILaunchManager.RUN_MODE || mode == ILaunchManager.DEBUG_MODE) {
 				val project = CDebugUtils.verifyCProject(config)
+				val programPath = CDebugUtils.verifyProgramPath(config)
+				val sourcePath = sourcelookupPath(config, programPath)
+				val consoleListener = ProcessConsoleListener(launch, sourcePath)
+
+				ConsolePlugin.getDefault().consoleManager.addConsoleListener(consoleListener)
+				DebugPlugin.getDefault().addDebugEventListener { events ->
+					events.filter { it.kind == DebugEvent.TERMINATE }
+						.filter { launch.processes.contains(it.source) }
+						.filter { it.source !is GDBProcess }
+						.forEach {
+							fLaunchObservers.forEach { it.notifyTermination(project.project) }
+							ConsolePlugin.getDefault().consoleManager.removeConsoleListener(consoleListener)
+						}
+				}
 
 				fLaunchObservers.forEach { it.notifyBeforeLaunch(project.project) }
 				getPreferredDelegate(config, mode)?.launch(config, mode, launch, monitor) ?: return
 				fLaunchObservers.forEach { it.notifyAfterLaunch(project.project) }
-
-				launch.processes.firstOrNull { it !is GDBProcess }?.let { process ->
-					val programPath = CDebugUtils.verifyProgramPath(config)
-					val sourcePath = sourcelookupPath(config, programPath)
-					val consoleListener = ProcessConsoleListener(process, launch, sourcePath)
-					ConsolePlugin.getDefault().consoleManager.addConsoleListener(consoleListener)
-					DebugPlugin.getDefault().addDebugEventListener { events ->
-						events.filter {
-							it.kind == DebugEvent.TERMINATE && it.source == process
-						}.forEach {
-							fLaunchObservers.forEach { it.notifyTermination(project.project) }
-							ConsolePlugin.getDefault().consoleManager.removeConsoleListener(consoleListener)
-						}
-					}
-				}
 			}
 		} catch (e: CoreException) {
 			TestFrameworkPlugin.log(e)
