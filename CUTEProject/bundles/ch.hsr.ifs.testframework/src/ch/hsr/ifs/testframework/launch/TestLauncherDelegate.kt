@@ -92,14 +92,31 @@ abstract class TestLauncherDelegate : LaunchConfigurationDelegate() {
 						.filter { launch.processes.contains(it.source) }
 						.filter { it.source !is GDBProcess }
 						.forEach {
-							fLaunchObservers.forEach { it.notifyTermination(project.project) }
+							fLaunchObservers.forEach {
+								try {
+									it.notifyTermination(project.project)
+								} catch (e: CoreException) {
+									TestFrameworkPlugin.log(e)
+								}
+							}
 							ConsolePlugin.getDefault().consoleManager.removeConsoleListener(consoleListener)
 						}
 				}
-
-				fLaunchObservers.forEach { it.notifyBeforeLaunch(project.project) }
+				fLaunchObservers.forEach {
+					try {
+						it.notifyBeforeLaunch(project.project)
+					} catch (e: CoreException) {
+						TestFrameworkPlugin.log(e)
+					}
+				}
 				getPreferredDelegate(config, mode)?.launch(config, mode, launch, monitor) ?: return
-				fLaunchObservers.forEach { it.notifyAfterLaunch(project.project) }
+				fLaunchObservers.forEach {
+					try {
+						it.notifyAfterLaunch(project.project)
+					} catch (e: CoreException) {
+						TestFrameworkPlugin.log(e)
+					}
+				}
 			}
 		} catch (e: CoreException) {
 			TestFrameworkPlugin.log(e)
