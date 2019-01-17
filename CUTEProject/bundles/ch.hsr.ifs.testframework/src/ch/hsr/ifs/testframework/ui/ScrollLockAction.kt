@@ -19,7 +19,7 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin
 class ScrollLockAction(private val view: TestRunnerViewPart) : Action(msg.getString("ScrollLockAction.ScrollLock")) {
 
    companion object {
-      private val msg = TestFrameworkPlugin.messages!!
+      private val msg = TestFrameworkPlugin.messages
    }
 
 

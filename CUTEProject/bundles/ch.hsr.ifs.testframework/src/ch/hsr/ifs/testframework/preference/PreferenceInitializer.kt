@@ -20,6 +20,6 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin;
  */
 class PreferenceInitializer : AbstractPreferenceInitializer() {
 
-   override fun initializeDefaultPreferences() =  TestFrameworkPlugin.default?.getPreferenceStore()?.setDefault(SHOW_WHITESPACES, false) ?: Unit
+   override fun initializeDefaultPreferences() =  TestFrameworkPlugin.default.preferenceStore.setDefault(SHOW_WHITESPACES, false)
 
 }

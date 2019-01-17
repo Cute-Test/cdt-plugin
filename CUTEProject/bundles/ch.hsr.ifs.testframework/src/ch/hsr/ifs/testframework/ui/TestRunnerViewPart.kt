@@ -37,7 +37,7 @@ public class TestRunnerViewPart : ViewPart(), ISessionListener {
 
 	companion object {
 		const val ID = "ch.hsr.ifs.cutelauncher.ui.TestRunnerViewPart"
-		val msg = TestFrameworkPlugin.messages!!
+		val msg = TestFrameworkPlugin.messages
 	}
 
 	private enum class Orientation {
@@ -60,7 +60,7 @@ public class TestRunnerViewPart : ViewPart(), ISessionListener {
 	private lateinit var rerunSelectedAction: RerunSelectedAction
 
 	init {
-		TestFrameworkPlugin.getModel()?.addListener(this)
+		TestFrameworkPlugin.getModel().addListener(this)
 	}
 
 	val rerunLastTestAction: IAction by lazy {

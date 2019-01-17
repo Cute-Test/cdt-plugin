@@ -17,7 +17,7 @@ import org.eclipse.ui.progress.UIJob
 import ch.hsr.ifs.testframework.Messages
 import ch.hsr.ifs.testframework.TestFrameworkPlugin
 
-class ShowResultView : UIJob(msg!!.getString("ShowResultView.ShowResultView")) {
+class ShowResultView : UIJob(msg.getString("ShowResultView.ShowResultView")) {
 
 	companion object {
 		private val msg = TestFrameworkPlugin.messages
@@ -31,14 +31,14 @@ class ShowResultView : UIJob(msg!!.getString("ShowResultView.ShowResultView")) {
 					IStatus.OK,
 					TestFrameworkPlugin.PLUGIN_ID,
 					IStatus.OK,
-					msg!!.getString("ShowResultView.OK"),
+					msg.getString("ShowResultView.OK"),
 					null
 				)
 			} catch (e: PartInitException) {
 				Status(
 					IStatus.ERROR,
 					TestFrameworkPlugin.PLUGIN_ID,
-					msg!!.getString("ShowResultView.CouldNotShowResultView"),
+					msg.getString("ShowResultView.CouldNotShowResultView"),
 					e
 				)
 			}

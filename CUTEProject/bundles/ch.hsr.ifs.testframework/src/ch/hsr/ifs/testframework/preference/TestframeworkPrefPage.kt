@@ -25,10 +25,10 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin;
  */
 public class TestframeworkPrefPage : FieldEditorPreferencePage(GRID), IWorkbenchPreferencePage {
 
-   private val msg = TestFrameworkPlugin.messages!!;
+   private val msg = TestFrameworkPlugin.messages;
 
    init {
-      setPreferenceStore(TestFrameworkPlugin.default!!.getPreferenceStore());
+      setPreferenceStore(TestFrameworkPlugin.default.getPreferenceStore());
       setDescription(msg.getString("CutePrefPage.CuteRefPage"));
    }
 

@@ -16,7 +16,7 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin
  * @author Emanuel Graf
  *
  */
-class ShowNextFailureAction(private val trViewPart: TestRunnerViewPart) : Action(msg!!.getString("ShowNextFailureAction.ShowNextFailedTest")) {
+class ShowNextFailureAction(private val trViewPart: TestRunnerViewPart) : Action(msg.getString("ShowNextFailureAction.ShowNextFailedTest")) {
 
    companion object {
       private val msg = TestFrameworkPlugin.messages
@@ -26,7 +26,7 @@ class ShowNextFailureAction(private val trViewPart: TestRunnerViewPart) : Action
       setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/select_next.gif"))
       setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/select_next.gif"))
       setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/select_next.gif"))
-      setToolTipText(msg!!.getString("ShowNextFailureAction.ShowNextFailedTest"))
+      setToolTipText(msg.getString("ShowNextFailureAction.ShowNextFailedTest"))
    }
 
    override fun run() = trViewPart.selectNextFailure()

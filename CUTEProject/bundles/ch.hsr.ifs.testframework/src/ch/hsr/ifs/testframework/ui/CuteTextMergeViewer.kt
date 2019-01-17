@@ -33,7 +33,7 @@ class CuteTextMergeViewer(parent: Composite?, style: Int, configuration: Compare
 
    override protected fun configureTextViewer(textViewer: TextViewer?) {
       super.configureTextViewer(textViewer)
-      if (TestFrameworkPlugin.default!!.getPreferenceStore().getBoolean(SHOW_WHITESPACES)) {
+      if (TestFrameworkPlugin.default.getPreferenceStore().getBoolean(SHOW_WHITESPACES)) {
          textViewer?.addPainter(WhitespaceCharacterPainter(textViewer))
       }
    }

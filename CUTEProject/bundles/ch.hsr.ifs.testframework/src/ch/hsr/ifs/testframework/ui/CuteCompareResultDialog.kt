@@ -42,7 +42,7 @@ import ch.hsr.ifs.testframework.model.TestResult
  */
 class CuteCompareResultDialog(shell: Shell, private var test: TestCase) : TrayDialog(shell) {
 
-   private val msg = TestFrameworkPlugin.messages!!
+   private val msg = TestFrameworkPlugin.messages
 
    private inner class CompareElement(private val fContent: String) : ITypedElement, IEncodedStreamContentAccessor {
 
