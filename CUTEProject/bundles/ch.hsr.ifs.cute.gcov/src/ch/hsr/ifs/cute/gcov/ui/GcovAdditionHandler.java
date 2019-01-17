@@ -97,6 +97,7 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
                     IConfiguration newConfig = createGcovConfig(project, info, config);
                     ManagedBuildManager.setDefaultConfiguration(project, newConfig);
                     ManagedBuildManager.setSelectedConfiguration(project, newConfig);
+                    ManagedBuildManager.saveBuildInfoLegacy(project, true);
                     return newConfig;
                 }
             }
@@ -126,7 +127,7 @@ public class GcovAdditionHandler implements ICuteWizardAdditionHandler {
         ITool[] tools = config.getToolsBySuperClassId(toolId);
         for (ITool tool : tools) {
             IOption option = tool.getOptionBySuperClassId(optionId);
-            option.setValue(optionValue);
+            ManagedBuildManager.setOption(config, tool, option, optionValue);
         }
     }
 
