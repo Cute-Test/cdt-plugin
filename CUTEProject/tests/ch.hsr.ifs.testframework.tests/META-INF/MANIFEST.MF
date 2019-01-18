@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Testframework Test
 Bundle-SymbolicName: ch.hsr.ifs.testframework.tests
-Bundle-Version: 5.5.4.qualifier
+Bundle-Version: 5.6.0.qualifier
 Bundle-Activator: ch.hsr.ifs.testframework.tests.TestframeworkTestPlugin
 Bundle-Vendor: IFS Institute for Software
 Require-Bundle: org.eclipse.core.runtime,
