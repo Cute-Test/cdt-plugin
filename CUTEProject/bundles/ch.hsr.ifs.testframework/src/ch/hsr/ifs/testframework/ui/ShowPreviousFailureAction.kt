@@ -16,7 +16,7 @@ import ch.hsr.ifs.testframework.TestFrameworkPlugin
  * @author Emanuel Graf
  *
  */
-class ShowPreviousFailureAction(private val trViewPart: TestRunnerViewPart?) : Action(msg!!.getString("ShowPreviousFailureAction.ShowPrevFailedTest")) {
+class ShowPreviousFailureAction(private val trViewPart: TestRunnerViewPart?) : Action(msg.getString("ShowPreviousFailureAction.ShowPrevFailedTest")) {
 
    companion object {
       private val msg = TestFrameworkPlugin.messages
@@ -26,7 +26,7 @@ class ShowPreviousFailureAction(private val trViewPart: TestRunnerViewPart?) : A
       setDisabledImageDescriptor(TestFrameworkPlugin.getImageDescriptor("dlcl16/select_prev.gif"))
       setHoverImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/select_prev.gif"))
       setImageDescriptor(TestFrameworkPlugin.getImageDescriptor("obj16/select_prev.gif"))
-      setToolTipText(msg!!.getString("ShowPreviousFailureAction.ShowPrevFailedTest"))
+      setToolTipText(msg.getString("ShowPreviousFailureAction.ShowPrevFailedTest"))
    }
 
    override fun run() = trViewPart!!.selectPrevFailure()

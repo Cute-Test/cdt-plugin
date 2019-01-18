@@ -55,7 +55,7 @@ import kotlin.properties.Delegates
 public class TestViewer(parent: Composite, style: Int, private val viewPart: TestRunnerViewPart) : Composite(parent, style), ITestElementListener, ISessionListener, ITestCompositeListener {
 
 	companion object {
-		private val msg = TestFrameworkPlugin.messages!!
+		private val msg = TestFrameworkPlugin.messages
 	}
 
 	private inner class UpdateTestElement(name: String, private val element: TestElement, private val reveal: Boolean) : UIJob(name) {
@@ -133,9 +133,9 @@ public class TestViewer(parent: Composite, style: Int, private val viewPart: Tes
 	}
 
 	init {
-		TestFrameworkPlugin.getModel()?.addListener(this)
+		TestFrameworkPlugin.getModel().addListener(this)
 		initialize()
-		addDisposeListener { _ -> TestFrameworkPlugin.getModel()?.removeListener(this) }
+		addDisposeListener { _ -> TestFrameworkPlugin.getModel().removeListener(this) }
 	}
 
 	fun reset(session: TestSession?) {
@@ -271,7 +271,7 @@ public class TestViewer(parent: Composite, style: Int, private val viewPart: Tes
 
 	private fun getSession(): TestSession {
 		if (session == null) {
-			session = TestFrameworkPlugin.getModel()!!.getSession()
+			session = TestFrameworkPlugin.getModel().getSession()
 		}
 		return session!!
 	}

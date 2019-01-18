@@ -94,6 +94,12 @@
          	  mode="debug"
          	  label="%contextLabel.label.0"/>
             </contextualLaunch>
+            <configurationType
+                  id="ch.hsr.ifs.cutelauncher.launchConfig">
+            </configurationType>
+            <configurationType
+                  id="ch.hsr.ifs.cutelauncher.launchConfig.debug">
+            </configurationType>
         </shortcut>
     </extension>
     <extension point="org.eclipse.debug.ui.launchConfigurationTabs">
@@ -144,9 +150,5 @@
             name="%CustomisedLaunchConfigTab.LookupPath">
             <placement after="org.eclipse.debug.ui.CommonTab"/>
         </tab>
-    </extension>
-    <extension point="org.eclipse.debug.core.processFactories">
-        <processFactory id="ch.hsr.ifs.cute.core.DebugProcessFactory"
-            class="ch.hsr.ifs.cute.core.launch.TestingProcessFactory"/>
     </extension>
 </plugin>

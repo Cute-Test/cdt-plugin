@@ -30,46 +30,46 @@ import ch.hsr.ifs.testframework.event.TestEventHandler
  */
 class ConsolePatternListener(private val eventParser: ConsoleEventParser) : IPatternMatchListener {
 
-   private var console: TextConsole? = null
-   private val handlers = mutableListOf<TestEventHandler>() 
+	private var console: TextConsole? = null
+	private val handlers = mutableListOf<TestEventHandler>()
 
-   override fun getCompilerFlags() = Pattern.UNIX_LINES
+	override fun getCompilerFlags() = Pattern.UNIX_LINES
 
-   override fun getLineQualifier() = eventParser.getLineQualifier()
+	override fun getLineQualifier() = eventParser.getLineQualifier()
 
-   override fun getPattern() = eventParser.getComprehensiveLinePattern()
+	override fun getPattern() = eventParser.getComprehensiveLinePattern()
 
-   override fun connect(console: TextConsole) {
-      this.console = console
-	   handlers.forEach(TestEventHandler::handleSessionStart)
-   }
+	override fun connect(console: TextConsole) {
+		this.console = console
+		handlers.forEach(TestEventHandler::handleSessionStart)
+	}
 
-   override fun disconnect() {
-	   handlers.forEach(TestEventHandler::handleSessionEnd)
-      console = null
-   }
+	override fun disconnect() {
+		handlers.forEach(TestEventHandler::handleSessionEnd)
+		console = null
+	}
 
-   fun addHandler(handler: TestEventHandler) {
-      handlers.add(handler)
-   }
+	fun addHandler(handler: TestEventHandler) {
+		handlers.add(handler)
+	}
 
-   fun removeHandler(handler: TestEventHandler) {
-      handlers.remove(handler)
-   }
+	fun removeHandler(handler: TestEventHandler) {
+		handlers.remove(handler)
+	}
 
-   override fun matchFound(event: PatternMatchEvent) {
-      console?.let{
-         try {
-            val doc = it.document
-            val reg = doc.getLineInformation(doc.getLineOfOffset(event.offset))
-            val line = doc.get(reg.offset, reg.length)
-            processTestEventsFrom(reg, line)
-         } catch (e: BadLocationException) {
-            throw RuntimeException(e)
-         }
-      }
-   }
+	override fun matchFound(event: PatternMatchEvent) {
+		console?.let {
+			try {
+				val doc = it.document
+				val reg = doc.getLineInformation(doc.getLineOfOffset(event.offset))
+				val line = doc.get(reg.offset, reg.length)
+				processTestEventsFrom(reg, line)
+			} catch (e: BadLocationException) {
+				throw RuntimeException(e)
+			}
+		}
+	}
 
-   private fun processTestEventsFrom(reg: IRegion, line: String) =
-         eventParser.eventsFrom(reg, line).forEach{ evt -> handlers.forEach{ it.handle(evt) }}
+	private fun processTestEventsFrom(reg: IRegion, line: String) =
+		eventParser.eventsFrom(reg, line).forEach { evt -> handlers.forEach { it.handle(evt) } }
 }

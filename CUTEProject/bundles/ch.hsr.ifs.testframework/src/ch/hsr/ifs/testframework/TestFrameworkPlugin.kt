@@ -39,63 +39,48 @@ class TestFrameworkPlugin : AbstractUIPlugin() {
 	companion object {
 
 		const val PLUGIN_ID = "ch.hsr.ifs.testframework"
-
-		var default: TestFrameworkPlugin? = null
+		lateinit var default: TestFrameworkPlugin private set
 
 		private val ICONS_PATH = Path("\$nl$/icons")
 
-		val uniqueIdentifier get() = default?.apply { bundle.symbolicName } ?: PLUGIN_ID
+		fun getImageDescriptor(relativePath: String): ImageDescriptor =
+			ImageDescriptor.createFromURL(FileLocator.find(default.bundle, ICONS_PATH.append(relativePath), null))
 
-		fun getImageDescriptor(relativePath: String): ImageDescriptor = createImageDescriptor(default!!.getBundle(), ICONS_PATH.append(relativePath))
-
-		val imageProvider: ImageProvider
-			get() {
-				try {
-					Platform.getExtensionRegistry().getExtensionPoint(TestFrameworkPlugin.PLUGIN_ID, "ImageProvider")?.let {
-						it.extensions.forEach {
-							val configElements = it.configurationElements
-							val className = configElements[0].getAttribute("class")
-							default?.bundle?.loadClass(className)?.getDeclaredConstructor()?.apply {
-								return newInstance() as ImageProvider
-							}
-						}
-					}
-				} catch (ignored: Exception) {
-				}
-				return FallbackImageProvider()
+		val imageProvider: ImageProvider by lazy {
+			try {
+				val registry = Platform.getExtensionRegistry()
+				registry.getExtensionPoint(PLUGIN_ID, "ImageProvider")?.run {
+					extensions.map {
+						it.configurationElements[0].createExecutableExtension("class") as? ImageProvider
+					}.firstOrNull()
+				} ?: FallbackImageProvider()
+			} catch (ignored: Throwable) {
+				FallbackImageProvider()
 			}
+		}
 
-		val activeWorkbenchWindow: IWorkbenchWindow? get() = default?.workbench?.activeWorkbenchWindow
+		val messages: Messages by lazy {
+			try {
+				val registry = Platform.getExtensionRegistry()
+				registry.getExtensionPoint(PLUGIN_ID, "Messages")?.run {
+					extensions.map {
+						it.configurationElements[0].createExecutableExtension("class") as? Messages
+					}.firstOrNull()
+				} ?: FallbackMessages()
+			} catch (ignored: Throwable) {
+				FallbackMessages()
+			}
+		}
+
+		val activeWorkbenchWindow: IWorkbenchWindow? get() = default.workbench.activeWorkbenchWindow
 
 		val activePage: IWorkbenchPage? get() = activeWorkbenchWindow?.activePage
 
-		val messages: Messages?
-			get() {
-				try {
-					Platform.getExtensionRegistry().getExtensionPoint(TestFrameworkPlugin.PLUGIN_ID, "Messages")?.let{
-						it.extensions.forEach{
-							val configElements = it.configurationElements
-							val className = configElements!![0].getAttribute("class")
-							default?.bundle?.loadClass(className)?.getDeclaredConstructor()?.apply{
-								return newInstance() as Messages
-							}
-						}
-					}
-				} catch (ignored: Exception) {
-				}
-				return FallbackMessages()
-			}
-
-		private fun createImageDescriptor(bundle: Bundle?, path: IPath?): ImageDescriptor {
-			val url = FileLocator.find(bundle, path, null)
-			return ImageDescriptor.createFromURL(url)
-		}
-
 		fun log(e: Throwable) = log(Status(IStatus.ERROR, PLUGIN_ID, IStatus.ERROR, "Error", e))
 
-		fun log(status: IStatus) = default!!.getLog().log(status)
+		fun log(status: IStatus) = default.getLog().log(status)
 
-		fun getModel() = default?.fModel
+		fun getModel() = default.fModel
 	}
 
 	init {
@@ -103,7 +88,6 @@ class TestFrameworkPlugin : AbstractUIPlugin() {
 	}
 
 	override fun stop(context: BundleContext?) {
-		default = null
 		super.stop(context)
 	}
 

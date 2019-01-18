@@ -10,6 +10,8 @@ package ch.hsr.ifs.cute.gcov.parser;
 
 import java.io.File;
 
+import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
+import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -44,11 +46,11 @@ public class GcnoFileVisitor implements IResourceVisitor {
 
     private void handleGcnoFile(IFile file) throws CoreException {
         final IPath location = file.getLocation();
-        final IPath directory = location.removeLastSegments(1);
-        final File workingDirectory = new File(directory.toPortableString());
-        if (workingDirectory.isDirectory()) {
+        if (location != null) {
             IProject project = file.getProject();
-            GcovRunner.runGcov(file.getName(), workingDirectory, project);
+            IManagedBuildInfo buildInfo = ManagedBuildManager.getBuildInfo(project);
+            IResource buildPath = project.findMember(buildInfo.getDefaultConfiguration().getBuildData().getOutputDirectories()[0].getFullPath());
+            GcovRunner.runGcov(location.toPortableString(), new File(buildPath.getLocation().toPortableString()), project);
             project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
             project.accept(resource -> {
                 if (resource instanceof IFile) {

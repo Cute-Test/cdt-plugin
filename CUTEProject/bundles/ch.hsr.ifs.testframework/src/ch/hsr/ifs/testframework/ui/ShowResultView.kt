@@ -17,36 +17,31 @@ import org.eclipse.ui.progress.UIJob
 import ch.hsr.ifs.testframework.Messages
 import ch.hsr.ifs.testframework.TestFrameworkPlugin
 
-class ShowResultView : UIJob(msg!!.getString("ShowResultView.ShowResultView")) {
+class ShowResultView : UIJob(msg.getString("ShowResultView.ShowResultView")) {
 
-   companion object {
-      private val msg = TestFrameworkPlugin.messages
-   }
+	companion object {
+		private val msg = TestFrameworkPlugin.messages
+	}
 
-   override fun runInUIThread(monitor: IProgressMonitor?) =
-         if (showTestRunnerViewPartInActivePage(findTestRunnerViewPartInActivePage()) == null) {
-            Status(IStatus.WARNING, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, msg!!.getString("ShowResultView.CouldNotShowResultView"), null)
-         } else {
-            Status(IStatus.OK, TestFrameworkPlugin.PLUGIN_ID, IStatus.OK, msg!!.getString("ShowResultView.OK"), null)
-         }
-
-   private fun showTestRunnerViewPartInActivePage(testRunner: TestRunnerViewPart?): TestRunnerViewPart? {
-      try {
-         testRunner?.let{
-            if(it.isCreated) {
-               return testRunner
-            }
-         } 
-         
-         return TestFrameworkPlugin.activePage?.showView(TestRunnerViewPart.ID) as? TestRunnerViewPart
-      } catch (pie: PartInitException) {
-         TestFrameworkPlugin.log(pie)
-         return null
-      }
-   }
-
-   private fun findTestRunnerViewPartInActivePage(): TestRunnerViewPart? {
-      return TestFrameworkPlugin.activePage?.findView(TestRunnerViewPart.ID) as? TestRunnerViewPart
-   }
+	override fun runInUIThread(monitor: IProgressMonitor?) =
+		TestFrameworkPlugin.activePage?.run {
+			try {
+				showView(TestRunnerViewPart.ID)
+				Status(
+					IStatus.OK,
+					TestFrameworkPlugin.PLUGIN_ID,
+					IStatus.OK,
+					msg.getString("ShowResultView.OK"),
+					null
+				)
+			} catch (e: PartInitException) {
+				Status(
+					IStatus.ERROR,
+					TestFrameworkPlugin.PLUGIN_ID,
+					msg.getString("ShowResultView.CouldNotShowResultView"),
+					e
+				)
+			}
+		}
 
 }

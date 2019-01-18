@@ -37,14 +37,14 @@ class ModellBuilder @JvmOverloads constructor(private val exePath: IPath, privat
       when(currentTestCase) {
          null -> unexpectedTestCaseEnd()
          else -> {
-            model?.endCurrentTestCase(null, -1, msg, TestStatus.error, currentTestCase!!)
+            model.endCurrentTestCase(null, -1, msg, TestStatus.error, currentTestCase!!)
             endTestCase()
          }
       }
    }
 
    fun unexpectedTestCaseEnd() {
-      lastTestCase?.let{model?.endCurrentTestCase(null, -1, Messages.ModellBuilder_0, TestStatus.error, it)}
+      lastTestCase?.let{model.endCurrentTestCase(null, -1, Messages.ModellBuilder_0, TestStatus.error, it)}
    }
 
    fun endTestCase() {
@@ -56,18 +56,18 @@ class ModellBuilder @JvmOverloads constructor(private val exePath: IPath, privat
       when(currentTestCase) {
          null -> unexpectedTestCaseEnd()
          else -> {
-            model?.endCurrentTestCase(null, -1, msg, TestStatus.success, currentTestCase!!)
+            model.endCurrentTestCase(null, -1, msg, TestStatus.success, currentTestCase!!)
             endTestCase()
          }
       }
    }
 
    override fun handleEnding(reg: IRegion, suitename: String) {
-      model?.endSuite()
+      model.endSuite()
    }
 
    override fun handleBeginning(reg: IRegion , suitename: String, suitesize: String) {
-      model?.startSuite(TestSuite(suitename, Integer.parseInt(suitesize), TestStatus.running))
+      model.startSuite(TestSuite(suitename, Integer.parseInt(suitesize), TestStatus.running))
    }
 
 
@@ -88,7 +88,7 @@ class ModellBuilder @JvmOverloads constructor(private val exePath: IPath, privat
                } catch (e: URISyntaxException) {}
             }
             val lineNumber = Integer.parseInt(lineNo)
-            model?.endCurrentTestCase(file, lineNumber, reason, TestStatus.failure, currentTestCase!!)
+            model.endCurrentTestCase(file, lineNumber, reason, TestStatus.failure, currentTestCase!!)
             endTestCase()
          }
       }
@@ -96,15 +96,15 @@ class ModellBuilder @JvmOverloads constructor(private val exePath: IPath, privat
 
    override fun handleTestStart(reg: IRegion, testName: String) {
       currentTestCase = TestCase(testName)
-      model?.addTest(currentTestCase!!)
+      model.addTest(currentTestCase!!)
    }
 
    override fun handleSessionEnd() {
-      model?.endSession(currentTestCase)
+      model.endSession(currentTestCase)
    }
 
    override fun handleSessionStart() {
-      model?.startSession(launch)
+      model.startSession(launch)
    }
 
 }

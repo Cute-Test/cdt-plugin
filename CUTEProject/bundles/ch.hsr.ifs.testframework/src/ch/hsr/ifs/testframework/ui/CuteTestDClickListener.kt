@@ -147,7 +147,7 @@ class CuteTestDClickListener(private var session: TestSession?) : IDoubleClickLi
       }
 
    private fun getEditorId(file: IFile) =
-         with(TestFrameworkPlugin.default!!.workbench, {
+         with(TestFrameworkPlugin.default.workbench, {
             getEditorRegistry()
                .getDefaultEditor(file.getName(), getFileContentType(file))
                ?.getId()
