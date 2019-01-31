@@ -170,6 +170,10 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
         textControl.addFocusListener(new StatusFocusListener(NEW_FILE_ID));
         createSeparator(parent, nColumns);
         final Button button = (Button) linkToRunnerCheck.doFillIntoGrid(parent, nColumns)[0];
+        final String[] runnerNames = getRunners();
+        if (runnerNames.length == 0) {
+            button.setEnabled(false);
+        }
         button.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -178,13 +182,8 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
                 runnerComboField.setEnabled(selection);
                 setErrorMessage(null);
                 if (selection) {
-                    final String[] runners2 = getRunners();
-                    if (runners2.length == 0) {
-                        setErrorMessage(I18N.NewSuiteWizardNoRunners);
-                        runnerComboField.setEnabled(false);
-                    }
-                    runnerComboField.setItems(runners2);
-                    if (runners2.length == 1) {
+                    runnerComboField.setItems(runnerNames);
+                    if (runnerNames.length == 1) {
                         runnerComboField.selectItem(0);
                     }
                 }
@@ -277,6 +276,11 @@ class NewSuiteFileCreationWizardPage extends WizardPage {
 
         if (!newFileDialogField.getText().matches("\\w+")) {
             status.setError(I18N.NewSuiteWizardInvalidIdentifier);
+            return status;
+        }
+        
+        if (runners == null || runners.size() == 0) {
+            status.setWarning(I18N.NewSuiteWizardNoRunners);
             return status;
         }
 
