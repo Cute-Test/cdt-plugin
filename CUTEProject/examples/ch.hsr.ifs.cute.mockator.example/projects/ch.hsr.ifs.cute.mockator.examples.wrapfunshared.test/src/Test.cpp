@@ -26,7 +26,7 @@ void testGameFourWins() {
 void runSuite() {
 	cute::suite s;
 	s.push_back(CUTE(testGameFourWins));
-	cute::ide_listener lis;
+	cute::ide_listener<> lis;
 	cute::makeRunner(lis)(s, "The Suite");
 }
 
