@@ -2,7 +2,6 @@
 #define DIE_H_
 
 struct Die {
-   INIT_MOCKATOR()
    int roll() const;
 };
 
