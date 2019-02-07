@@ -22,7 +22,7 @@
 
 	<extension point="ch.hsr.ifs.iltis.core.core.extendedExampleInstallerWizard">
 		<example wizardID="ch.hsr.ifs.cute.mockator.examples.CompileSeam" pageImage="icons/genproject.gif">
-			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ExampleProjectConfigurator" name="MockatorCompileSeamExample" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.compileseam.test/" description="An example project for Mockator Compiler-Seams"/>
+			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ExampleProjectConfigurator" name="CompileSeamExample" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.compileseam.test/" description="An example project for Mockator Compiler-Seams"/>
 		</example>
 	</extension>
 	

@@ -11,6 +11,7 @@ struct GameFourWins {
 			os << "You lost!" << std::endl;
 		}
 	}
+private:
 	Die die;
 };
 
