@@ -3,7 +3,6 @@
 	<name>Mockator Shared Mock Function Example Tests</name>
 	<comment></comment>
 	<projects>
-		<project>MockFunctionLib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
