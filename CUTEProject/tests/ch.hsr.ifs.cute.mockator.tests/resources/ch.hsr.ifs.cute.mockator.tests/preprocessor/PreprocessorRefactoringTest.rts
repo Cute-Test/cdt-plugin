@@ -183,3 +183,80 @@ namespace Ns {
 void Ns::mockator_foo(int i, const char *fileName, int lineNumber) {
   foo(i);
 }
+
+
+//!Parameter declaration name replacement pointer type
+//@.config
+newFileCreation=true
+primaryFile=A.cpp
+newFiles=trace/mockator_bar.h,trace/mockator_bar.cpp
+
+//@foo.h
+typedef long foo; 
+
+//@bar.h
+#include "foo.h"
+foo bar(foo*);
+
+//@A.cpp
+#include "bar.h"
+
+void dostuff() {
+	/*$*/bar/*$$*/(0);
+}
+
+//@trace/mockator_bar.h
+//=
+#ifndef MOCKATOR_BAR_H_
+#define MOCKATOR_BAR_H_
+#include "../bar.h"
+foo mockator_bar(foo* f, const char* fileName, int lineNumber);
+#define bar(f) mockator_bar((f), __FILE__, __LINE__)
+#endif
+
+//@trace/mockator_bar.cpp
+//=
+#include "mockator_bar.h"
+#undef bar
+
+foo mockator_bar(foo* f, const char* fileName, int lineNumber) {
+  return bar(f);
+}
+
+//!Parameter declaration name replacement pointer type ambiguous names
+//@.config
+newFileCreation=true
+primaryFile=A.cpp
+newFiles=trace/mockator_bar.h,trace/mockator_bar.cpp
+
+//@foo.h
+typedef long foo; 
+
+//@bar.h
+#include "foo.h"
+foo bar(foo*, foo*);
+
+//@A.cpp
+#include "bar.h"
+
+void dostuff() {
+	/*$*/bar/*$$*/(0, 0);
+}
+
+//@trace/mockator_bar.h
+//=
+#ifndef MOCKATOR_BAR_H_
+#define MOCKATOR_BAR_H_
+#include "../bar.h"
+foo mockator_bar(foo* f, foo* g, const char* fileName, int lineNumber);
+#define bar(f,g) mockator_bar((f),(g), __FILE__, __LINE__)
+#endif
+
+//@trace/mockator_bar.cpp
+//=
+#include "mockator_bar.h"
+#undef bar
+
+foo mockator_bar(foo* f, foo* g, const char* fileName, int lineNumber) {
+  return bar(f, g);
+}
