@@ -36,9 +36,8 @@ public class ParameterNameFunDecorator {
             if (!(paramName.isEmpty() && !isVoid(param))) {
                 continue;
             }
-
-            final IType type = TypeCreator.byParamDeclaration(param);
-
+            final ICPPASTParameterDeclaration original = (ICPPASTParameterDeclaration) param.getOriginalNode();
+            IType type = TypeCreator.byParamDeclaration(original);
             if (type instanceof IProblemType && isNamedSpecifier(param)) {
                 final String typeName = ((ICPPASTNamedTypeSpecifier) param.getDeclSpecifier()).getName().toString();
                 paramName = nameCreator.getParamName(typeName).toString();

@@ -2,6 +2,7 @@ package ch.hsr.ifs.cute.mockator.preprocessor;
 
 import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBasicType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
@@ -77,7 +78,7 @@ abstract class PreprocessorFileCreator {
     private static void addParamsExceptVoid(final ICPPASTFunctionDeclarator funDecl, final ICPPASTFunctionDeclarator newFunDecl) {
         for (final ICPPASTParameterDeclaration param : funDecl.getParameters()) {
             if (!ASTUtil.isVoid(param)) {
-                newFunDecl.addParameterDeclaration(param.copy());
+                newFunDecl.addParameterDeclaration(param.copy(CopyStyle.withLocations));
             }
         }
     }

@@ -4,6 +4,7 @@ import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTSimpleDeclaration;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
@@ -75,7 +76,7 @@ class PreprocessorHeaderFileCreator extends PreprocessorFileCreator {
     }
 
     private static void insertTraceMacro(final ICPPASTFunctionDeclarator funDecl, final IASTTranslationUnit header, final ASTRewrite r) {
-        final ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
+        final ICPPASTFunctionDeclarator newFunDecl = funDecl.copy(CopyStyle.withLocations);
         adjustParamNamesIfNecessary(newFunDecl);
         final ASTLiteralNode defineNode = createTraceMacro(newFunDecl);
         r.insertBefore(header, null, defineNode, null);
