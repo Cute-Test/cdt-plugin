@@ -26,7 +26,7 @@ The helpers and configurations that reside at the root of the repository are des
 Maven Build Helper
 ------------------
 
-The project includes a simple helper script, to make it easy to run *Maven* builds of specific bundles/tests of the project. The script is designed to run on Linux systems, since it is used in the continuous integration environment. To get started, simply call ``./build`` from the ``tools/`` directory. This will perform a complete build of all bundles in the project, as well as execute all tests. For more information, consult the output of ``./build -h``.
+The project includes a simple helper script, to make it easy to run *Maven* builds of specific bundles/tests of the project. The script is designed to run on Linux systems, since it is used in the continuous integration environment. To get started, simply call ``./tools/build`` in the repository root directory. This will perform a complete build of all bundles in the project, as well as execute all tests. For more information, consult the output of ``./build -h``.
 
 Some settings of the build helper can be configured using the file ``build.ini``, while others are passed directly on the command line.
 
