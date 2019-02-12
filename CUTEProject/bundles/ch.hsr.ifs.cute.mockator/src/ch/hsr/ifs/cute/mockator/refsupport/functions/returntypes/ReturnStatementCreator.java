@@ -11,6 +11,7 @@ import org.eclipse.cdt.core.dom.ast.IASTNamedTypeSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTPointer;
 import org.eclipse.cdt.core.dom.ast.IASTPointerOperator;
 import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
@@ -96,7 +97,7 @@ public class ReturnStatementCreator {
     }
 
     private IASTReturnStatement createDefaultReturn(final ICPPASTDeclSpecifier specifier) {
-        final ICPPASTDeclSpecifier returnDeclSpec = specifier.copy();
+        final ICPPASTDeclSpecifier returnDeclSpec = specifier.copy(CopyStyle.withLocations);
         returnDeclSpec.setStorageClass(IASTDeclSpecifier.sc_unspecified);
         final IASTInitializer emptyInitializer = cppStd.getEmptyInitializer();
         final ICPPASTSimpleTypeConstructorExpression returnType = nodeFactory.newSimpleTypeConstructorExpression(returnDeclSpec, emptyInitializer);
