@@ -3,7 +3,7 @@
 	<name>Mockator Shadow Function Example Test</name>
 	<comment></comment>
 	<projects>
-		<project>ShadowFunctionLib</project>
+		<project>ShadowFunctionExampleLibrary</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

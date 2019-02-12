@@ -3,7 +3,7 @@
 	<name>Mockator Wrap Shared Function Example Tests</name>
 	<comment></comment>
 	<projects>
-		<project>WrapFunSharedLib</project>
+		<project>WrapFunctionSharedExampleLibrary</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
