@@ -2,8 +2,107 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-          id="ch.hsr.ifs.cute.mockator.markerResolution"
-          name="%extensionMarkerResolution.name"
+         name="Mockator Code Analysis Checkers"
+         point="org.eclipse.cdt.codan.core.checkers">
+      <category
+            id="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
+            name="%MockatorProblemCategoryDesc">
+      </category>
+
+      <checker
+            class="ch.hsr.ifs.cute.mockator.incompleteclass.staticpoly.StaticPolymorphismChecker"
+            id="ch.hsr.ifs.cute.mockator.StaticPolyMissingMemFunsResolution"
+            name="%StaticPolyMissingMemberFunctionsCheckerName">
+      <problem
+            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
+            defaultEnabled="false"
+            defaultSeverity="Error"
+            id="ch.hsr.ifs.cute.mockator.problems.StaticPolyMissingMemFunsProblem"
+            messagePattern="%NeccesaryMemberFunctionsMissingMsg"
+            name="%MissingMemberFunctionsInCompileSeamProblemName"/>
+      </checker>
+
+      <checker
+            class="ch.hsr.ifs.cute.mockator.incompleteclass.subtype.SubtypePolymorphismChecker"
+            id="ch.hsr.ifs.cute.mockator.SubtypePolyMissingMemFunsResolution"
+            name="%SubtypePolyMissingMemberFunctionsCheckerName">
+      <problem
+            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
+            defaultEnabled="false"
+            defaultSeverity="Error"
+            id="ch.hsr.ifs.cute.mockator.problems.SubtypeMissingMemFunsProblem"
+            messagePattern="%NeccesaryMemberFunctionsMissingMsg"
+            name="%MissingMemberFunctionsInObjectSeamProblemName"/>
+      </checker>
+      
+      <checker
+            class="ch.hsr.ifs.cute.mockator.testdouble.creation.staticpoly.MissingTestDoubleStaticPolyChecker"
+            id="ch.hsr.ifs.cute.mockator.MissingTestDoubleStaticPolyChecker"
+            name="%StaticPolyMissingTestDoubleCheckerName">
+      <problem
+            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
+            defaultEnabled="false"
+            defaultSeverity="Error"
+            id="ch.hsr.ifs.cute.mockator.problems.MissingTestDoubleStaticPolyProblem"
+            messagePattern="%StaticPolyTestDoubleMissingMsg"
+            name="%StaticPolyMissingTestDoubleProblemName"/>
+      </checker>
+
+      <checker
+            class="ch.hsr.ifs.cute.mockator.testdouble.creation.subtype.MissingTestDoubleSubTypeChecker"
+            id="ch.hsr.ifs.cute.mockator.MissingTestDoubleSubTypeChecker"
+            name="%SubTypeMissingTestDoubleCheckerName">
+      <problem
+            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
+            defaultEnabled="false"
+            defaultSeverity="Error"
+            id="ch.hsr.ifs.cute.mockator.problems.MissingTestDoubleSubTypeProblem"
+            messagePattern="%SubTypeTestDoubleMissingMsg"
+            name="%SubTypeMissingTestDoubleProblemName"/>
+      </checker>
+
+      <checker
+            class="ch.hsr.ifs.cute.mockator.mockobject.expectations.qf.InconsistentExpectationsChecker"
+            id="ch.hsr.ifs.cute.mockator.InconsistentExpectationsChecker"
+            name="%InconsistentExpectationsProblemName">
+      <problem
+            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
+            defaultEnabled="false"
+            defaultSeverity="Info"
+            id="ch.hsr.ifs.cute.mockator.problems.InconsistentExpectationsProblem"
+            messagePattern="%InconsistentExpectationsProblemMsg"
+            name="%InconsistentExpectationsProblemName"/>
+      </checker>
+
+      <checker
+            class="ch.hsr.ifs.cute.mockator.linker.wrapfun.gnuoption.GnuOptionChecker"
+            id="ch.hsr.ifs.cute.mockator.WrapFunctionChecker"
+            name="%WrapFunctionCheckerName">
+      <problem
+            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
+            defaultEnabled="false"
+            defaultSeverity="Info"
+            id="ch.hsr.ifs.cute.mockator.problems.WrapFunctionProblem"
+            messagePattern="%WrapFunctionProblemMsg"
+            name="%WrapFunctionProblemName"/>
+      </checker>
+
+      <checker
+            class="ch.hsr.ifs.cute.mockator.preprocessor.qf.TraceFunctionChecker"
+            id="ch.hsr.ifs.cute.mockator.TraceFunctionChecker"
+            name="%TraceFunctionCheckerName">
+      <problem
+            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
+            defaultEnabled="false"
+            defaultSeverity="Warning"
+            id="ch.hsr.ifs.cute.mockator.problems.TraceFunctionProblem"
+            messagePattern="%TraceFunctionProblemMsg"
+            name="%TraceFunctionProblemName"/>
+      </checker>
+   </extension>
+
+   <extension
+          name="Mockator Marker Resolutions"
           point="org.eclipse.cdt.codan.ui.codanMarkerResolution">
       <resolution
             class="ch.hsr.ifs.cute.mockator.testdouble.creation.staticpoly.CreateTestDoubleStaticPolyQuickFix"
@@ -62,129 +161,7 @@
             problemId="ch.hsr.ifs.cute.mockator.problems.InconsistentExpectationsProblem">
       </resolution>
    </extension>
-   <extension
-         point="org.eclipse.cdt.codan.core.checkers"
-         id="org.eclipse.cdt.codan.core.internal.checkers">
-      <checker
-            class="ch.hsr.ifs.cute.mockator.incompleteclass.staticpoly.StaticPolymorphismChecker"
-            id="ch.hsr.ifs.cute.mockator.StaticPolyMissingMemFunsResolution"
-            name="%StaticPolyMissingMemberFunctionsCheckerName">
-      <problem
-            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
-            defaultEnabled="false"
-            defaultSeverity="Error"
-            id="ch.hsr.ifs.cute.mockator.problems.StaticPolyMissingMemFunsProblem"
-            messagePattern="%NeccesaryMemberFunctionsMissingMsg"
-            name="%MissingMemberFunctionsInCompileSeamProblemName">
-      </problem>
-      </checker>
-      <category
-            id="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
-            name="%MockatorProblemCategoryDesc">
-      </category>
-   </extension>
-   <extension
-         point="org.eclipse.cdt.codan.core.checkers"
-         id="org.eclipse.cdt.codan.core.internal.checkers">
-      <checker
-            class="ch.hsr.ifs.cute.mockator.incompleteclass.subtype.SubtypePolymorphismChecker"
-            id="ch.hsr.ifs.cute.mockator.SubtypePolyMissingMemFunsResolution"
-            name="%SubtypePolyMissingMemberFunctionsCheckerName">
-      <problem
-            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
-            defaultEnabled="false"
-            defaultSeverity="Error"
-            id="ch.hsr.ifs.cute.mockator.problems.SubtypeMissingMemFunsProblem"
-            messagePattern="%NeccesaryMemberFunctionsMissingMsg"
-            name="%MissingMemberFunctionsInObjectSeamProblemName">
-      </problem>
-      </checker>
-   </extension>
-   <extension
-         point="org.eclipse.cdt.codan.core.checkers"
-         id="org.eclipse.cdt.codan.core.internal.checkers">
-      <checker
-            class="ch.hsr.ifs.cute.mockator.testdouble.creation.staticpoly.MissingTestDoubleStaticPolyChecker"
-            id="ch.hsr.ifs.cute.mockator.MissingTestDoubleStaticPolyChecker"
-            name="%StaticPolyMissingTestDoubleCheckerName">
-      <problem
-            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
-            defaultEnabled="false"
-            defaultSeverity="Error"
-            id="ch.hsr.ifs.cute.mockator.problems.MissingTestDoubleStaticPolyProblem"
-            messagePattern="%StaticPolyTestDoubleMissingMsg"
-            name="%StaticPolyMissingTestDoubleProblemName">
-      </problem>
-      </checker>
-   </extension>
-   <extension
-         point="org.eclipse.cdt.codan.core.checkers"
-         id="org.eclipse.cdt.codan.core.internal.checkers">
-      <checker
-            class="ch.hsr.ifs.cute.mockator.testdouble.creation.subtype.MissingTestDoubleSubTypeChecker"
-            id="ch.hsr.ifs.cute.mockator.MissingTestDoubleSubTypeChecker"
-            name="%SubTypeMissingTestDoubleCheckerName">
-      <problem
-            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
-            defaultEnabled="false"
-            defaultSeverity="Error"
-            id="ch.hsr.ifs.cute.mockator.problems.MissingTestDoubleSubTypeProblem"
-            messagePattern="%SubTypeTestDoubleMissingMsg"
-            name="%SubTypeMissingTestDoubleProblemName">
-      </problem>
-      </checker>
-   </extension>
-   <extension
-         point="org.eclipse.cdt.codan.core.checkers"
-         id="org.eclipse.cdt.codan.core.internal.checkers">
-      <checker
-            class="ch.hsr.ifs.cute.mockator.mockobject.expectations.qf.InconsistentExpectationsChecker"
-            id="ch.hsr.ifs.cute.mockator.InconsistentExpectationsChecker"
-            name="%InconsistentExpectationsName">
-      <problem
-            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
-            defaultEnabled="false"
-            defaultSeverity="Info"
-            id="ch.hsr.ifs.cute.mockator.problems.InconsistentExpectationsProblem"
-            messagePattern="%InconsistentExpectationsProblemMsg"
-            name="%InconsistentExpectationsProblemName">
-      </problem>
-      </checker>
-   </extension>
-   <extension
-         point="org.eclipse.cdt.codan.core.checkers"
-         id="org.eclipse.cdt.codan.core.internal.checkers">
-      <checker
-            class="ch.hsr.ifs.cute.mockator.linker.wrapfun.gnuoption.GnuOptionChecker"
-            id="ch.hsr.ifs.cute.mockator.WrapFunctionChecker"
-            name="%WrapFunctionCheckerName">
-      <problem
-            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
-            defaultEnabled="false"
-            defaultSeverity="Info"
-            id="ch.hsr.ifs.cute.mockator.problems.WrapFunctionProblem"
-            messagePattern="%WrapFunctionProblemMsg"
-            name="%WrapFunctionProblemName">
-      </problem>
-      </checker>
-   </extension>
-   <extension
-         point="org.eclipse.cdt.codan.core.checkers"
-         id="org.eclipse.cdt.codan.core.internal.checkers">
-      <checker
-            class="ch.hsr.ifs.cute.mockator.preprocessor.qf.TraceFunctionChecker"
-            id="ch.hsr.ifs.cute.mockator.TraceFunctionChecker"
-            name="%TraceFunctionCheckerName">
-      <problem
-            category="ch.hsr.ifs.cute.mockator.MockatorProblemCategory"
-            defaultEnabled="false"
-            defaultSeverity="Warning"
-            id="ch.hsr.ifs.cute.mockator.problems.TraceFunctionProblem"
-            messagePattern="%TraceFunctionProblemMsg"
-            name="%TraceFunctionProblemName">
-      </problem>
-      </checker>
-   </extension>
+
    <extension
        point="org.eclipse.ui.actionSets">
     <actionSet
@@ -303,6 +280,139 @@
           </groupMarker>
        </menu>
     </viewerContribution>
+    <objectContribution
+          id="ch.hsr.ifs.cute.mockator.addNature"
+          objectClass="java.lang.Object">
+       <visibility>
+          <and>
+             <or>
+                <and>
+                   <objectClass
+                         name="org.eclipse.core.resources.IProject">
+                   </objectClass>
+                   <objectState
+                         name="nature"
+                         value="org.eclipse.cdt.core.ccnature">
+                   </objectState>
+                </and>
+                <objectClass
+                      name="org.eclipse.cdt.core.model.ICProject">
+                </objectClass>
+             </or>
+             <not>
+                <objectState
+                      name="nature"
+                      value="ch.hsr.ifs.cute.mockator.MockatorNature">
+                </objectState>
+             </not>
+          </and>
+       </visibility>
+       <menu
+             id="ch.hsr.ifs.cute.mockator"
+             label="%PluginVisibleName"
+             path="buildGroup">
+          <groupMarker
+                name="rebuild">
+          </groupMarker>
+          <separator
+                name="nature">
+          </separator>
+       </menu>
+       <action
+             class="ch.hsr.ifs.cute.mockator.project.nature.AddNatureAction"
+             definitionId="ch.hsr.ifs.cute.mockator.addNature"
+             enablesFor="+"
+             id="ch.hsr.ifs.cute.mockator.project.AddNatureAction"
+             label="%AddNatureMenu"
+             menubarPath="ch.hsr.ifs.cute.mockator/nature"
+             style="push">
+       </action>
+    </objectContribution>
+    <objectContribution
+          id="ch.hsr.ifs.cute.mockator.removeNature"
+          objectClass="java.lang.Object">
+       <visibility>
+          <and>
+             <or>
+                <and>
+                   <objectClass
+                         name="org.eclipse.core.resources.IProject">
+                   </objectClass>
+                   <objectState
+                         name="nature"
+                         value="org.eclipse.cdt.core.ccnature">
+                   </objectState>
+                </and>
+                <objectClass
+                      name="org.eclipse.cdt.core.model.ICProject">
+                </objectClass>
+             </or>
+             <objectState
+                   name="nature"
+                   value="ch.hsr.ifs.cute.mockator.MockatorNature">
+             </objectState>
+          </and>
+       </visibility>
+       <menu
+             id="ch.hsr.ifs.cute.mockator"
+             label="%PluginVisibleName"
+             path="buildGroup">
+          <groupMarker
+                name="rebuild">
+          </groupMarker>
+          <separator
+                name="nature">
+          </separator>
+       </menu>
+       <action
+             class="ch.hsr.ifs.cute.mockator.project.nature.RemoveNatureAction"
+             definitionId="ch.hsr.ifs.cute.mockator.removeNature"
+             enablesFor="1"
+             id="ch.hsr.ifs.cute.mockator.project.removeNatureAction"
+             label="%RemoveNatureMenu"
+             menubarPath="ch.hsr.ifs.cute.mockator/nature"
+             style="push">
+       </action>
+    </objectContribution>
+    <objectContribution
+          id="ch.hsr.ifs.cute.mockator.project.togglePreloadFunction"
+          objectClass="java.lang.Object">
+       <visibility>
+          <or>
+             <and>
+                <objectClass
+                      name="org.eclipse.core.resources.IProject">
+                </objectClass>
+                <objectState
+                      name="nature"
+                      value="org.eclipse.cdt.core.ccnature">
+                </objectState>
+             </and>
+             <objectClass
+                   name="org.eclipse.cdt.core.model.ICProject">
+             </objectClass>
+          </or>
+       </visibility>
+       <action
+             class="ch.hsr.ifs.cute.mockator.linker.wrapfun.ldpreload.TogglePreloadFunctionAction"
+             enablesFor="+"
+             id="ch.hsr.ifs.cute.mockator.project.togglePreloadFunction"
+             label="%MaintainRunTimeWrappingMenu"
+             menubarPath="ch.hsr.ifs.cute.mockator/nature"
+             style="pulldown">
+       </action>
+    </objectContribution>
+    <viewerContribution
+          id="ch.hsr.ifs.cute.mockator.cEditorContribution"
+          targetID="#CEditorContext">
+       <action
+             class="ch.hsr.ifs.cute.mockator.extractinterface.ui.ExtractInterfaceDelegate"
+             definitionId="ch.hsr.ifs.cute.mockator.extractInterfaceCommand"
+             id="ch.hsr.ifs.cute.mockator.extractInterfaceAction"
+             label="%ExtractInterfaceActionLabel"
+             menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
+       </action>
+    </viewerContribution>
  </extension>
  <extension
        point="org.eclipse.ui.commands">
@@ -348,7 +458,21 @@
           id="ch.hsr.ifs.cute.mockator.toogleTracingFunCallsCommand"
           name="%ToggleTracingFunCallsName">
     </command>
+    <command
+          id="ch.hsr.ifs.cute.mockator.addNature"
+          name="%AddNatureMenu">
+    </command>
+    <command
+          id="ch.hsr.ifs.cute.mockator.removeNature"
+          name="%RemoveNatureMenu">
+    </command>
+    <command
+          categoryId="org.eclipse.cdt.ui.category.refactoring"
+          id="ch.hsr.ifs.cute.mockator.extractInterfaceCommand"
+          name="%ExtractInterfaceCommandName">
+    </command>
  </extension>
+ 
  <extension
        point="org.eclipse.ui.bindings">
     <key
@@ -413,115 +537,6 @@
       <requires-nature id="org.eclipse.cdt.core.ccnature"/>
 </extension>
    <extension
-          point="org.eclipse.ui.popupMenus">
-       <objectContribution
-             id="ch.hsr.ifs.cute.mockator.addNature"
-             objectClass="java.lang.Object">
-         <visibility>
-         	<and>
-         	    <or>
-	              <and>
-		             <objectClass name="org.eclipse.core.resources.IProject"/>
-		             <objectState name="nature" value="org.eclipse.cdt.core.ccnature"/>
-	              </and>
-	              <objectClass name="org.eclipse.cdt.core.model.ICProject"/>
-	            </or>
-		        <not>
-		          <objectState name="nature"
-		                         value="ch.hsr.ifs.cute.mockator.MockatorNature">
-		          </objectState>
-		        </not>
-             </and>
-         </visibility>
-         <menu
-               id="ch.hsr.ifs.cute.mockator"
-               label="%PluginVisibleName"
-               path="buildGroup">
-            <groupMarker name="rebuild"/>
-            <separator name="nature"/>
-         </menu>
-         <action
-               class="ch.hsr.ifs.cute.mockator.project.nature.AddNatureAction"
-               enablesFor="+"
-               id="ch.hsr.ifs.cute.mockator.project.AddNatureAction"
-               label="%AddNatureMenu"
-               definitionId="ch.hsr.ifs.cute.mockator.addNature"
-               style="push"
-               menubarPath="ch.hsr.ifs.cute.mockator/nature">
-           </action>
-        </objectContribution>
-       <objectContribution
-             id="ch.hsr.ifs.cute.mockator.removeNature"
-             objectClass="java.lang.Object">
-         <visibility>
-           <and>
-              <or>
-	              <and>
-		             <objectClass name="org.eclipse.core.resources.IProject"/>
-		             <objectState name="nature" value="org.eclipse.cdt.core.ccnature"/>
-	              </and>
-	              <objectClass name="org.eclipse.cdt.core.model.ICProject"/>
-	          </or>
-              <objectState name="nature"
-                   value="ch.hsr.ifs.cute.mockator.MockatorNature">
-              </objectState>
-            </and>
-         </visibility>
-         <menu
-               id="ch.hsr.ifs.cute.mockator"
-               label="%PluginVisibleName"
-               path="buildGroup">
-            <groupMarker name="rebuild"/>
-            <separator name="nature"/>
-         </menu>
-          <action
-                class="ch.hsr.ifs.cute.mockator.project.nature.RemoveNatureAction"
-                definitionId="ch.hsr.ifs.cute.mockator.removeNature"
-                id="ch.hsr.ifs.cute.mockator.project.removeNatureAction"
-                label="%RemoveNatureMenu"
-                enablesFor="1"
-                menubarPath="ch.hsr.ifs.cute.mockator/nature"
-                style="push">
-          </action>
-       </objectContribution>
-       <objectContribution
-            objectClass="java.lang.Object"
-            id="ch.hsr.ifs.cute.mockator.project.togglePreloadFunction">
-          <visibility>
-         	    <or>
-	              <and>
-		             <objectClass name="org.eclipse.core.resources.IProject"/>
-		             <objectState name="nature" value="org.eclipse.cdt.core.ccnature"/>
-	              </and>
-	              <objectClass name="org.eclipse.cdt.core.model.ICProject"/>
-	            </or>
-         </visibility>
-         <action
-               label="%MaintainRunTimeWrappingMenu"
-               style="pulldown"
-               class="ch.hsr.ifs.cute.mockator.linker.wrapfun.ldpreload.TogglePreloadFunctionAction"
-               menubarPath="ch.hsr.ifs.cute.mockator/nature"
-               enablesFor="+"
-               id="ch.hsr.ifs.cute.mockator.project.togglePreloadFunction">
-         </action>  
-      </objectContribution>
-   </extension>
-   <extension
-       point="org.eclipse.ui.commands">
-    <command
-          id="ch.hsr.ifs.cute.mockator.addNature"
-          name="%AddNatureMenu">
-    </command>
-    <command
-          id="ch.hsr.ifs.cute.mockator.removeNature"
-          name="%RemoveNatureMenu">
-    </command>
-    <!--<command
-          id="ch.hsr.ifs.cute.mockator.maintainRuntimeWrapping"
-          name="%MaintainRunTimeWrappingMenu">
-    </command>-->
-   </extension>
-   <extension
          point="org.eclipse.ui.propertyPages">
       <page
       	 	name="%PluginVisibleName"
@@ -560,28 +575,7 @@
          </action>
       </actionSet>
    </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <command
-            categoryId="org.eclipse.cdt.ui.category.refactoring"
-            id="ch.hsr.ifs.cute.mockator.extractInterfaceCommand"
-            name="%ExtractInterfaceCommandName">
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.popupMenus">
-         <viewerContribution
-            id="ch.hsr.ifs.cute.mockator.cEditorContribution"
-            targetID="#CEditorContext">
-         <action
-               class="ch.hsr.ifs.cute.mockator.extractinterface.ui.ExtractInterfaceDelegate"
-               id="ch.hsr.ifs.cute.mockator.extractInterfaceAction"
-               definitionId="ch.hsr.ifs.cute.mockator.extractInterfaceCommand"
-               label="%ExtractInterfaceActionLabel"
-               menubarPath="org.eclipse.cdt.ui.refactoring.menu/codingGroup">
-         </action>
-      </viewerContribution>
-   </extension>
+
    <extension
          point="org.eclipse.ltk.core.refactoring.refactoringContributions">
       <contribution
@@ -589,6 +583,10 @@
             id="ch.hsr.ifs.cute.mockator.extractinterface.ExtractInterfaceRefactoring">
       </contribution>
    </extension>
+
+
+
+
    <!--<extension
          id="ch.hsr.ifs.cute.mockator.mockatorMenuExtension"
          name="Mockator Menu Extension"
