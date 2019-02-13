@@ -14,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import org.eclipse.cdt.ui.ICEditor;
 import org.eclipse.cdt.ui.testplugin.EditorTestHelper;
@@ -24,7 +25,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IEditorPart;
 import org.junit.Test;
 
-import ch.hsr.ifs.cute.ui.sourceactions.NewTestFunctionActionDelegate;
+import ch.hsr.ifs.cute.ui.commands.handlers.NewTestFunction;
 import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.base.CDTTestingUITest;
 
 
@@ -36,19 +37,11 @@ public class TestBugFixes extends CDTTestingUITest {
         assertTrue(editor instanceof ICEditor);
 
         final ISelectionProvider selectionProvider = ((ICEditor) editor).getSelectionProvider();
-        selectionProvider.setSelection(new TextSelection(212, 0));
+        final NewTestFunction commandHandler = new NewTestFunction();
+        commandHandler.execute(null);
 
-        final NewTestFunctionActionDelegate ntfad = new NewTestFunctionActionDelegate();
-        ntfad.run(null);
-
-        // set cursor location to be at the newly created newTest^Function
-        selectionProvider.setSelection(new TextSelection(261, 0));
-        ntfad.run(null);
-
-        final LinkedModeUI linked2ndCopy = ntfad.testOnlyGetLinkedMode();
-        linked2ndCopy.getSelectedRegion();
-
-        callLeave(linked2ndCopy);
+        LinkedModeUI linkedModeUI = getLinkedModeUI(commandHandler);
+        callLeave(linkedModeUI);
 
         final String results = currentProjectHolder.getDocument(getPrimaryIFileFromCurrentProject()).get();
 
@@ -56,6 +49,22 @@ public class TestBugFixes extends CDTTestingUITest {
         final String actual = results.substring(selection.getOffset(), selection.getOffset() + selection.getLength());
 
         assertEquals("ASSERTM(\"start writing tests\", false);", actual);
+    }
+
+    private static LinkedModeUI getLinkedModeUI(NewTestFunction handler) {
+        // @formatter:off
+        return Arrays.stream(NewTestFunction.class.getDeclaredFields())
+                .filter(f -> f.getName().equals("linkedModeUI"))
+                .findFirst()
+                .map(f -> {
+                    f.setAccessible(true);
+                    try {
+                        return (LinkedModeUI) f.get(handler);
+                    } catch (IllegalArgumentException | IllegalAccessException e) {
+                        return null;
+                    }
+        }).get();
+        // @formatter:on
     }
 
     private void callLeave(final LinkedModeUI linked2ndCopy) throws IllegalAccessException, InvocationTargetException {
@@ -72,5 +81,4 @@ public class TestBugFixes extends CDTTestingUITest {
         }
         assertFalse(flag);
     }
-
 }

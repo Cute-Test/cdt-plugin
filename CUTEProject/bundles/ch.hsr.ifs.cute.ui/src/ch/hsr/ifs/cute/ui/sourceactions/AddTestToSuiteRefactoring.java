@@ -36,7 +36,7 @@ import ch.hsr.ifs.cute.ui.ASTUtil;
 /**
  * @since 4.0
  */
-public class AddTestToSuite extends AbstractFunctionAction {
+public class AddTestToSuiteRefactoring extends AbstractFunctionAction {
 
     private static final String SCOPE = "::";
 

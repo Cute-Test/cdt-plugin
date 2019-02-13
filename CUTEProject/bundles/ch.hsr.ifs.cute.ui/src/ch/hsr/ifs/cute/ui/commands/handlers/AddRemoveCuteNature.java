@@ -6,7 +6,7 @@
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.cute.ui.actions;
+package ch.hsr.ifs.cute.ui.commands.handlers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,13 +27,13 @@ import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.project.CuteNature;
 
 
-public class AddRemoveCuteNatureAction extends AbstractHandler {
+public class AddRemoveCuteNature extends AbstractHandler {
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
         ISelection selection = HandlerUtil.getCurrentSelection(event);
         Collection<IProject> selectedProjects = updateSelection(selection);
-        String action = event.getParameter("ch.hsr.ifs.cute.ui.handleCuteNatureParameter");
+        String action = event.getParameter("ch.hsr.ifs.cute.ui.commands.parameters.AddRemoveCuteNatureParameter");
         switch (action) {
         case "add":
             addCuteNatureToSelectedProjects(selectedProjects);

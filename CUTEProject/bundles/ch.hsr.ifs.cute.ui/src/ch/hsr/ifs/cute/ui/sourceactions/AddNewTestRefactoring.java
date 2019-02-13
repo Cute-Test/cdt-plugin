@@ -26,16 +26,16 @@ import ch.hsr.ifs.cute.ui.CuteUIPlugin;
  * @author Thomas Corbat IFS
  *
  */
-public class NewTestFunctionAction extends AbstractFunctionAction {
+public class AddNewTestRefactoring extends AbstractFunctionAction {
 
     // TODO create Strategy or new Superclass
 
-    protected static final String TEST_STMT                    = "\tASSERTM(\"start writing tests\", false);";
+    public static final String TEST_STMT                    = "\tASSERTM(\"start writing tests\", false);";
     int                           problemMarkerErrorLineNumber = 0;
 
     private final String funcName;
 
-    public NewTestFunctionAction(String funcName) {
+    public AddNewTestRefactoring(String funcName) {
         this.funcName = funcName;
     }
 

@@ -6,7 +6,7 @@
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.cute.ui.actions;
+package ch.hsr.ifs.cute.ui.commands.handlers;
 
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.commands.AbstractHandler;
@@ -31,7 +31,7 @@ import ch.hsr.ifs.cute.ui.dialogs.ChangeCuteVersionWizard;
  * @since 4.0
  *
  */
-public class ChangeCuteVersionAction extends AbstractHandler implements IWorkbenchWindowActionDelegate {
+public class ChangeCuteVersion extends AbstractHandler implements IWorkbenchWindowActionDelegate {
 
     IProject project;
 
