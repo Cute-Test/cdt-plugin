@@ -12,7 +12,7 @@ import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.comparison.ASTCo
 
 public class NewTestFunctionTest extends CDTTestingUITest {
 
-    private static final String COMMAND_ID = "ch.hsr.ifs.cute.newTestFunctionCommand";
+    private static final String COMMAND_ID = "ch.hsr.ifs.cute.ui.commands.NewTestFunction";
     private String              insertText;
     private boolean             sendTab;
     private String              insertText2;

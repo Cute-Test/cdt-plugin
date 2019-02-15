@@ -1,5 +1,7 @@
 package ch.hsr.ifs.cute.mockator.project.cutewizard;
 
+import java.util.Optional;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -74,9 +76,9 @@ public class MockatorWizardAddition implements ICuteWizardAddition {
     }
 
     private CppStandard getSelectedCppStd() {
-        if (cpp03Button.getSelection()) return CppStandard.Cpp03Std;
-
-        return CppStandard.Cpp11Std;
+        return Optional.ofNullable(cpp03Button)
+            .map(b -> b.getSelection() ? CppStandard.Cpp03Std : CppStandard.Cpp11Std)
+            .orElse(CppStandard.Cpp11Std);
     }
 
     @Override

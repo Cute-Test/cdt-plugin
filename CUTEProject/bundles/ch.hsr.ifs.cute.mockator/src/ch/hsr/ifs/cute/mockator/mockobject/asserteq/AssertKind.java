@@ -97,7 +97,7 @@ public enum AssertKind {
     }
 
     public static Optional<AssertKind> fromCode(final String code) {
-        return Optional.of(STRING_TO_ENUM.get(code));
+        return Optional.ofNullable(STRING_TO_ENUM.get(code));
     }
 
     public static Collection<AssertKind> getAssertProposals() {

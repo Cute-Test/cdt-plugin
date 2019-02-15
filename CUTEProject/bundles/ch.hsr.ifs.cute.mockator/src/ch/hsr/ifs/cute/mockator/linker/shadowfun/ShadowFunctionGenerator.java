@@ -3,6 +3,7 @@ package ch.hsr.ifs.cute.mockator.linker.shadowfun;
 import org.eclipse.cdt.core.dom.ast.ASTNodeFactoryFactory;
 import org.eclipse.cdt.core.dom.ast.IASTCompoundStatement;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
@@ -27,9 +28,9 @@ public class ShadowFunctionGenerator {
     }
 
     public ICPPASTFunctionDefinition createShadowedFunction(final ICPPASTFunctionDeclarator funDecl, final IASTCompoundStatement newBody) {
-        final ICPPASTDeclSpecifier newDeclSpec = ASTUtil.getDeclSpec(funDecl).copy();
+        final ICPPASTDeclSpecifier newDeclSpec = ASTUtil.getDeclSpec(funDecl).copy(CopyStyle.withLocations);
         ASTUtil.removeExternalStorageIfSet(newDeclSpec);
-        final ICPPASTFunctionDeclarator newFunDecl = funDecl.copy();
+        final ICPPASTFunctionDeclarator newFunDecl = funDecl.copy(CopyStyle.withLocations);
         adjustParamNamesIfNecessary(newFunDecl);
         newFunDecl.setName(createFullyQualifiedName(funDecl));
         final ReturnStatementCreator creator = new ReturnStatementCreator(cppStd);

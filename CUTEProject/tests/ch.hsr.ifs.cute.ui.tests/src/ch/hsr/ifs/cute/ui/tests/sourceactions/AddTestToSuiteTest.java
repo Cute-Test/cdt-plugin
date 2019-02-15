@@ -10,7 +10,7 @@ import ch.hsr.ifs.iltis.testing.highlevel.testingplugin.cdttest.base.CDTTestingU
 
 public class AddTestToSuiteTest extends CDTTestingUITest {
 
-    private static final String COMMAND_ID = "ch.hsr.ifs.cute.addTestCommand";
+    private static final String COMMAND_ID = "ch.hsr.ifs.cute.ui.commands.AddTestToSuite";
     private boolean             shouldType;
     private String              insertText;
     private int                 insertPosition;

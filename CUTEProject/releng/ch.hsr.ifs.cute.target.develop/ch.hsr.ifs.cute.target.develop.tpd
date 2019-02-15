@@ -5,6 +5,8 @@ location "http://download.eclipse.org/releases/2018-12" {
 	org.apache.log4j lazy
 	org.eclipse.platform.sdk lazy
 	org.eclipse.sdk.ide lazy
+	
+	javax.xml.stream lazy
 }
 
 location "http://download.eclipse.org/tools/cdt/releases/9.6" {

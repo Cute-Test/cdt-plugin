@@ -7,7 +7,7 @@ import org.eclipse.core.runtime.QualifiedName;
 import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
 
-class ProjectPropertiesHandler {
+public class ProjectPropertiesHandler {
 
     private final IProject project;
 

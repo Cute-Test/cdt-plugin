@@ -55,7 +55,6 @@ public class WeakDeclAdder {
     }
 
     private static boolean isTuPartOfWorkspace(final IASTTranslationUnit tuOfFunDef) {
-        tuOfFunDef.getOriginatingTranslationUnit().getFile().getLocationURI();
         final URI uriOfTu = FileUtil.stringToUri(tuOfFunDef.getFilePath());
         final IFile[] files = WorkspaceUtil.getWorkspaceRoot().findFilesForLocationURI(uriOfTu);
         return files.length > 0;

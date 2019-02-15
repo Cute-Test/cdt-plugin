@@ -51,7 +51,6 @@ abstract class TestLauncherDelegate : LaunchConfigurationDelegate() {
 				.filter { it.process !is GDBProcess }
 				.filter { fLaunch.processes.contains(it.process) }
 				.forEach {
-					ShowResultView().apply { schedule() }
 					registerPatternMatchListener(fLaunch, fSourcePath, it)
 				}
 		}
@@ -86,6 +85,11 @@ abstract class TestLauncherDelegate : LaunchConfigurationDelegate() {
 				val sourcePath = sourcelookupPath(config, programPath)
 				val consoleListener = ProcessConsoleListener(launch, sourcePath)
 
+				ShowResultView().apply {
+					schedule()
+					join()
+				}
+				
 				ConsolePlugin.getDefault().consoleManager.addConsoleListener(consoleListener)
 				DebugPlugin.getDefault().addDebugEventListener { events ->
 					events.filter { it.kind == DebugEvent.TERMINATE }
