@@ -41,7 +41,7 @@
 
 	<extension point="ch.hsr.ifs.iltis.core.core.extendedExampleInstallerWizard">
 		<example wizardID="ch.hsr.ifs.cute.mockator.examples.MockFunction" pageImage="icons/genproject.gif">
-			<projectDescriptor name="MockFunctionExampleLibrary" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.mockfun.lib/" description="The shared library"/>
+			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ToolChainProjectConfigurator" name="MockFunctionExampleLibrary" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.mockfun.lib/" description="The shared library"/>
 			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ExampleProjectConfigurator" name="MockFunctionExample" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.mockfun.test/" description="The test for the shared library"/>
 		</example>
 	</extension>
@@ -99,7 +99,7 @@
 
 	<extension point="ch.hsr.ifs.iltis.core.core.extendedExampleInstallerWizard">
 		<example wizardID="ch.hsr.ifs.cute.mockator.examples.ShadowFunShared" pageImage="icons/genproject.gif">
-			<projectDescriptor name="ShadowFunctionExampleLibrary" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.shadowfun.lib/" description="The shared library"/>
+			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ToolChainProjectConfigurator" name="ShadowFunctionExampleLibrary" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.shadowfun.lib/" description="The shared library"/>
 			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ExampleProjectConfigurator" name="ShadowFunctionExample" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.shadowfun.test/" description="The test for the shared library"/>
 		</example>
 	</extension>
@@ -138,7 +138,7 @@
 
 	<extension point="ch.hsr.ifs.iltis.core.core.extendedExampleInstallerWizard">
 		<example wizardID="ch.hsr.ifs.cute.mockator.examples.WrapFunShared" pageImage="icons/genproject.gif">
-			<projectDescriptor name="WrapFunctionSharedExampleLibrary" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.wrapfunshared.lib/" description="The shared library"/>
+			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ToolChainProjectConfigurator" name="WrapFunctionSharedExampleLibrary" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.wrapfunshared.lib/" description="The shared library"/>
 			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ExampleProjectConfigurator" name="WrapFunctionSharedExample" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.wrapfunshared.test/" description="The test for the shared library"/>
 		</example>
 	</extension>
