@@ -28,13 +28,17 @@ import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunctionType;
 import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.index.IIndexBinding;
 import org.eclipse.cdt.core.index.IIndexName;
 import org.eclipse.cdt.core.index.IndexFilter;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPBasicType;
 import org.eclipse.cdt.internal.ui.refactoring.Container;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -171,6 +175,17 @@ public class RunnerFinder {
     }
 
     private boolean isTestRunner(IASTFunctionDefinition funcDef) {
+    	IASTName suspectName = funcDef.getDeclarator().getName();
+    	IBinding suspect = suspectName.resolveBinding();
+    	if(!(suspect instanceof ICPPFunction)) {
+    		return false;
+    	}
+    	
+    	ICPPFunctionType type = ((ICPPFunction) suspect).getType();
+    	if(!type.isSameType(CPPBasicType.BOOLEAN)) {
+    		return false;
+    	}
+    	
         TestRunnerVisitor visitor = new TestRunnerVisitor();
         funcDef.getBody().accept(visitor);
         return visitor.res;
