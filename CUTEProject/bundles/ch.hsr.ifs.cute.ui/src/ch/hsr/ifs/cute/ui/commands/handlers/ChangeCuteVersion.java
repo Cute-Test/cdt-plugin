@@ -23,7 +23,7 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import ch.hsr.ifs.cute.ui.dialogs.ChangeCuteVersionWizard;
+import ch.hsr.ifs.cute.ui.wizards.changeversion.ChangeVersionWizard;
 
 
 /**
@@ -48,7 +48,7 @@ public class ChangeCuteVersion extends AbstractHandler implements IWorkbenchWind
 
     private void changeVersion() {
         Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
-        ChangeCuteVersionWizard wizard = new ChangeCuteVersionWizard(project);
+        ChangeVersionWizard wizard = new ChangeVersionWizard(project);
 
         WizardDialog dialog = new WizardDialog(shell, wizard);
         dialog.create();

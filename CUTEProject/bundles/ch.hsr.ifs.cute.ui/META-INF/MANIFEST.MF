@@ -32,11 +32,11 @@ Require-Bundle: ch.hsr.ifs.iltis.cpp.versionator,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: ch.hsr.ifs.cute.ui,
  ch.hsr.ifs.cute.ui.commands.handlers,
- ch.hsr.ifs.cute.ui.dialogs,
+ ch.hsr.ifs.cute.ui.fields,
  ch.hsr.ifs.cute.ui.ids,
  ch.hsr.ifs.cute.ui.project,
- ch.hsr.ifs.cute.ui.project.wizard,
- ch.hsr.ifs.cute.ui.sourceactions
+ ch.hsr.ifs.cute.ui.sourceactions,
+ ch.hsr.ifs.cute.ui.wizards
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: ch.hsr.ifs.cute.ui

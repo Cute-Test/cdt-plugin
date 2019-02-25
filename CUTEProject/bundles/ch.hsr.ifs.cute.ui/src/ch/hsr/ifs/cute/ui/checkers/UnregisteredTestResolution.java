@@ -38,7 +38,7 @@ public class UnregisteredTestResolution extends AbstractCodanCMarkerResolution {
 
     @Override
     public String getLabel() {
-        return Messages.UnregisteredTestResolution_0;
+        return CheckerMessages.UnregisteredTest;
     }
 
     @Override
