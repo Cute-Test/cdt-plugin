@@ -6,7 +6,7 @@
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.cute.ui.project.wizard;
+package ch.hsr.ifs.cute.ui.project.wizard.newsuite;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -57,7 +57,7 @@ public class NewSuiteFileCreationWizard extends Wizard implements INewWizard {
 
     @Override
     public boolean performFinish() {
-        IWorkspaceRunnable op = monitor -> page.createFile(monitor);
+        IWorkspaceRunnable op = monitor -> page.createFiles(monitor);
         try {
             getContainer().run(true, true, new WorkbenchRunnableAdapter(op, getSchedulingRule()));
         } catch (InvocationTargetException e) {

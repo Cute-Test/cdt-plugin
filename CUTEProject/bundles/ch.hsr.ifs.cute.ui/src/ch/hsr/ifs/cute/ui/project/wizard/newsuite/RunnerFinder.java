@@ -6,7 +6,7 @@
  * purpose without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
  ******************************************************************************/
-package ch.hsr.ifs.cute.ui.project.wizard;
+package ch.hsr.ifs.cute.ui.project.wizard.newsuite;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +28,6 @@ import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
-import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTQualifiedName;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunction;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunctionType;
@@ -47,6 +46,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
+
+import ch.hsr.ifs.cute.ui.project.wizard.Messages;
 
 
 /**
@@ -175,17 +176,17 @@ public class RunnerFinder {
     }
 
     private boolean isTestRunner(IASTFunctionDefinition funcDef) {
-    	IASTName suspectName = funcDef.getDeclarator().getName();
-    	IBinding suspect = suspectName.resolveBinding();
-    	if(!(suspect instanceof ICPPFunction)) {
-    		return false;
-    	}
-    	
-    	ICPPFunctionType type = ((ICPPFunction) suspect).getType();
-    	if(!type.isSameType(CPPBasicType.BOOLEAN)) {
-    		return false;
-    	}
-    	
+        IASTName suspectName = funcDef.getDeclarator().getName();
+        IBinding suspect = suspectName.resolveBinding();
+        if (!(suspect instanceof ICPPFunction)) {
+            return false;
+        }
+
+        ICPPFunctionType type = ((ICPPFunction) suspect).getType();
+        if (!type.isSameType(CPPBasicType.BOOLEAN)) {
+            return false;
+        }
+
         TestRunnerVisitor visitor = new TestRunnerVisitor();
         funcDef.getBody().accept(visitor);
         return visitor.res;

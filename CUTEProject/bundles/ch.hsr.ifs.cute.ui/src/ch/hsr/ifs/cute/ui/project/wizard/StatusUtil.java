@@ -8,6 +8,9 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.project.wizard;
 
+import java.util.Collection;
+import java.util.Comparator;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -33,6 +36,15 @@ public class StatusUtil {
             }
         }
         return max;
+    }
+
+    public static IStatus getMostSevere(Collection<IStatus> status) {
+        //@formatter:off
+        return status.stream()
+            .sorted(Comparator.comparing(IStatus::getSeverity).reversed())
+            .findFirst()
+            .orElse(null);
+        //@formatter:on
     }
 
     public static void applyToStatusLine(DialogPage page, IStatus status) {
