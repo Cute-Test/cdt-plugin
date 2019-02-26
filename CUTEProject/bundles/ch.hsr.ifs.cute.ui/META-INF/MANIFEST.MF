@@ -36,7 +36,12 @@ Export-Package: ch.hsr.ifs.cute.ui,
  ch.hsr.ifs.cute.ui.ids,
  ch.hsr.ifs.cute.ui.project,
  ch.hsr.ifs.cute.ui.sourceactions,
- ch.hsr.ifs.cute.ui.wizards
+ ch.hsr.ifs.cute.ui.wizards,
+ ch.hsr.ifs.cute.ui.wizards.changeversion,
+ ch.hsr.ifs.cute.ui.wizards.newproject,
+ ch.hsr.ifs.cute.ui.wizards.newproject.newcuteproject,
+ ch.hsr.ifs.cute.ui.wizards.newproject.newsuiteproject,
+ ch.hsr.ifs.cute.ui.wizards.newsuitefile
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: ch.hsr.ifs.cute.ui

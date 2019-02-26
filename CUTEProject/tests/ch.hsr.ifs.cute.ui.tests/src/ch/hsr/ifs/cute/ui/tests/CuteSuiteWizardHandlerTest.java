@@ -30,21 +30,21 @@ import ch.hsr.ifs.iltis.cpp.versionator.definition.CPPVersion;
 
 import ch.hsr.ifs.cute.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.headers.versions.CuteHeaders2;
-import ch.hsr.ifs.cute.ui.project.wizard.CuteSuiteWizardHandler;
+import ch.hsr.ifs.cute.ui.wizards.newproject.newsuiteproject.NewSuiteProjectWizardHandler;
 
 
 public class CuteSuiteWizardHandlerTest {
 
-    CuteSuiteWizardHandler      cswh = null;
-    private IFolder             srcFolder;
-    private IFolder             cuteFolder;
-    private IProject            project;
-    private IScopeContext       scope;
-    private IEclipsePreferences node;
+    NewSuiteProjectWizardHandler cswh = null;
+    private IFolder              srcFolder;
+    private IFolder              cuteFolder;
+    private IProject             project;
+    private IScopeContext        scope;
+    private IEclipsePreferences  node;
 
     @Before
     public void setUp() throws Exception {
-        cswh = new CuteSuiteWizardHandler("theSuiteName");
+        cswh = new NewSuiteProjectWizardHandler("theSuiteName");
         IWorkspaceRoot iwsr = ResourcesPlugin.getWorkspace().getRoot();
         project = iwsr.getProject("CSWHT");
         scope = new ProjectScope(project);
