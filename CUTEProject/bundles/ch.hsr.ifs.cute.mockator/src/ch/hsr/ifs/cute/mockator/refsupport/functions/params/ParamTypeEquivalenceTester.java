@@ -21,6 +21,7 @@ import ch.hsr.ifs.iltis.core.core.functional.StreamTriple;
 import ch.hsr.ifs.iltis.core.core.functional.functions.Function2;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTTypeUtil;
 import ch.hsr.ifs.iltis.cpp.core.util.constants.CommonCPPConstants;
 
 
@@ -109,11 +110,11 @@ public class ParamTypeEquivalenceTester {
 
     private static IType getUnderlyingType(IType type) {
         type = CxxAstUtils.unwindTypedef(type);
-        return ASTUtil.asNonConst(ASTUtil.unwindPointerOrRefType(type));
+        return ASTTypeUtil.asNonConst(ASTTypeUtil.unwindPointerOrRefType(type));
     }
 
     private static boolean isString(IType type) {
-        type = ASTUtil.unwindPointerOrRefType(CxxAstUtils.unwindTypedef(type));
+        type = ASTTypeUtil.unwindPointerOrRefType(CxxAstUtils.unwindTypedef(type));
         final String unwoundQualifierType = unwindQualifierType(type).toString();
         return unwoundQualifierType.contains(CommonCPPConstants.STD_STRING) || unwoundQualifierType.contains(BASIC_STRING_CHAR);
     }

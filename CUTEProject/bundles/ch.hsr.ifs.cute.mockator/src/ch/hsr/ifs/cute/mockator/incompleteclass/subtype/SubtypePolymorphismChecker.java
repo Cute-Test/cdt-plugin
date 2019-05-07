@@ -29,6 +29,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.core.ast.checker.VisitorReport;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTDeclaratorUtil;
 import ch.hsr.ifs.iltis.cpp.core.ast.visitor.SimpleVisitor;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
@@ -73,7 +74,7 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
             }
 
             for (final IASTDeclarator declarator : simpleDecl.getDeclarators()) {
-                if (!ASTUtil.hasPointerOrRefType(declarator)) {
+                if (!ASTDeclaratorUtil.isPointerOrRefType(declarator)) {
                     checkIfAbstract(declSpec);
                     break;
                 }
@@ -85,7 +86,7 @@ public class SubtypePolymorphismChecker extends AbstractMissingMemFunChecker {
             if (expr instanceof ICPPASTNewExpression) {
                 final ICPPASTNewExpression newExpression = (ICPPASTNewExpression) expr;
 
-                if (!ASTUtil.hasPointerOrRefType(newExpression.getTypeId().getAbstractDeclarator())) {
+                if (!ASTDeclaratorUtil.isPointerOrRefType(newExpression.getTypeId().getAbstractDeclarator())) {
                     final IASTDeclSpecifier declSpec = newExpression.getTypeId().getDeclSpecifier();
 
                     if (declSpec instanceof ICPPASTNamedTypeSpecifier) {

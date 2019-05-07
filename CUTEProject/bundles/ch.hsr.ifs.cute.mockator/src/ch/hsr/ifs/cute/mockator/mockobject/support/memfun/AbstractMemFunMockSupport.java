@@ -10,7 +10,7 @@ import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
-import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTDeclSpecifierUtil;
 
 import ch.hsr.ifs.cute.mockator.mockobject.registrations.MemberFunCallRegistrationAdder;
 import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
@@ -54,7 +54,7 @@ abstract class AbstractMemFunMockSupport implements MemFunMockSupportAdder {
 
     protected void addCallRegistration(final IASTCompoundStatement newBody, final ICPPASTFunctionDefinition fun) {
         final ICPPASTFunctionDeclarator funDecl = (ICPPASTFunctionDeclarator) fun.getDeclarator();
-        final boolean isStatic = ASTUtil.isStatic(fun.getDeclSpecifier());
+        final boolean isStatic = ASTDeclSpecifierUtil.isStatic(fun.getDeclSpecifier());
         new MemberFunCallRegistrationAdder(funDecl, isStatic, cppStd, callsVectorName).addRegistrationTo(newBody);
     }
 

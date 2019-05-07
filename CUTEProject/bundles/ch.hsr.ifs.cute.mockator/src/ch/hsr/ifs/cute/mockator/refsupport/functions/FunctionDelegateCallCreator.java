@@ -18,6 +18,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTDeclSpecifierUtil;
 
 import ch.hsr.ifs.cute.mockator.refsupport.functions.params.ParameterNameCreator;
 import ch.hsr.ifs.cute.mockator.refsupport.utils.TypeCreator;
@@ -45,7 +46,7 @@ public class FunctionDelegateCallCreator {
     public IASTStatement createDelegate(final IASTName funName, final IASTDeclSpecifier declSpec) {
         final ICPPASTFunctionCallExpression call = createFunCall(funName);
 
-        if (ASTUtil.isVoid(declSpec) && hasNoPointers()) {
+        if (ASTDeclSpecifierUtil.isStatic(declSpec) && hasNoPointers()) {
             return nodeFactory.newExpressionStatement(call);
         }
 

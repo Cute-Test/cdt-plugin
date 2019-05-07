@@ -19,6 +19,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTDeclSpecifierUtil;
 
 
 public class PublicMemFunFinder {
@@ -85,7 +86,7 @@ public class PublicMemFunFinder {
     }
 
     private boolean ignoreStatic(final ICPPASTDeclSpecifier funDeclSpec) {
-        return ASTUtil.isStatic(funDeclSpec) && !typesToConsider.contains(Types.withStatics);
+        return ASTDeclSpecifierUtil.isStatic(funDeclSpec) && !typesToConsider.contains(Types.withStatics);
     }
 
     private boolean ignoreDtor(final IASTName memFunName) {

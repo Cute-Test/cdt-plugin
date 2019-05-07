@@ -27,6 +27,7 @@ import org.eclipse.jface.text.ITextSelection;
 import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTStatementUtil;
 import ch.hsr.ifs.iltis.cpp.core.util.constants.CommonCPPConstants;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;
@@ -169,7 +170,7 @@ public class GnuOptionRefactoring extends LinkerRefactoring {
         final FunctionDelegateCallCreator creator = new FunctionDelegateCallCreator(wrapFunDecl);
         final ICPPASTFunctionDeclarator funDecl = CPPVisitor.findChildWithType(realFunDecl, ICPPASTFunctionDeclarator.class).orElse(null);
         final IASTStatement delegateToRealFun = creator.createDelegate(funDecl.getName(), realFunDecl.getDeclSpecifier());
-        return ASTUtil.toCompoundStatement(delegateToRealFun);
+        return ASTStatementUtil.wrapInCompountStmtIfNecessary(delegateToRealFun);
     }
 
     String getNewFunName() {

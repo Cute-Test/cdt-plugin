@@ -33,7 +33,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
 
-import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTNavigationUtil;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.cute.mockator.incompleteclass.StaticPolyMissingMemFun;
@@ -135,11 +135,11 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
 
         final ICPPASTConstructorInitializer ctorInitializer = (ICPPASTConstructorInitializer) initializer;
 
-        if (ASTUtil.isPartOf(ctorInitializer, ICPPASTConstructorChainInitializer.class)) {
+        if (ASTNavigationUtil.isPartOf(ctorInitializer, ICPPASTConstructorChainInitializer.class)) {
             return handleCtorInitializer(initializer, ctorInitializer);
-        } else if (ASTUtil.isPartOf(ctorInitializer, ICPPASTNewExpression.class)) {
+        } else if (ASTNavigationUtil.isPartOf(ctorInitializer, ICPPASTNewExpression.class)) {
             return handleNewExpression(ctorInitializer);
-        } else if (ASTUtil.isPartOf(ctorInitializer, ICPPASTDeclarator.class)) {
+        } else if (ASTNavigationUtil.isPartOf(ctorInitializer, ICPPASTDeclarator.class)) {
             return handleSimpleDecl(ctorInitializer);
         }
 
@@ -184,7 +184,7 @@ class MissingCtorFinderVisitor extends MissingMemFunVisitor {
 
     @Override
     public int visit(final IASTDeclaration decl) {
-        if (!(decl instanceof IASTSimpleDeclaration && ASTUtil.isPartOf(decl, ICPPASTFunctionDefinition.class))) {
+        if (!(decl instanceof IASTSimpleDeclaration && ASTNavigationUtil.isPartOf(decl, ICPPASTFunctionDefinition.class))) {
             return PROCESS_CONTINUE;
         }
 

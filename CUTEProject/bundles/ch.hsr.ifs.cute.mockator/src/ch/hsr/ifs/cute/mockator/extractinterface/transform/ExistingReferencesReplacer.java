@@ -31,6 +31,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTDeclaratorUtil;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.cute.mockator.extractinterface.context.ExtractInterfaceContext;
@@ -80,7 +81,7 @@ public class ExistingReferencesReplacer implements Consumer<ExtractInterfaceCont
         }
         final IASTNode declaration = getDeclaration(usage);
         final IASTDeclarator declarator = getDeclarator(declaration, context.getChosenClass().getName());
-        return ASTUtil.hasPointerOrRefType(declarator) || isClassForwardDeclaration(declaration);
+        return ASTDeclaratorUtil.isPointerOrRefType(declarator) || isClassForwardDeclaration(declaration);
     }
 
     private static boolean isPartOfExpression(final IASTName usage) {
