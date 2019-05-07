@@ -46,7 +46,7 @@ public class FunctionDelegateCallCreator {
     public IASTStatement createDelegate(final IASTName funName, final IASTDeclSpecifier declSpec) {
         final ICPPASTFunctionCallExpression call = createFunCall(funName);
 
-        if (ASTDeclSpecifierUtil.isStatic(declSpec) && hasNoPointers()) {
+        if (ASTDeclSpecifierUtil.isVoid(declSpec) && hasNoPointers()) {
             return nodeFactory.newExpressionStatement(call);
         }
 
