@@ -14,7 +14,9 @@ import ch.hsr.ifs.cute.headers.ICuteHeaders;
 public enum CuteHeaders2 implements ICuteHeaders {
 
     @CuteVersionNumber(major = 2, minor = 2, patch = 1)
-    _2_1();
+    _2_1(),
+    @CuteVersionNumber(major = 2, minor = 2, patch = 3)
+    _2_3();
 
     private CuteVersionNumber fVersionNumber;
 

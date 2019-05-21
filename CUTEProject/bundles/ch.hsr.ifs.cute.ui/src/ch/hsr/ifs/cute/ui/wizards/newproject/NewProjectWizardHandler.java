@@ -120,8 +120,7 @@ public class NewProjectWizardHandler extends MBSWizardHandler implements IInclud
     }
 
     protected void createCuteProject(IProject project, IProgressMonitor pm) throws CoreException {
-        CuteNature.addCuteNature(project, new NullProgressMonitor());
-        ICuteHeaders.setForProject(project, getCuteVersion());
+        CuteNature.addCuteNature(project, getCuteVersion(),  new NullProgressMonitor());
         createCuteProjectFolders(project);
         callAdditionalHandlers(project, pm);
         ManagedBuildManager.saveBuildInfo(project, true);

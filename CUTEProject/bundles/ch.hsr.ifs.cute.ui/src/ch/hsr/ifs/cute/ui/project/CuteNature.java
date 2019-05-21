@@ -34,7 +34,8 @@ public class CuteNature implements IProjectNature, IIncludeStrategyProvider {
 
     private IProject project;
 
-    public static void addCuteNature(IProject project, IProgressMonitor mon) throws CoreException {
+    public static void addCuteNature(IProject project, ICuteHeaders headers, IProgressMonitor mon) throws CoreException {
+        ICuteHeaders.setForProject(project, headers);
         addNature(project, NATURE_ID, mon);
     }
 
@@ -60,8 +61,8 @@ public class CuteNature implements IProjectNature, IIncludeStrategyProvider {
     @Override
     public void configure() throws CoreException {
         if (ManagedBuildManager.getBuildInfo(project) != null) {
-            ICuteHeaders defaultHeaders = ICuteHeaders.getDefaultHeaders(CPPVersion.getForProject(getProject()));
-            createCuteProjectFolders(project, defaultHeaders);
+            ICuteHeaders headers = ICuteHeaders.getForProject(project) != null ? ICuteHeaders.getForProject(project) : ICuteHeaders.getDefaultHeaders(CPPVersion.getForProject(getProject()));
+            createCuteProjectFolders(project, headers);
         }
     }
 

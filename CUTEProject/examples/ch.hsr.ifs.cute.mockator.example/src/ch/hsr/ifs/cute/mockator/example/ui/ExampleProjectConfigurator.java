@@ -5,6 +5,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.BasicMonitor;
 
+import ch.hsr.ifs.iltis.cpp.versionator.definition.CPPVersion;
+
+import ch.hsr.ifs.cute.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.mockator.project.nature.MockatorNature;
 import ch.hsr.ifs.cute.ui.project.CuteNature;
 
@@ -21,7 +24,7 @@ public class ExampleProjectConfigurator extends ToolChainProjectConfigurator {
 					MockatorNature.addMockatorNature(project, BasicMonitor.subProgress(monitor, 1));
 				}
 				if (!project.hasNature(CuteNature.NATURE_ID)) {
-					CuteNature.addCuteNature(project, BasicMonitor.subProgress(monitor, 1));
+                    CuteNature.addCuteNature(project, ICuteHeaders.getDefaultHeaders(CPPVersion.getForProject(project)), BasicMonitor.subProgress(monitor, 1));
 				}
 			}
 		} catch (CoreException e) {
