@@ -37,5 +37,5 @@ void testSUT() {
     struct Dependency : IDependency
     {
     } dependency;
-    SUT* sut = new SUT(&dependency);
+    SUT *sut = new SUT(&dependency);
 }

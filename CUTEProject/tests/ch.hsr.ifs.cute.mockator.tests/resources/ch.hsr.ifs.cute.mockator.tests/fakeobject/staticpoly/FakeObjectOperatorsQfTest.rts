@@ -79,28 +79,28 @@ namespace suite {
        Fake operator --(int) {
          return Fake();
        }
-       int operator ()(const int& i) {
+       int operator ()(const int &i) {
          return int();
        }
-       bool operator ==(const Fake& f) const {
+       bool operator ==(const Fake &f) const {
          return bool();
        }
-       Fake& operator +=(const Fake& f) {
+       Fake& operator +=(const Fake &f) {
          return *this;
        }
-       Fake& operator /=(const Fake& f) {
+       Fake& operator /=(const Fake &f) {
          return *this;
        }
        bool operator !() const {
          return bool();
        }
-       int operator [](const int& i) {
+       int operator [](const int &i) {
          return int();
        }
        Fake* operator &() {
          return 0;
        }
-       bool operator <(const Fake& f) const {
+       bool operator <(const Fake &f) const {
          return bool();
        }
      };

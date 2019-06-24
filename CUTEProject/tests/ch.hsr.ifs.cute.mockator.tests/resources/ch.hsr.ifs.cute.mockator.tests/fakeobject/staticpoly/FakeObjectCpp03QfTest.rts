@@ -62,15 +62,15 @@ struct SUT {
 namespace suite {
    namespace testSUT {
      struct Fake {
-         void foo(const a::A& aa) const
+         void foo(const a::A &aa) const
          {
          }
 
-         void foo1(const std::string& s) const
+         void foo1(const std::string &s) const
          {
          }
 
-         void foo2(const std::string& s) const
+         void foo2(const std::string &s) const
          {
          }
          Fake& operator ++() {
