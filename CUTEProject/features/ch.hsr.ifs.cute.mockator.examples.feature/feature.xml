@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.mockator.examples.feature"
       label="%featureName"
-      version="5.6.1.qualifier"
+      version="5.7.0.qualifier"
       provider-name="%providerName"
       plugin="ch.hsr.ifs.cute.mockator">
 
