@@ -12,9 +12,15 @@ public class CopyHeaders2_2Test extends CopyHeadersBaseTest {
         super(m);
     }
 
-    public final void testCopySuiteFiles() throws CoreException {
+    public final void testCopySuiteFiles221() throws CoreException {
         String suitename = "TestSuite";
         CuteHeaders2._2_1.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename, true);
+        assertSuiteFilesExist(suitename);
+    }
+
+    public final void testCopySuiteFiles223() throws CoreException {
+        String suitename = "TestSuite";
+        CuteHeaders2._2_3.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename, true);
         assertSuiteFilesExist(suitename);
     }
 }

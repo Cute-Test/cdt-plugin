@@ -25,6 +25,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTArrayModifier;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTExpressionUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTTypeUtil;
 import ch.hsr.ifs.iltis.cpp.core.util.constants.CommonCPPConstants;
 
 import ch.hsr.ifs.cute.mockator.refsupport.functions.params.types.DeclSpecGenerator;
@@ -68,7 +70,7 @@ public class ParamDeclCreator {
     }
 
     public static ICPPASTParameterDeclaration createParameter(final IASTIdExpression idExpr, final Map<String, Boolean> nameHistory) {
-        final IType type = ASTUtil.getType(idExpr);
+        final IType type = ASTExpressionUtil.getType(idExpr);
         final ICPPASTDeclSpecifier spec = createDeclSpecifier(type);
         final IASTName parameterName = getParmeterName(idExpr, nameHistory);
         final IASTDeclarator declarator = getParameterDeclarator(parameterName, type, false);
@@ -120,7 +122,7 @@ public class ParamDeclCreator {
         final DeclSpecGenerator generator = new DeclSpecGenerator(type);
         final ICPPASTDeclSpecifier spec = generator.getDeclSpec();
         spec.setConst(true);
-        spec.setVolatile(ASTUtil.hasVolatilePart(type));
+        spec.setVolatile(ASTTypeUtil.hasVolatilePart(type));
         return spec;
     }
 

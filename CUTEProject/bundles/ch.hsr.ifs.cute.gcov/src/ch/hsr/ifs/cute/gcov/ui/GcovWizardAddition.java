@@ -15,9 +15,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import ch.hsr.ifs.cute.gcov.Messages;
 import ch.hsr.ifs.cute.ui.ICuteWizardAddition;
 import ch.hsr.ifs.cute.ui.ICuteWizardAdditionHandler;
-import ch.hsr.ifs.cute.ui.project.wizard.Messages;
 
 
 /**
@@ -31,7 +31,7 @@ public class GcovWizardAddition implements ICuteWizardAddition {
     @Override
     public Control createComposite(Composite parent) {
         final Button check = new Button(parent, SWT.CHECK);
-        check.setText(Messages.getString("CuteVersionWizardPage.EnableGcov"));
+        check.setText(Messages.getString("CuteGcov.WizardAddition.EnableGcov"));
         check.addSelectionListener(new SelectionAdapter() {
 
             @Override

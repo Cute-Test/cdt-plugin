@@ -23,6 +23,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import ch.hsr.ifs.iltis.cpp.versionator.definition.CPPVersion;
+
+import ch.hsr.ifs.cute.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;
 import ch.hsr.ifs.cute.ui.project.CuteNature;
 
@@ -48,7 +51,7 @@ public class AddRemoveCuteNature extends AbstractHandler {
     private void addCuteNatureToSelectedProjects(Collection<IProject> selectedProjects) {
         for (IProject p : selectedProjects) {
             try {
-                CuteNature.addCuteNature(p, new NullProgressMonitor());
+                CuteNature.addCuteNature(p, ICuteHeaders.getDefaultHeaders(CPPVersion.getForProject(p)), new NullProgressMonitor());
             } catch (CoreException e) {
                 CuteUIPlugin.log("Adding CUTE nature failed", e);
             }

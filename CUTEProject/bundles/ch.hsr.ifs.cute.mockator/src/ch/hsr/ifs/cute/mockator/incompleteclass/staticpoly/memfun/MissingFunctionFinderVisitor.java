@@ -85,9 +85,13 @@ class MissingFunctionFinderVisitor extends MissingMemFunVisitor {
             type = ((CPPUnknownMethod) binding).getOwnerType();
         }
 
-        if (type instanceof TypeOfDependentExpression) {
-            type = resolveTypeOfDependentExpression((TypeOfDependentExpression) type);
-        }
+        IType resolvedType;
+        do {
+            resolvedType = type;
+            if (resolvedType instanceof TypeOfDependentExpression) {
+                type = resolveTypeOfDependentExpression((TypeOfDependentExpression) resolvedType);
+            }
+        } while (!resolvedType.isSameType(type));
 
         return resolvesToTemplateParam(type);
     }

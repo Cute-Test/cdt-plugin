@@ -1,6 +1,6 @@
 target "Cute Development" with source requirements
 
-location "http://download.eclipse.org/releases/2018-12" {
+location "http://download.eclipse.org/releases/2019-06" {
 	org.eclipse.swtbot.eclipse.feature.group lazy
 	org.apache.log4j lazy
 	org.eclipse.platform.sdk lazy
@@ -9,7 +9,7 @@ location "http://download.eclipse.org/releases/2018-12" {
 	javax.xml.stream lazy
 }
 
-location "http://download.eclipse.org/tools/cdt/releases/9.6" {
+location "http://download.eclipse.org/tools/cdt/releases/9.8" {
 	org.eclipse.cdt.sdk.feature.group lazy
 }
 

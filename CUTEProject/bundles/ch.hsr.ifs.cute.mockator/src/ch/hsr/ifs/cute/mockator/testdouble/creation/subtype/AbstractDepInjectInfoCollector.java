@@ -21,6 +21,7 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTTypeUtil;
 
 import ch.hsr.ifs.cute.mockator.refsupport.functions.params.FunArgumentsTypeCollector;
 import ch.hsr.ifs.cute.mockator.refsupport.functions.params.FunctionParamTypeCollector;
@@ -92,11 +93,11 @@ abstract class AbstractDepInjectInfoCollector implements DepInjectInfoCollector 
     }
 
     private static boolean isPointerOrReferenceToClass(final IType type) {
-        if (!ASTUtil.hasPointerOrRefType(type)) {
+        if (!ASTTypeUtil.hasPointerOrRefType(type)) {
             return false;
         }
 
-        IType underlyingType = ASTUtil.unwindPointerOrRefType(type);
+        IType underlyingType = ASTTypeUtil.unwindPointerOrRefType(type);
 
         if (underlyingType instanceof IQualifierType) {
             underlyingType = ((IQualifierType) underlyingType).getType();

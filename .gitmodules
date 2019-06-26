@@ -4,3 +4,6 @@
 [submodule "CUTEProject/bundles/ch.hsr.ifs.cute.headers/cuteHeaders/2.2.1/headers/CUTE"]
 	path = CUTEProject/bundles/ch.hsr.ifs.cute.headers/cuteHeaders/2.2.1/headers/CUTE
 	url = https://github.com/PeterSommerlad/CUTE.git
+[submodule "CUTEProject/bundles/ch.hsr.ifs.cute.headers/cuteHeaders/2.2.3/headers/CUTE"]
+	path = CUTEProject/bundles/ch.hsr.ifs.cute.headers/cuteHeaders/2.2.3/headers/CUTE
+	url = https://github.com/PeterSommerlad/CUTE.git

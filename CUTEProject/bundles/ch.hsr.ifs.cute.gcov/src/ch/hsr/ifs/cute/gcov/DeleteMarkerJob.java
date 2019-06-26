@@ -28,7 +28,7 @@ public class DeleteMarkerJob extends Job {
     private final IFile file;
 
     public DeleteMarkerJob(IFile file) {
-        super(Messages.DeleteMarkerJob_deleteMarker + file.toString());
+        super(Messages.getString("CuteGcov.DeleteMarkerJob.deleteMarker") + file.toString());
         this.file = file;
     }
 

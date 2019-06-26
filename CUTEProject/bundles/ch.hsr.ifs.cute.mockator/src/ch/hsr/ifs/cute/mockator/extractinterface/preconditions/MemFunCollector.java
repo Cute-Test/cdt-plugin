@@ -25,6 +25,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTTypeUtil;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.cute.mockator.extractinterface.context.ExtractInterfaceContext;
@@ -130,7 +131,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
     }
 
     private static FunctionEquivalenceVerifier.ConstStrategy getConstStrategy(final IType typeOfSelection) {
-        return ASTUtil.hasConstPart(typeOfSelection) ? ConsiderConst : IgnoreConst;
+        return ASTTypeUtil.hasConstPart(typeOfSelection) ? ConsiderConst : IgnoreConst;
     }
 
     private static ICPPASTFunctionDeclarator getDeclarator(final IASTDeclaration function) {
@@ -196,7 +197,7 @@ public class MemFunCollector implements Consumer<ExtractInterfaceContext> {
 
         private void processFieldReference(final ICPPASTFunctionCallExpression funCall, final ICPPASTFieldReference field) {
             final IASTExpression owner = field.getFieldOwner();
-            final IType typeOfInstance = ASTUtil.unwindPointerOrRefType(owner.getExpressionType());
+            final IType typeOfInstance = ASTTypeUtil.unwindPointerOrRefType(owner.getExpressionType());
 
             if (hasSameTypeAsSelection(typeOfInstance)) {
                 funCalls.add(funCall);

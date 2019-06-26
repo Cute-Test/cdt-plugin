@@ -8,10 +8,10 @@ import org.eclipse.cdt.core.dom.ast.IASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.IASTInitializer;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTNamedTypeSpecifier;
+import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.IASTPointer;
 import org.eclipse.cdt.core.dom.ast.IASTPointerOperator;
 import org.eclipse.cdt.core.dom.ast.IASTReturnStatement;
-import org.eclipse.cdt.core.dom.ast.IASTNode.CopyStyle;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTDeclSpecifier;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
@@ -20,7 +20,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTSimpleTypeConstructorExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTUnaryExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTDeclSpecifierUtil;
 
 import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 
@@ -42,7 +42,7 @@ public class ReturnStatementCreator {
     }
 
     public IASTReturnStatement createReturnStatement(final ICPPASTFunctionDeclarator funDecl, final ICPPASTDeclSpecifier specifier) {
-        if (ASTUtil.isVoid(specifier)) {
+        if (ASTDeclSpecifierUtil.isVoid(specifier)) {
             return null; // return type is void
         } else if (hasPointerReturnType(funDecl)) {
             return createNullPtr();

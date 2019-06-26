@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTStatementUtil;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringContext;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;
 
@@ -66,7 +67,7 @@ class PreprocessorSourceFileCreator extends PreprocessorFileCreator {
         final Set<Integer> lastTwoParamsToBeIgnored = orderPreservingSet(numOfParams - 2, numOfParams - 1);
         final FunctionDelegateCallCreator creator = new FunctionDelegateCallCreator(newFunDecl, lastTwoParamsToBeIgnored);
         final IASTStatement delegateToOriginal = creator.createDelegate(funDecl.getName(), ASTUtil.getDeclSpec(funDecl));
-        return ASTUtil.toCompoundStatement(delegateToOriginal);
+        return ASTStatementUtil.wrapInCompountStmtIfNecessary(delegateToOriginal);
     }
 
     private void addHeaderInclude(final IASTTranslationUnit source, final ASTRewrite rewriter) {

@@ -32,7 +32,7 @@ import org.eclipse.core.resources.IFile;
 
 import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
 
-import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTDeclaratorUtil;
 import ch.hsr.ifs.iltis.cpp.core.resources.CFileUtil;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
@@ -139,7 +139,7 @@ public class InterfaceClassCreator implements Consumer<ExtractInterfaceContext> 
 
     private static boolean hasPointerOrReferenceToInterface(final ICPPASTDeclarator declarator, final IASTDeclSpecifier declSpecifier,
             final ICPPASTCompositeTypeSpecifier clazz) {
-        if (ASTUtil.hasPointerOrRefType(declarator) && declSpecifier instanceof ICPPASTNamedTypeSpecifier) {
+        if (ASTDeclaratorUtil.isPointerOrRefType(declarator) && declSpecifier instanceof ICPPASTNamedTypeSpecifier) {
             final String paramName = ((ICPPASTNamedTypeSpecifier) declSpecifier).getName().toString();
             return paramName.equals(clazz.getName().toString());
         }

@@ -13,7 +13,8 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import ch.hsr.ifs.iltis.core.core.functional.OptionalUtil;
 
-import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTDeclarationUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTNavigationUtil;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 
 import ch.hsr.ifs.cute.mockator.extractinterface.context.ExtractInterfaceContext;
@@ -51,8 +52,9 @@ public class ClassDefinitionLookup implements Consumer<ExtractInterfaceContext> 
     }
 
     private static Optional<ICPPASTNamedTypeSpecifier> getNamedSpecifier(final IASTNode originalNode) {
-        return OptionalUtil.of(CPPVisitor.findAncestorWithType(originalNode, ICPPASTNamedTypeSpecifier.class)).orElse(OptionalUtil.of(ASTUtil
-                .getDeclarationSpecifier(originalNode)).mapAs(ICPPASTNamedTypeSpecifier.class)).get();
+        return OptionalUtil.of(CPPVisitor.findAncestorWithType(originalNode, ICPPASTNamedTypeSpecifier.class)).orElse(OptionalUtil.of(
+                ASTDeclarationUtil.getDeclSpecifier(ASTNavigationUtil.findFirstParentDeclaration(originalNode))).mapAs(
+                        ICPPASTNamedTypeSpecifier.class)).get();
     }
 
     private static void warnUserAboutMissingClass(final RefactoringStatus status) {

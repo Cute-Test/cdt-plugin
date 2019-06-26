@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: CUTE UI
 Bundle-SymbolicName: ch.hsr.ifs.cute.ui;singleton:=true
-Bundle-Version: 5.6.1.qualifier
+Bundle-Version: 5.7.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.ui.CuteUIPlugin
 Bundle-Vendor: IFS Institute for Software
 Require-Bundle: ch.hsr.ifs.iltis.cpp.versionator,
@@ -32,11 +32,16 @@ Require-Bundle: ch.hsr.ifs.iltis.cpp.versionator,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: ch.hsr.ifs.cute.ui,
  ch.hsr.ifs.cute.ui.commands.handlers,
- ch.hsr.ifs.cute.ui.dialogs,
+ ch.hsr.ifs.cute.ui.fields,
  ch.hsr.ifs.cute.ui.ids,
  ch.hsr.ifs.cute.ui.project,
- ch.hsr.ifs.cute.ui.project.wizard,
- ch.hsr.ifs.cute.ui.sourceactions
+ ch.hsr.ifs.cute.ui.sourceactions,
+ ch.hsr.ifs.cute.ui.wizards,
+ ch.hsr.ifs.cute.ui.wizards.changeversion,
+ ch.hsr.ifs.cute.ui.wizards.newproject,
+ ch.hsr.ifs.cute.ui.wizards.newproject.newcuteproject,
+ ch.hsr.ifs.cute.ui.wizards.newproject.newsuiteproject,
+ ch.hsr.ifs.cute.ui.wizards.newsuitefile
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: ch.hsr.ifs.cute.ui

@@ -13,6 +13,7 @@ import org.eclipse.cdt.core.index.IIndex;
 import org.eclipse.cdt.core.model.ICProject;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTDeclSpecifierUtil;
 
 import ch.hsr.ifs.cute.mockator.incompleteclass.MissingMemFunFinder;
 import ch.hsr.ifs.cute.mockator.incompleteclass.StaticPolyMissingMemFun;
@@ -87,7 +88,7 @@ public class StaticPolyMissingMemFunFinder implements MissingMemFunFinder {
     }
 
     private static ConstStrategy getConstStrategy(final ICPPASTFunctionDefinition function) {
-        if (!ASTUtil.isStatic(function.getDeclSpecifier()) && !ASTUtil.isConstructor(function))
+        if (!ASTDeclSpecifierUtil.isStatic(function.getDeclSpecifier()) && !ASTUtil.isConstructor(function))
             return FunctionEquivalenceVerifier.ConstStrategy.ConsiderConst;
 
         return FunctionEquivalenceVerifier.ConstStrategy.IgnoreConst;

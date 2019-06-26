@@ -17,8 +17,6 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPClassType;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
 
-import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
-
 
 // Inspired by TDD
 public class ParameterNameCreator {
@@ -51,7 +49,7 @@ public class ParameterNameCreator {
     }
 
     private static String getFallBackName(IType type) {
-        type = ASTUtil.unwindPointerOrRefType(type);
+        type = ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTTypeUtil.unwindPointerOrRefType(type);
 
         if (type instanceof IQualifierType) {
             type = ((IQualifierType) type).getType();

@@ -20,6 +20,7 @@ import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalUnary;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.TypeOfDependentExpression;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
+import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTTypeUtil;
 
 import ch.hsr.ifs.cute.mockator.incompleteclass.StaticPolyMissingMemFun;
 
@@ -53,7 +54,7 @@ abstract class MissingMemFunVisitor extends ASTVisitor {
 
     protected boolean resolvesToTemplateParam(final IType type) {
         final IType resolvedType = CxxAstUtils.unwindTypedef(type);
-        IType unwoundType = ASTUtil.unwindPointerOrRefType(resolvedType);
+        IType unwoundType = ASTTypeUtil.unwindPointerOrRefType(resolvedType);
 
         if (unwoundType == null) {
             return false;
