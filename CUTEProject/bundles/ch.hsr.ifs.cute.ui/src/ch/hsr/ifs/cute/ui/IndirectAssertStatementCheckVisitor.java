@@ -6,8 +6,8 @@ import org.eclipse.cdt.core.dom.ast.IASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTIdExpression;
 import org.eclipse.cdt.core.dom.ast.IASTStatement;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPBinding;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPFunction;
+import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPInternalBinding;
 
 
 public class IndirectAssertStatementCheckVisitor extends ASTVisitor {
@@ -30,9 +30,9 @@ public class IndirectAssertStatementCheckVisitor extends ASTVisitor {
                 IASTFunctionCallExpression funcCallExp = (IASTFunctionCallExpression) exprStmt.getExpression();
                 if (funcCallExp.getFunctionNameExpression() instanceof IASTIdExpression) {
                     IASTIdExpression idExp = (IASTIdExpression) funcCallExp.getFunctionNameExpression();
-                    ICPPBinding binding = (ICPPBinding) idExp.getName().resolveBinding();
-                    if (binding instanceof CPPFunction) {
-                        CPPFunction func = (CPPFunction) binding;
+                    IBinding binding = idExp.getName().resolveBinding();
+                    if (binding instanceof ICPPInternalBinding) {
+                        ICPPInternalBinding func = (ICPPInternalBinding) binding;
                         if (func.getDefinition().getParent() instanceof IASTFunctionDefinition) {
                             IASTFunctionDefinition funcDef = (IASTFunctionDefinition) func.getDefinition().getParent();
                             if (ASTUtil.containsAssert(funcDef)) {
