@@ -33,7 +33,7 @@ public class IndirectAssertStatementCheckVisitor extends ASTVisitor {
                     IBinding binding = idExp.getName().resolveBinding();
                     if (binding instanceof ICPPInternalBinding) {
                         ICPPInternalBinding func = (ICPPInternalBinding) binding;
-                        if (func.getDefinition().getParent() instanceof IASTFunctionDefinition) {
+                        if (func.getDefinition() != null && func.getDefinition().getParent() instanceof IASTFunctionDefinition) {
                             IASTFunctionDefinition funcDef = (IASTFunctionDefinition) func.getDefinition().getParent();
                             if (ASTUtil.containsAssert(funcDef)) {
                                 hasIndirectAssertStmt = true;
