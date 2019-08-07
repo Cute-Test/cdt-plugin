@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="ch.hsr.ifs.cute.gcov.feature"
-      label="GCov"
+      label="CUTE GCov"
       version="5.7.2.qualifier"
       provider-name="IFS Institute for Software">
 
@@ -18,7 +18,7 @@
    </license>
 
    <url>
-      <update label="%updateSiteName" url="http://www.cute-test.com/updatesite/"/>
+      <update label="CUTE Update Site" url="https://www.cute-test.com/updatesite/"/>
    </url>
 
    <requires>
