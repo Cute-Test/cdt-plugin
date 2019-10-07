@@ -23,4 +23,10 @@ public class CopyHeaders2_2Test extends CopyHeadersBaseTest {
         CuteHeaders2._2_3.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename, true);
         assertSuiteFilesExist(suitename);
     }
+
+    public final void testCopySuiteFiles225() throws CoreException {
+        String suitename = "TestSuite";
+        CuteHeaders2._2_5.copySuiteFiles(srcFolder, new NullProgressMonitor(), suitename, true);
+        assertSuiteFilesExist(suitename);
+    }
 }
