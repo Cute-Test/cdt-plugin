@@ -1,16 +1,22 @@
 target "Cute Development" with source requirements
 
 location "http://download.eclipse.org/releases/2019-09" {
-	org.eclipse.swtbot.eclipse.feature.group lazy
-	org.apache.log4j lazy
-	org.eclipse.platform.sdk lazy
+	org.eclipse.equinox.launcher lazy
+	org.eclipse.ui.ide.application lazy
 	org.eclipse.sdk.ide lazy
-	
-	javax.xml.stream lazy
+
+	org.eclipse.swtbot.feature.group lazy
+	org.eclipse.swtbot.eclipse.feature.group lazy
+	org.eclipse.swtbot.generator.feature.feature.group lazy
 }
 
 location "http://download.eclipse.org/tools/cdt/releases/9.9" {
 	org.eclipse.cdt.sdk.feature.group lazy
+}
+
+location "http://download.eclipse.org/tools/orbit/downloads/drops/R20190827152740/repository/" {
+	javax.xml.stream lazy
+	org.apache.log4j lazy
 }
 
 location "https://www.cevelop.com/iltis-unstable" {
