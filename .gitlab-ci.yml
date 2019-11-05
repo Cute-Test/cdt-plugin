@@ -13,7 +13,7 @@ variables:
   P2_ENABLE_COMPOSITE: "1"
   P2_COMPOSITE_NAME: "Cute C++ Unit Testing Easier"
   P2_ROOT_BASE: "/var/lib/redmine/cute/public/updatesite"
-  P2_DESTINATION: "2019-06"
+  P2_DESTINATION: "2019-09"
   P2_SOURCE: "./CUTEProject/releng/ch.hsr.ifs.cute.update/target/repository"
 
 #=============================================================================#

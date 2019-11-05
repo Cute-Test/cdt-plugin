@@ -205,7 +205,7 @@
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"
-            locationURI="popup:ch.hsr.ifs.cuteMenu">
+            locationURI="popup:ch.hsr.ifs.cute.ui.menu">
          <command
                commandId="ch.hsr.ifs.cute.gcov.addRemoveGcovCommand"
                label="%action.label.0"

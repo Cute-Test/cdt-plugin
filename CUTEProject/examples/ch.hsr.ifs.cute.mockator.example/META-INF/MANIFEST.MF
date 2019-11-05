@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Examples
 Bundle-SymbolicName: ch.hsr.ifs.cute.mockator.example;singleton:=true
-Bundle-Version: 5.8.0.qualifier
+Bundle-Version: 5.8.1.qualifier
 Bundle-Vendor: IFS Institute for Software
 Automatic-Module-Name: ch.hsr.ifs.cute.mockator.examples
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

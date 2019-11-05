@@ -18,7 +18,9 @@ public enum CuteHeaders2 implements ICuteHeaders {
     @CuteVersionNumber(major = 2, minor = 2, patch = 3)
     _2_3(),
     @CuteVersionNumber(major = 2, minor = 2, patch = 5)
-    _2_5();
+    _2_5(),
+    @CuteVersionNumber(major = 2, minor = 2, patch = 6)
+    _2_6();
 
     private CuteVersionNumber fVersionNumber;
 

@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.feature"
       label="CUTE C++ Unit Testing Easier"
-      version="5.8.0.qualifier"
+      version="5.8.1.qualifier"
       provider-name="IFS Institute for Software"
       image="eclipse_update_120.jpg">
 
@@ -89,7 +89,7 @@ Switzerland
 
    <url>
       <update label="CUTE Update Site" url="https://www.cute-test.com/updatesite/"/>
-      <discovery label="Eclipse CDT 9.8" url="http://download.eclipse.org/tools/cdt/releases/9.8"/>
+      <discovery label="Eclipse CDT 9.9" url="http://download.eclipse.org/tools/cdt/releases/9.9"/>
    </url>
 
    <requires>
@@ -134,35 +134,35 @@ Switzerland
          id="ch.hsr.ifs.testframework"
          download-size="0"
          install-size="0"
-         version="5.8.0.qualifier"
+         version="5.8.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.core"
          download-size="0"
          install-size="0"
-         version="5.8.0.qualifier"
+         version="5.8.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.ui"
          download-size="0"
          install-size="0"
-         version="5.8.0.qualifier"
+         version="5.8.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.headers"
          download-size="0"
          install-size="0"
-         version="5.8.0.qualifier"
+         version="5.8.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.framework.extension"
          download-size="0"
          install-size="0"
-         version="5.8.0.qualifier"
+         version="5.8.1.qualifier"
          fragment="true"/>
 
    <plugin
