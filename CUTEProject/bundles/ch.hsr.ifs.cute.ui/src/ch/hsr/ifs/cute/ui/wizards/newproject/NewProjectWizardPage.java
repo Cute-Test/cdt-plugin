@@ -10,6 +10,7 @@ package ch.hsr.ifs.cute.ui.wizards.newproject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.eclipse.cdt.managedbuilder.ui.wizards.MBSCustomPage;
 import org.eclipse.core.resources.IProject;
@@ -246,7 +247,11 @@ public class NewProjectWizardPage extends MBSCustomPage implements ICheckStateLi
         if (cuteVersionComp != null) {
             return cuteVersionComp.getVersionString();
         } else {
-            return ICuteHeaders.loadedHeaders().stream().map(ICuteHeaders::getVersionString).findFirst().orElse(null);
+            try {
+                return ICuteHeaders.loadedHeaders().last().getVersionString();
+            } catch (NoSuchElementException e) {
+                return null;
+            }
         }
     }
 
