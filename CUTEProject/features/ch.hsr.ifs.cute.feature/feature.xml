@@ -89,7 +89,7 @@ Switzerland
 
    <url>
       <update label="CUTE Update Site" url="https://www.cute-test.com/updatesite/"/>
-      <discovery label="Eclipse CDT 9.8" url="http://download.eclipse.org/tools/cdt/releases/9.8"/>
+      <discovery label="Eclipse CDT 9.9" url="http://download.eclipse.org/tools/cdt/releases/9.9"/>
    </url>
 
    <requires>
