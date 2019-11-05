@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.boost.feature"
       label="CUTE Boost"
-      version="5.8.0.qualifier"
+      version="5.8.1.qualifier"
       provider-name="IFS Institute for Software">
 
    <description url="https://cute-test.com/">
@@ -64,7 +64,7 @@ DEALINGS IN THE SOFTWARE.
          id="ch.hsr.ifs.cute.boost"
          download-size="0"
          install-size="0"
-         version="5.8.0.qualifier"
+         version="5.8.1.qualifier"
          unpack="false"/>
 
 </feature>
