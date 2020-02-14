@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.mockator.feature"
       label="Mockator"
-      version="5.8.1.qualifier"
+      version="5.9.0.qualifier"
       provider-name="IFS Institute for Software">
 
    <description url="https://www.cute-test.com/">
@@ -121,13 +121,13 @@ Switzerland
          id="ch.hsr.ifs.cute.mockator"
          download-size="0"
          install-size="0"
-         version="5.8.1.qualifier"
+         version="5.9.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.mockator.help"
          download-size="0"
          install-size="0"
-         version="5.8.1.qualifier"/>
+         version="5.9.0.qualifier"/>
 
 </feature>
