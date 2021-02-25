@@ -11,7 +11,7 @@
 	<extension point="org.eclipse.ui.newWizards">
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.CompileSeam"
 			name="Mockator Compile-Seam Example"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
 			icon="icons/genproject.gif"
@@ -30,7 +30,7 @@
 	<extension point="org.eclipse.ui.newWizards">
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.MockFunction"
 			name="Mockator Mock-Function Example"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
 			icon="icons/genproject.gif"
@@ -51,7 +51,7 @@
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.ObjectSeam"
 			name="Mockator Object-Seam Example"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
 			icon="icons/genproject.gif"
 			project="true">
@@ -69,7 +69,7 @@
 	<extension point="org.eclipse.ui.newWizards">
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.PreprocessorSeam"
 			name="Mockator Preprocessor-Seam Example"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
 			icon="icons/genproject.gif"
@@ -88,7 +88,7 @@
 	<extension point="org.eclipse.ui.newWizards">
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.ShadowFunShared"
 			name="Mockator Shadow-Function Shared-library Example"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
 			icon="icons/genproject.gif"
@@ -108,7 +108,7 @@
 	<extension point="org.eclipse.ui.newWizards">
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.WrapFun"
 			name="Mockator Wrapper-Function local Example"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
 			icon="icons/genproject.gif"
@@ -127,7 +127,7 @@
 	<extension point="org.eclipse.ui.newWizards">
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.WrapFunShared"
 			name="Mockator Wrapper-Function Shared-library Example"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
 			icon="icons/genproject.gif"

@@ -126,8 +126,8 @@ Switzerland
       <import plugin="ch.hsr.ifs.cute.headers"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="ch.hsr.ifs.cute.core"/>
-      <import plugin="ch.hsr.ifs.iltis.core.kotlin"/>
-      <import plugin="ch.hsr.ifs.iltis.core.core"/>
+      <import plugin="ch.hsr.ifs.iltis.kotlin"/>
+      <import plugin="ch.hsr.ifs.iltis.core"/>
    </requires>
 
    <plugin

@@ -93,7 +93,7 @@ Switzerland
    </url>
 
    <requires>
-      <import plugin="ch.hsr.ifs.iltis.core.core"/>
+      <import plugin="ch.hsr.ifs.iltis.core"/>
       <import plugin="ch.hsr.ifs.iltis.cpp.core"/>
       <import plugin="org.eclipse.ui" version="3.105.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.9.0" match="greaterOrEqual"/>
