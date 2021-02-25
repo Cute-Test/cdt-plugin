@@ -1,8 +1,8 @@
 package ch.hsr.ifs.cute.mockator.mockobject.expectations;
 
 import static ch.hsr.ifs.cute.mockator.MockatorConstants.CALL;
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.head;
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.tail;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.tail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,8 +20,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionCallExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTLiteralExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.core.resources.StringUtil;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.resources.StringUtil;
 
 import ch.hsr.ifs.cute.mockator.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;

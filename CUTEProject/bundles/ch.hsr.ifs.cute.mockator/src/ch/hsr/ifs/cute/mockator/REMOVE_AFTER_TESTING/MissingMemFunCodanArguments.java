@@ -1,6 +1,6 @@
 //package ch.hsr.ifs.cute.mockator.REMOVE_AFTER_TESTING;
 //
-//import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.array;
+//import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
 //
 //import java.util.Arrays;
 //import java.util.List;

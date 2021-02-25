@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.mockator.refsupport.lookup;
 
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringContext;

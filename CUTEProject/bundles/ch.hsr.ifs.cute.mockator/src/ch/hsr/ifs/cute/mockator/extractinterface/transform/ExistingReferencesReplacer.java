@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.mockator.extractinterface.transform;
 
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
 
 import java.util.Arrays;
 import java.util.Collection;

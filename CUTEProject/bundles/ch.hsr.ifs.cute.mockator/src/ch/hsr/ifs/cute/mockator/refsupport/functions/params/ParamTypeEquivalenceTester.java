@@ -16,9 +16,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateDefinition;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.ICPPDeferredClassInstance;
 
-import ch.hsr.ifs.iltis.core.core.functional.Functional;
-import ch.hsr.ifs.iltis.core.core.functional.StreamTriple;
-import ch.hsr.ifs.iltis.core.core.functional.functions.Function2;
+import ch.hsr.ifs.iltis.core.functional.Functional;
+import ch.hsr.ifs.iltis.core.functional.StreamTriple;
+import ch.hsr.ifs.iltis.core.functional.functions.Function2;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTTypeUtil;

@@ -8,7 +8,7 @@
  ******************************************************************************/
 package ch.hsr.ifs.cute.ui.wizards.newsuitefile;
 
-import static ch.hsr.ifs.iltis.core.core.functional.Functional.also;
+import static ch.hsr.ifs.iltis.core.functional.Functional.also;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -67,7 +67,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
-import ch.hsr.ifs.iltis.core.core.collections.CollectionUtil;
+import ch.hsr.ifs.iltis.core.collections.CollectionUtil;
 
 import ch.hsr.ifs.cute.headers.ICuteHeaders;
 import ch.hsr.ifs.cute.ui.CuteUIPlugin;

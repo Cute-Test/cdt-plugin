@@ -2,7 +2,7 @@ package ch.hsr.ifs.cute.mockator.mockobject.registrations;
 
 import static ch.hsr.ifs.cute.mockator.MockatorConstants.CALL;
 import static ch.hsr.ifs.cute.mockator.MockatorConstants.MOCKATOR_NS;
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.array;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
 
 import org.eclipse.cdt.core.dom.ast.IASTExpression;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;

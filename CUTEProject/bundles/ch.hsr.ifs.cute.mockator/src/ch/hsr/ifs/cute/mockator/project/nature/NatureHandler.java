@@ -7,8 +7,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
-import ch.hsr.ifs.iltis.core.core.arrays.ArrayUtil;
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.arrays.ArrayUtil;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 public class NatureHandler {

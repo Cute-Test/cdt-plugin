@@ -2,7 +2,7 @@ package ch.hsr.ifs.cute.mockator.testdouble.support;
 
 import java.util.Collection;
 
-import ch.hsr.ifs.iltis.core.core.resources.StringUtil;
+import ch.hsr.ifs.iltis.core.resources.StringUtil;
 
 
 public abstract class MemFunSignature implements Comparable<MemFunSignature> {

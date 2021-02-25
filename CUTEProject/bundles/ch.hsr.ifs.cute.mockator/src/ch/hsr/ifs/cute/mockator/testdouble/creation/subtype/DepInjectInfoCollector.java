@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IType;
 
-import ch.hsr.ifs.iltis.core.core.data.AbstractPair;
+import ch.hsr.ifs.iltis.core.data.AbstractPair;
 
 
 interface DepInjectInfoCollector {

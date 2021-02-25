@@ -12,7 +12,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
-import ch.hsr.ifs.iltis.core.core.arrays.ArrayUtil;
+import ch.hsr.ifs.iltis.core.arrays.ArrayUtil;
 
 import ch.hsr.ifs.iltis.cpp.versionator.definition.CPPVersion;
 

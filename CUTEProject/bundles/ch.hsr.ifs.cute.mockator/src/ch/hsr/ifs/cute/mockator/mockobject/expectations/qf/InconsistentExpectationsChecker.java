@@ -12,8 +12,8 @@ import org.eclipse.collections.impl.factory.Lists;
 import org.eclipse.collections.impl.list.mutable.FastList;
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.iltis.core.core.data.AbstractPair;
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.data.AbstractPair;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.checker.VisitorReport;
 import ch.hsr.ifs.iltis.cpp.core.collections.StringList;

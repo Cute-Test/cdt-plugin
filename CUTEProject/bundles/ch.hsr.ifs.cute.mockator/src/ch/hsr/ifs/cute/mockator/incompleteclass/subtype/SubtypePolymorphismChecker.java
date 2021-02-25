@@ -1,7 +1,7 @@
 package ch.hsr.ifs.cute.mockator.incompleteclass.subtype;
 
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.head;
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
 
 import java.util.EnumSet;
 import java.util.Optional;

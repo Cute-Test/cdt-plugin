@@ -3,7 +3,7 @@ package ch.hsr.ifs.cute.mockator.infos;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
-import ch.hsr.ifs.iltis.core.core.resources.StringUtil;
+import ch.hsr.ifs.iltis.core.resources.StringUtil;
 
 import ch.hsr.ifs.iltis.cpp.core.collections.StringList;
 import ch.hsr.ifs.iltis.cpp.core.resources.info.MarkerInfo;

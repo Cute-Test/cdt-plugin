@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.mockator.mockobject.expectations.reconcile;
 
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
 
 import java.util.Collection;
 import java.util.Optional;

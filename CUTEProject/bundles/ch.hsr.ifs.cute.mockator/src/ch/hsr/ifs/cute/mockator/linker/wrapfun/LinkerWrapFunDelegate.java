@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.mockator.linker.wrapfun;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.cute.mockator.linker.wrapfun.common.LinkerWrapFun;
 import ch.hsr.ifs.cute.mockator.linker.wrapfun.gnuoption.GnuOptionLinkerWrapFun;

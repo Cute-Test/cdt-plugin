@@ -20,7 +20,7 @@ location "http://download.eclipse.org/tools/orbit/downloads/drops/R2019112622324
 }
 
 location "https://www.cevelop.com/iltis-unstable" {
-	ch.hsr.ifs.iltis.core.core.feature.feature.group lazy
+	ch.hsr.ifs.iltis.core.feature.feature.group lazy
 	ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group lazy
 	ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group lazy
 	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group lazy

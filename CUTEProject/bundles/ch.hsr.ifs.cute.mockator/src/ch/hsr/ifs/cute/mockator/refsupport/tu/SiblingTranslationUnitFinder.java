@@ -11,7 +11,7 @@ import org.eclipse.cdt.core.index.IndexLocationFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
 
 
 public class SiblingTranslationUnitFinder {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/eclipse-cbi/targetplatform-dsl -->
-<target name="Cute Development" sequenceNumber="1581690945">
+<target name="Cute Development" sequenceNumber="1614260831">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.equinox.launcher" version="0.0.0"/>
@@ -22,7 +22,7 @@
       <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20191126223242/repository/"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="ch.hsr.ifs.iltis.core.core.feature.feature.group" version="0.0.0"/>
+      <unit id="ch.hsr.ifs.iltis.core.feature.feature.group" version="0.0.0"/>
       <unit id="ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group" version="0.0.0"/>
       <unit id="ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group" version="0.0.0"/>
       <unit id="ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group" version="0.0.0"/>

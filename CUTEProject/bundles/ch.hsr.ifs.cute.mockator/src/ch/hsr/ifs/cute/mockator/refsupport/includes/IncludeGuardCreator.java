@@ -13,7 +13,7 @@ import org.eclipse.cdt.utils.PathUtil;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.iltis.cpp.core.util.constants.CommonCPPConstants;
 

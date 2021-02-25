@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.mockator.linker.shadowfun;
 
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -20,8 +20,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
 
 import ch.hsr.ifs.iltis.cpp.core.resources.CProjectUtil;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;

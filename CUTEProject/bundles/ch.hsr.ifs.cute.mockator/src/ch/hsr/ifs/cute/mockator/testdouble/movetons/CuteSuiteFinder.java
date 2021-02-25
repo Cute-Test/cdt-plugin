@@ -2,7 +2,7 @@ package ch.hsr.ifs.cute.mockator.testdouble.movetons;
 
 import static ch.hsr.ifs.cute.mockator.MockatorConstants.CUTE_NS;
 import static ch.hsr.ifs.cute.mockator.MockatorConstants.CUTE_SUITE;
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.array;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
 
 import java.util.Optional;
 
