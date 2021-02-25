@@ -20,8 +20,8 @@ location "http://download.eclipse.org/tools/orbit/downloads/drops/R2019112622324
 }
 
 location "https://www.cevelop.com/iltis" {
-	ch.hsr.ifs.iltis.core.core.feature.feature.group 2.5.0
-	ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group 3.3.0
-	ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group 3.3.0
-	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group 2.4.0
+	ch.hsr.ifs.iltis.core.feature.feature.group 4.0
+	ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group 4.0
+	ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group 4.0
+	ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group 4.0
 }

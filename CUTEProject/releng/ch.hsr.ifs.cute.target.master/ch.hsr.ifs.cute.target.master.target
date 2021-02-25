@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/eclipse-cbi/targetplatform-dsl -->
-<target name="Cute" sequenceNumber="1581692862">
+<target name="Cute" sequenceNumber="1614264048">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="false" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.equinox.launcher" version="1.5.600.v20191014-2022"/>
@@ -22,10 +22,10 @@
       <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20191126223242/repository/"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="false" includeConfigurePhase="false" type="InstallableUnit">
-      <unit id="ch.hsr.ifs.iltis.core.core.feature.feature.group" version="2.5.0.202002140953"/>
-      <unit id="ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group" version="3.3.0.202002141322"/>
-      <unit id="ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group" version="3.3.0.202002141322"/>
-      <unit id="ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group" version="2.4.0.202002141412"/>
+      <unit id="ch.hsr.ifs.iltis.core.feature.feature.group" version="4.0.1.202102221544"/>
+      <unit id="ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group" version="4.0.1.202102221544"/>
+      <unit id="ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group" version="4.0.1.202102221544"/>
+      <unit id="ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group" version="4.0.1.202102221544"/>
       <repository location="https://www.cevelop.com/iltis"/>
     </location>
   </locations>
