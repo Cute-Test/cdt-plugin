@@ -1,0 +1,129 @@
+# CUTE Eclipse CDT Plug-in
+
+This repository contains the source code of the CUTE plug-in for Eclipse CDT.
+This document describes the structure of the projects, as well as the workflow used.
+Please adhere to the guidelines described in this document to ensure a smooth development process.
+
+Additionally, please take your time to update this and other documentation files if things change.
+There are few things worse than an out-of-date documentation.
+
+## Structure
+
+The project layout follows the following conventions:
+
+* Top-level helpers, configurations, and this file are located at the repository root
+* All plug-in code resides in the folder *Plug-InsProject* in the repository root
+
+### Helpers and Configuration
+
+The helpers and configurations that reside at the root of the repository are described in this section.
+
+#### Maven Build Helper
+
+The project includes a simple helper script, to make it easy to run *Maven* builds of specific bundles/tests of the project.
+The script is designed to run on Linux systems, since it is used in the continuous integration environment.
+To get started, simply call `./releng-tools/build` in the repository root directory.
+This will perform a complete build of all bundles in the project, as well as execute all tests.
+For more information, consult the output of `./releng-tools/build -h`.
+
+Some settings of the build helper can be configured using the file `build.ini`, while others are passed directly on the command line.
+
+## Development Setup
+
+The easiest way to get started with developing is to use Eclipse PDE/Eclipse for Committers.
+We recommend that you install the development environment via the [Eclipse Installer](https://www.eclipse.org/downloads/packages/installer).
+Below is a quick guide on how to set up a basic Eclipse installation:
+
+1. Make sure you have a JDK 8 **and** JDK 11 set up on your machine.
+1. Download and install/extract the [Eclipse Installer](https://www.eclipse.org/downloads/packages/installer).
+1. Start the intaller.
+1. Use the hamburger menu in the upper right corner to switch the installer to *Advanced Mode*
+1. Select *Eclipse IDE for Eclipse Committers* from the list of available packages
+1. **IMPORTANT** In the *Product Version* drop down menu, select *2020-06*
+1. In the *Java 1.8+ VM* drop down menu, select your installation of JDK 11
+1. Click *Next* twice
+1. In the *Variable* screen, check the *Show all variables* box and configure the installation path to your liking.
+1. Click *Next*
+1. In the *Confirmation* click *Finish*
+
+Depending on your internet connection speed, the installation will take some time.
+During the installation process, you might be prompted as to if you would like to accept the installation of unsigned content.
+This is expected and you will need to accept it in order for the installation to finish.
+If you have left the *Launch automatically* box checked, your freshly installed Eclipse will start automatically when the installation finishes.
+Otherwise you may start it manually afterwards.
+
+When the Eclipse instance is lauchen, you will be asked to select a workspace.
+Additionally, we recommend you switch to the *Plug-in Development* perspective and also enable the *Git* perspective.
+
+The CUTE plug-in source projects use a specific IDE configuration as well as a number of additional plug-ins.
+We recommend you use the configurations found in the [development-support](https://github.com/Cevelop/development-support) repository.
+Clone it somewhere and then perform the following steps to configure your IDE in accordance with the development process and guidelines of this project:
+
+1. From within the IDE, select the *Import...* entry from the *File* menu
+1. In the newly opened window, select *Install Software Item from File* in the *Install* group and click *Next*
+1. On the *Import Software Configuration* screen, select the path to the `cevelop-ide-plug-ins.p2` file within your clone of the [development-support](https://github.com/Cevelop/development-support) repository
+1. **IMPORTANT** Uncheck the *Install latest version of selected software* box
+1. **IMPORTANT** Check the *Contact all update sites during install to find required software* box
+1. Click *Next* twice
+1. On the *Review Licenses* screen, select *I accept the terms of the license agreements* and click finish
+
+During the installation process, you might be prompted as to if you would like to accept the installation of unsigned content.
+This is expected and you will need to accept it in order for the installation to finish.
+When the installation finishes, you will be prompted to restart the IDE.
+Do so, in order for the newly installed plug-ins to be activated.
+
+In order to import the code-style/formatting and debugging support configurations, follow these steps:
+
+1. From within the IDE, select the *Import...* entry from the *File* menu
+1. In the newly opened window, select *Preferences* in the *General* group and click *Next*
+1. On the *Import Preferences* screen, select the path to the `cevelop-ide-settings.epf` file within your clone of the [development-support](https://github.com/Cevelop/development-support) repository
+1. Make sure the *Import all* box is checked and click *Finish*
+
+When the import finishes, you will be prompted to restart the IDE.
+Do so, in order for the newly imported preferences to be activated.
+
+Finally, make sure that the IDE knows about your JDK 8 installtion:
+
+1. Open the IDE preferences
+1. In The preferences screen, navigate to *Java -> Installed JREs*
+1. Use the *Add...* button to add your JDK 8 installation
+1. Navigate to *Java -> Installed JREs -> Execution Environments*
+1. Select *JavaSE-1.8* from the list an check the JDK 8 box
+
+You have now successfully prepared your IDE for development on the plug-in code and [ILTIS](https://github.com/Cevelop/iltis).
+
+## Importing and Building the Plug-ins
+
+Please be sure to finish the IDE setup, as described above, before starting work on the source code.
+With the IDE setup in place, clone this repository to a location of your choosing.
+You might do so either from within in the IDE or from the command line or any other tool you prefer.
+Regardless of the cloning mechanism you chose, make that the clone is available within in the IDE.
+If you have created the clone outside of the IDE, you may do so by switching to the *Git* perspective and clicking on *Add an existing local Git repository*.
+To subsequent dialogs will guide you through the import process.
+
+With the repository registered in IDE, right click on it and select *Import projects...*.
+In the newly opened dialog, accept the default settings and click *Finish*.
+Depending on the perfomance of your system, the import process might take some time, wait for it to finish.
+
+After the import has finished, switch back to the *Plug-in Development* perspective.
+You will notice that IDE has detected 25'000+ errors.
+This is expected, so DON'T PANIC!
+In the *Project Explorer* navigate the tree structure to either:
+
+* CUTE -> CUTEProject -> releng -> ch.hsr.ifs.cute.target.master
+
+or
+
+* CUTE -> CUTEProject -> releng -> ch.hsr.ifs.cute.target.develop
+
+depending on your currently checked-out branch.
+Open the contained `.target` file, and in the newly opened editor click *Set as Active Target Platform*.
+This will initiate the download and configuration of the dependencies required by the project.
+The download/configuration process will take some time.
+Afterwards, the IDE will automatically rebuild the project.
+
+> NOTE: a warning/error, originating from the Kotlin plug-in, may pop up.
+> It it safe to ignore this error.
+> If it keeps reappearing, try to restart the IDE.
+
+You should notice, that the previous errors are now fixed.

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 
-import ch.hsr.ifs.iltis.core.core.functional.functions.Function;
+import ch.hsr.ifs.iltis.core.functional.functions.Function;
 
 import ch.hsr.ifs.iltis.cpp.core.resources.info.IInfo;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringContribution;

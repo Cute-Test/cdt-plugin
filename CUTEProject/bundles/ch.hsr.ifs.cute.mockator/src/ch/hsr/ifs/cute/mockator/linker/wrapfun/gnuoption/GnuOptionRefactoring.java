@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTStatementUtil;

@@ -20,7 +20,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-import ch.hsr.ifs.iltis.core.core.resources.WorkspaceUtil;
+import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
 
 import ch.hsr.ifs.cute.mockator.base.i18n.I18N;
 import ch.hsr.ifs.cute.mockator.base.util.ExceptionUtil;

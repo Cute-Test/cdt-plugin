@@ -4,7 +4,7 @@ import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIfdefStatement;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.iltis.cpp.core.wrappers.AbstractIndexAstChecker;
 

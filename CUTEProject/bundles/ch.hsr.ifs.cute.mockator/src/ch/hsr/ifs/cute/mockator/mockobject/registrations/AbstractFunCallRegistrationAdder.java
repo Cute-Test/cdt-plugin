@@ -19,7 +19,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDeclarator;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTParameterDeclaration;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 
-import ch.hsr.ifs.iltis.core.core.resources.StringUtil;
+import ch.hsr.ifs.iltis.core.resources.StringUtil;
 
 import ch.hsr.ifs.cute.mockator.project.properties.CppStandard;
 import ch.hsr.ifs.cute.mockator.refsupport.functions.FunctionSignatureFormatter;

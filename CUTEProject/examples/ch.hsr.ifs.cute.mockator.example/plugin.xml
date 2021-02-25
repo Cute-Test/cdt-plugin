@@ -11,7 +11,7 @@
 	<extension point="org.eclipse.ui.newWizards">
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.CompileSeam"
 			name="Mockator Compile-Seam Example"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
 			icon="icons/genproject.gif"
@@ -20,7 +20,7 @@
 		</wizard>
 	</extension>
 
-	<extension point="ch.hsr.ifs.iltis.core.core.extendedExampleInstallerWizard">
+	<extension point="ch.hsr.ifs.iltis.core.extendedExampleInstallerWizard">
 		<example wizardID="ch.hsr.ifs.cute.mockator.examples.CompileSeam" pageImage="icons/genproject.gif">
 			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ExampleProjectConfigurator" name="CompileSeamExample" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.compileseam.test/" description="An example project for Mockator Compiler-Seams"/>
 		</example>
@@ -30,7 +30,7 @@
 	<extension point="org.eclipse.ui.newWizards">
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.MockFunction"
 			name="Mockator Mock-Function Example"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
 			icon="icons/genproject.gif"
@@ -39,7 +39,7 @@
 		</wizard>
 	</extension>
 
-	<extension point="ch.hsr.ifs.iltis.core.core.extendedExampleInstallerWizard">
+	<extension point="ch.hsr.ifs.iltis.core.extendedExampleInstallerWizard">
 		<example wizardID="ch.hsr.ifs.cute.mockator.examples.MockFunction" pageImage="icons/genproject.gif">
 			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ToolChainProjectConfigurator" name="MockFunctionExampleLibrary" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.mockfun.lib/" description="The shared library"/>
 			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ExampleProjectConfigurator" name="MockFunctionExample" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.mockfun.test/" description="The test for the shared library"/>
@@ -51,7 +51,7 @@
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.ObjectSeam"
 			name="Mockator Object-Seam Example"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
 			icon="icons/genproject.gif"
 			project="true">
@@ -59,7 +59,7 @@
 		</wizard>
 	</extension>
 
-	<extension point="ch.hsr.ifs.iltis.core.core.extendedExampleInstallerWizard">
+	<extension point="ch.hsr.ifs.iltis.core.extendedExampleInstallerWizard">
 		<example wizardID="ch.hsr.ifs.cute.mockator.examples.ObjectSeam" pageImage="icons/genproject.gif">
 			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ExampleProjectConfigurator" name="ObjectSeamExample" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.objectseam.test/" description="An example project for Mockator Object-Seam"/>
 		</example>
@@ -69,7 +69,7 @@
 	<extension point="org.eclipse.ui.newWizards">
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.PreprocessorSeam"
 			name="Mockator Preprocessor-Seam Example"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
 			icon="icons/genproject.gif"
@@ -78,7 +78,7 @@
 		</wizard>
 	</extension>
 
-	<extension point="ch.hsr.ifs.iltis.core.core.extendedExampleInstallerWizard">
+	<extension point="ch.hsr.ifs.iltis.core.extendedExampleInstallerWizard">
 		<example wizardID="ch.hsr.ifs.cute.mockator.examples.PreprocessorSeam" pageImage="icons/genproject.gif">
 			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ExampleProjectConfigurator" name="PreprocessorSeamExample" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.preprocessorseam.test/" description="An example project for Mockator Preprocessor-Seam"/>
 		</example>
@@ -88,7 +88,7 @@
 	<extension point="org.eclipse.ui.newWizards">
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.ShadowFunShared"
 			name="Mockator Shadow-Function Shared-library Example"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
 			icon="icons/genproject.gif"
@@ -97,7 +97,7 @@
 		</wizard>
 	</extension>
 
-	<extension point="ch.hsr.ifs.iltis.core.core.extendedExampleInstallerWizard">
+	<extension point="ch.hsr.ifs.iltis.core.extendedExampleInstallerWizard">
 		<example wizardID="ch.hsr.ifs.cute.mockator.examples.ShadowFunShared" pageImage="icons/genproject.gif">
 			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ToolChainProjectConfigurator" name="ShadowFunctionExampleLibrary" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.shadowfun.lib/" description="The shared library"/>
 			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ExampleProjectConfigurator" name="ShadowFunctionExample" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.shadowfun.test/" description="The test for the shared library"/>
@@ -108,7 +108,7 @@
 	<extension point="org.eclipse.ui.newWizards">
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.WrapFun"
 			name="Mockator Wrapper-Function local Example"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
 			icon="icons/genproject.gif"
@@ -117,7 +117,7 @@
 		</wizard>
 	</extension>
 
-	<extension point="ch.hsr.ifs.iltis.core.core.extendedExampleInstallerWizard">
+	<extension point="ch.hsr.ifs.iltis.core.extendedExampleInstallerWizard">
 		<example wizardID="ch.hsr.ifs.cute.mockator.examples.WrapFun" pageImage="icons/genproject.gif">
 			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ExampleProjectConfigurator" name="WrapFunctionExample" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.wrapfun.test/" description="An example project for Mockator Wrapper-Function"/>
 		</example>
@@ -127,7 +127,7 @@
 	<extension point="org.eclipse.ui.newWizards">
 		<wizard id="ch.hsr.ifs.cute.mockator.examples.WrapFunShared"
 			name="Mockator Wrapper-Function Shared-library Example"
-			class="ch.hsr.ifs.iltis.core.core.ui.examples.ExtendedExampleInstallerWizard"
+			class="ch.hsr.ifs.iltis.core.ui.examples.ExtendedExampleInstallerWizard"
             finalPerspective="org.eclipse.cdt.ui.CPerspective"
 			category="org.eclipse.ui.Examples/ch.hsr.ifs.cute.mockator.Examples"
 			icon="icons/genproject.gif"
@@ -136,7 +136,7 @@
 		</wizard>
 	</extension>
 
-	<extension point="ch.hsr.ifs.iltis.core.core.extendedExampleInstallerWizard">
+	<extension point="ch.hsr.ifs.iltis.core.extendedExampleInstallerWizard">
 		<example wizardID="ch.hsr.ifs.cute.mockator.examples.WrapFunShared" pageImage="icons/genproject.gif">
 			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ToolChainProjectConfigurator" name="WrapFunctionSharedExampleLibrary" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.wrapfunshared.lib/" description="The shared library"/>
 			<projectDescriptor projectConfigurator="ch.hsr.ifs.cute.mockator.example.ui.ExampleProjectConfigurator" name="WrapFunctionSharedExample" contentURI="projects/ch.hsr.ifs.cute.mockator.examples.wrapfunshared.test/" description="The test for the shared library"/>

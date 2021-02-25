@@ -20,7 +20,7 @@ Require-Bundle: ch.hsr.ifs.iltis.cpp.versionator,
  ch.hsr.ifs.cute.gcov,
  ch.hsr.ifs.cute.headers,
  ch.hsr.ifs.cute.core,
- ch.hsr.ifs.iltis.core.core
+ ch.hsr.ifs.iltis.core
 Eclipse-RegisterBuddy: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

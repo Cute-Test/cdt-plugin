@@ -1,7 +1,7 @@
 package ch.hsr.ifs.cute.mockator.mockobject.function;
 
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.array;
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CRefactoringContext;

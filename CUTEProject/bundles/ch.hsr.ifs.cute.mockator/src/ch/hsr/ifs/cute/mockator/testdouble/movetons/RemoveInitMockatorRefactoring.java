@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.mockator.testdouble.movetons;
 
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -26,7 +26,7 @@ import org.eclipse.ltk.core.refactoring.TextFileChange;
 import org.eclipse.text.edits.DeleteEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CCompositeChange;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;

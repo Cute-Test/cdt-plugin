@@ -2,7 +2,7 @@ package ch.hsr.ifs.cute.mockator.linker.wrapfun.ldpreload.runconfig;
 
 import java.util.Map;
 
-import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
 
 
 class MacOsXPreloadRunConfig extends AbstractPreloadRunStrategy {

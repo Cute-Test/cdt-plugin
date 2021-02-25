@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.cute.mockator.base.util.ExceptionUtil;
 

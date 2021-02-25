@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: CUTE Headers
 Bundle-SymbolicName: ch.hsr.ifs.cute.headers;singleton:=true
-Bundle-Version: 5.9.0.qualifier
+Bundle-Version: 5.10.0.qualifier
 Bundle-Activator: ch.hsr.ifs.cute.headers.CuteHeadersPlugin
 Bundle-Vendor: IFS Institute for Software
 Require-Bundle: ch.hsr.ifs.iltis.cpp.versionator,
@@ -10,7 +10,7 @@ Require-Bundle: ch.hsr.ifs.iltis.cpp.versionator,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  ch.hsr.ifs.cute.core,
- ch.hsr.ifs.iltis.core.core
+ ch.hsr.ifs.iltis.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.headers,

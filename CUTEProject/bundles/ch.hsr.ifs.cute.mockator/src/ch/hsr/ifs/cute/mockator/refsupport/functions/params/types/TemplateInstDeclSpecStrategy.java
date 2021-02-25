@@ -16,9 +16,9 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateInstance;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPTemplateParameter;
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.core.functional.Functional;
-import ch.hsr.ifs.iltis.core.core.functional.StreamPair;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.functional.Functional;
+import ch.hsr.ifs.iltis.core.functional.StreamPair;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 

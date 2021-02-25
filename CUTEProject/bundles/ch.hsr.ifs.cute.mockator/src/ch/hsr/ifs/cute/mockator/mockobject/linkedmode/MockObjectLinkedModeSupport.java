@@ -11,7 +11,7 @@ import org.eclipse.cdt.internal.corext.fix.LinkedProposalPositionGroup.Proposal;
 import org.eclipse.cdt.ui.CDTSharedImages;
 import org.eclipse.text.edits.ReplaceEdit;
 
-import ch.hsr.ifs.iltis.core.core.data.AbstractPair;
+import ch.hsr.ifs.iltis.core.data.AbstractPair;
 
 import ch.hsr.ifs.cute.mockator.MockatorConstants;
 import ch.hsr.ifs.cute.mockator.incompleteclass.TestDoubleMemFun;

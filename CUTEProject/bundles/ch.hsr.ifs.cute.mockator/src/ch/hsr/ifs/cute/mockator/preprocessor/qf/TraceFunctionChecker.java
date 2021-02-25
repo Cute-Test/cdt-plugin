@@ -21,7 +21,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
 
 import ch.hsr.ifs.cute.mockator.ids.IdHelper.ProblemId;
 import ch.hsr.ifs.cute.mockator.project.cdt.options.IncludeFileHandler;

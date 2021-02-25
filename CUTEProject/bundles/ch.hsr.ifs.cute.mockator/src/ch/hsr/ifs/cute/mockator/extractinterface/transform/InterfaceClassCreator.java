@@ -30,7 +30,7 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPNodeFactory;
 import org.eclipse.cdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.core.resources.IFile;
 
-import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTDeclaratorUtil;
 import ch.hsr.ifs.iltis.cpp.core.resources.CFileUtil;

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.eclipse.core.runtime.CoreException;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.cute.mockator.mockobject.MockObject;
 import ch.hsr.ifs.cute.mockator.mockobject.linkedmode.MockObjectLinkedEditModeFactory;

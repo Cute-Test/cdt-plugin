@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.mockator.base.util;
 
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.last;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.last;
 
 import java.util.ArrayList;
 import java.util.List;

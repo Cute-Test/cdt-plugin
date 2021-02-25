@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Examples
 Bundle-SymbolicName: ch.hsr.ifs.cute.mockator.example;singleton:=true
-Bundle-Version: 5.9.0.qualifier
+Bundle-Version: 5.10.0.qualifier
 Bundle-Vendor: IFS Institute for Software
 Automatic-Module-Name: ch.hsr.ifs.cute.mockator.examples
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Require-Bundle: ch.hsr.ifs.iltis.core.core,
+Require-Bundle: ch.hsr.ifs.iltis.core,
  ch.hsr.ifs.iltis.cpp.core,
  ch.hsr.ifs.iltis.cpp.versionator,
  org.eclipse.emf.common.ui;bundle-version="2.12.0",

@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.feature"
       label="CUTE C++ Unit Testing Easier"
-      version="5.9.0.qualifier"
+      version="5.10.0.qualifier"
       provider-name="IFS Institute for Software"
       image="eclipse_update_120.jpg">
 
@@ -126,43 +126,43 @@ Switzerland
       <import plugin="ch.hsr.ifs.cute.headers"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="ch.hsr.ifs.cute.core"/>
-      <import plugin="ch.hsr.ifs.iltis.core.kotlin"/>
-      <import plugin="ch.hsr.ifs.iltis.core.core"/>
+      <import plugin="ch.hsr.ifs.iltis.kotlin"/>
+      <import plugin="ch.hsr.ifs.iltis.core"/>
    </requires>
 
    <plugin
          id="ch.hsr.ifs.testframework"
          download-size="0"
          install-size="0"
-         version="5.9.0.qualifier"
+         version="5.10.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.core"
          download-size="0"
          install-size="0"
-         version="5.9.0.qualifier"
+         version="5.10.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.ui"
          download-size="0"
          install-size="0"
-         version="5.9.0.qualifier"
+         version="5.10.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.headers"
          download-size="0"
          install-size="0"
-         version="5.9.0.qualifier"
+         version="5.10.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.framework.extension"
          download-size="0"
          install-size="0"
-         version="5.9.0.qualifier"
+         version="5.10.0.qualifier"
          fragment="true"/>
 
    <plugin

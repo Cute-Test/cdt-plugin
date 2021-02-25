@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.mockator.incompleteclass.staticpoly.referenced;
 
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +25,7 @@ import org.eclipse.cdt.internal.ui.viewsupport.IndexUI;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.cute.mockator.refsupport.lookup.NodeLookup;
 

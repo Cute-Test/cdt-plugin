@@ -5,7 +5,7 @@ import static ch.hsr.ifs.cute.mockator.base.i18n.I18N.MemberFunctionsToImplement
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import ch.hsr.ifs.iltis.core.core.resources.StringUtil;
+import ch.hsr.ifs.iltis.core.resources.StringUtil;
 
 import ch.hsr.ifs.cute.mockator.incompleteclass.MissingMemberFunction;
 

@@ -1,7 +1,7 @@
 package ch.hsr.ifs.cute.mockator.tests.extractinterface;
 
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.head;
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.list;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.head;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.list;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 

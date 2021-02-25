@@ -17,7 +17,7 @@ import org.eclipse.ltk.core.refactoring.TextFileChange;
 import org.eclipse.text.edits.DeleteEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CCompositeChange;
 import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;

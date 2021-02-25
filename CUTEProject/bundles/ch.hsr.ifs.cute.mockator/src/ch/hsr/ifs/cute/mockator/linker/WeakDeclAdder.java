@@ -11,8 +11,8 @@ import org.eclipse.cdt.core.dom.ast.cpp.ICPPASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.gnu.IGCCASTAttributeList;
 import org.eclipse.core.resources.IFile;
 
-import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
-import ch.hsr.ifs.iltis.core.core.resources.WorkspaceUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.WorkspaceUtil;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.nodefactory.ASTNodeFactoryFactory;
 import ch.hsr.ifs.iltis.cpp.core.ast.nodefactory.IBetterFactory;

@@ -3,7 +3,7 @@ package ch.hsr.ifs.cute.mockator.mockobject.linkedmode;
 import java.util.Collection;
 import java.util.Optional;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.cute.mockator.incompleteclass.TestDoubleMemFun;
 import ch.hsr.ifs.cute.mockator.project.properties.AssertionOrder;

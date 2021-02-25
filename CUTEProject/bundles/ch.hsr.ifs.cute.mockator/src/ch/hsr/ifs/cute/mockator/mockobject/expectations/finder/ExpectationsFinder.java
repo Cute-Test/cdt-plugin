@@ -10,8 +10,8 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.collections.api.set.MutableSet;
 import org.eclipse.collections.impl.factory.Sets;
 
-import ch.hsr.ifs.iltis.core.core.data.AbstractPair;
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.data.AbstractPair;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 import ch.hsr.ifs.iltis.cpp.core.wrappers.CPPVisitor;
 

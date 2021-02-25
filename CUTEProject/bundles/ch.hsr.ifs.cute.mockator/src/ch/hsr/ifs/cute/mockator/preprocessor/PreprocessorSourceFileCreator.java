@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.mockator.preprocessor;
 
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.orderPreservingSet;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.orderPreservingSet;
 
 import java.util.Set;
 
@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
 
 import ch.hsr.ifs.iltis.cpp.core.ast.ASTUtil;
 import ch.hsr.ifs.iltis.cpp.core.ast.utilities.ASTStatementUtil;

@@ -1,6 +1,6 @@
 package ch.hsr.ifs.cute.mockator.refsupport.linkededit;
 
-import static ch.hsr.ifs.iltis.core.core.collections.CollectionUtil.array;
+import static ch.hsr.ifs.iltis.core.collections.CollectionUtil.array;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
 
 
 public class ChangeEdit {

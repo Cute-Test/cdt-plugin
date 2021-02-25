@@ -18,8 +18,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import ch.hsr.ifs.iltis.core.core.exception.ILTISException;
-import ch.hsr.ifs.iltis.core.core.resources.ProjectUtil;
+import ch.hsr.ifs.iltis.core.exception.ILTISException;
+import ch.hsr.ifs.iltis.core.resources.ProjectUtil;
 
 import ch.hsr.ifs.cute.mockator.refsupport.tu.TranslationUnitLoader;
 

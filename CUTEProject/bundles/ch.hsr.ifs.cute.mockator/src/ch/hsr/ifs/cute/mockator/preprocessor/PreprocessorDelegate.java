@@ -2,7 +2,7 @@ package ch.hsr.ifs.cute.mockator.preprocessor;
 
 import org.eclipse.core.runtime.IPath;
 
-import ch.hsr.ifs.iltis.core.core.resources.FileUtil;
+import ch.hsr.ifs.iltis.core.resources.FileUtil;
 
 import ch.hsr.ifs.cute.mockator.project.cdt.options.IncludeFileHandler;
 import ch.hsr.ifs.cute.mockator.refsupport.qf.MockatorDelegate;

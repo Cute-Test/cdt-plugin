@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.text.ITextSelection;
 
-import ch.hsr.ifs.iltis.core.core.resources.StringUtil;
+import ch.hsr.ifs.iltis.core.resources.StringUtil;
 
 import ch.hsr.ifs.iltis.cpp.core.wrappers.ModificationCollector;
 

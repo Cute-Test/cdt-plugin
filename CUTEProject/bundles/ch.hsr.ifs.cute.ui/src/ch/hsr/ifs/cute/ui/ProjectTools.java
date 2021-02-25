@@ -38,7 +38,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 
-import ch.hsr.ifs.iltis.core.core.arrays.ArrayUtil;
+import ch.hsr.ifs.iltis.core.arrays.ArrayUtil;
 
 import ch.hsr.ifs.cute.core.CuteCorePlugin;
 

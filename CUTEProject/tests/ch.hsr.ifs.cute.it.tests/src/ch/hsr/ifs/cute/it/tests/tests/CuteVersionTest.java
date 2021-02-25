@@ -9,7 +9,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.hsr.ifs.iltis.core.core.resources.IOUtil;
+import ch.hsr.ifs.iltis.core.resources.IOUtil;
 
 import ch.hsr.ifs.iltis.cpp.versionator.definition.CPPVersion;
 
