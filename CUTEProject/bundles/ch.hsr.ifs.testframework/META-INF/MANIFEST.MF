@@ -26,7 +26,7 @@ Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.testframework,ch.hsr.ifs.testframework.even
  t,ch.hsr.ifs.testframework.launch,ch.hsr.ifs.testframework.model,ch.h
  sr.ifs.testframework.preference,ch.hsr.ifs.testframework.ui
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Import-Package: org.eclipse.cdt.dsf.gdb.launching,
  org.eclipse.cdt.launch
 Automatic-Module-Name: ch.hsr.ifs.testframework

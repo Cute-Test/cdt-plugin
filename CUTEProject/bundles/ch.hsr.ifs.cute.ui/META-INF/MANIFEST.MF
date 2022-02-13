@@ -29,7 +29,7 @@ Require-Bundle: ch.hsr.ifs.iltis.cpp.versionator,
  ch.hsr.ifs.cute.headers,
  ch.hsr.ifs.iltis.core,
  ch.hsr.ifs.iltis.cpp.core
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: ch.hsr.ifs.cute.ui,
  ch.hsr.ifs.cute.ui.commands.handlers,
  ch.hsr.ifs.cute.ui.fields,

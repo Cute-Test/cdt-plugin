@@ -24,7 +24,7 @@ Require-Bundle: org.eclipse.cdt.dsf.gdb.ui,
  ch.hsr.ifs.testframework
 Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: ch.hsr.ifs.cute.core,
  ch.hsr.ifs.cute.core.event,
  ch.hsr.ifs.cute.core.headers,

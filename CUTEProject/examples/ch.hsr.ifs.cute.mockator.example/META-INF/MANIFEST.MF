@@ -5,7 +5,7 @@ Bundle-SymbolicName: ch.hsr.ifs.cute.mockator.example;singleton:=true
 Bundle-Version: 5.10.0.qualifier
 Bundle-Vendor: IFS Institute for Software
 Automatic-Module-Name: ch.hsr.ifs.cute.mockator.examples
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: ch.hsr.ifs.iltis.core,
  ch.hsr.ifs.iltis.cpp.core,
  ch.hsr.ifs.iltis.cpp.versionator,

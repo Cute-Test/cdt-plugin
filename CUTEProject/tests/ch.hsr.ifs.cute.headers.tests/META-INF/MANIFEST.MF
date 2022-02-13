@@ -12,6 +12,6 @@ Require-Bundle: org.eclipse.core.runtime,
  ch.hsr.ifs.cute.headers,
  ch.hsr.ifs.cute.core
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: IFS Institute for Software
 Automatic-Module-Name: ch.hsr.ifs.cute.headers.tests

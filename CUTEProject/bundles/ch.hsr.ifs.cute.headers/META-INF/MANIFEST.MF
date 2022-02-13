@@ -11,7 +11,7 @@ Require-Bundle: ch.hsr.ifs.iltis.cpp.versionator,
  org.eclipse.core.resources,
  ch.hsr.ifs.cute.core,
  ch.hsr.ifs.iltis.core
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.headers,
  ch.hsr.ifs.cute.headers.manager,

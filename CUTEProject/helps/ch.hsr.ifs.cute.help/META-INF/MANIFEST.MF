@@ -8,3 +8,4 @@ Require-Bundle: org.eclipse.ui.intro,
  org.eclipse.ui.intro.universal,
  org.eclipse.ui,
  org.eclipse.help
+Automatic-Module-Name: ch.hsr.ifs.cute.help

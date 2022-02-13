@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.hsr.ifs.cute</groupId>
 	<artifactId>ch.hsr.ifs.cute.configuration</artifactId>
-	<version>5.6.1-SNAPSHOT</version>
+	<version>5.6.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
 		<tycho-version>2.2.0</tycho-version>
@@ -101,12 +101,12 @@
 					</dependencies>
 					<configuration>
 						<timestampProvider>jgit</timestampProvider>
-						<jgit.ignore>
+<!--						<jgit.ignore>
 							pom.xml
 							.polyglot.build.properties
 							.gitlab-ci.yml
 						</jgit.ignore>
-					</configuration>
+-->					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -149,6 +149,11 @@
 							<os>macosx</os>
 							<ws>cocoa</ws>
 							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>aarch64</arch>
 						</environment>
 					</environments>
 				</configuration>

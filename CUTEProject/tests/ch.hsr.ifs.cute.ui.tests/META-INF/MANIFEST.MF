@@ -29,7 +29,7 @@ Require-Bundle: org.eclipse.core.runtime,
  ch.hsr.ifs.cute.core,
  ch.hsr.ifs.cute.ui,
  ch.hsr.ifs.cute.headers
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Export-Package: ch.hsr.ifs.cute.ui.tests,
  ch.hsr.ifs.cute.ui.tests.checkers,
