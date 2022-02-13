@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -67,7 +68,7 @@ public class CuteCorePlugin extends AbstractUIPlugin {
 
     public static IWorkbenchWindow getActiveWorkbenchWindow() {
         if (plugin == null) return null;
-        IWorkbench workBench = plugin.getWorkbench();
+        IWorkbench workBench = PlatformUI.getWorkbench();//plugin.getWorkbench();
         if (workBench == null) return null;
         return workBench.getActiveWorkbenchWindow();
     }

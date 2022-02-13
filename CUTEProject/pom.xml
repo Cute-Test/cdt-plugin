@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>ch.hsr.ifs.cute</groupId>
 		<artifactId>ch.hsr.ifs.cute.configuration</artifactId>
-		<version>5.6.2-SNAPSHOT</version>
+		<version>5.10.2-SNAPSHOT</version>
 		<relativePath>./releng/ch.hsr.ifs.cute.configuration</relativePath>
 	</parent>
 	<modules>
@@ -18,5 +18,5 @@
 		<module>releng</module>
 		<module>tests</module>
 	</modules>
-<version>5.10.1-SNAPSHOT</version>
+<version>5.10.2-SNAPSHOT</version>
 </project>

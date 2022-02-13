@@ -2,7 +2,7 @@
 <feature
       id="ch.hsr.ifs.cute.mockator.examples.feature"
       label="Mockator Examples"
-      version="5.10.0.qualifier"
+      version="5.10.2.qualifier"
       provider-name="IFS Institute for Software">
 
    <description url="https://www.cute-test.com/">

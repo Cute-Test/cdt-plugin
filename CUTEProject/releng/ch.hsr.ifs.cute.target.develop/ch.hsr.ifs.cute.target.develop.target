@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
-<!-- generated with https://github.com/eclipse-cbi/targetplatform-dsl --><target name="Cute Development" sequenceNumber="1644590937">
+<!-- generated with https://github.com/eclipse-cbi/targetplatform-dsl --><target name="Cute Development" sequenceNumber="1644754582">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.eclipse.equinox.launcher" version="0.0.0"/>
       <unit id="org.eclipse.ui.ide.application" version="0.0.0"/>
       <unit id="org.eclipse.sdk.ide" version="0.0.0"/>
+      <unit id="org.eclipse.emf.common.ui.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.swtbot.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.swtbot.generator.feature.feature.group" version="0.0.0"/>
@@ -29,6 +30,7 @@
       <unit id="org.eclipse.cdt.testing.source.feature.group" version="0.0.0"/>
       <repository location="https://ci.eclipse.org/cdt/job/cdt-10.5/lastSuccessfulBuild/artifact/releng/org.eclipse.cdt.testing.repo/target/repository/"/>
     </location>
+	  <location path="/Users/sop/cevelop-out/iltis" type="Directory"/>
   </locations>
 	<targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11"/>
 </target>
