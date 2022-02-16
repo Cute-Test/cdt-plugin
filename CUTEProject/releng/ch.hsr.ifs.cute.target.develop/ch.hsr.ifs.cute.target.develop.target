@@ -30,7 +30,25 @@
       <unit id="org.eclipse.cdt.testing.source.feature.group" version="0.0.0"/>
       <repository location="https://ci.eclipse.org/cdt/job/cdt-10.5/lastSuccessfulBuild/artifact/releng/org.eclipse.cdt.testing.repo/target/repository/"/>
     </location>
-	  <location path="/Users/sop/cevelop-out/iltis" type="Directory"/>
+	  <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+		  <repository location="jar:file:/Users/sop/cevelop-M1/iltis/ILTISProject/releng/ch.hsr.ifs.iltis.update/target/ch.hsr.ifs.iltis.update-4.0.2-SNAPSHOT.zip!/"/>
+		  <unit id="ch.hsr.ifs.iltis.core.feature.feature.group" version="4.0.2.202202140813"/>
+		  <unit id="ch.hsr.ifs.iltis.core.feature.source.feature.group" version="4.0.2.202202140813"/>
+		  <unit id="ch.hsr.ifs.iltis.cpp.core.feature.feature.group" version="4.0.2.202202140813"/>
+		  <unit id="ch.hsr.ifs.iltis.cpp.core.feature.source.feature.group" version="4.0.2.202202140813"/>
+		  <unit id="ch.hsr.ifs.iltis.cpp.versionator.feature.feature.group" version="4.0.2.202202140813"/>
+		  <unit id="ch.hsr.ifs.iltis.cpp.versionator.feature.source.feature.group" version="4.0.2.202202140813"/>
+		  <unit id="ch.hsr.ifs.iltis.kotlin.feature.feature.group" version="4.0.2.202202150814"/>
+		  <unit id="ch.hsr.ifs.iltis.testing.core.feature.feature.group" version="4.0.2.202202101359"/>
+		  <unit id="ch.hsr.ifs.iltis.testing.core.feature.source.feature.group" version="4.0.2.202202101359"/>
+		  <unit id="ch.hsr.ifs.iltis.testing.cpp.feature.feature.group" version="4.0.2.202202140813"/>
+		  <unit id="ch.hsr.ifs.iltis.testing.cpp.feature.source.feature.group" version="4.0.2.202202140813"/>
+		  <unit id="ch.hsr.ifs.iltis.testing.highlevel.examples.feature.feature.group" version="4.0.2.202202101351"/>
+		  <unit id="ch.hsr.ifs.iltis.testing.highlevel.feature.feature.group" version="4.0.2.202202101359"/>
+		  <unit id="ch.hsr.ifs.iltis.testing.highlevel.feature.source.feature.group" version="4.0.2.202202101359"/>
+		  <unit id="ch.hsr.ifs.iltis.testing.tools.feature.feature.group" version="4.0.2.202202131059"/>
+		  <unit id="ch.hsr.ifs.iltis.testing.tools.pasta.feature.feature.group" version="4.0.2.202202131059"/>
+	  </location>
   </locations>
 	<targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11"/>
 </target>

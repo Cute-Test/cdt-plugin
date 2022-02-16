@@ -23,6 +23,7 @@ import org.eclipse.ui.IWorkbench
 import org.eclipse.ui.IWorkbenchPage
 import org.eclipse.ui.IWorkbenchWindow
 import org.eclipse.ui.plugin.AbstractUIPlugin
+import org.eclipse.ui.PlatformUI
 import org.osgi.framework.Bundle
 import org.osgi.framework.BundleContext
 import ch.hsr.ifs.testframework.model.Model
@@ -72,7 +73,7 @@ class TestFrameworkPlugin : AbstractUIPlugin() {
 			}
 		}
 
-		val activeWorkbenchWindow: IWorkbenchWindow? get() = default.workbench.activeWorkbenchWindow
+		val activeWorkbenchWindow: IWorkbenchWindow? get() = PlatformUI.getWorkbench().activeWorkbenchWindow
 
 		val activePage: IWorkbenchPage? get() = activeWorkbenchWindow?.activePage
 

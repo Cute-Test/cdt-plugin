@@ -7,9 +7,9 @@
 	<version>5.10.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
-		<tycho-version>2.2.0</tycho-version>
-		<tycho-extras-version>2.2.0</tycho-extras-version>
-		<kotlin-version>1.4.21</kotlin-version>
+		<tycho-version>2.6.0</tycho-version>
+		<tycho-extras-version>2.6.0</tycho-extras-version>
+		<kotlin-version>1.5.31</kotlin-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.surefire.version>2.22.2</maven.surefire.version>
 	</properties>

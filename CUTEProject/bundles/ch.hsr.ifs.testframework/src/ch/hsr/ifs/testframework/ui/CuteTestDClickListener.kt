@@ -44,6 +44,7 @@ import org.eclipse.ui.PartInitException
 import org.eclipse.ui.part.FileEditorInput
 import org.eclipse.ui.texteditor.IDocumentProvider
 import org.eclipse.ui.texteditor.ITextEditor
+import org.eclipse.ui.PlatformUI
 
 import ch.hsr.ifs.testframework.TestFrameworkPlugin
 import ch.hsr.ifs.testframework.model.TestCase
@@ -147,7 +148,7 @@ class CuteTestDClickListener(private var session: TestSession?) : IDoubleClickLi
       }
 
    private fun getEditorId(file: IFile) =
-         with(TestFrameworkPlugin.default.workbench, {
+         with(PlatformUI.getWorkbench(), {
             getEditorRegistry()
                .getDefaultEditor(file.getName(), getFileContentType(file))
                ?.getId()
