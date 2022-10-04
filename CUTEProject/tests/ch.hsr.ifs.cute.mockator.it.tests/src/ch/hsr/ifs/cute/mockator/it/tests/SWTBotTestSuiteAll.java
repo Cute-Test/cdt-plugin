@@ -9,7 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
 //@formatter:off
 	MockatorInCUTEWizardTest.class,
-	ToggleMockatorProjectSupportTest.class,
+//	ToggleMockatorProjectSupportTest.class,
 	CProjectsNotSupportedTest.class
 //@formatter:on
 })
