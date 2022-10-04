@@ -48,23 +48,23 @@ DEALINGS IN THE SOFTWARE.
    </license>
 
    <url>
-      <update label="CUTE Update Site" url="https://www.cute-test.com/updatesite/"/>
+      <update label="CUTE Update Site" url="https://eclipse-update-sites.s3.eu-central-1.amazonaws.com/cute-plugin/"/>
    </url>
 
    <requires>
-      <import plugin="org.eclipse.core.resources" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.cdt.managedbuilder.core" version="7.0.0" match="greaterOrEqual"/>
-      <import plugin="ch.hsr.ifs.cute.ui" version="4.0.0" match="greaterOrEqual"/>
-      <import plugin="ch.hsr.ifs.cute.core" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.core"/>
+      <import plugin="ch.hsr.ifs.cute.ui"/>
+      <import plugin="ch.hsr.ifs.cute.core"/>
    </requires>
 
    <plugin
          id="ch.hsr.ifs.cute.boost"
          download-size="0"
          install-size="0"
-         version="5.10.2.qualifier"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>

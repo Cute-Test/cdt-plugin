@@ -87,18 +87,50 @@ Switzerland
    </license>
 
    <url>
-      <update label="CUTE Update Site" url="https://www.cute-test.com/updatesite/"/>
+      <update label="CUTE Update Site" url="https://eclipse-update-sites.s3.eu-central-1.amazonaws.com/cute-plugin/"/>
       <discovery label="Eclipse CDT 9.9" url="http://download.eclipse.org/tools/cdt/releases/9.9"/>
    </url>
 
    <requires>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.ui.ide"/>
-      <import plugin="org.eclipse.ui.editors"/>
-      <import plugin="org.eclipse.debug.core"/>
-      <import plugin="org.eclipse.cdt.core" version="5.3.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.cdt.managedbuilder.core"/>
+      <import plugin="org.eclipse.core.runtime" version="3.24.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.200.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.18.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.editors" version="3.14.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.debug.core" version="3.18.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.core" version="7.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.core" version="9.3.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.testframework" version="5.10.2" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.ui" version="5.10.2" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.iltis.cpp.versionator" version="4.0.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.expressions" version="3.8.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ltk.core.refactoring" version="3.12.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.commands" version="3.10.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text" version="3.19.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.views" version="3.11.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor" version="3.16.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.debug.ui" version="3.15.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.ui" version="7.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.managedbuilder.ui" version="9.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.core" version="4.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.core.cxx" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.ui" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.codan.ui.cxx" version="3.6.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.core" version="5.10.2" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.headers" version="5.10.2" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.iltis.core" version="4.0.2" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.iltis.cpp.core" version="4.0.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface" version="3.24.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.workbench" version="3.124.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.18.400" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.compare" version="3.8.200" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.debug.ui" version="3.15.200" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.console" version="3.11.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor" version="3.16.300" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.launch" version="10.3.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.debug.core" version="8.7.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.filesystem" version="1.9.200" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.iltis.kotlin" version="4.0.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.cdt.dsf.gdb"/>
    </requires>
 
    <plugin

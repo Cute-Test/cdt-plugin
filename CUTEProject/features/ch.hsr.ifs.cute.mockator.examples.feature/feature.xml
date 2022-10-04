@@ -87,10 +87,21 @@ Switzerland
    </license>
 
    <url>
-      <update label="CUTE Update Site" url="https://www.cute-test.com/updatesite/"/>
+      <update label="CUTE Update Site" url="https://eclipse-update-sites.s3.eu-central-1.amazonaws.com/cute-plugin/"/>
    </url>
 
    <requires>
+      <import plugin="ch.hsr.ifs.iltis.core" version="4.0.2" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.iltis.cpp.core" version="4.0.2" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.iltis.cpp.versionator" version="4.0.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.common.ui" version="2.19.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.common" version="2.23.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime" version="3.24.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.16.0" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.core" version="5.10.2" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.ui" version="5.10.2" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.mockator" version="5.10.2" match="greaterOrEqual"/>
+      <import plugin="ch.hsr.ifs.cute.headers" version="5.10.2" match="greaterOrEqual"/>
       <import feature="ch.hsr.ifs.cute.mockator.feature" version="5.1.2" match="compatible"/>
    </requires>
 

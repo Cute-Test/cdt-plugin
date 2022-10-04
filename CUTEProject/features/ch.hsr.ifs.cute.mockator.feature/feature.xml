@@ -89,7 +89,7 @@ Switzerland
    </license>
 
    <url>
-      <update label="CUTE Update Site" url="https://www.cute-test.com/updatesite/"/>
+      <update label="CUTE Update Site" url="https://eclipse-update-sites.s3.eu-central-1.amazonaws.com/cute-plugin/"/>
    </url>
 
    <requires>
@@ -123,13 +123,13 @@ Switzerland
          id="ch.hsr.ifs.cute.mockator"
          download-size="0"
          install-size="0"
-         version="5.10.2.qualifier"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="ch.hsr.ifs.cute.mockator.help"
          download-size="0"
          install-size="0"
-         version="5.10.2.qualifier"/>
+         version="0.0.0"/>
 
 </feature>
