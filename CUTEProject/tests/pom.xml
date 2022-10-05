@@ -15,8 +15,8 @@
 		<module>ch.hsr.ifs.cute.ui.tests</module>
 		<module>ch.hsr.ifs.cute.headers.tests</module>
 		<module>ch.hsr.ifs.cute.gcov.tests</module>
-		<module>ch.hsr.ifs.cute.mockator.tests</module>
-		<module>ch.hsr.ifs.cute.mockator.it.tests</module>
+		<!-- <module>ch.hsr.ifs.cute.mockator.tests</module>
+		<module>ch.hsr.ifs.cute.mockator.it.tests</module> -->
 	</modules>
 
 	<properties>
