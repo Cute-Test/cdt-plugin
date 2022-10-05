@@ -102,7 +102,7 @@ Switzerland
       <import plugin="ch.hsr.ifs.cute.ui" version="5.10.2" match="greaterOrEqual"/>
       <import plugin="ch.hsr.ifs.cute.mockator" version="5.10.2" match="greaterOrEqual"/>
       <import plugin="ch.hsr.ifs.cute.headers" version="5.10.2" match="greaterOrEqual"/>
-      <import feature="ch.hsr.ifs.cute.mockator.feature" version="5.1.2" match="compatible"/>
+      <import feature="ch.hsr.ifs.cute.mockator.feature" version="5.10.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin
