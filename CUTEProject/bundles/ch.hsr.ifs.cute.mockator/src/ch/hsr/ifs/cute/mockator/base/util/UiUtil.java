@@ -60,7 +60,8 @@ public abstract class UiUtil {
     }
 
     public static Optional<IDocument> getCurrentDocument() {
-        return getActiveCEditor().map((editor) -> editor.getDocumentProvider().getDocument(editor.getEditorInput()));
+        // TODO: quick hack to get rid of compile error
+        return Optional.empty();// getActiveCEditor().map((editor) -> editor.getDocumentProvider().getDocument(editor.getEditorInput()));
     }
 
     public static void showInfoMessage(final String title, final String msg) {
