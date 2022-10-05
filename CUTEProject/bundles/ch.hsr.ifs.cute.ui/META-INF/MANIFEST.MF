@@ -22,9 +22,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.cdt.codan.ui.cxx,
  ch.hsr.ifs.cute.core;bundle-version="5.10.2",
  ch.hsr.ifs.cute.headers;bundle-version="5.10.2",
- ch.hsr.ifs.iltis.core,
- ch.hsr.ifs.iltis.cpp.core,
- ch.hsr.ifs.iltis.cpp.versionator,
+ ch.hsr.ifs.iltis.core;bundle-version="4.0.3",
+ ch.hsr.ifs.iltis.cpp.core;bundle-version="4.0.3",
+ ch.hsr.ifs.iltis.cpp.versionator;bundle-version="4.0.3",
  org.eclipse.cdt.codan.core,
  org.eclipse.cdt.codan.core.cxx
 Bundle-RequiredExecutionEnvironment: JavaSE-11
