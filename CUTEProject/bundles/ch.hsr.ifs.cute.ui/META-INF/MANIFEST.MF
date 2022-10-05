@@ -24,7 +24,9 @@ Require-Bundle: org.eclipse.core.runtime,
  ch.hsr.ifs.cute.headers;bundle-version="5.10.2",
  ch.hsr.ifs.iltis.core,
  ch.hsr.ifs.iltis.cpp.core,
- ch.hsr.ifs.iltis.cpp.versionator
+ ch.hsr.ifs.iltis.cpp.versionator,
+ org.eclipse.cdt.codan.core,
+ org.eclipse.cdt.codan.core.cxx
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: ch.hsr.ifs.cute.ui,
  ch.hsr.ifs.cute.ui.commands.handlers,

@@ -47,7 +47,6 @@ import ch.hsr.ifs.cute.ui.sourceactions.ASTHelper;
  */
 public class UnregisteredTestChecker extends AbstractIndexAstChecker {
 
-    @Override
     public void processAst(IASTTranslationUnit ast) {
         final FunctorFinderVisitor functorFinderVisitor = new FunctorFinderVisitor();
         ast.accept(functorFinderVisitor);
